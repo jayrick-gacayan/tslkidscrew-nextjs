@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <div className="drawer-content flex flex-col h-screen overflow-auto relative">
         <AdminHeader />
         <div className="relative">
-          <div className="p-12">
+          <div className="p-12 relative">
             {children}
           </div>
         </div>

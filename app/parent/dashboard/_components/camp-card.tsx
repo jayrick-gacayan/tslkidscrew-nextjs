@@ -7,7 +7,7 @@ export default function CampCard({
   isDisabled?: boolean;
 }) {
   return (
-    <div className="mb-8 h-56 p-4 rounded-lg drop-shadow bg-white relative overflow-hidden w-full">
+    <div className="mb-8 h-72 lg:h-56 p-4 rounded-lg drop-shadow bg-white relative overflow-hidden w-full">
       <Link href='/' className="flex flex-col h-full gap-2 relative z-0">
         <div className="flex-1" />
         <div className="flex-none">

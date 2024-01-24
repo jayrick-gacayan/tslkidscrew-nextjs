@@ -7,7 +7,7 @@ export default function Layout({
   children: ReactNode;
 }) {
   return (
-    <div className="relative h-screen">
+    <div className="relative">
       <ParentHeader />
       <div className="p-12 max-w-screen-2xl m-auto block overflow-auto">
         {children}

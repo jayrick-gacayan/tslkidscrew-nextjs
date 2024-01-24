@@ -3,7 +3,7 @@
 import CustomInput from "@/app/_components/custom-input";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
-import DirectorSelect from "../../_components/director-select";
+import CustomListboxHeadless from "../../../../_components/custom-listbox-headless";
 
 let directorItems = [
   { id: 1, email: "alexisLarose.tsl@gmail.com" },
@@ -29,12 +29,14 @@ export function NewFormLocation() {
           onChange={(value: string) => { return; }} />
         <label className="space-y-[2px] relative">
           <p className="font-semibold text-black">Director</p>
-          <DirectorSelect value={director}
+          <CustomListboxHeadless value={director}
             placeholder='Director'
             onChange={(value: any) => {
+              console.log('sdfsdfsd', value)
               setDirector(value)
             }}
-            items={directorItems} />
+            items={directorItems}
+            by="id" />
         </label>
         <CustomInput labelText='Minimum Age For Children'
           fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}

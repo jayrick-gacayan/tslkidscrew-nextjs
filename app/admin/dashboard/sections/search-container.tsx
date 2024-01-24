@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SearchSelect from "../_components/search-select";
+import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
 
 let locationItems = [
   {
@@ -51,34 +52,42 @@ let locationItems = [
   },
 ]
 
-let types = ['Before/After School', 'Summer Camp', 'Vacation Camp']
+let programTypes = ['Before/After School', 'Summer Camp', 'Vacation Camp']
 
 
 export default function SearchContainer() {
   const [location, setLocation] = useState<any>(undefined);
   const [locProg, setLocProg] = useState<any>(undefined);
-  const [type, setType] = useState<string>('');
+  const [programType, setProgramType] = useState<string>('');
 
   return (
     <div className="w-full lg:w-8/12 m-auto block space-y-8">
       <h1 className="font-medium text-[40px] text-center">Welcome to Admin</h1>
       <div className="space-y-4">
         <div className="w-full relative">
-          <SearchSelect value={location} items={locationItems} onChange={setLocation} placeholder="Location" by="id" />
+          <CustomListboxHeadless value={location}
+            placeholder='Location'
+            onChange={(value: any) => {
+              setLocation(value)
+            }}
+            items={locationItems}
+            by="id"
+            listButtonClassName="rounded-full" />
         </div>
         {
           location &&
           (
             <div className="w-full relative">
-              <SearchSelect value={locProg}
-                items={
-                  locationItems.find((value: any) => {
-                    return value.id === location.id
-                  })?.programs ?? []
-                }
-                onChange={setLocProg}
-                placeholder="Location Program"
-                by="id" />
+              <CustomListboxHeadless value={locProg}
+                placeholder='Location Program'
+                onChange={(value: any) => {
+                  setLocProg(value)
+                }}
+                items={locationItems.find((value: any) => {
+                  return value.id === location.id
+                })?.programs ?? []}
+                by="id"
+                listButtonClassName="rounded-full" />
             </div>
           )
         }
@@ -86,10 +95,13 @@ export default function SearchContainer() {
           locProg &&
           (
             <div className="w-full relative">
-              <SearchSelect value={type}
-                items={types}
-                onChange={setType}
-                placeholder="Program" />
+              <CustomListboxHeadless value={programType}
+                placeholder='Type'
+                onChange={(value: any) => {
+                  setProgramType(value)
+                }}
+                items={programTypes}
+                listButtonClassName="rounded-full" />
             </div>
           )
         }

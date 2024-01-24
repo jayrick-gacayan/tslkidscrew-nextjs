@@ -3,7 +3,7 @@
 import CustomInput from "@/app/_components/custom-input";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
-import DirectorSelect from "../../../_components/director-select";
+import CustomListboxHeadless from "../../../../../_components/custom-listbox-headless";
 
 let directorItems = [
   { id: 1, email: "alexisLarose.tsl@gmail.com" },
@@ -29,7 +29,7 @@ export function EditFormLocation() {
           onChange={(value: string) => { return; }} />
         <div className="space-y-[2px] relative">
           <p className="font-semibold text-black">Director</p>
-          <DirectorSelect value={director}
+          <CustomListboxHeadless value={director}
             placeholder='Director'
             onChange={(value: any) => {
               setDirector(value)

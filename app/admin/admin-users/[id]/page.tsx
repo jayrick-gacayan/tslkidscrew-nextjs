@@ -1,8 +1,14 @@
-import Link from "next/link";
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import AdminInfoContainer from "./_components/admin-info-container";
+import EditInfoButton from "./_sections/edit-info-button";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({
+  params
+}: {
+  params: {
+    id: string
+  }
+}) {
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <AdminHeaderWithEntries headerText='Admin Information' />
@@ -20,10 +26,7 @@ export default function Page({ params }: { params: { id: string } }) {
             } />
           <AdminInfoContainer label='Created By' data='alexislarose.tsl@gmail.com' />
         </div>
-        <Link href='#'
-          className="w-fit px-4 py-2 rounded-sm block ml-auto bg-primary text-white">
-          Edit Info
-        </Link>
+        <EditInfoButton />
       </div>
     </div>
   )
