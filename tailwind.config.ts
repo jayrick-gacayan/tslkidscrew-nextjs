@@ -14,6 +14,7 @@ const config: Config = {
       "default": "#DEE7E7",
       "default-light": "#333333",
       "tertiary": "#A1A1A1",
+      "tertiary-dark": "#D9D9D9",
       "secondary": "#FAFAFA",
       "secondary-light": "#E5E5E5",
       "primary": "#1565C0"

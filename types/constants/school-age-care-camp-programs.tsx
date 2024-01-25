@@ -1,11 +1,44 @@
 export const SCHOOL_AGE_CARE_CAMP_PROGRAMS = [
-  { name: 'Subsidized Enrollment', isDisabled: true },
-  { name: 'Request A Daycare Tour', isDisabled: true },
-  { name: 'Summer Camp', },
-  { name: 'Nursery School', isDisabled: true },
-  { name: 'Day Care', isDisabled: true },
-  { name: 'Vacation Camp', },
-  { name: 'Single Day', isDisabled: true },
-  { name: 'Before/After School', },
-  { name: 'Weedend Fun Club', isDisabled: true },
+  {
+    name: 'Subsidized Enrollment',
+    altText: 'subsidized-enrollment',
+    isDisabled: true
+  },
+  {
+    name: 'Request A Daycare Tour',
+    isDisabled: true,
+    altText: 'request-a-daycare-tour',
+  },
+  {
+    name: 'Summer Camp',
+    altText: 'summer-camp',
+  },
+  {
+    name: 'Nursery School',
+    altText: 'nursery-school',
+    isDisabled: true
+  },
+  {
+    name: 'Day Care',
+    altText: 'day-care',
+    isDisabled: true
+  },
+  {
+    name: 'Vacation Camp',
+    altText: 'vacation-camp',
+  },
+  {
+    name: 'Single Day',
+    altText: 'single-day',
+    isDisabled: true
+  },
+  {
+    name: 'Before or After School',
+    altText: 'before-or-after-school',
+  },
+  {
+    name: 'Weedend Fun Club',
+    altText: 'weekend-fun-club',
+    isDisabled: true
+  },
 ]

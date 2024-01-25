@@ -1,7 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { Fragment, ReactNode } from "react";
 
-export default function SettingsTabItem({
+export default function CustomTabItem({
   labelText
 }: {
   labelText: string | ReactNode

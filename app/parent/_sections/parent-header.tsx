@@ -5,8 +5,12 @@ import Image from "next/image";
 import { Menu, Transition } from "@headlessui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { SCHOOL_AGE_CARE_CAMP_PROGRAMS } from "@/types/constants/school-age-care-camp-programs";
+import { Fragment } from "react";
+import { usePathname } from "next/navigation";
 
 export default function ParentHeader() {
+  const pathname = usePathname();
+
   return (
     <div className="sticky top-0 left-0 z-[20] bg-primary w-full">
       <div className="px-12 py-4 w-full">
@@ -54,10 +58,27 @@ export default function ParentHeader() {
                             {
                               SCHOOL_AGE_CARE_CAMP_PROGRAMS.map((value: any) => {
                                 return (
-                                  <Menu.Item key={`dashboard-parent-navbar-${value.name}`}
-                                    as='div'
-                                    className={`${value.isDisabled ? 'cursor-not-allowed bg-secondary-light text-black' : 'cursor-pointer hover:bg-primary hover:text-white'} p-3`}>
-                                    {value.name}
+                                  <Menu.Item as={Fragment} key={`forms-navbar-parent-${value.name}`}>
+                                    {
+                                      ({ active }) => {
+                                        return (
+                                          <div className='relative'>
+                                            <Link href={`/parent/forms/${value.altText}`}
+                                              className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}>
+                                              {value.name}
+                                            </Link>
+                                            {
+                                              value.isDisabled && (
+                                                <div className="p-3 w-full text-white bg-secondary-light cursor-not-allowed absolute top-0 left-0">
+                                                  {value.name}
+                                                </div>
+                                              )
+                                            }
+                                          </div>
+                                        )
+                                      }
+                                    }
+
                                   </Menu.Item>
                                 )
                               })
