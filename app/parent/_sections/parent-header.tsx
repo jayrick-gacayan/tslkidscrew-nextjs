@@ -32,9 +32,7 @@ export default function ParentHeader() {
             </Link>
           </div>
           <div className="flex-none w-[368px]">
-
             <div className="flex items-center w-full gap-4">
-
               <div className="w-full">
                 <Menu as='div' className='relative'>
                   {({ open, close }) => {
@@ -60,11 +58,12 @@ export default function ParentHeader() {
                                 return (
                                   <Menu.Item as={Fragment} key={`forms-navbar-parent-${value.name}`}>
                                     {
-                                      ({ active }) => {
+                                      ({ close }) => {
                                         return (
                                           <div className='relative'>
                                             <Link href={`/parent/forms/${value.altText}`}
-                                              className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}>
+                                              className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}
+                                              onClick={() => { close() }}>
                                               {value.name}
                                             </Link>
                                             {
@@ -78,7 +77,6 @@ export default function ParentHeader() {
                                         )
                                       }
                                     }
-
                                   </Menu.Item>
                                 )
                               })

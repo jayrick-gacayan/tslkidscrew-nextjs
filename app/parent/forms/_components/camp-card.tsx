@@ -22,7 +22,7 @@ export default function CampCard({
           <div className="absolute top-0 left-0 w-full h-full z-10 bg-default-light/[.25] cursor-not-allowed">
             <div className="h-full text-white flex items-center justify-center">
               <div className="text-[32px]">
-                SOON
+                COMING SOON
               </div>
             </div>
           </div>
