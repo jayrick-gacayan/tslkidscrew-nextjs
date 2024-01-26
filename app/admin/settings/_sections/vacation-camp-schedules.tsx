@@ -6,9 +6,20 @@ import { Listbox, Transition } from "@headlessui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
+import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 
 export default function VacationCampSchedules() {
   const [camp, setCamp] = useState('camp-1');
+
+  const [month, setMonth] = useState('');
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date()
+  });
+
+  const handleValueChange = (newValue: any) => {
+    setValue(newValue);
+  }
 
   return (
     <div className="space-y-4">
@@ -61,28 +72,61 @@ export default function VacationCampSchedules() {
               </Transition>
             </Listbox>
           </div>
-
-
         </div>
       </div>
       <div className="block bg-secondary p-4">
-        <div className="w-4/12 block space-y-4">
-          <CustomInput labelText='Name'
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text'
-            onChange={(value: string) => { return; }}
-            className="bg-white" />
-          <CustomInput labelText='Capacity'
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text'
-            inputMode="numeric"
-            onChange={(value: string) => { return; }}
-            className="bg-white" />
-          <CustomInput labelText='Year'
-            fieldInput={{ value: '2024', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text'
-            onChange={(value: string) => { return; }}
-            className="bg-white" />
+        <div className="w-full xxl:w-5/12 block space-y-4">
+          <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2 w-full">
+            <div className="basis-full sm:basis-5/12">
+              <p className="font-semibold text-black">Name</p>
+            </div>
+            <div className="w-full sm:flex-1">
+              <CustomInput fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+                type='text'
+                onChange={(value: string) => { return; }}
+                className="bg-white" />
+            </div>
+          </div>
+          <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
+            <div className="basis-full sm:basis-5/12">
+              <p className="font-semibold text-black">Capacity</p>
+            </div>
+            <div className="w-full sm:flex-1">
+              <CustomInput fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+                type='text'
+                inputMode="numeric"
+                onChange={(value: string) => { return; }}
+                className="bg-white" />
+            </div>
+          </div>
+          {/* <div className="flex items-center gap-2">
+            <div className="basis-full sm:basis-5/12">
+              <p className="font-semibold text-black">Month</p>
+            </div>
+            <div className="flex-1">
+              <CustomInput fieldInput={{ value: month, errorText: '', validationStatus: ValidationType.NONE }}
+                type='month'
+                disabled={false}
+                onChange={(value: string) => { setMonth(value) }}
+                className="bg-white" />
+            </div>
+          </div> */}
+          <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
+            <div className="basis-full sm:basis-5/12">
+              <p className="font-semibold text-black">Date</p>
+            </div>
+            <div className="w-full sm:flex-1">
+              <div className="relative w-full">
+                <Datepicker minDate={new Date()}
+                  value={value}
+                  inputClassName='w-full rounded font-normal text-black bg-white p-2 border-0 focus:border-none'
+                  onChange={(value: DateValueType, e?: HTMLInputElement | null | undefined) => {
+                    handleValueChange(value);
+                  }} />
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>

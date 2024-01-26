@@ -11,6 +11,7 @@ export default function CustomInput({
   inputMode,
   className,
   disabled = false,
+  placeholder,
 }: {
   labelText?: string | ReactNode;
   fieldInput: InputProps<string>;
@@ -19,7 +20,8 @@ export default function CustomInput({
   onChange?: (value: string) => void;
   inputMode?: "text" | "email" | "search" | "none" | "tel" | "url" | "numeric" | "decimal";
   className?: string;
-  disabled?: boolean
+  disabled?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div className="w-full space-y-[2px]">
@@ -32,12 +34,13 @@ export default function CustomInput({
               `${className!}`
             )
           }>
-          <div className="flex-1 ">
+          <div className="flex-1">
             <input type={type}
+              placeholder={placeholder!}
               value={fieldInput.value}
               inputMode={inputMode!}
               disabled={disabled}
-              className="p-2 disabled:cursor-not-allowed w-full outline-0 outline-transparent rounded bg-transparent border-transparent"
+              className="p-2 disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent"
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 onChange && onChange(event.target.value);
               }}

@@ -25,10 +25,11 @@ export default function ParentHeader() {
               className="block"
               aria-label="Brand">
               <Image alt="tsl-kids-crew-logo"
-                src={`/static/tsl-kids-crew-logo-white.png`}
+                src='/static/tsl-kids-crew-logo-white.png'
                 width={128}
                 height={64}
                 className="h-[64px] w-[128px] " />
+
             </Link>
           </div>
           <div className="flex-none w-[368px]">

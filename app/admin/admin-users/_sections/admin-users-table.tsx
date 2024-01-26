@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function AdminUsersTable() {
   return (
     <div className="block overflow-auto rounded bg-secondary h-96">
-      <table className="min-w-[768px] w-full">
+      <table className="min-w-[1024px] w-full">
         <thead>
           <tr className="bg-secondary-light [&>th]:font-medium [&>th]:px-3 [&>th]:py-2 [&>th]:text-black">
             <th className="w-56">EMAIL</th>

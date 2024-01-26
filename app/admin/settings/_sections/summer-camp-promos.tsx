@@ -13,19 +13,16 @@ export default function SummerCampPromos() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
+      <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Update Promos</h1>
         </div>
-        <div className="flex-none">
-          <div className="flex w-fit items-center gap-4">
-            <div>
-              <CustomCheckbox value={false}
-                onChange={(value: boolean) => {
-                  return
-                }} text={`${capitalCase(noCase(week))} Enabled`} />
+        <div className="flex-none sm:w-auto w-full">
+          <div className="flex w-full sm:w-64 items-center gap-4">
+            <div className="w-full">
+              <CustomCheckbox value={false} onChange={(value: boolean) => { return }} text='Enabled' />
             </div>
-            <div className="relative">
+            <div className="relative w-full">
               <Listbox value={week} onChange={(value: string) => { setWeek(value); }}>
                 <Listbox.Button
                   as="div"
@@ -70,23 +67,21 @@ export default function SummerCampPromos() {
               </Listbox>
             </div>
           </div>
-
-
         </div>
       </div>
       <div className="block bg-secondary p-4">
-        <div className="w-4/12 block space-y-4">
+        <div className="w-full sm:w-4/12 block space-y-4">
           {
             [1, 2, 3].map((value) => {
               return (
                 <div key={`update-promos-children-${value}`}
-                  className="flex items-center justify-between gap-8">
-                  <div>
+                  className="flex sm:flex-row flex-col litems-center justify-between gap-4 sm:gap-8">
+                  <div className="w-full">
                     <h1 className="font-medium text-[20px]">
                       Children #{value}
                     </h1>
                   </div>
-                  <div>
+                  <div className="w-full">
                     <CustomInput type='text'
                       fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
                       inputMode="numeric"

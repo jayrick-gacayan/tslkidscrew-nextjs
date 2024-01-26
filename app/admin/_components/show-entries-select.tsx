@@ -11,7 +11,7 @@ export default function ShowEntriesSelect({
   items: any[];
 }) {
   return (
-    <div className="flex w-fit items-center gap-x-2">
+    <div className="w-full flex sm:w-fit items-center gap-x-2">
       <div>Show</div>
       <div className="w-16">
         <div className="w-full relative text-sm">

@@ -18,7 +18,7 @@ export default function SummerCampSwimPrices() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
+      <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Prices</h1>
         </div>
@@ -66,7 +66,7 @@ export default function SummerCampSwimPrices() {
         </div>
       </div>
       <div className="block overflow-auto">
-        <table className="min-w-[768px] w-full">
+        <table className="min-w-[1024px] w-full">
           <thead>
             <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
               <th className="w-56">Name</th>
@@ -85,7 +85,8 @@ export default function SummerCampSwimPrices() {
             {
               [1, 2, 3].map((childValue) => {
                 return (
-                  <tr className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
+                  <tr key={`prices-${withSwim}-${childValue}`}
+                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
                     <td className="w-56">Children #{childValue}</td>
                     {
                       weeksSwimArray.map((value) => {

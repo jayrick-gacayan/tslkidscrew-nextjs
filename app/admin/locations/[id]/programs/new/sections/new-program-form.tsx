@@ -31,6 +31,10 @@ export default function NewProgramForm() {
           fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
           type='text'
           onChange={(value: string) => { return; }} />
+        <CustomInput labelText='Suffix'
+          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+          type='text'
+          onChange={(value: string) => { return; }} />
         <div className="space-y-[2px] relative">
           <p className="font-semibold text-black">Program Type</p>
           <CustomListboxHeadless value={programType}
@@ -40,10 +44,6 @@ export default function NewProgramForm() {
             }}
             items={programTypes} />
         </div>
-        <CustomInput labelText='Program Name'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          onChange={(value: string) => { return; }} />
         <div className="space-y-[2px] relative">
           <p className="font-semibold text-black">Director</p>
           <CustomListboxHeadless value={director}
@@ -53,6 +53,22 @@ export default function NewProgramForm() {
             }}
             items={directorItems}
             by="id" />
+        </div>
+        <div className="flex items-center gap-2 w-full">
+          <div className="w-full">
+            <CustomInput labelText='Capacity'
+              fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+              type='text'
+              inputMode="decimal"
+              onChange={(value: string) => { return; }} />
+          </div>
+          <div className="w-full">
+            <CustomInput labelText='Price'
+              fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+              type='text'
+              inputMode="decimal"
+              onChange={(value: string) => { return; }} />
+          </div>
         </div>
         <CustomCheckbox value={false}
           onChange={(value: boolean) => { return }}

@@ -8,11 +8,11 @@ export default function AdminHeaderWithEntries({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex sm:flex-row flex-col gap-4 items-start sm:items-center justify-between">
       <div className="flex-1 text-black">
         <h1 className="font-medium text-[24px]">{headerText}</h1>
       </div>
-      <div className="flex-none">
+      <div className="flex-none sm:w-auto w-full">
         {children && children}
       </div>
     </div>

@@ -16,11 +16,13 @@ export default function Layout({
   });
 
   return (
-    <div className="relative">
+    <div className="relative h-screen w-screen">
       <ParentHeader />
-      <div className="p-12 max-w-screen-2xl m-auto block overflow-auto space-y-8">
-        <ParentBreadcrumbs />
-        {children}
+      <div className="relative mt-12 mx-12">
+        <div className="max-w-screen-2xl m-auto block space-y-8">
+          <ParentBreadcrumbs />
+          {children}
+        </div>
       </div>
     </div>
   )

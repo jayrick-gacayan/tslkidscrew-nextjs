@@ -12,22 +12,18 @@ import { useState } from "react";
 export default function SummerCampWeekPrices() {
   const [week, setWeek] = useState('week-1');
 
-
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
+      <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center w-full">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Update Weeks</h1>
         </div>
-        <div className="flex-none">
-          <div className="flex w-fit items-center gap-4">
-            <div>
-              <CustomCheckbox value={false}
-                onChange={(value: boolean) => {
-                  return
-                }} text={`${capitalCase(noCase(week))} Enabled`} />
+        <div className="flex-none sm:w-auto w-full">
+          <div className="flex w-full sm:w-64 items-center gap-4">
+            <div className="w-full">
+              <CustomCheckbox value={false} onChange={(value: boolean) => { return }} text='Enabled' />
             </div>
-            <div className="relative">
+            <div className="relative w-full">
               <Listbox value={week} onChange={(value: string) => { setWeek(value); }}>
                 <Listbox.Button
                   as="div"
@@ -72,12 +68,10 @@ export default function SummerCampWeekPrices() {
               </Listbox>
             </div>
           </div>
-
-
         </div>
       </div>
       <div className="block bg-secondary p-4">
-        <div className="w-8/12 block space-y-4">
+        <div className="w-full md:w-8/12 block space-y-4">
           <CustomInput labelText='Name'
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
             type='text'

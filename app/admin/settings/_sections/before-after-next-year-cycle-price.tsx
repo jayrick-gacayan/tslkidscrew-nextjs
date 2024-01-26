@@ -6,11 +6,11 @@ import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
 
 export default function BeforeAfterNextYearCyclePrice() {
-  const [daySelection, setDaySelection] = useState('everyday');
+  const [daySelection, setDaySelection] = useState('up-to-3-days-a-week');
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
+      <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Update Price for Next Year Cycle</h1>
         </div>
@@ -41,9 +41,9 @@ export default function BeforeAfterNextYearCyclePrice() {
                 leaveFrom="transform scale-100 opacity-100"
                 leaveTo="transform scale-95 opacity-0">
                 <Listbox.Options as='div'
-                  className="absolute top-[105%] left-0 w-full bg-white rounded drop-shadow overflow-hidden">
+                  className="absolute top-[105%] sm:right-0 right-auto w-[256px] bg-white rounded drop-shadow overflow-hidden">
                   {
-                    ['everyday', 'three-days-per-week', 'one-or-two-days-per-week'].map((value: any, index: any) => (
+                    ['up-to-3-days-a-week', '4-to-5-days-a-week'].map((value: any, index: any) => (
                       <Listbox.Option
                         as='div'
                         key={`show-camp-rates-summer-camps-${value}${index}`}
@@ -63,7 +63,7 @@ export default function BeforeAfterNextYearCyclePrice() {
         </div>
       </div>
       <div className="block overflow-auto">
-        <table className="min-w-[768px] w-full">
+        <table className="min-w-[1024px] w-full">
           <thead>
             <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
               <th>Name</th>
@@ -76,7 +76,8 @@ export default function BeforeAfterNextYearCyclePrice() {
             {
               [1, 2, 3].map((childValue) => {
                 return (
-                  <tr className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
+                  <tr key={`before-after-next-year-cycle-${childValue}`}
+                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
                     <td>Children #{childValue}</td>
                     <td className="capitalize">
                       <input className="rounded w-full outline-0 outline-transparent bg-white p-2" />

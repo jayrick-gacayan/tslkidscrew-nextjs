@@ -1,7 +1,7 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
-import { Fragment, useMemo } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
@@ -15,8 +15,10 @@ import {
   modalFormOpened
 } from "../_redux/admin-users-slice";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
+import { SampleContext } from "./form-actions-providers";
 
 export default function ModalAdminUsersForm() {
+  const { formAction, state } = useContext(SampleContext);
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => { return state.adminUsers; });
 
   const {
@@ -36,9 +38,12 @@ export default function ModalAdminUsersForm() {
   }, [adminUsersState.adminUserForm]);
 
   function formReset() {
+    formAction();
     reduxStore.dispatch(adminUserFormReset());
     reduxStore.dispatch(modalFormOpened({ open: false, type: '' }));
   }
+
+  console.log('state', state.count)
 
   return (
     <Transition show={open} as={Fragment}>

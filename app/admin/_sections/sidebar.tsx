@@ -22,8 +22,9 @@ export default function Sidebar() {
             className="m-auto block h-[72px] w-[144px] relative"
             aria-label="Brand">
             <Image alt="tsl-kids-crew-logo"
-              src={`/static/tsl-kids-crew-logo-white.png`}
-              fill />
+              fill
+              src='/static/tsl-kids-crew-logo-white.png'
+              sizes="100vw" />
           </Link>
 
           <nav className="w-full py-4">
@@ -82,60 +83,4 @@ export default function Sidebar() {
       </ul>
     </div>
   )
-  // return (
-
-  //   <div id="application-sidebar-brand"
-  //     className="text-white hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 start-0 bottom-0 z-[60] w-64 bg-primary pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 h-screen">
-  //     <div className="flex flex-col h-full justify-between">
-  //       <div className="flex-1">
-  //         <Link href='/'
-  //           className="m-auto block h-[72px] w-[144px] relative"
-  //           aria-label="Brand">
-  //           <Image alt="tsl-kids-crew-logo"
-  //             src={`/static/tsl-kids-crew-logo-white.png`}
-  //             fill />
-  //         </Link>
-
-  //         <nav className="w-full py-4">
-  //           <DashboardMenuLink href='/admin/dashboard'
-  //             altText='dashboard'
-  //             current={memoSegment}
-  //             text='Dashboard'
-  //           />
-  //           <DashboardMenuLink href='/admin/admin-users'
-  //             altText='admin-users'
-  //             current={memoSegment}
-  //             text='Admin Users'
-  //           />
-  //           <DashboardMenuLink href='/admin/locations'
-  //             altText='locations'
-  //             current={memoSegment}
-  //             text='Locations'
-  //           />
-  //           <DashboardMenuLink href='/admin/programs'
-  //             altText='programs'
-  //             current={memoSegment}
-  //             text='Programs'
-  //           />
-  //         </nav>
-  //       </div>
-  //       <div className="flex-none">
-  //         <nav className="w-full py-4">
-  //           <DashboardMenuLink href={`#`}
-  //             altText='settings'
-  //             current={memoSegment}
-  //             text='Settings'
-  //           />
-  //           <DashboardMenuLink href={`#`}
-  //             altText='logout'
-  //             current={memoSegment}
-  //             text='Logout'
-  //           />
-
-  //         </nav>
-  //       </div>
-  //     </div>
-
-  //      </div>
-  // )
 }

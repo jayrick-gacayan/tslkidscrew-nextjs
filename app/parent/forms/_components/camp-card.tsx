@@ -28,7 +28,6 @@ export default function CampCard({
           </div>
         )
       }
-
     </div>
   )
 }

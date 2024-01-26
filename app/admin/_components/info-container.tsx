@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export default function AdminInfoContainer({
+export default function InfoContainer({
   label,
   data
 }: {
@@ -8,8 +8,8 @@ export default function AdminInfoContainer({
   data: string | ReactNode;
 }) {
   return (
-    <div className="flex w-full mb-8">
-      <div className="w-full font-semibold">{label}</div>
+    <div className="flex sm:flex-row flex-col gap-2 w-full mb-8">
+      <div className="w-full font-semibold text-black">{label}</div>
       <div className="w-full">{data}</div>
     </div>
   )
