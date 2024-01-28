@@ -1,4 +1,5 @@
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
+import BackButtonClient from "../../_components/back-button-client";
 import InfoContainer from "../../_components/info-container";
 import EditInfoButton from "./_sections/edit-info-button";
 
@@ -11,6 +12,7 @@ export default function Page({
 }) {
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
+      <BackButtonClient />
       <AdminHeaderWithEntries headerText='Admin Information' />
       <div className="bg-secondary p-6">
         <div className="columns-1 lg:columns-2">

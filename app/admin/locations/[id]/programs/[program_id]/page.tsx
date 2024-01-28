@@ -1,4 +1,5 @@
 import AdminHeaderWithEntries from "@/app/admin/_components/admin-header-with-entries"
+import BackButtonClient from "@/app/admin/_components/back-button-client"
 import InfoContainer from "@/app/admin/_components/info-container"
 import Link from "next/link"
 
@@ -6,6 +7,7 @@ export default function Page(props: any) {
   console.log('props', props)
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
+      <BackButtonClient />
       <AdminHeaderWithEntries headerText='Location Program Information' />
       <div className="bg-secondary p-6">
         <div className="w-6/12 block">
