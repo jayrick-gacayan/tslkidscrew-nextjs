@@ -53,29 +53,30 @@ export default function ParentBreadcrumbs() {
     return arraybc;
   }, [pathSegments]);
 
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      {
-        cbArrBreadCrumbs().map((value: any, index: number) => {
-          return (
-            <Fragment key={`parent-breadcrumbs-${value.text}-${index}`}>
-              <Link href={value.href}
-                className={`cursor-pointer block hover:underline 
+  return (pathname.includes('login') || pathname.includes('register')) ? null :
+    (
+      <div className="flex flex-wrap items-center gap-2 pt-12">
+        {
+          cbArrBreadCrumbs().map((value: any, index: number) => {
+            return (
+              <Fragment key={`parent-breadcrumbs-${value.text}-${index}`}>
+                <Link href={value.href}
+                  className={`cursor-pointer block hover:underline 
                 ${value.altText === pathSegments[pathSegments.length - 1] ? 'text-primary' : ''}`}>
-                {value.text}
-              </Link>
-              {
-                index < pathSegments.length - 1 &&
-                (
-                  <div>
-                    <Icon icon='fa6-solid:chevron-right'></Icon>
-                  </div>
-                )
-              }
-            </Fragment>
-          )
-        })
-      }
-    </div>
-  )
+                  {value.text}
+                </Link>
+                {
+                  index < pathSegments.length - 1 &&
+                  (
+                    <div>
+                      <Icon icon='fa6-solid:chevron-right'></Icon>
+                    </div>
+                  )
+                }
+              </Fragment>
+            )
+          })
+        }
+      </div>
+    )
 }

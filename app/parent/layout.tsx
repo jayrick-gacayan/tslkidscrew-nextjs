@@ -1,7 +1,6 @@
 import { ReactNode } from "react"
 import ParentHeader from "./_sections/parent-header";
 import ParentBreadcrumbs from "./_sections/parent-breadcrumbs";
-import { headers } from "next/headers";
 
 export default function Layout({
   children
@@ -9,17 +8,11 @@ export default function Layout({
   children: ReactNode;
 }) {
 
-  let headersList = headers();
-
-  headersList.forEach((value, key) => {
-    console.log(`${key} ==> ${value}`);
-  });
-
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative w-screen h-screen">
       <ParentHeader />
-      <div className="relative mt-12 mx-12">
-        <div className="max-w-screen-2xl m-auto block space-y-8">
+      <div className="h-[calc(100vh-96px)] overflow-auto">
+        <div className="container mx-auto block space-y-8 h-full">
           <ParentBreadcrumbs />
           {children}
         </div>

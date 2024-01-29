@@ -11,9 +11,9 @@ export default function CustomCheckbox({
 }) {
   return (
     <div className="block form-control">
-      <label className="flex items-center gap-2">
+      <label className="flex items-center gap-2 w-fit">
         <input type="checkbox"
-          className="border-[.1rem] border-secondary-light h-5 w-5 inline-block checkbox checked:border-primary [--chkbg:theme(colors.white)] [--chkfg:theme(colors.primary)] rounded"
+          className="form-checkbox checked:text-primary h-5 w-5 rounded border border-secondary-light ring-0 ring-transparent"
           checked={value}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             onChange(event.target.checked)

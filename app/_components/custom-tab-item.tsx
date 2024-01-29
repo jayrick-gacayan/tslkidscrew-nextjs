@@ -7,7 +7,7 @@ export default function CustomTabItem({
   labelText: string | ReactNode
 }) {
   function tabClassName(selected: boolean) {
-    return `cursor-pointer border-b-2 ${selected ? 'border-b-primary text-primary' : 'text-black border-b-secondary-light'} hover:bg-secondary-light flex-none w-auto py-3 px-4`
+    return `transition-all duration-100 cursor-pointer border-b-2 ${selected ? 'border-b-primary text-primary' : 'text-black border-b-secondary-light'} hover:bg-secondary-light flex-none w-auto py-3 px-4`
   }
   return (
     <Tab as={Fragment}>
