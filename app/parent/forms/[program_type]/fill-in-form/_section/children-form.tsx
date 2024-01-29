@@ -30,7 +30,7 @@ export default function ChildrenForm() {
         <h1 className="font-medium text-[36px]">Child/ren's Information</h1>
         <p>Accepting children 5 years old and up at this location.</p>
       </div>
-      <div className="w-full rounded border border-secondary-light p-4 h-96 space-y-4">
+      <div className="w-full rounded border border-secondary-light p-4 space-y-4">
         <div className="flex items-center gap-4">
           <CustomInput
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
