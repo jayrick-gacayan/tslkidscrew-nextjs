@@ -6,23 +6,28 @@ export default function CustomInput({
   labelText,
   fieldInput,
   iconSuffix,
+  iconPrefix,
   type,
   onChange,
   inputMode,
   className,
+  name,
   disabled = false,
   placeholder,
 }: {
   labelText?: string | ReactNode;
   fieldInput: InputProps<string>;
   type: string;
+  iconPrefix?: ReactNode;
   iconSuffix?: ReactNode;
   onChange?: (value: string) => void;
   inputMode?: "text" | "email" | "search" | "none" | "tel" | "url" | "numeric" | "decimal";
   className?: string;
   disabled?: boolean;
   placeholder?: string;
+  name?: string;
 }) {
+
   return (
     <div className="w-full space-y-[2px]">
       <label className="block space-y-1 w-full">
@@ -34,13 +39,15 @@ export default function CustomInput({
               `${className!}`
             )
           }>
+          {iconPrefix && <div className="flex-none">{iconPrefix}</div>}
           <div className="flex-1">
             <input type={type}
               placeholder={placeholder!}
-              value={fieldInput.value}
               inputMode={inputMode!}
               disabled={disabled}
-              className="p-2 disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent"
+              name={name!}
+              defaultValue={fieldInput.value}
+              className="p-2 placeholder:text-secondary-light disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent"
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 onChange && onChange(event.target.value);
               }}

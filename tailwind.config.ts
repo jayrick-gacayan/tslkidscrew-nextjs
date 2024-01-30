@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss'
 const colors = require('tailwindcss/colors');
-const screens = require('tailwindcss/nesting/')
 
 const config: Config = {
   content: [
@@ -13,14 +12,16 @@ const config: Config = {
   theme: {
     colors: {
       ...colors,
-      "danger": "#DC2626",
       "default": "#DEE7E7",
       "default-light": "#333333",
       "tertiary": "#A1A1A1",
       "tertiary-dark": "#D9D9D9",
       "secondary": "#FAFAFA",
       "secondary-light": "#E5E5E5",
-      "primary": "#1565C0"
+      "primary": "#1565C0",
+      "danger": "#DC2626",
+      "warning": "#F9C13A",
+      "success": "#19a974"
     },
     extend: {
       screens: {
@@ -41,13 +42,14 @@ const config: Config = {
         "tertiary-dark": "#D9D9D9",
         "secondary": "#FAFAFA",
         "secondary-light": "#E5E5E5",
-        "primary": "#1565C0"
+        "primary": "#1565C0",
+        "warning": "#F9C13A",
+        "success": "#19a974"
       },
     },
   },
   plugins: [
     require('@tailwindcss/forms')({ strategy: 'class' }),
-    require("daisyui"),
   ],
 }
 export default config

@@ -3,7 +3,7 @@ import CampCard from "./_components/camp-card";
 
 export default function Page() {
   return (
-    <div className="columns-1 lg:columns-3 gap-8">
+    <div className="gap-6 columns-auto xl:columns-3 h-auto">
       {
         SCHOOL_AGE_CARE_CAMP_PROGRAMS.map((value: any) => {
           let objectToSend: any = {
