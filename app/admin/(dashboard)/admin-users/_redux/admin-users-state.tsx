@@ -12,7 +12,6 @@ export interface AdminUsersState {
     isActive: boolean;
     isSuperAdmin: boolean;
     requestStatus: RequestStatus;
+    id?: number
   }
-
-
 }

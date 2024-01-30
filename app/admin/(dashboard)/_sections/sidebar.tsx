@@ -1,13 +1,17 @@
 'use client';
 
-import { Fragment, useEffect, useMemo, useRef } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import DashboardMenuLink from "../_components/dashboard-menu-link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dialog, Transition } from "@headlessui/react";
-import { useMediaQuery, useOnClickOutside, useWindowSize } from "usehooks-ts";
+import { Transition } from "@headlessui/react";
+import {
+  useEventListener,
+  useOnClickOutside,
+  useWindowSize
+} from "usehooks-ts";
 
 export default function Sidebar({
   drawerOpen,
@@ -16,7 +20,6 @@ export default function Sidebar({
   drawerOpen: boolean;
   onDrawerOpen: (open: boolean) => void;
 }) {
-  const matches = useMediaQuery('(min-width: 1024px)');
   const drawerRef = useRef(null);
   let segment = useSelectedLayoutSegment();
 
@@ -24,13 +27,13 @@ export default function Sidebar({
 
   const memoSegment = useMemo(() => { return segment ?? '' }, [segment]);
 
-  useEffect(() => {
-    // if (width > 1024 && !drawerOpen) { onDrawerOpen(true) }
-    if (width < 1024 && drawerOpen) { onDrawerOpen(false); }
-  }, [width, drawerOpen]);
+  useEventListener('resize', () => {
+    if (width <= 1024 && drawerOpen) { onDrawerOpen(false); }
+    else if (width > 1024 && !drawerOpen) { onDrawerOpen(true); }
+  })
 
   useOnClickOutside(drawerRef, () => {
-    if (width < 1024) { onDrawerOpen(false); }
+    if (width <= 1024) { onDrawerOpen(false); }
   });
 
   return (

@@ -74,6 +74,20 @@ const adminUsersSlice = createSlice({
         }
       }
     },
+    editAdminUserFields: (state, action: PayloadAction<any>) => {
+
+      return {
+        ...state,
+        adminUserForm: {
+          ...state.adminUserForm,
+          email: fieldInputValue<string>(action.payload.email),
+          name: fieldInputValue<string>(action.payload.name),
+          isActive: action.payload.isActive,
+          isSuperAdmin: action.payload.isSuperAdmin,
+          id: action.payload.id
+        }
+      }
+    },
     adminUserFormReset: (state: AdminUsersState) => {
       return { ...state, adminUserForm: adminFormInitValues };
     }
@@ -87,7 +101,8 @@ export const {
   adminUserNameChanged,
   adminUserIsActiveChanged,
   adminUserIsSuperAdminChanged,
-  adminUserRequestStatusSet
+  adminUserRequestStatusSet,
+  editAdminUserFields
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;

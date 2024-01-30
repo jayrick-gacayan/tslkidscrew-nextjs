@@ -1,8 +1,8 @@
 'use client';
 
-import StepThreeFormBeforeAndAfterSchool from "./step-three-form-before-and-after-school";
+import ScheduleSelectionBeforeAndAfterSchool from "./schedule-selection-before-and-after-school";
 import StepThreeFormSummerCamp from "./step-three-form-summer-camp";
-import StepThreeFormVacationCamp from "./step-three-form-vacation-camp";
+import AttendanceScheduleVacationCamp from "./attendance-schedule-vacation-camp";
 
 export default function StepThreeForm({
   program_type
@@ -11,9 +11,9 @@ export default function StepThreeForm({
 }) {
 
   switch (program_type) {
-    case 'before-or-after-school': return <StepThreeFormBeforeAndAfterSchool />;
+    case 'before-or-after-school': return <ScheduleSelectionBeforeAndAfterSchool />;
     case 'summer-camp': return <StepThreeFormSummerCamp />
-    case 'vacation-camp': return <StepThreeFormVacationCamp />;
+    case 'vacation-camp': return <AttendanceScheduleVacationCamp />;
   }
   return null;
 }

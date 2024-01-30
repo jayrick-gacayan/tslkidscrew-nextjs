@@ -32,6 +32,18 @@ export default function PaymentFormSummerCamp() {
       <CustomCheckbox value={false}
         onChange={(value: boolean) => { return; }}
         text="I understand that my invoices will not be pro-rated for general illness, even if the child misses several days in a given week due to that illness." />
+      <CustomCheckbox value={false}
+        onChange={(value: boolean) => { return; }}
+        text="I waive all liability of TSL for any accidental injury of my child that occurs on site during program hours." />
+      <CustomCheckbox value={false}
+        onChange={(value: boolean) => { return; }}
+        text="I understand that my invoices will not be pro-rated for general illness, even if the child misses several days in a given week due to that illness." />
+      <CustomCheckbox value={false}
+        onChange={(value: boolean) => { return; }}
+        text="I understand that my invoices will not be pro-rated for general illness, even if the child misses several days in a given week due to that illness." />
+      <CustomCheckbox value={false}
+        onChange={(value: boolean) => { return; }}
+        text="I agree that my child can attend an off-site park at Clifton Park, Sacred Heart, and Rotterdam." />
     </div>
   )
 }

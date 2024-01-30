@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 
-export default function StepThreeFormBeforeAndAfterSchool() {
+export default function ScheduleSelectionBeforeAndAfterSchool() {
   const [yearCycle, setYearCycle] = useState('')
   return (
     <div className="space-y-8">

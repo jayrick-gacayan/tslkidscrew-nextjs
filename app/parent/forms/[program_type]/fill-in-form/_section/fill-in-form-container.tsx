@@ -3,6 +3,7 @@
 import ChildrenForm from "./children-form";
 import LocationForm from "./location-form";
 import PaymentFormContainer from "./payment-form-container";
+import RegistrationTypeSelectionBeforeOrAfterSchool from "./registration-type-selection-before-or-after-school";
 import StepThreeForm from "./step-three-form";
 
 export default function FillInFormContainer({
@@ -22,7 +23,8 @@ export default function FillInFormContainer({
         stepInNumber === 1 ? <LocationForm /> :
           stepInNumber === 2 ? <ChildrenForm /> :
             stepInNumber === 3 ? <StepThreeForm program_type={program_type} /> :
-              stepInNumber === highestStep ? <PaymentFormContainer program_type={program_type} /> : null
+              stepInNumber === 4 && program_type === 'before-or-after-school' ? <RegistrationTypeSelectionBeforeOrAfterSchool /> :
+                stepInNumber === highestStep ? <PaymentFormContainer program_type={program_type} /> : null
 
       }
     </>

@@ -2,8 +2,11 @@
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
+import { reduxStore } from "@/react-redux/redux-store";
+import { editAdminUserFields, modalFormOpened } from "../_redux/admin-users-slice";
 
 export default function AdminUsersTable() {
+
   return (
     <div className="block overflow-auto rounded bg-secondary h-96">
       <table className="min-w-[1024px] w-full">
@@ -30,12 +33,26 @@ export default function AdminUsersTable() {
               {new Date('02/28/18 01:00 AM').toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
             </td>
             <td className="w-32">
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center w-full gap-2">
                 <Link href='/admin/admin-users/1'
                   className="text-primary block cursor-pointer">
                   <Icon icon='fa6-solid:eye' />
                 </Link>
+                <button className="text-warning block cursor-pointer"
+                  onClick={() => {
+                    reduxStore.dispatch(editAdminUserFields({
+                      email: 'jayrick.gacayan@kodakollectiv.com',
+                      name: 'Jayrick Gacayan',
+                      isActive: true,
+                      isSuperAdmin: false,
+                      id: 1
+                    }))
+                    reduxStore.dispatch(modalFormOpened({ open: true, type: 'update' }));
+                  }}>
+                  <Icon icon='fa6-solid:pen' />
+                </button>
               </div>
+
             </td>
           </tr>
         </tbody>

@@ -1,6 +1,6 @@
-import AdminHeaderWithEntries from "@/app/admin/_components/admin-header-with-entries"
-import BackButtonClient from "@/app/admin/_components/back-button-client"
-import InfoContainer from "@/app/admin/_components/info-container"
+import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries"
+import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client"
+import InfoContainer from "@/app/admin/(dashboard)/_components/info-container"
 import Link from "next/link"
 
 export default function Page(props: any) {

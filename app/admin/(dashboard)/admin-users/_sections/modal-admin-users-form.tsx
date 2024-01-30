@@ -1,7 +1,7 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
-import { Fragment, useContext, useMemo } from "react";
+import { Fragment, useContext, useMemo, useRef } from "react";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
@@ -15,10 +15,11 @@ import {
   modalFormOpened
 } from "../_redux/admin-users-slice";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
-import { SampleContext } from "./form-actions-providers";
+import { useFormState, useFormStatus } from "react-dom";
+import { addAdminUser, updateAdminUser } from "../_actions/admin-user-actions";
 
 export default function ModalAdminUsersForm() {
-  const { formAction, state } = useContext(SampleContext);
+  const modalFormRef = useRef<HTMLFormElement>(null);
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => { return state.adminUsers; });
 
   const {
@@ -32,18 +33,22 @@ export default function ModalAdminUsersForm() {
     email,
     name,
     isActive,
-    isSuperAdmin
+    isSuperAdmin,
+    id
   } = useMemo(() => {
     return { ...adminUsersState.adminUserForm };
   }, [adminUsersState.adminUserForm]);
 
-  function formReset() {
-    formAction();
-    reduxStore.dispatch(adminUserFormReset());
-    reduxStore.dispatch(modalFormOpened({ open: false, type: '' }));
-  }
+  const [state, formAction] = useFormState((state: any, formData: any) => {
+    return type === 'update' ? updateAdminUser(id!, formData) : addAdminUser(state, formData);
+  }, {} as any);
+  const { pending, data, action, method } = useFormStatus();
 
-  console.log('state', state.count)
+
+  function formReset() {
+    reduxStore.dispatch(adminUserFormReset());
+    reduxStore.dispatch(modalFormOpened({ open: false, type: '' }))
+  }
 
   return (
     <Transition show={open} as={Fragment}>
@@ -69,37 +74,38 @@ export default function ModalAdminUsersForm() {
             <Dialog.Title as="h1" className='font-medium text-[24px]'>
               {type === 'add' ? 'Register' : 'Edit'} Admin Account
             </Dialog.Title>
-            <div className="space-y-4">
-              <CustomInput labelText='Email'
-                fieldInput={email}
-                onChange={(value: string) => { reduxStore.dispatch(adminUserEmailChanged(value)); }}
-                type='email' />
-              <CustomInput labelText='Name'
-                fieldInput={name}
-                onChange={(value: string) => { reduxStore.dispatch(adminUserNameChanged(value)); }}
-                type='text' />
-            </div>
-            {
-              type === 'update' &&
-              (
-                <CustomCheckbox value={isActive}
-                  onChange={(value: boolean) => { reduxStore.dispatch(adminUserIsActiveChanged(value)); }}
-                  text='Active' />
-              )
-            }
-            <CustomCheckbox value={isSuperAdmin}
-              onChange={(value: boolean) => { reduxStore.dispatch(adminUserIsSuperAdminChanged(value)); }}
-              text='Super Admin' />
-            <div className="flex items-center justify-end gap-4">
-              <button className='bg-white text-primary p-2' onClick={formReset}>Cancel</button>
-              <button className='bg-primary text-white rounded p-2'
-                onClick={() => {
-                  if (type === 'add') { }
-                  else if (type === 'update') { }
-                }}>
-                Save
-              </button>
-            </div>
+            <form action={formAction} ref={modalFormRef} className="space-y-8">
+              <div className="space-y-4">
+                <CustomInput labelText='Email'
+                  name="email"
+                  fieldInput={email}
+                  type='text' />
+                <CustomInput labelText='Name'
+                  name="name"
+                  fieldInput={name}
+                  type='text' />
+              </div>
+              {
+                type === 'update' &&
+                (
+                  <CustomCheckbox value={isActive}
+                    name="isActive"
+                    text='Active' />
+                )
+              }
+              <CustomCheckbox value={isSuperAdmin}
+                name="isAdmin"
+                text='Super Admin' />
+              <div className="flex items-center justify-end gap-4">
+                <button type='button'
+                  className='bg-white text-primary p-2'
+                  onClick={formReset}>Cancel</button>
+                <button className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
+                  disabled={pending}>
+                  {pending ? 'Processing' : 'Save'}
+                </button>
+              </div>
+            </form>
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>

@@ -10,6 +10,7 @@ export default function Page({
 }) {
   const { program_type } = params;
   const step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
+
   return (
     <div className='pb-12'>
       <div className="rounded drop-shadow bg-white w-8/12 m-auto block p-6 space-y-6 max-h-fit">

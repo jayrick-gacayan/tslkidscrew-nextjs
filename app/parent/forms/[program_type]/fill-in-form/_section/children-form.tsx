@@ -5,23 +5,23 @@ import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
 
-
 export default function ChildrenForm() {
   let today = new Date();
 
   const [value, setValue] = useState({
-    startDate: new Date("2019-01-26"),
-    endDate: null
+    startDate: today,
+    endDate: today
   });
 
   const handleValueChange = (newValue: any) => {
     setValue(newValue);
   }
 
-  function setDate(date: Date, year: number) {
-    date.setFullYear(date.getFullYear() - year);
+  function setMaxDateByYear(date: Date, year: number) {
+    let tempDate = date;
+    tempDate.setFullYear(date.getFullYear() - year);
 
-    return date;
+    return tempDate;
   }
 
   return (
@@ -46,8 +46,9 @@ export default function ChildrenForm() {
             placeholder="Lastname" />
         </div>
         <div className="relative w-full">
-          <Datepicker maxDate={new Date("2019-01-26")}
+          <Datepicker
 
+            maxDate={setMaxDateByYear(today, 5)}
             useRange={false}
             asSingle={true}
             value={value}

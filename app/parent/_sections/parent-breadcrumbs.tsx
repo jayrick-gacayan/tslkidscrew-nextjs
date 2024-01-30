@@ -53,7 +53,10 @@ export default function ParentBreadcrumbs() {
     return arraybc;
   }, [pathSegments]);
 
-  return (pathname.includes('login') || pathname.includes('register')) ? null :
+  return (
+    pathname.includes('login') ||
+    pathname.includes('register') ||
+    pathname.includes('profile')) ? null :
     (
       <div className="flex flex-wrap items-center gap-2 pt-12">
         {
