@@ -12,7 +12,7 @@ export default function Layout({
     <div className="relative w-screen h-screen">
       <ParentHeader />
       <div className="h-[calc(100vh-96px)] overflow-auto">
-        <div className="container mx-auto block space-y-8 h-full">
+        <div className="container mx-auto block space-y-8 h-full lg:px-0 px-4">
           <ParentBreadcrumbs />
           {children}
         </div>

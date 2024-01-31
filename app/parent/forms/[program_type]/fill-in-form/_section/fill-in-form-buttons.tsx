@@ -50,7 +50,9 @@ export default function FillInFormButtons({
                 programTypePath(stepInNumber + 1)
               }
 
-            }}>Next</button>
+            }}>
+            {stepInNumber === highestStep ? 'Proceed to Payment' : 'Next'}
+          </button>
         </div>
 
       </div>

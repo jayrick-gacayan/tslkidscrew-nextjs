@@ -8,12 +8,12 @@ export default function FormsMenu({ pathname }: { pathname: string }) {
   return (
     <div className="w-full">
       <Menu as='div' className='relative'>
-        {({ open }) => {
+        {({ open, close }) => {
           return (
             <>
               <Menu.Button as="div"
                 className="flex items-center gap-2 w-full cursor-pointer text-white  hover:text-primary-light/70">
-                <Link href='/parent/forms'>Forms</Link>
+                <Link href='/parent/forms' onClick={() => { close(); }}>Forms</Link>
                 <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
               </Menu.Button>
               <Transition enter="transition duration-100 ease-out"

@@ -1,7 +1,7 @@
 import PaymentFormSummerCamp from "./payment-form-summer-camp";
 import PaymentFormBeforeOrAfterSchool from "./payment-form-before-or-after-school";
 import PaymentFormVacationCamp from "./payment-form-vacation-camp";
-import StripeFormContainer from "./stripe-form-container";
+import StripeFormContainer from "./credit-card-info-container";
 import { PhShoppingCartBold } from "@/app/_components/svg/ph-shopping-cart-bold";
 
 export default function PaymentFormContainer({
@@ -27,11 +27,11 @@ export default function PaymentFormContainer({
           return null
         })()
       }
-      <div className="rounded border shadow-lg overflow-hidden flex items-center gap-4 w-full">
-        <div className="flex-none w-[192px] text-primary">
-          <PhShoppingCartBold height={72} width={192} />
+      <div className="rounded border shadow-lg overflow-hidden flex items-center lg:flex-row flex-col gap-4 w-full">
+        <div className="flex-none w-full lg:w-[192px] text-primary lg:p-0 p-4 border-b lg:border-b-0">
+          <PhShoppingCartBold height={72} width={192} className="m-auto block" />
         </div>
-        <div className="flex-1 divide-y divide-y-secondary-light">
+        <div className="flex-1 w-full divide-y divide-y-secondary-light">
           <div className='px-4 py-2 flex justify-between items-center'>
             <div>Deposit Fee:</div>
             <div>{

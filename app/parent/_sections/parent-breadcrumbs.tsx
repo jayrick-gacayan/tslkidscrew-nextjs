@@ -21,8 +21,8 @@ export default function ParentBreadcrumbs() {
         href: '/parent/dashboard'
       },
       {
-        altText: 'forms',
-        text: `${capitalCase(pathSegments[1])}`,
+        altText: pathSegments[1],
+        text: pathname.includes('settings') ? 'Settings' : `${capitalCase(pathSegments[1])}`,
         href: `/parent/${pathSegments[1]}`
       },
     ];
@@ -55,8 +55,7 @@ export default function ParentBreadcrumbs() {
 
   return (
     pathname.includes('login') ||
-    pathname.includes('register') ||
-    pathname.includes('profile')) ? null :
+    pathname.includes('register')) ? null :
     (
       <div className="flex flex-wrap items-center gap-2 pt-12">
         {
@@ -65,14 +64,13 @@ export default function ParentBreadcrumbs() {
               <Fragment key={`parent-breadcrumbs-${value.text}-${index}`}>
                 <Link href={value.href}
                   className={`cursor-pointer block hover:underline 
-                ${value.altText === pathSegments[pathSegments.length - 1] ? 'text-primary' : ''}`}>
+                ${value.altText === cbArrBreadCrumbs()[cbArrBreadCrumbs().length - 1].altText ? 'text-primary' : ''}`}>
                   {value.text}
                 </Link>
                 {
-                  index < pathSegments.length - 1 &&
+                  index < cbArrBreadCrumbs().length - 1 &&
                   (
                     <Fa6SolidChevronRight className='block' />
-
                   )
                 }
               </Fragment>

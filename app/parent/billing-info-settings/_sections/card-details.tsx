@@ -27,6 +27,7 @@ export default function CardDetails() {
                 <Fa6SolidCalendar />
               </div>
             }
+            className=""
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
             type='month' />
           <CustomInput labelText='CVC'

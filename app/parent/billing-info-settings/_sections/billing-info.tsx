@@ -15,7 +15,7 @@ export default function BillingInfo() {
       <Tab.Group as={Fragment}>
         <div className='space-y-8 w-full'>
           <div className="pb-4 sm:pb-0">
-            <div className='flex items-center flex-nowrap w-full'>
+            <div className='flex items-center flex-nowrap overflow-auto w-full'>
               <CustomTabItem labelText='Card Details' />
               <CustomTabItem labelText='Bank Details' />
               <CustomTabItem labelText='Notification Settings' />

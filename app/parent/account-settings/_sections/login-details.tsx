@@ -2,9 +2,9 @@
 
 import CustomInput from "@/app/_components/custom-input";
 import { Fa6SolidEnvelope } from "@/app/_components/svg/fa6-solid-envelope";
-import { Fa6SolidLock } from "@/app/_components/svg/fa6-solid-lock";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Tab } from "@headlessui/react";
+import LockIcon from "../../_components/lock-icon";
 
 export default function LoginDetails() {
   return (
@@ -21,21 +21,13 @@ export default function LoginDetails() {
           fieldInput={{ value: 'deanver@kodakollectiv.com', errorText: '', validationStatus: ValidationType.NONE }}
           type='text' />
         <CustomInput labelText='Password'
-          iconPrefix={
-            <div className="flex-none text-warning p-2">
-              <Fa6SolidLock />
-            </div>
-          }
+          iconPrefix={<LockIcon />}
           placeholder="Lastname"
           fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
           type='password' />
         <CustomInput labelText='Confirm Password'
           placeholder="Confirm Password"
-          iconPrefix={
-            <div className="flex-none text-warning p-2">
-              <Fa6SolidLock />
-            </div>
-          }
+          iconPrefix={<LockIcon />}
           fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
           type='password' />
       </div>

@@ -55,7 +55,7 @@ export default function LocationForm() {
   const [location, setLocation] = useState<any>(undefined);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       <div>
         <h1 className="font-medium text-[36px] text-black">Pick A Location</h1>
       </div>

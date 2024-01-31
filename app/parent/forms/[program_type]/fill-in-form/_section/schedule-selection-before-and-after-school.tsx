@@ -12,7 +12,7 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
         <h1 className="font-medium text-[36px]">Schedule's Selection</h1>
         <div className="flex items-center gap-2">
           <div className="flex-none">
-            <PhInfoLight className="text-warning" height={20} />
+            <PhInfoLight className="text-warning text-[24px]" />
           </div>
           <div>Please note that each year cycle has its own set of rates.</div>
         </div>

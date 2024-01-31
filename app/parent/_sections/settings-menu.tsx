@@ -27,11 +27,19 @@ export default function SettingsMenu({ pathname }: { pathname: string }) {
                     PARENT_SETTINGS.map((value: any) => {
                       return (
                         <Menu.Item as={Fragment} key={`forms-navbar-parent-${value.name}`}>
-                          <Link href={`/parent/${value.altText}`}
-                            className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}
-                            onClick={() => { close() }}>
-                            {value.name}
-                          </Link>
+                          {
+                            ({ close }) => {
+                              return (
+                                <div className='relative'>
+                                  <Link href={`/parent/${value.altText}`}
+                                    className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}
+                                    onClick={() => { close() }}>
+                                    {value.name}
+                                  </Link>
+                                </div>
+                              )
+                            }
+                          }
                         </Menu.Item>
                       )
                     })
