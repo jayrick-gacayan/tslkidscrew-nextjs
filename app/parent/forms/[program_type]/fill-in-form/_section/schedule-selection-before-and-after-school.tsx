@@ -1,8 +1,8 @@
 'use client';
 
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
+import { PhInfoLight } from "@/app/_components/svg/ph-info-light";
 
 export default function ScheduleSelectionBeforeAndAfterSchool() {
   const [yearCycle, setYearCycle] = useState('')
@@ -12,7 +12,7 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
         <h1 className="font-medium text-[36px]">Schedule's Selection</h1>
         <div className="flex items-center gap-2">
           <div className="flex-none">
-            <Icon icon="ph:info-light" className="text-warning" height={20} />
+            <PhInfoLight className="text-warning" height={20} />
           </div>
           <div>Please note that each year cycle has its own set of rates.</div>
         </div>

@@ -1,5 +1,5 @@
+import { Fa6SolidCaretDown } from "@/app/_components/svg/fa6-solid-caret-down";
 import { Combobox } from "@headlessui/react"
-import { Icon } from "@iconify/react/dist/iconify.js"
 
 export default function SearchSelect({
   value,
@@ -28,8 +28,7 @@ export default function SearchSelect({
               <>
                 <div className="p-2 text-tertiary">{getValue}</div>
                 <div className="p-2 text-primary">
-                  <Icon icon='fa6-solid:caret-down'
-                    className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                  <Fa6SolidCaretDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                 </div>
               </>
             )

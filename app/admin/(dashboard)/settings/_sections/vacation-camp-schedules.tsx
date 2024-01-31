@@ -1,9 +1,9 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Transition } from "@headlessui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
@@ -39,8 +39,7 @@ export default function VacationCampSchedules() {
                       <>
                         <div className="px-3 py-2">{capitalCase(noCase(camp))}</div>
                         <div className="px-3 py-2">
-                          <Icon icon='fa6-solid:chevron-down'
-                            className={`fill-white transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                          <Fa6SolidChevronDown className={`fill-white transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                         </div>
                       </>
                     )

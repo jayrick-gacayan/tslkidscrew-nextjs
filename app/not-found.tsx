@@ -1,8 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { Icon } from '@iconify/react'
 import { useRouter } from 'next/navigation'
+import { PhSmileyXEyesBold } from './_components/svg/ph-smiley-x-eyes-bold';
 
 export default function NotFound() {
   const router = useRouter();
@@ -12,7 +11,7 @@ export default function NotFound() {
       <div className='flex items-center justify-center h-full w-full'>
         <div className='space-y-4 rounded flex-none w-auto'>
           <div className='text-danger w-fit m-auto block'>
-            <Icon icon="ph:smiley-x-eyes-bold" height={192} width={192} />
+            <PhSmileyXEyesBold />
           </div>
           <div className='text-center space-y-2 font-semibold'>
             <h1 className='text-[48px]'>404</h1>

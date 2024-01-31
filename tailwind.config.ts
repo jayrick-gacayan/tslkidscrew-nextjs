@@ -19,9 +19,10 @@ const config: Config = {
       "secondary": "#FAFAFA",
       "secondary-light": "#E5E5E5",
       "primary": "#1565C0",
+      "primary-light": "#68aefe",
       "danger": "#DC2626",
       "warning": "#F9C13A",
-      "success": "#19a974"
+      "success": "#00B915"
     },
     extend: {
       screens: {
@@ -44,7 +45,8 @@ const config: Config = {
         "secondary-light": "#E5E5E5",
         "primary": "#1565C0",
         "warning": "#F9C13A",
-        "success": "#19a974"
+        "success": "#00B915",
+        "primary-light": "#68aefe",
       },
     },
   },

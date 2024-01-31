@@ -1,10 +1,10 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import { Fa6SolidEnvelope } from "@/app/_components/svg/fa6-solid-envelope";
+import { Fa6SolidLock } from "@/app/_components/svg/fa6-solid-lock";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Tab } from "@headlessui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Fragment } from "react";
 
 export default function LoginDetails() {
   return (
@@ -14,7 +14,7 @@ export default function LoginDetails() {
         <CustomInput labelText='Email'
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:envelope" />
+              <Fa6SolidEnvelope />
             </div>
           }
           placeholder="Email"
@@ -23,7 +23,7 @@ export default function LoginDetails() {
         <CustomInput labelText='Password'
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:lock" />
+              <Fa6SolidLock />
             </div>
           }
           placeholder="Lastname"
@@ -33,7 +33,7 @@ export default function LoginDetails() {
           placeholder="Confirm Password"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:lock" />
+              <Fa6SolidLock />
             </div>
           }
           fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}

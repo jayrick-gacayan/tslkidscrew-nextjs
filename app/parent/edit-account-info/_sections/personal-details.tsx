@@ -1,10 +1,10 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import { Fa6SolidLocationDot } from "@/app/_components/svg/fa6-solid-location-dot";
+import { Fa6SolidPhone } from "@/app/_components/svg/fa6-solid-phone";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Tab } from "@headlessui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Fragment } from "react";
 
 export default function PersonalDetails() {
   return (
@@ -29,7 +29,7 @@ export default function PersonalDetails() {
           placeholder="Emergency Number"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:phone" />
+              <Fa6SolidPhone />
             </div>
           }
           fieldInput={{ value: '09052050255', errorText: '', validationStatus: ValidationType.NONE }}
@@ -38,7 +38,7 @@ export default function PersonalDetails() {
           placeholder="Phone Number"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:phone" />
+              <Fa6SolidPhone />
             </div>
           }
           fieldInput={{ value: '09052050255', errorText: '', validationStatus: ValidationType.NONE }}
@@ -51,7 +51,7 @@ export default function PersonalDetails() {
           placeholder="Address Line 1"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:location-dot" />
+              <Fa6SolidLocationDot />
             </div>
           }
           fieldInput={{ value: 'Cebu City', errorText: '', validationStatus: ValidationType.NONE }}
@@ -60,7 +60,7 @@ export default function PersonalDetails() {
           placeholder="Address Line 2"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:location-dot" />
+              <Fa6SolidLocationDot />
             </div>
           }
           fieldInput={{ value: 'Cebu City', errorText: '', validationStatus: ValidationType.NONE }}
@@ -69,7 +69,7 @@ export default function PersonalDetails() {
           placeholder="City"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:location-dot" />
+              <Fa6SolidLocationDot />
             </div>
           }
           fieldInput={{ value: 'Cebu', errorText: '', validationStatus: ValidationType.NONE }}
@@ -78,7 +78,7 @@ export default function PersonalDetails() {
           placeholder="State"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:location-dot" />
+              <Fa6SolidLocationDot />
             </div>
           }
           fieldInput={{ value: 'Cebu', errorText: '', validationStatus: ValidationType.NONE }}
@@ -88,7 +88,7 @@ export default function PersonalDetails() {
           placeholder="Zipcode"
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:location-dot" />
+              <Fa6SolidLocationDot />
             </div>
           }
           fieldInput={{ value: 'Cebu', errorText: '', validationStatus: ValidationType.NONE }}

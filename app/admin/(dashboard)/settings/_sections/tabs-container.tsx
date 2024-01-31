@@ -13,7 +13,7 @@ export default function TabsContainer() {
     <Tab.Group as={Fragment}>
       <div className='space-y-8 w-full'>
         <div className="pb-4 sm:pb-0">
-          <div className='flex items-center flex-nowrap w-full'>
+          <div className='flex items-center flex-nowrap w-full overflow-auto'>
             <CustomTabItem labelText='Summer Camp' />
             <CustomTabItem labelText='Vacation Camp' />
             <CustomTabItem labelText='Before and After School' />

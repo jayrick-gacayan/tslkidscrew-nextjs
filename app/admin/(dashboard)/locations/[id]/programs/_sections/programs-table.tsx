@@ -1,6 +1,5 @@
-'use client';
-
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
+import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Link from "next/link";
 
 export default function ProgramsTable() {
@@ -30,11 +29,11 @@ export default function ProgramsTable() {
               <div className="flex items-center justify-center gap-2 w-full">
                 <Link href='/admin/locations/1/programs/1'
                   className="text-primary block">
-                  <Icon icon='fa6-solid:eye' />
+                  <Fa6SolidEye />
                 </Link>
                 <Link href='/admin/locations/1/programs/1/edit'
-                  className="text-amber-300 block">
-                  <Icon icon='fa6-solid:pen' />
+                  className="text-warning block">
+                  <Fa6SolidPen />
                 </Link>
               </div>
             </td>

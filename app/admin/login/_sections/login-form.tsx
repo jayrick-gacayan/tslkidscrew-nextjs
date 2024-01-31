@@ -3,7 +3,8 @@
 import CustomInput from "@/app/_components/custom-input";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
-import { Icon } from '@iconify/react';
+import { Fa6SolidEyeSlash } from "@/app/_components/svg/fa6-solid-eye-slash";
+import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
 
 export default function LoginForm() {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
@@ -21,7 +22,7 @@ export default function LoginForm() {
         iconSuffix={
           <div className="p-2 text-default/90"
             onClick={() => { setPasswordShow(!passwordShow) }}>
-            <Icon icon={`fa6-solid:${passwordShow ? `eye-slash` : `eye`}`} />
+            {passwordShow ? <Fa6SolidEyeSlash /> : <Fa6SolidEye />}
           </div>
         }
       />

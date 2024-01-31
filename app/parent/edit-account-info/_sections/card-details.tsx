@@ -1,10 +1,11 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import { Fa6SolidCalendar } from "@/app/_components/svg/fa6-solid-calendar";
+import { Fa6SolidCreditCard } from "@/app/_components/svg/fa6-solid-credit-card";
+import { Fa6SolidLock } from "@/app/_components/svg/fa6-solid-lock";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Tab } from "@headlessui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-
 export default function CardDetails() {
   return (
     <Tab.Panel as='div' className="space-y-8">
@@ -13,7 +14,7 @@ export default function CardDetails() {
         <CustomInput labelText='Card Number'
           iconPrefix={
             <div className="flex-none text-warning p-2">
-              <Icon icon="fa6-solid:credit-card" />
+              <Fa6SolidCreditCard />
             </div>
           }
           placeholder="Card Number"
@@ -23,7 +24,7 @@ export default function CardDetails() {
           <CustomInput labelText='Date Expiry'
             iconPrefix={
               <div className="flex-none text-warning p-2">
-                <Icon icon="fa6-solid:calendar" />
+                <Fa6SolidCalendar />
               </div>
             }
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
@@ -31,7 +32,7 @@ export default function CardDetails() {
           <CustomInput labelText='CVC'
             iconPrefix={
               <div className="flex-none text-warning p-2">
-                <Icon icon="fa6-solid:lock" />
+                <Fa6SolidLock />
               </div>
             }
             placeholder="CVC"

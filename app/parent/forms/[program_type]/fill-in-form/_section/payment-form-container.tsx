@@ -2,7 +2,7 @@ import PaymentFormSummerCamp from "./payment-form-summer-camp";
 import PaymentFormBeforeOrAfterSchool from "./payment-form-before-or-after-school";
 import PaymentFormVacationCamp from "./payment-form-vacation-camp";
 import StripeFormContainer from "./stripe-form-container";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { PhShoppingCartBold } from "@/app/_components/svg/ph-shopping-cart-bold";
 
 export default function PaymentFormContainer({
   program_type
@@ -29,7 +29,7 @@ export default function PaymentFormContainer({
       }
       <div className="rounded border shadow-lg overflow-hidden flex items-center gap-4 w-full">
         <div className="flex-none w-[192px] text-primary">
-          <Icon icon="ph:shopping-cart-bold" height={72} width={192} />
+          <PhShoppingCartBold height={72} width={192} />
         </div>
         <div className="flex-1 divide-y divide-y-secondary-light">
           <div className='px-4 py-2 flex justify-between items-center'>

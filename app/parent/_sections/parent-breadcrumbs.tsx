@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@iconify/react';
+import { Fa6SolidChevronRight } from '@/app/_components/svg/fa6-solid-chevron-right';
 import { capitalCase } from "change-case";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -71,9 +71,8 @@ export default function ParentBreadcrumbs() {
                 {
                   index < pathSegments.length - 1 &&
                   (
-                    <div>
-                      <Icon icon='fa6-solid:chevron-right'></Icon>
-                    </div>
+                    <Fa6SolidChevronRight className='block' />
+
                   )
                 }
               </Fragment>
