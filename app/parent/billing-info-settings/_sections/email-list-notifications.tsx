@@ -8,7 +8,8 @@ export default function EmailListNotifications() {
       {
         emails.map((value: any, index: number) => {
           return (
-            <div className="flex items-center justify-between p-4 gap-4">
+            <div key={`email-list-notifications-${value.email}`}
+              className="flex items-center justify-between p-4 gap-4">
               <div className="flex-1">
                 {value.email}
               </div>

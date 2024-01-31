@@ -18,7 +18,7 @@ export default function FillInFormButtons({
 
   const programTypePath = useCallback((numberStep: number) => {
     router.push(`/parent/forms/${program_type}/fill-in-form${numberStep === 1 ? `` : `?step=${numberStep}`}`);
-  }, [program_type])
+  }, [program_type, router])
 
   return (
     <div className="flex items-center justify-center gap-4">

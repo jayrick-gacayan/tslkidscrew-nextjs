@@ -1,9 +1,9 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
-import CustomListboxHeadless from "../../../../_components/custom-listbox-headless";
 
 let directorItems = [
   { id: 1, email: "alexisLarose.tsl@gmail.com" },

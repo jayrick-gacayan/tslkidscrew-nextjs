@@ -51,7 +51,7 @@ export default function ParentBreadcrumbs() {
 
     }
     return arraybc;
-  }, [pathSegments]);
+  }, [pathSegments, pathname]);
 
   return (
     pathname.includes('login') ||
