@@ -3,23 +3,25 @@
 import CustomInput from "@/app/_components/custom-input";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { ValidationType } from "@/types/enums/validation-type";
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Popover, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { useState } from "react";
-import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
+import { format } from "date-fns";
+import { Fragment, useCallback, useState } from "react";
+import { DateRange, DayPicker } from "react-day-picker";
+
+function dateDf(d: Date, df?: string) {
+  return format(d, df ?? 'LL-dd-yyyy');
+}
 
 export default function VacationCampSchedules() {
   const [camp, setCamp] = useState('camp-1');
+  const [reactDayPicker, setReactDayPicker] = useState<DateRange | undefined>();
 
-  const [month, setMonth] = useState('');
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date()
-  });
+  const reactDaypickerCB = useCallback(() => {
+    if (!reactDayPicker || (!reactDayPicker.from || !reactDayPicker.to)) { return ''; }
 
-  const handleValueChange = (newValue: any) => {
-    setValue(newValue);
-  }
+    return `${dateDf(reactDayPicker.from)} to ${dateDf(reactDayPicker.to)}`
+  }, [reactDayPicker])
 
   return (
     <div className="space-y-4">
@@ -98,30 +100,75 @@ export default function VacationCampSchedules() {
                 className="bg-white" />
             </div>
           </div>
-          {/* <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <div className="basis-full sm:basis-5/12">
-              <p className="font-semibold text-black">Month</p>
+              <p className="font-semibold text-black">Month And Year</p>
             </div>
             <div className="flex-1">
-              <CustomInput fieldInput={{ value: month, errorText: '', validationStatus: ValidationType.NONE }}
-                type='month'
-                disabled={false}
-                onChange={(value: string) => { setMonth(value) }}
-                className="bg-white" />
+              <input type='month' className="p-2 bg-white w-full" />
+
             </div>
-          </div> */}
-          <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
-            <div className="basis-full sm:basis-5/12">
+          </div>
+          <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
+            <div className="basis-full md:basis-5/12">
               <p className="font-semibold text-black">Date</p>
             </div>
-            <div className="w-full sm:flex-1">
-              <div className="relative w-full">
-                <Datepicker minDate={new Date()}
-                  value={value}
-                  inputClassName='w-full rounded font-normal text-black bg-white p-2 border-0 focus:border-none'
-                  onChange={(value: DateValueType, e?: HTMLInputElement | null | undefined) => {
-                    handleValueChange(value);
-                  }} />
+            <div className="w-full md:flex-1">
+              <div className="w-full">
+                <Popover className="relative">
+                  {({ open }) => (
+                    <>
+                      <Popover.Button as={Fragment}>
+                        <input type='text' className="p-3 bg-white w-full outline-0 outline-transparent"
+                          onChange={() => { return }}
+                          placeholder="Choose a Date Range"
+                          readOnly
+                          value={reactDaypickerCB()} />
+                      </Popover.Button>
+                      <Transition as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1">
+                        <Popover.Panel className='absolute z-[999] top-[115%]'>
+
+                          <DayPicker
+                            mode="range"
+                            numberOfMonths={2}
+                            selected={reactDayPicker}
+                            onSelect={setReactDayPicker}
+                            className="rounded shadow-lg border border-secondary bg-white"
+                            classNames={{
+                              months: 'flex items-stretch p-4 gap-4',
+                              month: 'w-full',
+                              caption: "flex justify-center py-2 mb-4 items-center",
+                              caption_label: "text-sm font-medium text-gray-900",
+                              nav: "flex items-center",
+                              nav_button:
+                                "h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300",
+                              nav_button_previous: "absolute left-1.5",
+                              nav_button_next: "absolute right-1.5",
+                              table: "w-full border-collapse",
+                              head_row: "flex font-medium",
+                              head_cell: "m-0.5 w-9 font-medium text-sm",
+                              row: "flex w-full mt-2",
+                              cell: "text-secondary-light rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                              day: "h-9 w-9 p-0",
+                              day_range_end: "day-range-end",
+                              day_selected:
+                                "rounded-md bg-primary text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
+                              day_today: "rounded-md bg-gray-200 text-gray-900",
+                              day_outside:
+                                "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
+                            }} />
+
+                        </Popover.Panel>
+                      </Transition>
+                    </>
+                  )}
+                </Popover>
               </div>
 
             </div>

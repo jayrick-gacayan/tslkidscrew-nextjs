@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
+import { FillInFormContext } from "../_context/fill-in-form-context";
 
 export default function FillInFormButtons({
   program_type,
@@ -11,6 +12,7 @@ export default function FillInFormButtons({
   program_type: string;
   step: string | undefined;
 }) {
+  const { dispatch } = useContext(FillInFormContext);
   const router = useRouter();
 
   const stepInNumber = !step ? 1 : parseInt(step);
@@ -48,6 +50,9 @@ export default function FillInFormButtons({
             onClick={() => {
               if (stepInNumber < highestStep) {
                 programTypePath(stepInNumber + 1)
+              }
+              else {
+                dispatch({ type: 'MODAL_TOGGLE' });
               }
 
             }}>
