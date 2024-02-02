@@ -2,9 +2,10 @@
 
 import { Fa6SolidCreditCard } from "@/app/_components/svg/fa6-solid-credit-card";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
-import { StripeCardNumberElementChangeEvent } from "@stripe/stripe-js/types/stripe-js/elements/card-number";
+import { StripeCardNumberElement, StripeCardNumberElementChangeEvent } from "@stripe/stripe-js/types/stripe-js/elements/card-number";
 import { FormEvent, useContext } from "react";
 import { FillInFormContext } from "../_context/fill-in-form-context";
+import { StripeElementType } from "@stripe/stripe-js";
 
 export default function StripeCardForm() {
   const { dispatch } = useContext(FillInFormContext);
@@ -17,6 +18,7 @@ export default function StripeCardForm() {
     if (!stripe || !elements) {
       return;
     }
+
 
     // Use elements.getElement to get references to the CardNumber, CardExpiry, and CardCvc elements.
     const cardNumberElement = elements.getElement(CardNumberElement);
@@ -51,9 +53,22 @@ export default function StripeCardForm() {
             <div className="flex-1">
               <CardNumberElement className="py-3"
                 options={{ showIcon: true, }}
+                onReady={(element: StripeCardNumberElement) => {
+                  console.log("CardNumberElement [ready]", element);
+                }}
 
+                onBlur={(event: {
+                  elementType: StripeElementType;
+                }) => {
+                  console.log("CardNumberElement [blur]", event.elementType);
+                }}
+                onFocus={(event: {
+                  elementType: StripeElementType;
+                }) => {
+                  console.log("CardNumberElement [focus]", event.elementType);
+                }}
                 onChange={(event: StripeCardNumberElementChangeEvent) => {
-                  console.log("CardNumberElement [change]", event);
+                  console.log("CardNumberElement [change]", event.error);
                 }} />
             </div>
           </div>

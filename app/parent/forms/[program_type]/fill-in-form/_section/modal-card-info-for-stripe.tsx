@@ -41,6 +41,7 @@ export default function ModalCardInfoForStripe() {
               Payment
             </Dialog.Title>
             <Elements stripe={stripePromise}>
+
               <StripeCardForm />
             </Elements>
 

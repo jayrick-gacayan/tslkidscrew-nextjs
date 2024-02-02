@@ -35,7 +35,8 @@ export default function FillInFormButtons({
           {
             stepInNumber > 1 &&
             (
-              <button className="px-4 py-2 bg-white text-primary rounded border border-primary"
+              <button type='button'
+                className="px-4 py-2 bg-white text-primary rounded border border-primary"
                 onClick={() => {
                   if (stepInNumber > 1) {
                     programTypePath(stepInNumber - 1)
@@ -46,7 +47,8 @@ export default function FillInFormButtons({
             )
           }
 
-          <button className="px-4 py-2 bg-primary text-white rounded"
+          <button type="submit"
+            className="px-4 py-2 bg-primary text-white rounded"
             onClick={() => {
               if (stepInNumber < highestStep) {
                 programTypePath(stepInNumber + 1)

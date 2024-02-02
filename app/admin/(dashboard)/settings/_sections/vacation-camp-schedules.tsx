@@ -106,7 +106,6 @@ export default function VacationCampSchedules() {
             </div>
             <div className="flex-1">
               <input type='month' className="p-2 bg-white w-full" />
-
             </div>
           </div>
           <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
@@ -132,7 +131,7 @@ export default function VacationCampSchedules() {
                         leave="transition ease-in duration-150"
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1">
-                        <Popover.Panel className='absolute z-[999] top-[115%]'>
+                        <Popover.Panel className='absolute z-[999] top-[115%]' >
 
                           <DayPicker
                             mode="range"

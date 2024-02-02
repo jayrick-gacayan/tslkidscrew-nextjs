@@ -18,9 +18,11 @@ export default function CompanyLogo({
       className={twMerge('block', className!)}
       aria-label="Brand">
       <Image alt="tsl-kids-crew-logo"
-        height={height}
-        width={width}
+        height={`${height}`}
+        width={`${width}`}
         src='/static/tsl-kids-crew-logo-white.png'
+
+        style={{ width: width, height: 'auto' }}
       />
     </Link>
   )

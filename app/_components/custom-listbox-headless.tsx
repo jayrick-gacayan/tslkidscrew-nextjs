@@ -27,6 +27,9 @@ export default function CustomListboxHeadless({
 
           return (
             <>
+              <input type='hidden' name='location'
+                value={typeof value === 'string' ? value : value ? value.id : ''}
+                onChange={() => { return null; }} />
               <Listbox.Button
                 as="div"
                 className={

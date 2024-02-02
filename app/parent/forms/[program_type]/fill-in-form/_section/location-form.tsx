@@ -51,8 +51,12 @@ let locationItems = [
   },
 ]
 
-export default function LocationForm() {
-  const [location, setLocation] = useState<any>(undefined);
+export default function LocationForm({ loc }: { loc: string | undefined }) {
+  const [location, setLocation] = useState<any>(
+    locationItems.find((value: any) => {
+      return (value.id === parseInt(loc!))
+    }) ?? undefined
+  );
 
   return (
     <div className="space-y-4 w-full">

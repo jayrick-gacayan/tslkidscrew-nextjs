@@ -4,16 +4,22 @@ import { FillInFormContext } from "./fill-in-form-context";
 import { FillInFormContextTypes } from "./context-types";
 
 const initialState: FillInFormContextTypes = {
-  stripeModalOpen: false
+  stripeModalOpen: false,
+  numberOfChildren: 1,
 };
 
-const reducer = (state: FillInFormContextTypes, action: { type: any; }) => {
+const reducer = (state: FillInFormContextTypes, action: { type: any; payload: any; }) => {
   switch (action.type) {
     case 'MODAL_TOGGLE':
       return {
         ...state,
         stripeModalOpen: !state.stripeModalOpen
       };
+    case 'SET_NUMBER_OF_CHILD':
+      return {
+        ...state,
+        numberOfChildren: action.payload
+      }
     default:
       return state;
   }
