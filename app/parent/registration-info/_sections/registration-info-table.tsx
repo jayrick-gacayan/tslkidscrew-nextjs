@@ -1,6 +1,4 @@
-'use client';
-
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
 import Link from "next/link";
 
 export default function RegistrationInfoTable() {
@@ -25,7 +23,7 @@ export default function RegistrationInfoTable() {
               <div className="flex items-center justify-center w-full gap-2">
                 <Link href='/admin/admin-users/1'
                   className="text-primary block cursor-pointer">
-                  <Icon icon='fa6-solid:eye' />
+                  <Fa6SolidEye />
                 </Link>
 
               </div>

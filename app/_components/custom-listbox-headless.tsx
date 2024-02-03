@@ -1,7 +1,7 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { Icon } from "@iconify/react/dist/iconify.js"
 import { Fragment } from "react";
 import { twMerge } from "tailwind-merge";
+import { Fa6SolidCaretDown } from "./svg/fa6-solid-caret-down";
 
 export default function CustomListboxHeadless({
   value,
@@ -27,6 +27,9 @@ export default function CustomListboxHeadless({
 
           return (
             <>
+              <input type='hidden' name='location'
+                value={typeof value === 'string' ? value : value ? value.id : ''}
+                onChange={() => { return null; }} />
               <Listbox.Button
                 as="div"
                 className={
@@ -36,8 +39,7 @@ export default function CustomListboxHeadless({
                 }>
                 <div className={`p-2 ${getValue === placeholder ? 'text-secondary-light' : 'text-black'}`}>{getValue}</div>
                 <div className="p-2 text-white">
-                  <Icon icon='fa6-solid:caret-down'
-                    className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                  <Fa6SolidCaretDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                 </div>
               </Listbox.Button>
 

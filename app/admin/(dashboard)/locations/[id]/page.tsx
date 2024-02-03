@@ -4,6 +4,7 @@ import InfoContainer from "../../_components/info-container";
 import BackButtonClient from "../../_components/back-button-client";
 
 export default function Page() {
+
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <BackButtonClient />

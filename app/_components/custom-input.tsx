@@ -47,7 +47,12 @@ export default function CustomInput({
               disabled={disabled}
               name={name!}
               defaultValue={fieldInput.value}
-              className="p-2 placeholder:text-secondary-light disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent"
+              className={
+                twMerge(
+                  'p-2 placeholder:text-secondary-light disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent',
+                  type === 'month' ? 'appearance-none' : ''
+                )
+              }
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 onChange && onChange(event.target.value);
               }}

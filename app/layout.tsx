@@ -24,8 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en" className='dark'>
       <Providers>
-        <body className={`${montserrat.className} bg-default`}>
-          {children}
+        <body className={`${montserrat.className} `}>
+          <div className='bg-default'>
+            {children}
+          </div>
+
         </body>
       </Providers>
     </html>

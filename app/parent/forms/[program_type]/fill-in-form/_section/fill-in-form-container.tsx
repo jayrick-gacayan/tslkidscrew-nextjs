@@ -20,11 +20,11 @@ export default function FillInFormContainer({
   return (
     <>
       {
-        stepInNumber === 1 ? <LocationForm /> :
-          stepInNumber === 2 ? <ChildrenForm /> :
-            stepInNumber === 3 ? <StepThreeForm program_type={program_type} /> :
-              stepInNumber === 4 && program_type === 'before-or-after-school' ? <RegistrationTypeSelectionBeforeOrAfterSchool /> :
-                stepInNumber === highestStep ? <PaymentFormContainer program_type={program_type} /> : null
+        // stepInNumber === 1 ? <LocationForm /> :
+        //   stepInNumber === 2 ? <ChildrenForm /> :
+        //     stepInNumber === 3 ? <StepThreeForm program_type={program_type} /> :
+        //       stepInNumber === 4 && program_type === 'before-or-after-school' ? <RegistrationTypeSelectionBeforeOrAfterSchool /> :
+        //         stepInNumber === highestStep ? <PaymentFormContainer program_type={program_type} /> : null
 
       }
     </>

@@ -1,8 +1,9 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
+import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
+import { Fa6SolidEyeSlash } from "@/app/_components/svg/fa6-solid-eye-slash";
 import { ValidationType } from "@/types/enums/validation-type";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 
 export default function RegisterForm() {
@@ -22,7 +23,7 @@ export default function RegisterForm() {
         iconSuffix={
           <div className="p-2 text-default/90"
             onClick={() => { setPasswordShow(!passwordShow) }}>
-            <Icon icon={`fa6-solid:${passwordShow ? `eye-slash` : `eye`}`} />
+            {passwordShow ? <Fa6SolidEyeSlash /> : <Fa6SolidEye />}
           </div>
         } />
       <CustomInput labelText='Confirm Password'
@@ -32,7 +33,7 @@ export default function RegisterForm() {
         iconSuffix={
           <div className="p-2 text-default/90"
             onClick={() => { setPasswordShow(!passwordConfirmationShow) }}>
-            <Icon icon={`fa6-solid:${passwordConfirmationShow ? `eye-slash` : `eye`}`} />
+            {passwordConfirmationShow ? <Fa6SolidEyeSlash /> : <Fa6SolidEye />}
           </div>
         } />
 

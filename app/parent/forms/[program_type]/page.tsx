@@ -18,8 +18,8 @@ export default function Page({
   }
 
   return (
-    <div className="pb-12">
-      <div className="rounded drop-shadow bg-white w-8/12 mx-auto block p-6 space-y-6">
+    <div className="pb-12 w-full">
+      <div className="rounded drop-shadow bg-white w-full lg:w-8/12 mx-auto block p-6 space-y-6">
         <h1 className="text-center font-medium text-[32px] text-black">
           {capitalCase(program_type)} for Capital Region Families
         </h1>

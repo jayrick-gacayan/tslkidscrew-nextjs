@@ -8,10 +8,10 @@ export default function DrawerRoot({ children }: { children: ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(true);
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen overflow-auto">
       <AdminHeader onDrawerOpen={() => { setDrawerOpen(true); }} />
       <Sidebar drawerOpen={drawerOpen} onDrawerOpen={(open: boolean) => { setDrawerOpen(open) }} />
-      <div className="w-full lg:ps-64 overflow-auto pt-12">
+      <div className="w-full lg:ps-64 pt-12 overflow-auto h-full relative">
         <div className="p-12">
           {children}
         </div>

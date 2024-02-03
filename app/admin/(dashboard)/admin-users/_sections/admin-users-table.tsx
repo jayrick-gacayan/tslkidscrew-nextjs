@@ -1,9 +1,10 @@
 'use client';
 
-import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
 import { reduxStore } from "@/react-redux/redux-store";
 import { editAdminUserFields, modalFormOpened } from "../_redux/admin-users-slice";
+import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
+import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
 
 export default function AdminUsersTable() {
 
@@ -36,7 +37,7 @@ export default function AdminUsersTable() {
               <div className="flex items-center justify-center w-full gap-2">
                 <Link href='/admin/admin-users/1'
                   className="text-primary block cursor-pointer">
-                  <Icon icon='fa6-solid:eye' />
+                  <Fa6SolidEye />
                 </Link>
                 <button className="text-warning block cursor-pointer"
                   onClick={() => {
@@ -49,7 +50,7 @@ export default function AdminUsersTable() {
                     }))
                     reduxStore.dispatch(modalFormOpened({ open: true, type: 'update' }));
                   }}>
-                  <Icon icon='fa6-solid:pen' />
+                  <Fa6SolidPen />
                 </button>
               </div>
 

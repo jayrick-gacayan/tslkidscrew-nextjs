@@ -1,17 +1,16 @@
-'use client';
-
 import { Fragment, useMemo, useRef } from "react";
 import DashboardMenuLink from "../_components/dashboard-menu-link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import Link from 'next/link';
-import Image from 'next/image';
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Transition } from "@headlessui/react";
 import {
   useEventListener,
   useOnClickOutside,
   useWindowSize
 } from "usehooks-ts";
+import { capitalCase } from "change-case";
+import CompanyLogo from "@/app/_components/company-logo";
+import { Fa6SolidGear } from "@/app/_components/svg/fa6-solid-gear";
+import { FeLogout } from "@/app/_components/svg/fe-logout";
 
 export default function Sidebar({
   drawerOpen,
@@ -36,9 +35,11 @@ export default function Sidebar({
     if (width <= 1024) { onDrawerOpen(false); }
   });
 
+  const adminDashboardLinks = ['dashboard', 'admin-users', 'locations'];
+
   return (
     <Transition appear={true} show={drawerOpen} as={Fragment}>
-      <div className={`absolute h-screen z-[60]`}>
+      <div className={`fixed h-screen z-[60]`}>
         <Transition.Child as={Fragment}
           enter="transition-opacity ease-in duration-300"
           enterFrom="opacity-0"
@@ -58,33 +59,21 @@ export default function Sidebar({
           leaveTo="-translate-x-full">
           <div ref={drawerRef}
             className="w-64 min-h-full bg-primary text-white flex flex-col relative pt-8 fix z-[60]">
-            {/* Sidebar content here */}
             <div className="flex-1">
-              <Link href='/'
-                className="m-auto block h-[72px] w-[144px] relative"
-                aria-label="Brand">
-                <Image alt="tsl-kids-crew-logo"
-                  fill
-                  src='/static/tsl-kids-crew-logo-white.png'
-                  sizes="100vw" />
-              </Link>
-
+              <CompanyLogo height={72} width={144} href="/admin/dashboard" className="m-auto w-fit" />
               <nav className="w-full py-4">
-                <DashboardMenuLink href='/admin/dashboard'
-                  altText='dashboard'
-                  current={memoSegment}
-                  text='Dashboard'
-                />
-                <DashboardMenuLink href='/admin/admin-users'
-                  altText='admin-users'
-                  current={memoSegment}
-                  text='Admin Users'
-                />
-                <DashboardMenuLink href='/admin/locations'
-                  altText='locations'
-                  current={memoSegment}
-                  text='Locations'
-                />
+                {
+                  adminDashboardLinks.map((link: string) => {
+                    return (
+                      <DashboardMenuLink key={`admin-links-${link}`}
+                        href={`/admin/${link}`}
+                        altText={link}
+                        current={memoSegment}
+                        text={capitalCase(link)}
+                      />
+                    )
+                  })
+                }
               </nav>
             </div>
             <div className="flex-none">
@@ -92,24 +81,13 @@ export default function Sidebar({
                 <DashboardMenuLink href='/admin/settings'
                   altText='settings'
                   current={memoSegment}
-                  text='Settings'
-                  icon={
-                    <span className="align-middle inline-block">
-                      <Icon icon='fa6-solid:gear' fontSize={20} />
-                    </span>
-                  }
-                />
+                  icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
+                  text='Settings' />
                 <DashboardMenuLink href={`#`}
                   altText='logout'
                   current={memoSegment}
-                  text='Logout'
-                  icon={
-                    <span className="align-middle inline-block">
-                      <Icon icon='fe:logout' fontSize={20} />
-                    </span>
-                  }
-                />
-
+                  icon={<FeLogout className="text-[20px] align-middle inline-block" />}
+                  text='Logout' />
               </nav>
             </div>
           </div>

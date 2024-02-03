@@ -1,7 +1,7 @@
 'use client';
 
+import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Listbox, Transition } from "@headlessui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { capitalCase, noCase } from "change-case";
 import { useCallback, useState } from "react";
 
@@ -33,8 +33,7 @@ export default function SummerCampSwimPrices() {
                     <>
                       <div className="px-3 py-2">{capitalCase(noCase(withSwim))}</div>
                       <div className="px-3 py-2">
-                        <Icon icon='fa6-solid:chevron-down'
-                          className={`fill-white transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                        <Fa6SolidChevronDown className={`fill-white transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                       </div>
                     </>
                   )
@@ -92,7 +91,8 @@ export default function SummerCampSwimPrices() {
                       weeksSwimArray.map((value) => {
                         return (
                           <td key={`prices-${withSwim}-${childValue}-${value}`} className="capitalize">
-                            <input className="rounded w-full outline-0 outline-transparent bg-white p-2" />
+                            <input placeholder='$'
+                              className="placeholder:text-secondary-light rounded w-full outline-0 outline-transparent bg-white p-2 text-center" />
                           </td>
                         );
                       })

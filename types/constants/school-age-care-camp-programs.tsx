@@ -41,4 +41,4 @@ export const SCHOOL_AGE_CARE_CAMP_PROGRAMS = [
     altText: 'weekend-fun-club',
     isDisabled: true
   },
-]
+];

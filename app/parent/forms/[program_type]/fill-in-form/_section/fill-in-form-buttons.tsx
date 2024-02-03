@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
+import { FillInFormContext } from "../_context/fill-in-form-context";
 
 export default function FillInFormButtons({
   program_type,
@@ -11,6 +12,7 @@ export default function FillInFormButtons({
   program_type: string;
   step: string | undefined;
 }) {
+  const { dispatch } = useContext(FillInFormContext);
   const router = useRouter();
 
   const stepInNumber = !step ? 1 : parseInt(step);
@@ -18,7 +20,7 @@ export default function FillInFormButtons({
 
   const programTypePath = useCallback((numberStep: number) => {
     router.push(`/parent/forms/${program_type}/fill-in-form${numberStep === 1 ? `` : `?step=${numberStep}`}`);
-  }, [program_type])
+  }, [program_type, router])
 
   return (
     <div className="flex items-center justify-center gap-4">
@@ -33,7 +35,8 @@ export default function FillInFormButtons({
           {
             stepInNumber > 1 &&
             (
-              <button className="px-4 py-2 bg-white text-primary rounded border border-primary"
+              <button type='button'
+                className="px-4 py-2 bg-white text-primary rounded border border-primary"
                 onClick={() => {
                   if (stepInNumber > 1) {
                     programTypePath(stepInNumber - 1)
@@ -44,13 +47,19 @@ export default function FillInFormButtons({
             )
           }
 
-          <button className="px-4 py-2 bg-primary text-white rounded"
+          <button type="submit"
+            className="px-4 py-2 bg-primary text-white rounded"
             onClick={() => {
               if (stepInNumber < highestStep) {
                 programTypePath(stepInNumber + 1)
               }
+              else {
+                dispatch({ type: 'MODAL_TOGGLE' });
+              }
 
-            }}>Next</button>
+            }}>
+            {stepInNumber === highestStep ? 'Proceed to Payment' : 'Next'}
+          </button>
         </div>
 
       </div>
