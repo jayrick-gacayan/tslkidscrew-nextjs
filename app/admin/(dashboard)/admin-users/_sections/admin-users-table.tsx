@@ -1,12 +1,14 @@
-'use client';
-
 import Link from "next/link";
-import { reduxStore } from "@/react-redux/redux-store";
-import { editAdminUserFields, modalFormOpened } from "../_redux/admin-users-slice";
-import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
+import EditAdminUserButton from "./edit-admin-user-button";
+import { Admin } from "@/models/admin";
 
-export default function AdminUsersTable() {
+export default function AdminUsersTable({
+  adminUsers
+}: {
+  adminUsers: Admin[]
+}) {
+
 
   return (
     <div className="block overflow-auto rounded bg-secondary h-96">
@@ -39,21 +41,8 @@ export default function AdminUsersTable() {
                   className="text-primary block cursor-pointer">
                   <Fa6SolidEye />
                 </Link>
-                <button className="text-warning block cursor-pointer"
-                  onClick={() => {
-                    reduxStore.dispatch(editAdminUserFields({
-                      email: 'jayrick.gacayan@kodakollectiv.com',
-                      name: 'Jayrick Gacayan',
-                      isActive: true,
-                      isSuperAdmin: false,
-                      id: 1
-                    }))
-                    reduxStore.dispatch(modalFormOpened({ open: true, type: 'update' }));
-                  }}>
-                  <Fa6SolidPen />
-                </button>
+                <EditAdminUserButton />
               </div>
-
             </td>
           </tr>
         </tbody>

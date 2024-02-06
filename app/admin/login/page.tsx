@@ -1,6 +1,12 @@
 import LoginForm from "./_sections/login-form";
 import RememberMe from "./_sections/remember-me";
 import LoginButtons from "./_sections/login-buttons";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Admin Login',
+  description: 'Admin Login Page'
+}
 
 export default function Page() {
   return (
