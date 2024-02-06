@@ -1,7 +1,7 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
-import { Fragment, useContext, useMemo, useRef } from "react";
+import { FormEvent, Fragment, useContext, useEffect, useMemo, useRef } from "react";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
@@ -9,18 +9,21 @@ import { Transition, Dialog } from "@headlessui/react";
 import {
   adminUserEmailChanged,
   adminUserFormReset,
-  adminUserIsActiveChanged,
-  adminUserIsSuperAdminChanged,
+  adminUserFormSubmitted,
   adminUserNameChanged,
+  adminUserRequestStatusSet,
   modalFormOpened
 } from "../_redux/admin-users-slice";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
 import { useFormState, useFormStatus } from "react-dom";
-import { addAdminUser, updateAdminUser } from "../_actions/admin-user-actions";
+
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { RequestStatus } from "@/types/enums/request-status";
 
 export default function ModalAdminUsersForm() {
-  const modalFormRef = useRef<HTMLFormElement>(null);
-  const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => { return state.adminUsers; });
+  const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
+    return state.adminUsers;
+  });
 
   const {
     type,
@@ -34,20 +37,34 @@ export default function ModalAdminUsersForm() {
     name,
     isActive,
     isSuperAdmin,
-    id
+    id,
+    requestStatus
   } = useMemo(() => {
     return { ...adminUsersState.adminUserForm };
   }, [adminUsersState.adminUserForm]);
 
-  const [state, formAction] = useFormState((state: any, formData: any) => {
-    return type === 'update' ? updateAdminUser(id!, formData) : addAdminUser(state, formData);
-  }, {} as any);
   const { pending, data, action, method } = useFormStatus();
 
+  useEffect(() => {
+    switch (requestStatus) {
+      case RequestStatus.IN_PROGRESS:
+        if (type === 'add') {
+
+        }
+        break;
+    }
+  }, [requestStatus, type])
 
   function formReset() {
     reduxStore.dispatch(adminUserFormReset());
     reduxStore.dispatch(modalFormOpened({ open: false, type: '' }))
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    reduxStore.dispatch(adminUserRequestStatusSet(RequestStatus.WAITING));
+    reduxStore.dispatch(adminUserFormSubmitted())
   }
 
   return (
@@ -74,16 +91,22 @@ export default function ModalAdminUsersForm() {
             <Dialog.Title as="h1" className='font-medium text-[24px]'>
               {type === 'add' ? 'Register' : 'Edit'} Admin Account
             </Dialog.Title>
-            <form action={formAction} ref={modalFormRef} className="space-y-8">
+            <form onSubmit={onSubmit} className="space-y-8">
               <div className="space-y-4">
                 <CustomInput labelText='Email'
                   name="email"
                   fieldInput={email}
+                  onChange={(value: string) => {
+                    reduxStore.dispatch(adminUserEmailChanged(value));
+                  }}
                   type='text' />
                 <CustomInput labelText='Name'
                   name="name"
                   fieldInput={name}
-                  type='text' />
+                  type='text'
+                  onChange={(value: string) => {
+                    reduxStore.dispatch(adminUserNameChanged(value));
+                  }} />
               </div>
               {
                 type === 'update' &&
@@ -100,7 +123,8 @@ export default function ModalAdminUsersForm() {
                 <button type='button'
                   className='bg-white text-primary p-2'
                   onClick={formReset}>Cancel</button>
-                <button className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
+                <button type="submit"
+                  className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
                   disabled={pending}>
                   {pending ? 'Processing' : 'Save'}
                 </button>

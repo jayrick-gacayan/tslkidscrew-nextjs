@@ -3,6 +3,10 @@ import { AdminUsersState } from "./admin-users-state";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
 
+import { z } from 'zod';
+import { ValidationType } from "@/types/enums/validation-type";
+
+
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
   name: fieldInputValue<string>(''),
@@ -65,6 +69,52 @@ const adminUsersSlice = createSlice({
         }
       }
     },
+    adminUserFormSubmitted: (state: AdminUsersState) => {
+      const schema = z.object({
+        email: z.string().min(1, 'Email is required').email(),
+        name: z.string().min(1, 'Name is required')
+      });
+
+      const validatedFields = schema.safeParse({
+        email: state.adminUserForm.email.value,
+        name: state.adminUserForm.name.value
+      });
+
+      if (validatedFields.success) {
+        return {
+          ...state,
+          email: {
+            ...state.adminUserForm.email,
+            validationStatus: ValidationType.VALID,
+          },
+          name: {
+            ...state.adminUserForm.name,
+            validationStatus: ValidationType.VALID,
+          },
+          requestStatus: RequestStatus.IN_PROGRESS
+        }
+      } else {
+
+        let errors = validatedFields.error.flatten().fieldErrors;
+        return {
+          ...state,
+          adminUserForm: {
+            ...state.adminUserForm,
+            email: {
+              ...state.adminUserForm.email,
+              validationStatus: ValidationType.ERROR,
+              errorText: errors["email"]![0],
+            },
+            name: {
+              ...state.adminUserForm.name,
+              validationStatus: ValidationType.ERROR,
+              errorText: errors["name"]![0],
+            },
+            requestStatus: RequestStatus.FAILURE
+          }
+        }
+      }
+    },
     adminUserRequestStatusSet: (state: AdminUsersState, action: PayloadAction<RequestStatus>) => {
       return {
         ...state,
@@ -102,7 +152,8 @@ export const {
   adminUserIsActiveChanged,
   adminUserIsSuperAdminChanged,
   adminUserRequestStatusSet,
-  editAdminUserFields
+  editAdminUserFields,
+  adminUserFormSubmitted
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;

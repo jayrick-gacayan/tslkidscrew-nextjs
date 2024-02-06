@@ -20,7 +20,7 @@ export default function Pagination({
 
   let pageNumber = !currentPage ? 1 : parseInt(currentPage);
 
-  function urlPageNumber(searchParams: SearchParamsProps, pageNumber?: number) {
+  function urlPaginate(searchParams: SearchParamsProps, pageNumber?: number) {
     let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
     if (!pageNumber) { urlSearchParams.delete('page'); }
@@ -40,15 +40,19 @@ export default function Pagination({
         <div>
           <PaginationIcon condition={pageNumber === 1}
             onClick={() => {
-              onButtonClick(urlPageNumber(searchParams, pageNumber - 1 === 1 ? undefined : pageNumber - 1))
+              onButtonClick(urlPaginate(searchParams, pageNumber - 1 === 1 ? undefined : pageNumber - 1))
             }}
             icon={<Fa6SolidChevronLeft className="inline-block text-primary text-[20px] " />} />
         </div>
         {
-          [1, 2, 3, 4, 5].map((value: number, index: number) => {
+          Array.from({ length: totalPages <= 5 ? totalPages : 5 }).map((_val, idx) => {
+            return (totalPages <= 5 || pageNumber <= 5) ? idx + 1 :
+              pageNumber === totalPages ? (idx + ((totalPages - 5) + 1)) :
+                (idx + ((pageNumber - 5) + 1))
+          }).map((value: number, index: number) => {
             return (
               <div key={`pagination-${value}-index`}>
-                <Link href={urlPageNumber(searchParams, value === 1 ? undefined : value)}
+                <Link href={urlPaginate(searchParams, value === 1 ? undefined : value)}
                   className={`px-4 py-3 ${value === pageNumber ? 'bg-primary text-white' : 'text-primary'} cursor-pointer inline-block`}>
                   {value}
                 </Link>
@@ -59,7 +63,7 @@ export default function Pagination({
         <div>
           <PaginationIcon condition={pageNumber === totalPages}
             onClick={() => {
-              onButtonClick(urlPageNumber(searchParams, pageNumber === totalPages ? totalPages : pageNumber + 1))
+              onButtonClick(urlPaginate(searchParams, pageNumber === totalPages ? totalPages : pageNumber + 1))
             }}
             icon={<Fa6SolidChevronRight className="inline-block text-primary text-[20px] " />} />
         </div>
