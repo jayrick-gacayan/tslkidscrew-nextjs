@@ -12,7 +12,7 @@ export default async function AdminUsersTable({
 }: {
   searchParams: SearchParamsProps;
 }) {
-  let result: Result<Paginate<Admin>> = await userAdmins(searchParams);
+  // let result: Result<Paginate<Admin>> = await userAdmins(searchParams);
 
   return (
     <div className="block overflow-auto rounded bg-secondary h-[476px]">
@@ -30,7 +30,7 @@ export default async function AdminUsersTable({
         </thead>
         <tbody>
           {
-            (result.data?.data ?? []).map((admin: Admin, idx: number) => {
+            ([]).map((admin: Admin, idx: number) => {
               return (
                 <tr key={`admin-users-table-${admin.name!}-${idx}`}
                   className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">

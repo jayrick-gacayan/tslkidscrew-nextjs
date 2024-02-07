@@ -12,11 +12,11 @@ export default async function Page({
     id: string
   }
 }) {
-  let result = await getAdminUser(params.id);
+  // let result = await getAdminUser(params.id);
 
-  if (!result.data) { notFound(); }
+  // if (!result.data) { notFound(); }
 
-  let admin = result.data;
+  // let admin = result.data;
 
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
@@ -24,23 +24,18 @@ export default async function Page({
       <AdminHeaderWithEntries headerText='Admin Information' />
       <div className="bg-secondary p-6">
         <div className="columns-1 lg:columns-2">
-          <InfoContainer label='Name' data={admin.name!} />
-          <InfoContainer label='Email' data={admin.email!} />
+          <InfoContainer label='Name' data='Sample Name' />
+          <InfoContainer label='Email' data='email@gmail.com' />
           <InfoContainer label='Super Admin'
-            data={
-              admin.is_super_admin === undefined ? 'No' :
-                admin.is_super_admin ? "Yes" : "No"
-            } />
+            data='Yes' />
           <InfoContainer label='Last Signed In'
             data={
               <div className="space-x-2">
-                {new Date(admin.updated_at!).toLocaleDateString('en-US', { month: '2-digit', day: "2-digit", year: "numeric" })} &nbsp;
-                {new Date(admin.updated_at!).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                {new Date().toLocaleDateString('en-US', { month: '2-digit', day: "2-digit", year: "numeric" })} &nbsp;
+                {new Date().toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
               </div>
             } />
-          <InfoContainer label='Created By' data={
-            admin.created_by?.name ?? "N/A"
-          } />
+          <InfoContainer label='Created By' data="N/A" />
         </div>
         <EditInfoButton />
       </div>
