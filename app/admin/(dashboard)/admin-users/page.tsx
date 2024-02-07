@@ -14,7 +14,7 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
 
-  let result: Result<Paginate<Admin>> = await adminUsers(searchParams);
+  // let result: Result<Paginate<Admin>> = await adminUsers(searchParams);
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
 
   return (
@@ -24,7 +24,7 @@ export default async function Page({
         redirectURL={redirectURL} />
       <AdminUsersTable searchParams={searchParams} />
       <AdminUsersPaginationClient searchParams={searchParams}
-        totalPages={Math.ceil(result.data?.total! / showEntry) ?? 1}
+        totalPages={Math.ceil(1 / showEntry) ?? 1}
         redirectURL={redirectURL} />
     </div>
   )
