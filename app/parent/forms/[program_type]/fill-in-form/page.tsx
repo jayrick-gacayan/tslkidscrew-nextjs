@@ -1,7 +1,13 @@
 import FillInFormProvider from "./_context/fill-in-form-provider";
-import FillInFormButtons from "./_section/fill-in-form-buttons";
-import FillInFormContainer from "./_section/fill-in-form-container";
 import FormActionContainer from "./_section/form-action-container";
+
+export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
+  return [
+    { program_type: 'vacation-camp' },
+    { program_type: 'summer-camp' },
+    { program_type: 'before-or-after-school' }
+  ]
+}
 
 export default function Page({
   params,

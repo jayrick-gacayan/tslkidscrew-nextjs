@@ -1,5 +1,3 @@
-'use client';
-
 import CustomInput from "@/app/_components/custom-input";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
@@ -14,11 +12,13 @@ export default function LoginForm() {
       <CustomInput labelText='Email'
         fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
         type='email'
+        name='email'
         onChange={(value: string) => { return; }} />
       <CustomInput labelText='Password'
         fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
         type={passwordShow ? 'text' : 'password'}
         onChange={(value: string) => { return; }}
+        name="password"
         iconSuffix={
           <div className="p-2 text-default/90"
             onClick={() => { setPasswordShow(!passwordShow) }}>

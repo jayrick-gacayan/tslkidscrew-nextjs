@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu, Transition } from "@headlessui/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CompanyLogo from "@/app/_components/company-logo";
 import FormsMenu from "./forms-menu";
 import SettingsMenu from "./settings-menu";
@@ -10,6 +10,7 @@ import Link from "next/link";
 
 export default function ParentHeader() {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <div className="sticky top-0 left-0 z-[20] bg-primary w-full">
@@ -62,7 +63,10 @@ export default function ParentHeader() {
                                     </Menu.Item>
                                     <Menu.Item as='div'
                                       className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'
-                                      onClick={() => { close(); }}>
+                                      onClick={() => {
+                                        close();
+                                        router.push('/admin/login');
+                                      }}>
                                       Logout
                                     </Menu.Item>
                                   </div>
@@ -75,7 +79,6 @@ export default function ParentHeader() {
                     </>
                   )
               }
-
             </div>
           </div>
         </div>

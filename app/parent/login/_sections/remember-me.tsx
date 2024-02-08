@@ -1,5 +1,3 @@
-'use client';
-
 export default function RememberMe() {
   return (
     <div className="block form-control">

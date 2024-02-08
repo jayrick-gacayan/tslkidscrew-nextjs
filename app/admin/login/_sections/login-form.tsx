@@ -1,5 +1,3 @@
-'use client';
-
 import CustomInput from "@/app/_components/custom-input";
 import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";

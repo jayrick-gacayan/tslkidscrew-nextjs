@@ -4,7 +4,6 @@ import { LegacyRef, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 function CustomInputDefault(props: any, ref: LegacyRef<HTMLButtonElement> | undefined) {
-  console.log('props', props)
   return (
     <button ref={ref}
       {...props}

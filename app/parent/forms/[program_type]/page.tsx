@@ -3,6 +3,14 @@ import { notFound } from "next/navigation";
 import ProgramTypeTabContainer from "./_section/program-type-tab-container";
 import Link from "next/link";
 
+export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
+  return [
+    { program_type: 'vacation-camp' },
+    { program_type: 'summer-camp' },
+    { program_type: 'before-or-after-school' }
+  ]
+}
+
 export default function Page({
   params
 }: {

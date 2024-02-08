@@ -2,12 +2,14 @@
 
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Menu, Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
 
 export default function AdminHeader({
   onDrawerOpen
 }: {
   onDrawerOpen: () => void;
 }) {
+  const router = useRouter();
   return (
     <div className="fixed top-0 left-0 z-50 lg:ps-64 bg-white w-full">
       <div className="flex justify-between lg:justify-end px-12 py-4 gap-4 w-full">
@@ -45,7 +47,10 @@ export default function AdminHeader({
                       </Menu.Item>
                       <Menu.Item as='div'
                         className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'
-                        onClick={() => { close(); }}>
+                        onClick={() => {
+                          close();
+                          router.push('/admin/login');
+                        }}>
                         Logout
                       </Menu.Item>
                     </div>
