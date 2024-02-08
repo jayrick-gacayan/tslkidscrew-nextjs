@@ -70,6 +70,6 @@
   @apply w-[120px] text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
 }
 
-.react-datepicker__month-text--selected {
+.react-datepicker__month-text--selected, .react-datepicker__day--selected {
   @apply bg-primary text-white rounded-lg
 }

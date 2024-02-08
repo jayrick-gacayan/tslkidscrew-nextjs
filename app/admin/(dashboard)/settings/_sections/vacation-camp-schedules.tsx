@@ -118,11 +118,11 @@ export default function VacationCampSchedules() {
               />
             </div>
           </div>
-          <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
-            <div className="basis-full sm:basis-5/12">
+          <div className="flex lg:flex-row flex-col items-start lg:items-center gap-2">
+            <div className="basis-full lg:basis-5/12">
               <p className="font-semibold text-black">Date</p>
             </div>
-            <div className="w-full sm:flex-1">
+            <div className="w-full lg:flex-1 relative">
               <DatePicker selected={rangeDate[0]}
                 selectsRange
                 monthsShown={2}

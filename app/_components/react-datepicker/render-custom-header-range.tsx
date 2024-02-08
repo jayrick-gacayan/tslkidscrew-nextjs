@@ -25,7 +25,7 @@ export default function renderCustomHeaderRange({
         className={`${customHeaderCount === 1 ? 'invisible' : 'visible'} cursor-pointer p-3`}>
         <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
       </button>
-      <div className={`flex-1 ${customHeaderCount === 0 ? 'text-left' : 'text-right'}`}>
+      <div className={`flex-1 ${customHeaderCount === 0 ? 'sm:text-left text-center' : 'sm:text-right text-center'}`}>
         {format(new Date(monthDate), 'MMMM yyyy')}
       </div>
       <button type="button"

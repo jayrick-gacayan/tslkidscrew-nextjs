@@ -1,16 +1,23 @@
 import CustomCheckbox from "@/app/_components/custom-checkbox";
 import CustomInput from "@/app/_components/custom-input";
 import CustomTextarea from "@/app/_components/custom-textarea";
+import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
+import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
+import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
 import { ValidationType } from "@/types/enums/validation-type";
-import { Listbox, Popover, Transition } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { format } from "date-fns";
-import { Fragment, useState } from "react";
-import { DayPicker } from "react-day-picker";
+import { addYears, format } from "date-fns";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+
+let today = new Date();
+const maxDate = addYears(today, 1);
 
 export default function SummerCampWeekPrices() {
-  const [reactDayPicker, setReactDayPicker] = useState<Date | undefined>();
+  const [weekDate, setWeekDate] = useState<Date | null>(today);
   const [week, setWeek] = useState('week-1');
 
   return (
@@ -79,60 +86,42 @@ export default function SummerCampWeekPrices() {
             className="bg-white" />
           <div className="space-y-1 w-full">
             <div className="font-medium">Start Date</div>
-            <Popover className="relative">
-              {({ open }) => (
-                <>
-                  <Popover.Button as={Fragment}>
-                    <input type='text' className="p-3 bg-white w-full outline-0 outline-transparent"
-                      onChange={() => { return }}
-                      placeholder="Choose a Date"
-                      readOnly
-                      value={reactDayPicker ? format(reactDayPicker, 'LL-dd-yyyy') : ''} />
-                  </Popover.Button>
-                  <Transition as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1">
-                    <Popover.Panel className='absolute z-[999] top-[115%]'>
-                      <DayPicker mode="single"
-                        selected={reactDayPicker}
-                        onSelect={setReactDayPicker}
-                        className="rounded shadow-lg border border-secondary bg-white"
-                        classNames={{
-                          caption: "flex justify-center py-2 mb-4 relative items-center",
-                          caption_label: "text-sm font-medium",
-                          nav: "flex items-center",
-                          nav_button:
-                            "h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300",
-                          nav_button_previous: "absolute left-1.5",
-                          nav_button_next: "absolute right-1.5",
-                          table: "w-full border-collapse",
-                          head_row: "flex font-medium",
-                          head_cell: "m-0.5 w-9 font-medium text-sm",
-                          row: "flex w-full mt-2",
-                          cell: "text-secondary-light rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-primary/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-primary/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                          day: "h-9 w-9 p-0 hover:rounded hover:bg-secondary hover:text-primary",
-                          day_selected:
-                            "rounded-md bg-primary text-white hover:bg-primary hover:text-white focus:bg-primary focus:text-white",
-                          // day_today: "rounded-md bg-gray-200 text-primary",
-                        }}
-                      // components={{
-                      //   IconLeft: ({ ...props }) => (
-                      //     <ChevronLeftIcon {...props} className="h-4 w-4 stroke-2" />
-                      //   ),
-                      //   IconRight: ({ ...props }) => (
-                      //     <ChevronRightIcon {...props} className="h-4 w-4 stroke-2" />
-                      //   ),
-                      // }}
-                      />
-                    </Popover.Panel>
-                  </Transition>
-                </>
-              )}
-            </Popover>
+            <div>
+              <DatePicker selected={weekDate}
+                customInput={<CustomInputDefault className='bg-white' />}
+                onChange={(date) => { setWeekDate(date) }}
+                calendarContainer={calendarContainer}
+                renderCustomHeader={({
+                  changeYear,
+                  date,
+                  decreaseMonth,
+                  increaseMonth,
+                  prevMonthButtonDisabled,
+                  nextMonthButtonDisabled
+                }) => {
+                  return (
+                    <div className="flex w-full items-center gap-4 bg-primary text-white">
+                      <button type="button"
+                        onClick={decreaseMonth}
+                        disabled={prevMonthButtonDisabled}
+                        className={`cursor-pointer p-3`}>
+                        <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
+                      </button>
+                      <div className={`flex-1 text-center`}>
+                        {format(new Date(date), 'MMMM d')}
+                      </div>
+                      <button type="button"
+                        onClick={increaseMonth}
+                        disabled={nextMonthButtonDisabled}
+                        className={`cursor-pointer p-3`}>
+                        <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
+                      </button>
+                    </div>
+                  )
+                }}
+              />
+            </div>
+
           </div>
           <CustomInput labelText='Capacity'
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}

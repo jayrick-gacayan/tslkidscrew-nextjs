@@ -1,15 +1,22 @@
 
 import { format } from "date-fns";
 import { LegacyRef, forwardRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 function CustomInputDefault(props: any, ref: LegacyRef<HTMLButtonElement> | undefined) {
-
+  console.log('props', props)
   return (
     <button ref={ref}
+      {...props}
       onClick={props.onClick}
-      className='w-full focus:border-primary text-left border bg-secondary text-tertiary p-3 rounded border-secondary-light'
+      className={
+        twMerge(
+          'w-full focus:border-primary text-left border bg-secondary text-tertiary p-3 rounded border-secondary-light',
+          props.className!
+        )
+      }
       type="button">
-      {format(new Date(props.value), "MMMM d, yyyy")}
+      {props.value === '' ? <>Place a start date:</> : format(new Date(props.value), "MMMM d, yyyy")}
     </button>
   )
 }

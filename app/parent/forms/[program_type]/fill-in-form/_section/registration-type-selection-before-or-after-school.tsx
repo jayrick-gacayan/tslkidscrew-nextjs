@@ -1,13 +1,19 @@
 'use client';
 
 import CustomCheckbox from "@/app/_components/custom-checkbox";
-import { Popover, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
+import { useState } from "react";
+import { addYears, format } from "date-fns";
+import DatePicker from "react-datepicker";
+import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
+import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
+import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
+import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
+
+let today = new Date();
+const maxDate = addYears(today, 1);
 
 export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
-  const [reactDayPicker, setReactDayPicker] = useState<Date>();
+  const [registerStartDate, setRegisterStartDate] = useState<Date | null>(null)
 
   return (
     <div className="space-y-8">
@@ -16,66 +22,39 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
       <div className="space-y-6">
         <div className="relative space-y-1">
           <div className="font-medium">Start Date</div>
-          <Popover className="relative">
-            {({ open }) => (
-              <>
-                <Popover.Button as={Fragment}>
-                  <input type='text' className="p-3 bg-secondary w-full outline-0 outline-transparent"
-                    onChange={() => { return }}
-                    placeholder="Choose a Date"
-                    readOnly
-                    value={reactDayPicker ? format(reactDayPicker, 'LL-dd-yyyy') : ''} />
-                </Popover.Button>
-                <Transition as={Fragment}
-                  enter="transition ease-out duration-200"
-                  enterFrom="opacity-0 translate-y-1"
-                  enterTo="opacity-100 translate-y-0"
-                  leave="transition ease-in duration-150"
-                  leaveFrom="opacity-100 translate-y-0"
-                  leaveTo="opacity-0 translate-y-1">
-                  <Popover.Panel className='absolute z-[999] top-[115%]'>
-                    <DayPicker
-                      mode="single"
-                      selected={reactDayPicker}
-                      onSelect={setReactDayPicker}
-                      className="rounded shadow-lg border border-secondary bg-white"
-                      classNames={{
-                        caption: "flex justify-center py-2 mb-4 relative items-center",
-                        caption_label: "text-sm font-medium text-gray-900",
-                        nav: "flex items-center",
-                        nav_button:
-                          "h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300",
-                        nav_button_previous: "absolute left-1.5",
-                        nav_button_next: "absolute right-1.5",
-                        table: "w-full border-collapse",
-                        head_row: "flex font-medium",
-                        head_cell: "m-0.5 w-9 font-medium text-sm",
-                        row: "flex w-full mt-2",
-                        cell: "text-secondary-light rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-9 w-9 p-0",
-                        day_range_end: "day-range-end",
-                        day_selected:
-                          "rounded-md bg-primary text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
-                        day_today: "rounded-md bg-gray-200 text-gray-900",
-                        day_outside:
-                          "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
-                        day_disabled: "text-gray-500 opacity-50",
-                        day_hidden: "invisible",
-                      }}
-                    // components={{
-                    //   IconLeft: ({ ...props }) => (
-                    //     <ChevronLeftIcon {...props} className="h-4 w-4 stroke-2" />
-                    //   ),
-                    //   IconRight: ({ ...props }) => (
-                    //     <ChevronRightIcon {...props} className="h-4 w-4 stroke-2" />
-                    //   ),
-                    // }}
-                    />
-                  </Popover.Panel>
-                </Transition>
-              </>
-            )}
-          </Popover>
+          <DatePicker selected={registerStartDate}
+            customInput={<CustomInputDefault />}
+            onChange={(date) => { setRegisterStartDate(date) }}
+            calendarContainer={calendarContainer}
+            renderCustomHeader={({
+              changeYear,
+              date,
+              decreaseMonth,
+              increaseMonth,
+              prevMonthButtonDisabled,
+              nextMonthButtonDisabled
+            }) => {
+              return (
+                <div className="flex w-full items-center gap-4 bg-primary text-white">
+                  <button type="button"
+                    onClick={decreaseMonth}
+                    disabled={prevMonthButtonDisabled}
+                    className={`cursor-pointer p-3`}>
+                    <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
+                  </button>
+                  <div className={`flex-1 text-center`}>
+                    {format(new Date(date), 'MMMM d')}
+                  </div>
+                  <button type="button"
+                    onClick={increaseMonth}
+                    disabled={nextMonthButtonDisabled}
+                    className={`cursor-pointer p-3`}>
+                    <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
+                  </button>
+                </div>
+              )
+            }}
+          />
         </div>
         <div className="space-y-6">
           <div className='block space-y-2'>

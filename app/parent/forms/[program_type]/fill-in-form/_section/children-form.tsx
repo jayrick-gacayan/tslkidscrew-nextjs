@@ -45,6 +45,7 @@ export default function ChildrenForm() {
               onChange={(date) => { setBirthdate(date) }}
               calendarContainer={calendarContainer}
               renderCustomHeader={({
+                changeYear,
                 date,
                 decreaseMonth,
                 increaseMonth,
@@ -60,7 +61,7 @@ export default function ChildrenForm() {
                       <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
                     </button>
                     <div className={`flex-1 text-center`}>
-                      {format(new Date(date), 'MMMM d, yyyy')}
+                      {format(new Date(date), 'MMMM d')}
                     </div>
                     <button type="button"
                       onClick={increaseMonth}
