@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useRef } from "react";
 import DashboardMenuLink from "../_components/dashboard-menu-link";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import {
   useEventListener,
@@ -19,6 +19,7 @@ export default function Sidebar({
   drawerOpen: boolean;
   onDrawerOpen: (open: boolean) => void;
 }) {
+  const router = useRouter();
   const drawerRef = useRef(null);
   let segment = useSelectedLayoutSegment();
 
@@ -83,11 +84,12 @@ export default function Sidebar({
                   current={memoSegment}
                   icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
                   text='Settings' />
-                <DashboardMenuLink href={`#`}
+                <DashboardMenuLink href={`/admin/login`}
                   altText='logout'
                   current={memoSegment}
                   icon={<FeLogout className="text-[20px] align-middle inline-block" />}
-                  text='Logout' />
+                  text='Logout'
+                  onClick={() => { router.push('/admin/login') }} />
               </nav>
             </div>
           </div>
