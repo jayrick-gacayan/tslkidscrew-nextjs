@@ -7,7 +7,6 @@ import AdminUsersTable from "./_sections/admin-users-table";
 import { Paginate } from "@/models/paginate";
 import { adminUsers } from "@/services/admin_services";
 
-
 export default async function Page({
   searchParams
 }: {
