@@ -2,6 +2,7 @@ import { redirectURL } from "@/types/common-use-server-functions/use-server-func
 import ProgramsHeader from "./_sections/programs-header";
 import ProgramsPaginationClient from "./_sections/programs-pagination-client";
 import ProgramsTable from "./_sections/programs-table";
+import BackButtonClient from "../../../_components/back-button-client";
 
 export default function Page({
   params,
@@ -13,6 +14,7 @@ export default function Page({
 
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
+      <BackButtonClient />
       <ProgramsHeader />
       <ProgramsTable />
       <ProgramsPaginationClient searchParams={searchParams}
