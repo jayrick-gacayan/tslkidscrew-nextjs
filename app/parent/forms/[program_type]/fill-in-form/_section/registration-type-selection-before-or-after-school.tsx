@@ -6,8 +6,7 @@ import { addYears, format } from "date-fns";
 import DatePicker from "react-datepicker";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
-import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
-import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
+import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
 
 let today = new Date();
 const maxDate = addYears(today, 1);
@@ -26,35 +25,7 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
             customInput={<CustomInputDefault />}
             onChange={(date) => { setRegisterStartDate(date) }}
             calendarContainer={calendarContainer}
-            renderCustomHeader={({
-              changeYear,
-              date,
-              decreaseMonth,
-              increaseMonth,
-              prevMonthButtonDisabled,
-              nextMonthButtonDisabled
-            }) => {
-              return (
-                <div className="flex w-full items-center gap-4 bg-primary text-white">
-                  <button type="button"
-                    onClick={decreaseMonth}
-                    disabled={prevMonthButtonDisabled}
-                    className={`cursor-pointer p-3`}>
-                    <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
-                  </button>
-                  <div className={`flex-1 text-center`}>
-                    {format(new Date(date), 'MMMM d')}
-                  </div>
-                  <button type="button"
-                    onClick={increaseMonth}
-                    disabled={nextMonthButtonDisabled}
-                    className={`cursor-pointer p-3`}>
-                    <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
-                  </button>
-                </div>
-              )
-            }}
-          />
+            renderCustomHeader={renderCustomHeaderDefault} />
         </div>
         <div className="space-y-6">
           <div className='block space-y-2'>

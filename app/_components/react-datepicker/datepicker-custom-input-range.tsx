@@ -7,7 +7,7 @@ function DatepickerInputCustomRange(props: any, ref: LegacyRef<HTMLButtonElement
   return (
     <button ref={ref}
       onClick={props.onClick}
-      className='w-full focus:border-primary text-left border bg-white text-black p-3 rounded border-secondary-light'
+      className='relative z-0 w-full focus:border-primary text-left border bg-white text-black p-3 rounded border-secondary-light'
       type="button">
       {
         splitValue[1] !== '' ?

@@ -3,10 +3,8 @@
 import CustomInput from "@/app/_components/custom-input";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
-import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
-import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
+import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
 import { ValidationType } from "@/types/enums/validation-type";
-import { format } from "date-fns";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -44,35 +42,7 @@ export default function ChildrenForm() {
               customInput={<CustomInputDefault />}
               onChange={(date) => { setBirthdate(date) }}
               calendarContainer={calendarContainer}
-              renderCustomHeader={({
-                changeYear,
-                date,
-                decreaseMonth,
-                increaseMonth,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled
-              }) => {
-                return (
-                  <div className="flex w-full items-center gap-4 bg-primary text-white">
-                    <button type="button"
-                      onClick={decreaseMonth}
-                      disabled={prevMonthButtonDisabled}
-                      className={`cursor-pointer p-3`}>
-                      <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
-                    </button>
-                    <div className={`flex-1 text-center`}>
-                      {format(new Date(date), 'MMMM d')}
-                    </div>
-                    <button type="button"
-                      onClick={increaseMonth}
-                      disabled={nextMonthButtonDisabled}
-                      className={`cursor-pointer p-3`}>
-                      <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
-                    </button>
-                  </div>
-                )
-              }}
-            />
+              renderCustomHeader={renderCustomHeaderDefault} />
           </div>
         </div>
         <CustomInput

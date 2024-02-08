@@ -3,13 +3,12 @@ import CustomInput from "@/app/_components/custom-input";
 import CustomTextarea from "@/app/_components/custom-textarea";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
+import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
-import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { addYears, format } from "date-fns";
+import { addYears } from "date-fns";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -91,35 +90,7 @@ export default function SummerCampWeekPrices() {
                 customInput={<CustomInputDefault className='bg-white' />}
                 onChange={(date) => { setWeekDate(date) }}
                 calendarContainer={calendarContainer}
-                renderCustomHeader={({
-                  changeYear,
-                  date,
-                  decreaseMonth,
-                  increaseMonth,
-                  prevMonthButtonDisabled,
-                  nextMonthButtonDisabled
-                }) => {
-                  return (
-                    <div className="flex w-full items-center gap-4 bg-primary text-white">
-                      <button type="button"
-                        onClick={decreaseMonth}
-                        disabled={prevMonthButtonDisabled}
-                        className={`cursor-pointer p-3`}>
-                        <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
-                      </button>
-                      <div className={`flex-1 text-center`}>
-                        {format(new Date(date), 'MMMM d')}
-                      </div>
-                      <button type="button"
-                        onClick={increaseMonth}
-                        disabled={nextMonthButtonDisabled}
-                        className={`cursor-pointer p-3`}>
-                        <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
-                      </button>
-                    </div>
-                  )
-                }}
-              />
+                renderCustomHeader={renderCustomHeaderDefault} />
             </div>
 
           </div>

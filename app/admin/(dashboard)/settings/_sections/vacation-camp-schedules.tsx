@@ -1,7 +1,7 @@
 'use client';
 
 import CustomInput from "@/app/_components/custom-input";
-import { datePickerHeaderYearOnly } from "@/app/_components/react-datepicker/datepicker-header-year-only";
+import { renderCustomHeaderYearOnly } from "@/app/_components/react-datepicker/render-custom-header-year-only";
 import { renderMonthContent } from "@/app/_components/react-datepicker/render-month-content";
 import DatepickerMonthYearInputCustom from '@/app/_components/react-datepicker/datepicker-month-year-custom-input';
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
@@ -111,8 +111,9 @@ export default function VacationCampSchedules() {
                 customInput={<DatepickerMonthYearInputCustom />}
                 onChange={(date) => { setMonthYearDate(date) }}
                 maxDate={maxDate}
+                popperClassName="z-50"
                 calendarContainer={calendarContainer}
-                renderCustomHeader={datePickerHeaderYearOnly}
+                renderCustomHeader={renderCustomHeaderYearOnly}
                 renderMonthContent={renderMonthContent}
                 showMonthYearPicker
               />

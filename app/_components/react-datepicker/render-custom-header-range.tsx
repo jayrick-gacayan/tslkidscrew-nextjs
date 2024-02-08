@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { Fa6SolidChevronLeft } from "../svg/fa6-solid-chevron-left";
 import { Fa6SolidChevronRight } from "../svg/fa6-solid-chevron-right";
+import ButtonDPNavHeader from "./button-dp-nav-header";
 
 export default function renderCustomHeaderRange({
   monthDate,
@@ -19,21 +20,17 @@ export default function renderCustomHeaderRange({
 }) {
   return (
     <div className="flex w-full items-center gap-4 bg-primary text-white">
-      <button type="button"
-        onClick={decreaseMonth}
-        disabled={prevMonthButtonDisabled}
-        className={`${customHeaderCount === 1 ? 'invisible' : 'visible'} cursor-pointer p-3`}>
-        <Fa6SolidChevronLeft className="inline-block text-[24px] font-medium" />
-      </button>
+      <ButtonDPNavHeader disabled={prevMonthButtonDisabled}
+        direction="left"
+        conditionCustomHeaderCount={customHeaderCount === 0}
+        onClick={decreaseMonth} />
       <div className={`flex-1 ${customHeaderCount === 0 ? 'sm:text-left text-center' : 'sm:text-right text-center'}`}>
         {format(new Date(monthDate), 'MMMM yyyy')}
       </div>
-      <button type="button"
-        onClick={increaseMonth}
-        disabled={nextMonthButtonDisabled}
-        className={`${customHeaderCount === 0 ? 'invisible' : 'visible'} cursor-pointer p-3`}>
-        <Fa6SolidChevronRight className="inline-block text-[24px] font-medium" />
-      </button>
+      <ButtonDPNavHeader disabled={nextMonthButtonDisabled}
+        direction="right"
+        conditionCustomHeaderCount={customHeaderCount === 1}
+        onClick={increaseMonth} />
     </div>
   )
 }
