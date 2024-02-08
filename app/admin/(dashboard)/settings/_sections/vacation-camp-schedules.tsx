@@ -2,12 +2,18 @@
 
 import CustomInput from "@/app/_components/custom-input";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
+import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Popover, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { format } from "date-fns";
+import { format, getYear } from "date-fns";
 import { Fragment, useCallback, useState } from "react";
-import { DateRange, DayPicker } from "react-day-picker";
+import DatePicker from "react-datepicker";
+import { datePickerHeaderYearOnly } from "../_components/datepicker-header-year-only";
+import CustomDatePickerInput from "../_components/react-datepicker-custom-input";
+import { renderMonthContent } from "../_components/render-month-content";
+
 
 function dateDf(d: Date, df?: string) {
   return format(d, df ?? 'LL-dd-yyyy');
@@ -15,13 +21,14 @@ function dateDf(d: Date, df?: string) {
 
 export default function VacationCampSchedules() {
   const [camp, setCamp] = useState('camp-1');
-  const [reactDayPicker, setReactDayPicker] = useState<DateRange | undefined>();
+  const [monthYearDate, setMonthYearDate] = useState<Date | null>(new Date());
+  // const [reactDayPicker, setReactDayPicker] = useState<DateRange | undefined>();
 
-  const reactDaypickerCB = useCallback(() => {
-    if (!reactDayPicker || (!reactDayPicker.from || !reactDayPicker.to)) { return ''; }
+  // const reactDaypickerCB = useCallback(() => {
+  //   if (!reactDayPicker || (!reactDayPicker.from || !reactDayPicker.to)) { return ''; }
 
-    return `${dateDf(reactDayPicker.from)} to ${dateDf(reactDayPicker.to)}`
-  }, [reactDayPicker])
+  //   return `${dateDf(reactDayPicker.from)} to ${dateDf(reactDayPicker.to)}`
+  // }, [reactDayPicker])
 
   return (
     <div className="space-y-4">
@@ -105,10 +112,26 @@ export default function VacationCampSchedules() {
               <p className="font-semibold text-black">Month And Year</p>
             </div>
             <div className="flex-1">
-              <input type='month' className="p-2 bg-white w-full" />
+              <DatePicker selected={monthYearDate}
+                customInput={<CustomDatePickerInput />}
+                onChange={(date) => { setMonthYearDate(date) }}
+                calendarContainer={
+                  ({ children, className, arrowProps, showPopperArrow }) => {
+                    return (
+                      <div className="bg-white rounded border border-secondary-light shadow-lg">
+                        {children}
+                      </div>
+                    )
+                  }
+                }
+                renderCustomHeader={datePickerHeaderYearOnly}
+                renderMonthContent={renderMonthContent}
+                showMonthYearPicker
+                dateFormat="MMMM/yyyy"
+              />
             </div>
           </div>
-          <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
+          {/* <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
             <div className="basis-full md:basis-5/12">
               <p className="font-semibold text-black">Date</p>
             </div>
@@ -171,7 +194,7 @@ export default function VacationCampSchedules() {
               </div>
 
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
