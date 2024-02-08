@@ -3,6 +3,7 @@ import RememberMe from "./_sections/remember-me";
 import LoginButtons from "./_sections/login-buttons";
 import type { Metadata } from "next";
 import { adminLogin } from "./_actions/login-actions";
+import FormContainer from "./_sections/form-container";
 
 export const metadata: Metadata = {
   title: 'Admin Login',
@@ -14,11 +15,7 @@ export default function Page() {
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="w-[448px] m-auto block bg-white rounded p-8 shadow-lg">
         <h1 className="text-center text-[24px]">Login</h1>
-        <form action={adminLogin} className="space-y-4">
-          <LoginForm />
-          <RememberMe />
-          <LoginButtons />
-        </form>
+        <FormContainer />
       </div>
     </div>
   )

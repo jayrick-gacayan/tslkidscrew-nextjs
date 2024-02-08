@@ -1,6 +1,4 @@
-import LoginForm from "./_sections/login-form";
-import RememberMe from "./_sections/remember-me";
-import LoginButtons from "./_sections/login-buttons";
+import FormContainer from "./_sections/form-container";
 
 export default function Page() {
   return (
@@ -8,9 +6,7 @@ export default function Page() {
       <div className="w-[448px] m-auto block bg-white rounded p-8 shadow-lg">
         <h1 className="text-center text-[24px]">Login</h1>
         <div className="space-y-4">
-          <LoginForm />
-          <RememberMe />
-          <LoginButtons />
+          <FormContainer />
         </div>
       </div>
     </div>

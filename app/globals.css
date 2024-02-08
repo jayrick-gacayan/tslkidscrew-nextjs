@@ -15,3 +15,61 @@
   --success: "#00B915";
   --primary-light: "#68aefe";
 }
+
+.react-datepicker__month-container {
+  @apply space-y-2 w-full
+}
+
+.react-datepicker__month-wrapper {
+  @apply flex items-stretch w-full justify-evenly gap-2
+}
+
+.react-datepicker__triangle {
+  @apply sm:fill-primary fill-white stroke-white sm:stroke-primary drop-shadow-lg stroke-0 border-transparent
+}
+
+.react-datepicker__aria-live {
+  @apply hidden
+}
+
+.react-datepicker__week, .react-datepicker__day-names {
+  @apply flex justify-evenly
+}
+
+.react-datepicker__day--outside-month {
+  @apply invisible
+}
+
+.react-datepicker__day--in-range {
+  @apply bg-primary text-white
+}
+
+.react-datepicker__day--range-start {
+  @apply rounded-l-lg overflow-hidden
+}
+
+.react-datepicker__day--range-end {
+  @apply rounded-r-lg overflow-hidden
+}
+
+.react-datepicker__day-name {
+  @apply p-2 h-10 flex-none w-11 text-center text-sm cursor-pointer
+}
+
+.react-datepicker__day {
+  @apply p-2 h-10 flex-none w-11 text-center text-sm cursor-pointer
+}
+
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--selecting-range-start,
+.react-datepicker__day--selecting-range-end {
+  @apply bg-primary-light/70
+}
+
+.react-datepicker__month-text {
+  @apply w-[120px] text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
+}
+
+.react-datepicker__month-text--selected {
+  @apply bg-primary text-white rounded-lg
+}

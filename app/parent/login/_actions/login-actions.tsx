@@ -4,9 +4,9 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
-export async function adminLogin(formData: FormData) {
+export async function parentLogin(formData: FormData) {
 
-  redirect('/admin/dashboard');
+  redirect('/parent/dashboard');
   // try {
   //   let result = await signIn('credentials', {
   //     email: formData.get('email'),
