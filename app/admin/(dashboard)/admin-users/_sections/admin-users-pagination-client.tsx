@@ -13,16 +13,17 @@ export function AdminUsersPaginationClient({
   redirectURL: (url: string) => Promise<void>
 }) {
 
-  return (
-    <div className="w-fit m-auto block">
-      <Pagination baseURL="/admin/admin-users"
-        currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-        searchParams={searchParams}
-        totalPages={totalPages}
-        onButtonClick={(url: string) => {
-          redirectURL(url);
-        }}
-      />
-    </div>
-  )
+  return totalPages < 2 ? null :
+    (
+      <div className="w-fit m-auto block">
+        <Pagination baseURL="/admin/admin-users"
+          currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+          searchParams={searchParams}
+          totalPages={totalPages}
+          onButtonClick={(url: string) => {
+            redirectURL(url);
+          }}
+        />
+      </div>
+    )
 }

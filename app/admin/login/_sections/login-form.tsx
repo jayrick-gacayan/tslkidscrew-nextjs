@@ -13,11 +13,13 @@ export default function LoginForm() {
     <div className="space-y-2">
       <CustomInput labelText='Email'
         fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-        type='email'
+        type='text'
+        name='email'
         onChange={(value: string) => { return; }} />
       <CustomInput labelText='Password'
         fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
         type={passwordShow ? 'text' : 'password'}
+        name='password'
         onChange={(value: string) => { return; }}
         iconSuffix={
           <div className="p-2 text-default/90"

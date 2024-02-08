@@ -46,7 +46,7 @@ export default function CustomInput({
               inputMode={inputMode!}
               disabled={disabled}
               name={name!}
-              defaultValue={fieldInput.value}
+              defaultValue={fieldInput.value!}
               className={
                 twMerge(
                   'p-2 placeholder:text-secondary-light disabled:cursor-not-allowed block w-full outline-0 outline-transparent rounded bg-transparent border-transparent',
@@ -61,6 +61,9 @@ export default function CustomInput({
           {iconSuffix && <div className="flex-none">{iconSuffix}</div>}
         </div>
       </label>
+      {
+        fieldInput.errorText !== '' && (<div className="text-danger">{fieldInput.errorText}</div>)
+      }
     </div>
   )
 }
