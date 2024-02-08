@@ -48,8 +48,8 @@ export default function AdminHeader({
                       <Menu.Item as='div'
                         className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'
                         onClick={() => {
-                          close();
                           router.push('/admin/login');
+                          close();
                         }}>
                         Logout
                       </Menu.Item>
