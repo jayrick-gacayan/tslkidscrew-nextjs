@@ -12,7 +12,9 @@ import {
   adminUserFormSubmitted,
   adminUserNameChanged,
   adminUserRequestStatusSet,
-  modalFormOpened
+  modalFormClosed,
+  modalFormOpened,
+  modalFormTypeCloseSet
 } from "../_redux/admin-users-slice";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
 import { useFormState, useFormStatus } from "react-dom";
@@ -57,7 +59,11 @@ export default function ModalAdminUsersForm() {
 
   function formReset() {
     reduxStore.dispatch(adminUserFormReset());
-    reduxStore.dispatch(modalFormOpened({ open: false, type: '' }))
+
+    reduxStore.dispatch(modalFormClosed());
+    setTimeout(() => {
+      reduxStore.dispatch(modalFormTypeCloseSet());
+    }, 500)
   }
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {

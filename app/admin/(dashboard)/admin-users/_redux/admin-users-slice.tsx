@@ -140,6 +140,12 @@ const adminUsersSlice = createSlice({
     },
     adminUserFormReset: (state: AdminUsersState) => {
       return { ...state, adminUserForm: adminFormInitValues };
+    },
+    modalFormClosed: (state: AdminUsersState) => {
+      return { ...state, modalForm: { ...state.modalForm, open: false } }
+    },
+    modalFormTypeCloseSet: (state: AdminUsersState) => {
+      return { ...state, modalForm: { ...state.modalForm, type: '' } }
     }
   },
 });
@@ -153,7 +159,9 @@ export const {
   adminUserIsSuperAdminChanged,
   adminUserRequestStatusSet,
   editAdminUserFields,
-  adminUserFormSubmitted
+  adminUserFormSubmitted,
+  modalFormClosed,
+  modalFormTypeCloseSet
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;
