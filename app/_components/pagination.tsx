@@ -1,8 +1,8 @@
 import { SearchParamsProps } from "@/types/props/search-params-props";
-import { Fa6SolidChevronLeft } from "./svg/fa6-solid-chevron-left"
-import { Fa6SolidChevronRight } from "./svg/fa6-solid-chevron-right"
 import Link from "next/link";
 import PaginationIcon from "./pagination-icon";
+import Fa6SolidChevronLeft from "./svg/fa6-solid-chevron-left";
+import Fa6SolidChevronRight from "./svg/fa6-solid-chevron-right";
 
 export default function Pagination({
   baseURL,
@@ -42,7 +42,7 @@ export default function Pagination({
             onClick={() => {
               onButtonClick(urlPaginate(searchParams, pageNumber - 1 === 1 ? undefined : pageNumber - 1))
             }}
-            icon={<Fa6SolidChevronLeft className="inline-block text-primary text-[20px] " />} />
+            icon={Fa6SolidChevronLeft} />
         </div>
         {
           Array.from({ length: totalPages <= 5 ? totalPages : 5 }).map((_val, idx) => {
@@ -53,7 +53,8 @@ export default function Pagination({
             return (
               <div key={`pagination-${value}-index`}>
                 <Link href={urlPaginate(searchParams, value === 1 ? undefined : value)}
-                  className={`px-4 py-3 ${value === pageNumber ? 'bg-primary text-white' : 'text-primary'} cursor-pointer inline-block`}>
+                  className={`px-3 py-2 cursor-pointer inline-block hover:bg-secondary-light
+                    ${value === pageNumber ? 'bg-primary text-white' : 'text-primary'}`}>
                   {value}
                 </Link>
               </div>
@@ -65,7 +66,7 @@ export default function Pagination({
             onClick={() => {
               onButtonClick(urlPaginate(searchParams, pageNumber === totalPages ? totalPages : pageNumber + 1))
             }}
-            icon={<Fa6SolidChevronRight className="inline-block text-primary text-[20px] " />} />
+            icon={Fa6SolidChevronRight} />
         </div>
       </div>
     )

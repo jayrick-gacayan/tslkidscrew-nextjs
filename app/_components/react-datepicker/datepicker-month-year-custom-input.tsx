@@ -1,7 +1,7 @@
 import { format } from "date-fns"
-import { forwardRef, LegacyRef, MouseEventHandler } from "react"
+import { ForwardedRef, forwardRef } from "react"
 
-function DatepickerMonthYearInputCustom(props: any, ref: LegacyRef<HTMLButtonElement> | undefined) {
+function DatepickerMonthYearInputCustom(props: any, ref: ForwardedRef<HTMLButtonElement>) {
   return (
     <button ref={ref}
       onClick={props.onClick}

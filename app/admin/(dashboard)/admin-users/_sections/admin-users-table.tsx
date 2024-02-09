@@ -30,7 +30,15 @@ export default async function AdminUsersTable({
         </thead>
         <tbody>
           {
-            ([]).map((admin: Admin, idx: number) => {
+            ([{
+              id: 1,
+              email: 'deanver@kodakollectiv.com',
+              name: 'Deanver',
+              is_active: false,
+              is_super_admin: false,
+              created_at: '02/09/2024',
+              updated_at: '02/09/2024',
+            }]).map((admin: Admin, idx: number) => {
               return (
                 <tr key={`admin-users-table-${admin.name!}-${idx}`}
                   className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
@@ -60,12 +68,8 @@ export default async function AdminUsersTable({
                         <Fa6SolidEye />
                       </Link>
                       {
-                        admin.id! !== 1 &&
-                        (
-                          <EditAdminUserButton admin={admin} />
-                        )
+                        admin.id! !== 1 && (<EditAdminUserButton admin={admin} />)
                       }
-
                     </div>
                   </td>
                 </tr>

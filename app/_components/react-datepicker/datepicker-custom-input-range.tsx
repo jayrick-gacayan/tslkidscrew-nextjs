@@ -1,7 +1,7 @@
 import { format } from "date-fns";
-import { forwardRef, LegacyRef } from "react"
+import { ForwardedRef, forwardRef } from "react"
 
-function DatepickerInputCustomRange(props: any, ref: LegacyRef<HTMLButtonElement> | undefined) {
+function DatepickerInputCustomRange(props: any, ref: ForwardedRef<HTMLButtonElement>) {
   const splitValue = props.value.split(' - ');
 
   return (

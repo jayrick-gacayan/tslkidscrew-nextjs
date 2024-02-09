@@ -1,13 +1,12 @@
 
 import { format } from "date-fns";
-import { LegacyRef, forwardRef } from "react";
+import { ForwardedRef, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-function CustomInputDefault(props: any, ref: LegacyRef<HTMLButtonElement> | undefined) {
+function CustomInputDefault(props: any, ref: ForwardedRef<HTMLButtonElement>) {
   return (
     <button ref={ref}
       {...props}
-      onClick={props.onClick}
       className={
         twMerge(
           'w-full focus:border-primary text-left border bg-secondary text-tertiary p-3 rounded border-secondary-light',
@@ -19,6 +18,5 @@ function CustomInputDefault(props: any, ref: LegacyRef<HTMLButtonElement> | unde
     </button>
   )
 }
-
 
 export default forwardRef(CustomInputDefault);
