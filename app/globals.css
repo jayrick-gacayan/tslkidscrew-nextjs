@@ -25,7 +25,7 @@
 }
 
 .react-datepicker__triangle {
-  @apply sm:fill-primary fill-white stroke-white sm:stroke-primary drop-shadow-lg stroke-0 border-transparent
+  @apply fill-white stroke-white drop-shadow-lg stroke-0
 }
 
 .react-datepicker__aria-live {
