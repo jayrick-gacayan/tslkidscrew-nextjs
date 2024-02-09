@@ -42,6 +42,7 @@ export default function ChildrenForm() {
               customInput={<CustomInputDefault />}
               onChange={(date) => { setBirthdate(date) }}
               calendarContainer={calendarContainer}
+              formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
               renderCustomHeader={renderCustomHeaderDefault} />
           </div>
         </div>

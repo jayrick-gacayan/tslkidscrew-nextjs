@@ -21,7 +21,7 @@ export default function ButtonDPNavHeader({
         ${conditionCustomHeaderCount === undefined || conditionCustomHeaderCount ? 'visible' : 'invisible'}`
       }
       disabled={disabled}>
-      <Icon className="inline-block text-[24px] font-medium" />
+      <Icon className="inline-block text-[20px] font-medium" />
     </button>
   )
 }

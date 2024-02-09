@@ -8,12 +8,10 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { addYears } from "date-fns";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
 let today = new Date();
-const maxDate = addYears(today, 1);
 
 export default function SummerCampWeekPrices() {
   const [weekDate, setWeekDate] = useState<Date | null>(today);
@@ -85,14 +83,12 @@ export default function SummerCampWeekPrices() {
             className="bg-white" />
           <div className="space-y-1 w-full">
             <div className="font-medium">Start Date</div>
-            <div>
-              <DatePicker selected={weekDate}
-                customInput={<CustomInputDefault className='bg-white' />}
-                onChange={(date) => { setWeekDate(date) }}
-                calendarContainer={calendarContainer}
-                renderCustomHeader={renderCustomHeaderDefault} />
-            </div>
-
+            <DatePicker selected={weekDate}
+              customInput={<CustomInputDefault className='bg-white' />}
+              onChange={(date) => { setWeekDate(date) }}
+              calendarContainer={calendarContainer}
+              renderCustomHeader={renderCustomHeaderDefault}
+              formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)} />
           </div>
           <CustomInput labelText='Capacity'
             fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}

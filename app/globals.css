@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* extended variables to tailwind colors */
 :root {
   --default: "#DEE7E7";
   --default-light: "#333333";
@@ -16,6 +17,7 @@
   --primary-light: "#68aefe";
 }
 
+/* CSS Classes for React Datepicker Package */
 .react-datepicker__month-container {
   @apply space-y-2 w-full
 }
@@ -53,7 +55,7 @@
 }
 
 .react-datepicker__day-name {
-  @apply p-2 h-10 flex-none w-11 text-center text-sm cursor-pointer
+  @apply p-2 h-10 flex-none w-11 text-center text-sm text-primary
 }
 
 .react-datepicker__day {

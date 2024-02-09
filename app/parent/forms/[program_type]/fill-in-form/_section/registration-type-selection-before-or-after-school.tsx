@@ -2,14 +2,10 @@
 
 import CustomCheckbox from "@/app/_components/custom-checkbox";
 import { useState } from "react";
-import { addYears, format } from "date-fns";
 import DatePicker from "react-datepicker";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
-
-let today = new Date();
-const maxDate = addYears(today, 1);
 
 export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
   const [registerStartDate, setRegisterStartDate] = useState<Date | null>(null)
@@ -17,7 +13,6 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
   return (
     <div className="space-y-8">
       <h1 className="font-medium text-[36px]">Registration Type Selection</h1>
-
       <div className="space-y-6">
         <div className="relative space-y-1">
           <div className="font-medium">Start Date</div>
@@ -25,6 +20,7 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
             customInput={<CustomInputDefault />}
             onChange={(date) => { setRegisterStartDate(date) }}
             calendarContainer={calendarContainer}
+            formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
             renderCustomHeader={renderCustomHeaderDefault} />
         </div>
         <div className="space-y-6">
@@ -49,7 +45,6 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   )

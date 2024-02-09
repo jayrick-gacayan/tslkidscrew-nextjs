@@ -115,8 +115,8 @@ export default function VacationCampSchedules() {
                 calendarContainer={calendarContainer}
                 renderCustomHeader={renderCustomHeaderYearOnly}
                 renderMonthContent={renderMonthContent}
-                showMonthYearPicker
-              />
+                formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
+                showMonthYearPicker />
             </div>
           </div>
           <div className="flex lg:flex-row flex-col items-start lg:items-center gap-2">
@@ -135,8 +135,7 @@ export default function VacationCampSchedules() {
                 showPreviousMonths
                 formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
                 renderDayContents={renderDayContents}
-                renderCustomHeader={renderCustomHeaderRange}
-              />
+                renderCustomHeader={renderCustomHeaderRange} />
             </div>
           </div>
         </div>
