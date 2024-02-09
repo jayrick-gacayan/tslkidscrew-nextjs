@@ -62,12 +62,11 @@ export default function ParentHeader() {
                                       Profile
                                     </Menu.Item>
                                     <Menu.Item as='div'
-                                      className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'
-                                      onClick={() => {
-                                        router.push('/admin/login');
-                                        close();
-                                      }}>
-                                      Logout
+                                      className='block'>
+                                      <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'
+                                        onClick={() => { router.push('/parent/login'); close(); }}>
+                                        Logout
+                                      </button>
                                     </Menu.Item>
                                   </div>
                                 </Transition>
