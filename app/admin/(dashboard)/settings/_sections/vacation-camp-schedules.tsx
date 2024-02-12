@@ -1,11 +1,9 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
 import { renderCustomHeaderYearOnly } from "@/app/_components/react-datepicker/render-custom-header-year-only";
 import { renderMonthContent } from "@/app/_components/react-datepicker/render-month-content";
 import DatepickerMonthYearInputCustom from '@/app/_components/react-datepicker/datepicker-month-year-custom-input';
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
 import { addYears } from "date-fns";
@@ -16,6 +14,7 @@ import calendarContainerRange from "@/app/_components/react-datepicker/calendar-
 import renderDayContents from "@/app/_components/react-datepicker/render-day-contents";
 import renderCustomHeaderRange from "@/app/_components/react-datepicker/render-custom-header-range";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
+import InputCustom from "@/app/_components/input-custom";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
@@ -84,10 +83,12 @@ export default function VacationCampSchedules() {
               <p className="font-semibold text-black">Name</p>
             </div>
             <div className="w-full sm:flex-1">
-              <CustomInput fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-                type='text'
-                onChange={(value: string) => { return; }}
-                className="bg-white px-3 border border-secondary-light" />
+              <InputCustom
+                id='schedule-name'
+                name='schedule-name'
+                type="text"
+                className="bg-white p-2 px-3"
+                placeholder="Name:" />
             </div>
           </div>
           <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
@@ -95,11 +96,12 @@ export default function VacationCampSchedules() {
               <p className="font-semibold text-black">Capacity</p>
             </div>
             <div className="w-full sm:flex-1">
-              <CustomInput fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-                type='text'
-                inputMode="numeric"
-                onChange={(value: string) => { return; }}
-                className="bg-white px-3 border border-secondary-light" />
+              <InputCustom
+                id='schedule-capacity'
+                name='schedule-capacity'
+                type="text"
+                className="bg-white p-2 px-3"
+                placeholder="Capacity:" />
             </div>
           </div>
           <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">

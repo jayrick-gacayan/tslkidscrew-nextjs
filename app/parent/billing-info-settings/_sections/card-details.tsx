@@ -1,44 +1,37 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
-import { Fa6SolidCalendar } from "@/app/_components/svg/fa6-solid-calendar";
-import { Fa6SolidCreditCard } from "@/app/_components/svg/fa6-solid-credit-card";
-import { Fa6SolidLock } from "@/app/_components/svg/fa6-solid-lock";
-import { ValidationType } from "@/types/enums/validation-type";
+import InputCustom from "@/app/_components/input-custom";
+import Fa6SolidCalendar from "@/app/_components/svg/fa6-solid-calendar";
+import Fa6SolidCreditCard from "@/app/_components/svg/fa6-solid-credit-card";
+import Fa6SolidLock from "@/app/_components/svg/fa6-solid-lock";
 import { Tab } from "@headlessui/react";
+
 export default function CardDetails() {
   return (
     <Tab.Panel as='div' className="space-y-8">
-
       <div className="space-y-4">
-        <CustomInput labelText='Card Number'
-          iconPrefix={
-            <div className="flex-none text-warning p-2">
-              <Fa6SolidCreditCard />
-            </div>
-          }
-          placeholder="Card Number"
-          fieldInput={{ value: '424242424242', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text' />
+        <InputCustom labelText="Card Number"
+          id="card-details-card-number"
+          name="card-details-card-number"
+          className="bg-secondary p-2 pl-10 border-transparent"
+          placeholder="Card Number:"
+          type="text"
+          prefixIcon={<PrefixCreditCardIcon />} />
         <div className="flex items-center gap-4">
-          <CustomInput labelText='Date Expiry'
-            iconPrefix={
-              <div className="flex-none text-warning p-2">
-                <Fa6SolidCalendar />
-              </div>
-            }
-            className=""
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            type='month' />
-          <CustomInput labelText='CVC'
-            iconPrefix={
-              <div className="flex-none text-warning p-2">
-                <Fa6SolidLock />
-              </div>
-            }
-            placeholder="CVC"
-            fieldInput={{ value: '12345678', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text' />
+          <InputCustom labelText="Date Expiry"
+            id="card-details-expiry"
+            name="card-details-expiry"
+            className="bg-secondary p-2 pl-10 border-transparent"
+            placeholder="Date Expiry:"
+            type="month"
+            prefixIcon={<PrefixCalendarIcon />} />
+          <InputCustom labelText="CVC"
+            id="card-details-cvc"
+            name="card-details-cvc"
+            className="bg-secondary p-2 pl-10 border-transparent"
+            placeholder="CVC:"
+            type="text"
+            prefixIcon={<PrefixLockIcon />} />
         </div>
       </div>
       <div className="w-fit ml-auto block space-x-4">
@@ -48,4 +41,17 @@ export default function CardDetails() {
       </div>
     </Tab.Panel>
   )
+}
+
+/* Prefix icons */
+const PrefixCreditCardIcon = () => {
+  return (<Fa6SolidCreditCard className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
+}
+
+const PrefixCalendarIcon = () => {
+  return (<Fa6SolidCalendar className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
+}
+
+const PrefixLockIcon = () => {
+  return (<Fa6SolidLock className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
 import { FormEvent, Fragment, useContext, useEffect, useMemo, useRef } from "react";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
@@ -12,15 +11,15 @@ import {
   adminUserFormSubmitted,
   adminUserNameChanged,
   adminUserRequestStatusSet,
-  modalFormClosed,
-  modalFormOpened,
-  modalFormTypeCloseSet
+  modalFormOpenStateSet,
+  modalFormTypeSet,
 } from "../_redux/admin-users-slice";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
 import { useFormState, useFormStatus } from "react-dom";
 
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
+import InputCustom from "@/app/_components/input-custom";
 
 export default function ModalAdminUsersForm() {
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
@@ -60,9 +59,9 @@ export default function ModalAdminUsersForm() {
   function formReset() {
     reduxStore.dispatch(adminUserFormReset());
 
-    reduxStore.dispatch(modalFormClosed());
+    reduxStore.dispatch(modalFormOpenStateSet(false));
     setTimeout(() => {
-      reduxStore.dispatch(modalFormTypeCloseSet());
+      reduxStore.dispatch(modalFormTypeSet(''));
     }, 500)
   }
 
@@ -75,7 +74,9 @@ export default function ModalAdminUsersForm() {
 
   return (
     <Transition show={open} as={Fragment}>
-      <Dialog className='fixed h-screen w-screen top-0 left-0 z-[500] flex items-center justify-center'
+      <Dialog as="div"
+        tabIndex={0}
+        className='fixed h-screen w-screen top-0 left-0 z-[9999] flex items-center justify-center'
         onClose={formReset}>
         <Transition.Child as={Fragment}
           enter="ease-out duration-300"
@@ -94,25 +95,21 @@ export default function ModalAdminUsersForm() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95">
           <Dialog.Panel as="div" className='bg-white relative z-[50] space-y-8 p-8 w-[448px] rounded drop-shadow'>
-            <Dialog.Title as="h1" className='font-medium text-[24px]'>
-              {type === 'add' ? 'Register' : 'Edit'} Admin Account
-            </Dialog.Title>
+            <h1 className='font-medium text-[24px]'>{type === 'add' ? 'Register' : 'Edit'} Admin Account</h1>
             <form onSubmit={onSubmit} className="space-y-8">
               <div className="space-y-4">
-                <CustomInput labelText='Email'
-                  name="email"
-                  fieldInput={email}
-                  onChange={(value: string) => {
-                    reduxStore.dispatch(adminUserEmailChanged(value));
-                  }}
-                  type='text' />
-                <CustomInput labelText='Name'
-                  name="name"
-                  fieldInput={name}
-                  type='text'
-                  onChange={(value: string) => {
-                    reduxStore.dispatch(adminUserNameChanged(value));
-                  }} />
+                <InputCustom labelText="Email"
+                  htmlFor="admin-user-email"
+                  name="admin-user-email"
+                  type="text"
+                  placeholder='Email Address:'
+                  className="bg-secondary border-0" />
+                <InputCustom labelText="Name"
+                  htmlFor="admin-user-name"
+                  name="admin-user-name"
+                  type="text"
+                  placeholder="Name: "
+                  className="bg-secondary border-0" />
               </div>
               {
                 type === 'update' &&

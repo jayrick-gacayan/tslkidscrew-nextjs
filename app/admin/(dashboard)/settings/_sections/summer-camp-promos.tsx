@@ -1,9 +1,8 @@
 'use client';
 
 import CustomCheckbox from "@/app/_components/custom-checkbox";
-import CustomInput from "@/app/_components/custom-input";
+import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { ValidationType } from "@/types/enums/validation-type";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
@@ -69,22 +68,20 @@ export default function SummerCampPromos() {
         </div>
       </div>
       <div className="block bg-secondary p-4">
-        <div className="w-full sm:w-4/12 block space-y-4">
+        <div className="w-full sm:w-8/12 block space-y-4">
           {
             [1, 2, 3].map((value) => {
               return (
                 <div key={`update-promos-children-${value}`}
-                  className="flex sm:flex-row flex-col litems-center justify-between gap-4 sm:gap-8">
+                  className="flex sm:flex-row flex-col items-center justify-between gap-4 sm:gap-8">
                   <div className="w-full">
                     <h1 className="font-medium text-[20px]">
                       Children #{value}
                     </h1>
                   </div>
                   <div className="w-full">
-                    <CustomInput type='text'
-                      fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+                    <InputCustom type="text"
                       inputMode="numeric"
-                      onChange={(value: string) => { return; }}
                       className="bg-white" />
                   </div>
                 </div>

@@ -3,7 +3,7 @@
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import ShowEntriesSelect from "../../_components/show-entries-select";
 import { reduxStore } from "@/react-redux/redux-store";
-import { modalFormOpened } from "../_redux/admin-users-slice";
+import { modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export default function AdminUsersHeader({
@@ -43,7 +43,8 @@ export default function AdminUsersHeader({
         <div className="w-full">
           <button className="rounded text-white bg-primary px-4 py-2 text-sm text-center"
             onClick={() => {
-              reduxStore.dispatch(modalFormOpened({ open: true, type: 'add' }));
+              reduxStore.dispatch(modalFormOpenStateSet(true));
+              reduxStore.dispatch(modalFormTypeSet('add'));
             }}>
             Add a New Admin User
           </button>

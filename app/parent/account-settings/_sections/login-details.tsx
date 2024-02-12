@@ -1,35 +1,36 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
-import { Fa6SolidEnvelope } from "@/app/_components/svg/fa6-solid-envelope";
-import { ValidationType } from "@/types/enums/validation-type";
+import Fa6SolidEnvelope from "@/app/_components/svg/fa6-solid-envelope";
 import { Tab } from "@headlessui/react";
-import LockIcon from "../../_components/lock-icon";
+import InputCustom from "@/app/_components/input-custom";
+import Fa6SolidLock from "@/app/_components/svg/fa6-solid-lock";
 
 export default function LoginDetails() {
   return (
     <Tab.Panel as='div' className="space-y-8">
       <h1 className="text-[32px] font-medium">Login Details</h1>
       <div className="space-y-4">
-        <CustomInput labelText='Email'
-          iconPrefix={
-            <div className="flex-none text-warning p-2">
-              <Fa6SolidEnvelope />
-            </div>
-          }
-          placeholder="Email"
-          fieldInput={{ value: 'deanver@kodakollectiv.com', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text' />
-        <CustomInput labelText='Password'
-          iconPrefix={<LockIcon />}
-          placeholder="Lastname"
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='password' />
-        <CustomInput labelText='Confirm Password'
-          placeholder="Confirm Password"
-          iconPrefix={<LockIcon />}
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='password' />
+        <InputCustom labelText="Email"
+          id="email-address"
+          name="email-address"
+          className="bg-secondary p-2 pl-10 border-transparent"
+          placeholder="Email Address:"
+          type="text"
+          prefixIcon={<PrefixEnvelopeIcon />} />
+        <InputCustom labelText="Password"
+          id="password"
+          name="password"
+          className="bg-secondary p-2 pl-10 border-transparent"
+          placeholder="Password:"
+          type="text"
+          prefixIcon={<PrefixLockIcon />} />
+        <InputCustom labelText="Confirm Password"
+          id="password-confirmation"
+          name="password-confirmation"
+          className="bg-secondary p-2 pl-10 border-transparent"
+          placeholder="Confirm Password:"
+          type="text"
+          prefixIcon={<PrefixLockIcon />} />
       </div>
       <div className="w-fit ml-auto block space-x-4">
         <button className="p-2 text-white border border-primary rounded bg-primary">
@@ -38,4 +39,13 @@ export default function LoginDetails() {
       </div>
     </Tab.Panel>
   )
+}
+
+/* Prefix icons */
+const PrefixEnvelopeIcon = () => {
+  return (<Fa6SolidEnvelope className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
+}
+
+const PrefixLockIcon = () => {
+  return (<Fa6SolidLock className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
 }

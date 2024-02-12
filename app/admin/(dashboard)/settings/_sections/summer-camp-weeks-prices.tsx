@@ -1,11 +1,10 @@
 import CustomCheckbox from "@/app/_components/custom-checkbox";
-import CustomInput from "@/app/_components/custom-input";
-import CustomTextarea from "@/app/_components/custom-textarea";
+import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { ValidationType } from "@/types/enums/validation-type";
+import TextareaCustom from "@/app/_components/textarea-custom";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
@@ -76,11 +75,12 @@ export default function SummerCampWeekPrices() {
       </div>
       <div className="block bg-secondary p-4">
         <div className="w-full md:w-8/12 block space-y-4">
-          <CustomInput labelText='Name'
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text'
-            onChange={(value: string) => { return; }}
-            className="bg-white" />
+          <InputCustom labelText="Name"
+            id='week-name'
+            name='week-name'
+            type="text"
+            className="bg-white p-2 px-3"
+            placeholder="Week Name:" />
           <div className="space-y-1 w-full">
             <div className="font-medium">Start Date</div>
             <DatePicker selected={weekDate}
@@ -90,16 +90,17 @@ export default function SummerCampWeekPrices() {
               renderCustomHeader={renderCustomHeaderDefault}
               formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)} />
           </div>
-          <CustomInput labelText='Capacity'
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            type='text'
-            inputMode="numeric"
-            onChange={(value: string) => { return; }}
-            className="bg-white" />
-          <CustomTextarea labelText='Notes'
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            onChange={(value: string) => { return }}
+          <InputCustom labelText="Capacity"
+            id='week-capacity'
+            name='week-capacity'
+            type="text"
+            className="bg-white p-2 px-3"
+            placeholder="Capacity:" />
+          <TextareaCustom labelText="Notes"
+            id='week-name-notes'
+            name='notes'
             className="bg-white"
+            placeholder='Enter your note/s here:'
             rows={7} />
         </div>
       </div>

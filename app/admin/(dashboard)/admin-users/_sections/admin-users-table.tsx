@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
+import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import EditAdminUserButton from "./edit-admin-user-button";
 import { Admin } from "@/models/admin";
 import { Result } from "@/models/result";

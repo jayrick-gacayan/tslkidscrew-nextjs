@@ -1,10 +1,13 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
-import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
-import { Fa6SolidEyeSlash } from "@/app/_components/svg/fa6-solid-eye-slash";
-import { ValidationType } from "@/types/enums/validation-type";
-import { useState } from "react";
+import InputCustom from "@/app/_components/input-custom";
+import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
+import Fa6SolidEyeSlash from "@/app/_components/svg/fa6-solid-eye-slash";
+import { Dispatch, ForwardedRef, SVGProps, SetStateAction, forwardRef, useState } from "react";
+interface PasswordIconProps extends SVGProps<SVGSVGElement> {
+  passwordShow: boolean;
+  onPasswordShown: Dispatch<SetStateAction<boolean>>
+}
 
 export default function RegisterForm() {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
@@ -12,31 +15,41 @@ export default function RegisterForm() {
 
   return (
     <div className="space-y-2">
-      <CustomInput labelText='Email'
-        fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-        type='email'
-        onChange={(value: string) => { return; }} />
-      <CustomInput labelText='Password'
-        fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+      <InputCustom labelText="Email"
+        id='register-email'
+        placeholder="Email Address:"
+        name='email'
+        type="text"
+        className="bg-secondary border-transparent p-2 px-3" />
+      <InputCustom labelText="Password"
+        id='register-password'
+        name='password'
+        placeholder="Password:"
         type={passwordShow ? 'text' : 'password'}
-        onChange={(value: string) => { return; }}
-        iconSuffix={
-          <div className="p-2 text-default/90"
-            onClick={() => { setPasswordShow(!passwordShow) }}>
-            {passwordShow ? <Fa6SolidEyeSlash /> : <Fa6SolidEye />}
-          </div>
-        } />
-      <CustomInput labelText='Confirm Password'
-        fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
+        suffixIcon={<PasswordIcon passwordShow={passwordShow} onPasswordShown={setPasswordShow} />}
+        className="bg-secondary border-transparent p-2 px-3 pr-10" />
+      <InputCustom labelText="Confirm Password"
+        id='register-password-confirmation'
+        name='password-confirmation'
+        placeholder="Confirm Password:"
         type={passwordConfirmationShow ? 'text' : 'password'}
-        onChange={(value: string) => { return; }}
-        iconSuffix={
-          <div className="p-2 text-default/90"
-            onClick={() => { setPasswordShow(!passwordConfirmationShow) }}>
-            {passwordConfirmationShow ? <Fa6SolidEyeSlash /> : <Fa6SolidEye />}
-          </div>
-        } />
-
+        suffixIcon={<PasswordIcon passwordShow={passwordConfirmationShow} onPasswordShown={setPasswordConfirmationShow} />}
+        className="bg-secondary border-transparent p-2 px-3 pr-10" />
     </div>
   )
 }
+
+const PasswordIcon = forwardRef<
+  SVGSVGElement,
+  PasswordIconProps
+>(
+  (
+    { passwordShow, onPasswordShown, ...props }: PasswordIconProps,
+    ref: ForwardedRef<SVGSVGElement>) => {
+    const IconPassword = passwordShow ? Fa6SolidEyeSlash : Fa6SolidEye;
+    return <IconPassword {...props}
+      ref={ref}
+      onClick={() => { onPasswordShown(passwordShow ? false : true); }}
+      className="text-default/90 absolute right-3 z-20 top-3 block cursor-pointer" />;
+  }
+);

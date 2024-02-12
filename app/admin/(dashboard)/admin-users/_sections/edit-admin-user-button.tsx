@@ -2,7 +2,7 @@
 
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { reduxStore } from "@/react-redux/redux-store";
-import { editAdminUserFields, modalFormOpened } from "../_redux/admin-users-slice";
+import { editAdminUserFields, modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
 import { Admin } from "@/models/admin";
 
 export default function EditAdminUserButton({
@@ -20,7 +20,9 @@ export default function EditAdminUserButton({
           isSuperAdmin: admin.is_super_admin!,
           id: admin.id!
         }))
-        reduxStore.dispatch(modalFormOpened({ open: true, type: 'update' }));
+        reduxStore.dispatch(modalFormOpenStateSet(true));
+        reduxStore.dispatch(modalFormTypeSet('update'));
+
       }}>
       <Fa6SolidPen />
     </button>

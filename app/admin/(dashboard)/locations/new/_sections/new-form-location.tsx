@@ -1,8 +1,7 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
 import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
-import { ValidationType } from "@/types/enums/validation-type";
+import InputCustom from "@/app/_components/input-custom";
 import { useState } from "react";
 
 let directorItems = [
@@ -19,14 +18,19 @@ export function NewFormLocation() {
   return (
     <>
       <div className="space-y-4">
-        <CustomInput labelText='Name'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          onChange={(value: string) => { return; }} />
-        <CustomInput labelText='Address'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          onChange={(value: string) => { return; }} />
+        <InputCustom labelText='Name'
+          id='location-name'
+          type="text"
+          name="name"
+          className="bg-secondary border-0"
+          placeholder="Name:" />
+        <InputCustom labelText='Address'
+          id='location-address'
+          type="text"
+          name="address"
+          className="bg-secondary border-0"
+          placeholder="Address:" />
+
         <label className="space-y-[2px] relative">
           <p className="font-semibold text-black">Director</p>
           <CustomListboxHeadless value={director}
@@ -37,12 +41,12 @@ export function NewFormLocation() {
             items={directorItems}
             by="id" />
         </label>
-        <CustomInput labelText='Minimum Age For Children'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          inputMode="numeric"
-          onChange={(value: string) => { return; }} />
-
+        <InputCustom labelText='Minimum Age For Children'
+          id='location-minimum-age-for-children'
+          type="text"
+          name="location-minimum-age"
+          className="bg-secondary border-0"
+          placeholder="Minimum Age:" />
       </div>
       <div className="w-1/2 block m-auto">
         <button className="bg-primary p-2 rounded text-white w-fit block m-auto">Submit</button>

@@ -1,5 +1,6 @@
 'use client';
 
+import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
@@ -91,8 +92,9 @@ export default function SummerCampSwimPrices() {
                       weeksSwimArray.map((value) => {
                         return (
                           <td key={`prices-${withSwim}-${childValue}-${value}`} className="capitalize">
-                            <input placeholder='$'
-                              className="placeholder:text-secondary-light rounded w-full outline-0 outline-transparent bg-white p-2 text-center" />
+                            <InputCustom type="text"
+                              inputMode="numeric"
+                              className="bg-white text-center border-transparent" />
                           </td>
                         );
                       })

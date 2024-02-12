@@ -1,10 +1,9 @@
 'use client';
 
-import CustomInput from "@/app/_components/custom-input";
+import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
-import { ValidationType } from "@/types/enums/validation-type";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -22,18 +21,18 @@ export default function ChildrenForm() {
       </div>
       <div className="w-full rounded border border-secondary-light p-4 space-y-4">
         <div className="flex items-center gap-4">
-          <CustomInput
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            onChange={(value: string) => { }}
-            type='text'
-            className="p-3"
-            placeholder="Firstname" />
-          <CustomInput
-            fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-            onChange={(value: string) => { }}
-            type='text'
-            className="p-3"
-            placeholder="Lastname" />
+          <InputCustom
+            id='children-firstname'
+            name='children-firstname'
+            type="text"
+            className="bg-secondary p-4 border-transparent"
+            placeholder="Firstname:" />
+          <InputCustom
+            id='children-lastname'
+            name='children-lastname'
+            type="text"
+            className="bg-secondary p-4 border-transparent"
+            placeholder="Lastname:" />
         </div>
         <div className="relative w-full">
           <div className="relative space-y-1">
@@ -46,12 +45,12 @@ export default function ChildrenForm() {
               renderCustomHeader={renderCustomHeaderDefault} />
           </div>
         </div>
-        <CustomInput
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          onChange={(value: string) => { }}
-          type='text'
-          className="p-3"
-          placeholder="School Attending" />
+        <InputCustom
+          id='children-school-attending'
+          name='children-school-attending'
+          type="text"
+          className="bg-secondary p-4 border-transparent"
+          placeholder="School Attending:" />
         <div>
           <button className="p-3 text-white w-full rounded bg-primary">Add Child</button>
         </div>

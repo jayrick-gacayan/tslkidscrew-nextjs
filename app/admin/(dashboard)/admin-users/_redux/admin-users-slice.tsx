@@ -27,12 +27,6 @@ const adminUsersSlice = createSlice({
   name: 'adminUsers',
   initialState,
   reducers: {
-    modalFormOpened: (
-      state: AdminUsersState,
-      action: PayloadAction<{ open: boolean; type: string }>
-    ) => {
-      return { ...state, modalForm: action.payload };
-    },
     adminUserEmailChanged: (state: AdminUsersState, action: PayloadAction<string>) => {
       return {
         ...state,
@@ -141,17 +135,16 @@ const adminUsersSlice = createSlice({
     adminUserFormReset: (state: AdminUsersState) => {
       return { ...state, adminUserForm: adminFormInitValues };
     },
-    modalFormClosed: (state: AdminUsersState) => {
-      return { ...state, modalForm: { ...state.modalForm, open: false } }
+    modalFormOpenStateSet: (state: AdminUsersState, action: PayloadAction<boolean>) => {
+      return { ...state, modalForm: { ...state.modalForm, open: action.payload } }
     },
-    modalFormTypeCloseSet: (state: AdminUsersState) => {
-      return { ...state, modalForm: { ...state.modalForm, type: '' } }
+    modalFormTypeSet: (state: AdminUsersState, action: PayloadAction<string>) => {
+      return { ...state, modalForm: { ...state.modalForm, type: action.payload } }
     }
   },
 });
 
 export const {
-  modalFormOpened,
   adminUserFormReset,
   adminUserEmailChanged,
   adminUserNameChanged,
@@ -160,8 +153,8 @@ export const {
   adminUserRequestStatusSet,
   editAdminUserFields,
   adminUserFormSubmitted,
-  modalFormClosed,
-  modalFormTypeCloseSet
+  modalFormOpenStateSet,
+  modalFormTypeSet
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;

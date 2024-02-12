@@ -1,6 +1,4 @@
-
-
-import { Fa6SolidCreditCard } from "@/app/_components/svg/fa6-solid-credit-card";
+import Fa6SolidCreditCard from "@/app/_components/svg/fa6-solid-credit-card";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
 import { StripeCardNumberElement, StripeCardNumberElementChangeEvent } from "@stripe/stripe-js/types/stripe-js/elements/card-number";
 import { FormEvent, useContext } from "react";

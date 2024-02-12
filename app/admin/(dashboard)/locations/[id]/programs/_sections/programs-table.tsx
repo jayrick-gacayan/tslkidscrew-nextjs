@@ -1,4 +1,4 @@
-import { Fa6SolidEye } from "@/app/_components/svg/fa6-solid-eye";
+import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Link from "next/link";
 

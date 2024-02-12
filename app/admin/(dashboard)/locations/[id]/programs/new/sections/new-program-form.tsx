@@ -1,9 +1,8 @@
 'use client';
 
 import CustomCheckbox from "@/app/_components/custom-checkbox";
-import CustomInput from "@/app/_components/custom-input";
 import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
-import { ValidationType } from "@/types/enums/validation-type";
+import InputCustom from "@/app/_components/input-custom";
 import { useState } from "react";
 
 let directorItems = [
@@ -23,18 +22,26 @@ export default function NewProgramForm() {
   return (
     <>
       <div className="space-y-4">
-        <CustomInput labelText='Location'
-          fieldInput={{ value: 'Sample', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          disabled={true} />
-        <CustomInput labelText='Program Name'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          onChange={(value: string) => { return; }} />
-        <CustomInput labelText='Suffix'
-          fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-          type='text'
-          onChange={(value: string) => { return; }} />
+        <InputCustom labelText="Location"
+          id='location-name'
+          name='location-name'
+          type="text"
+          className="bg-secondary border-transparent p-2 px-3"
+          placeholder="Location:"
+          value='Sample'
+          disabled />
+        <InputCustom labelText="Program Name"
+          id='location-program-name'
+          name='program-name'
+          type="text"
+          className="bg-secondary border-transparent p-2 px-3"
+          placeholder="Program Name:" />
+        <InputCustom labelText="Program Suffix"
+          id='location-program-name-suffix'
+          name='program-name-suffix'
+          type="text"
+          className="bg-secondary border-transparent p-2 px-3"
+          placeholder="Program Suffix:" />
         <div className="space-y-[2px] relative">
           <p className="font-semibold text-black">Program Type</p>
           <CustomListboxHeadless value={programType}
@@ -56,18 +63,22 @@ export default function NewProgramForm() {
         </div>
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
-            <CustomInput labelText='Capacity'
-              fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-              type='text'
-              inputMode="decimal"
-              onChange={(value: string) => { return; }} />
+            <InputCustom labelText="Capacity"
+              id='location-program-capacity'
+              name='program-capacity'
+              type="text"
+              inputMode="numeric"
+              className="bg-secondary border-transparent p-2 px-3"
+              placeholder="Capacity:" />
           </div>
           <div className="w-full">
-            <CustomInput labelText='Price'
-              fieldInput={{ value: '', errorText: '', validationStatus: ValidationType.NONE }}
-              type='text'
-              inputMode="decimal"
-              onChange={(value: string) => { return; }} />
+            <InputCustom labelText="Price"
+              id='location-program-price'
+              name='program-price'
+              type="text"
+              inputMode="numeric"
+              className="bg-secondary border-transparent p-2 px-3"
+              placeholder="Price:" />
           </div>
         </div>
         <CustomCheckbox value={false}
