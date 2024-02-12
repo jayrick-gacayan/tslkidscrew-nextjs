@@ -99,13 +99,13 @@ export default function ModalAdminUsersForm() {
             <form onSubmit={onSubmit} className="space-y-8">
               <div className="space-y-4">
                 <InputCustom labelText="Email"
-                  htmlFor="admin-user-email"
+                  id="admin-user-email"
                   name="admin-user-email"
                   type="text"
                   placeholder='Email Address:'
                   className="bg-secondary border-0" />
                 <InputCustom labelText="Name"
-                  htmlFor="admin-user-name"
+                  id="admin-user-name"
                   name="admin-user-name"
                   type="text"
                   placeholder="Name: "
