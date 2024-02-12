@@ -1,5 +1,3 @@
-import { Fa6SolidChevronLeft } from "@/app/_components/svg/fa6-solid-chevron-left";
-import { Fa6SolidChevronRight } from "@/app/_components/svg/fa6-solid-chevron-right";
 import { getYear } from "date-fns";
 import ButtonDPNavHeader from "./button-dp-nav-header";
 

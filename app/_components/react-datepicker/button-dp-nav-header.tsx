@@ -1,5 +1,5 @@
-import { Fa6SolidChevronRight } from "../svg/fa6-solid-chevron-right";
-import { Fa6SolidChevronLeft } from "../svg/fa6-solid-chevron-left";
+import Fa6SolidChevronLeft from "../svg/fa6-solid-chevron-left";
+import Fa6SolidChevronRight from "../svg/fa6-solid-chevron-left";
 
 export default function ButtonDPNavHeader({
   onClick,

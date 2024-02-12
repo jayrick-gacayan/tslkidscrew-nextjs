@@ -1,6 +1,4 @@
 import { format } from "date-fns";
-import { Fa6SolidChevronLeft } from "../svg/fa6-solid-chevron-left";
-import { Fa6SolidChevronRight } from "../svg/fa6-solid-chevron-right";
 import ButtonDPNavHeader from "./button-dp-nav-header";
 
 export default function renderCustomHeaderRange({
