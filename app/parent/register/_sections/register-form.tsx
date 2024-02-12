@@ -1,19 +1,12 @@
 'use client';
 
 import InputCustom from "@/app/_components/input-custom";
-import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
-import Fa6SolidEyeSlash from "@/app/_components/svg/fa6-solid-eye-slash";
-import { Dispatch, ForwardedRef, SVGProps, SetStateAction, forwardRef, useState } from "react";
-interface PasswordIconProps extends SVGProps<SVGSVGElement> {
-  passwordShow: boolean;
-  onPasswordShown: Dispatch<SetStateAction<boolean>>
-}
+import PasswordIcon from "@/app/_components/password-icon";
+import { useState } from "react";
 
 export default function RegisterForm() {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
-
-
 
   return (
     <div className="space-y-2">
@@ -40,21 +33,3 @@ export default function RegisterForm() {
     </div>
   )
 }
-
-const PasswordIcon = forwardRef<
-  SVGSVGElement,
-  PasswordIconProps
->(
-  (
-    { passwordShow, onPasswordShown, ...props }: PasswordIconProps,
-    ref: ForwardedRef<SVGSVGElement>) => {
-    const IconPassword = passwordShow ? Fa6SolidEyeSlash : Fa6SolidEye;
-    return <IconPassword {...props}
-      ref={ref}
-      onClick={() => { onPasswordShown(passwordShow ? false : true); }}
-      className="text-default/90 absolute right-3 z-20 top-3 block cursor-pointer" />;
-  }
-);
-
-PasswordIcon.displayName = "PasswordIcon";
-

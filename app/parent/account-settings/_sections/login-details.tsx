@@ -4,8 +4,13 @@ import Fa6SolidEnvelope from "@/app/_components/svg/fa6-solid-envelope";
 import { Tab } from "@headlessui/react";
 import InputCustom from "@/app/_components/input-custom";
 import Fa6SolidLock from "@/app/_components/svg/fa6-solid-lock";
+import PasswordIcon from "@/app/_components/password-icon";
+import { useState } from "react";
 
 export default function LoginDetails() {
+  const [passwordShow, setPasswordShow] = useState<boolean>(false);
+  const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
+
   return (
     <Tab.Panel as='div' className="space-y-8">
       <h1 className="text-[32px] font-medium">Login Details</h1>
@@ -20,9 +25,10 @@ export default function LoginDetails() {
         <InputCustom labelText="Password"
           id="password"
           name="password"
-          className="bg-secondary p-2 pl-10 border-transparent"
+          className="bg-secondary p-2 pl-10 pr-10 border-transparent"
           placeholder="Password:"
           type="text"
+          suffixIcon={<PasswordIcon passwordShow={passwordShow} onPasswordShown={setPasswordShow} />}
           prefixIcon={<PrefixLockIcon />} />
         <InputCustom labelText="Confirm Password"
           id="password-confirmation"
@@ -30,7 +36,9 @@ export default function LoginDetails() {
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Confirm Password:"
           type="text"
-          prefixIcon={<PrefixLockIcon />} />
+          suffixIcon={<PasswordIcon passwordShow={passwordConfirmationShow} onPasswordShown={setPasswordConfirmationShow} />}
+          prefixIcon={<PrefixLockIcon />}
+        />
       </div>
       <div className="w-fit ml-auto block space-x-4">
         <button className="p-2 text-white border border-primary rounded bg-primary">
