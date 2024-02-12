@@ -1,8 +1,7 @@
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import Link from "next/link";
 import PaginationIcon from "./pagination-icon";
-import Fa6SolidChevronLeft from "./svg/fa6-solid-chevron-left";
-import Fa6SolidChevronRight from "./svg/fa6-solid-chevron-right";
+
 
 export default function Pagination({
   baseURL,
@@ -34,15 +33,17 @@ export default function Pagination({
     return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`
   }
 
+  function onClickButton(pageNumber?: number) {
+    onButtonClick(urlPaginate(searchParams, pageNumber));
+  }
+
   return totalPages === 1 ? null :
     (
       <div className="w-fit flex items-center rounded border border-primary divide-x divide-primary overflow-hidden">
         <div>
           <PaginationIcon condition={pageNumber === 1}
-            onClick={() => {
-              onButtonClick(urlPaginate(searchParams, pageNumber - 1 === 1 ? undefined : pageNumber - 1))
-            }}
-            icon={Fa6SolidChevronLeft} />
+            onClick={() => { onClickButton(pageNumber - 1 === 1 ? undefined : pageNumber - 1); }}
+            direction="left" />
         </div>
         {
           Array.from({ length: totalPages <= 5 ? totalPages : 5 }).map((_val, idx) => {
@@ -63,10 +64,8 @@ export default function Pagination({
         }
         <div>
           <PaginationIcon condition={pageNumber === totalPages}
-            onClick={() => {
-              onButtonClick(urlPaginate(searchParams, pageNumber === totalPages ? totalPages : pageNumber + 1))
-            }}
-            icon={Fa6SolidChevronRight} />
+            onClick={() => { onClickButton(pageNumber === totalPages ? totalPages : pageNumber + 1); }}
+            direction="right" />
         </div>
       </div>
     )

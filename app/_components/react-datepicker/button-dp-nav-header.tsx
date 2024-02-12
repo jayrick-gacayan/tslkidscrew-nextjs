@@ -1,5 +1,5 @@
 import Fa6SolidChevronLeft from "../svg/fa6-solid-chevron-left";
-import Fa6SolidChevronRight from "../svg/fa6-solid-chevron-left";
+import Fa6SolidChevronRight from "../svg/fa6-solid-chevron-right";
 
 export default function ButtonDPNavHeader({
   onClick,
@@ -12,7 +12,8 @@ export default function ButtonDPNavHeader({
   onClick: () => void;
   conditionCustomHeaderCount?: boolean;
 }) {
-  let Icon = direction === 'left' ? Fa6SolidChevronLeft : Fa6SolidChevronRight;
+  const Icon = direction === 'left' ? Fa6SolidChevronLeft : Fa6SolidChevronRight;
+
   return (
     <button type="button"
       onClick={onClick}

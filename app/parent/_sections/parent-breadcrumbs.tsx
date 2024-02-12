@@ -1,6 +1,6 @@
 'use client';
 
-import { Fa6SolidChevronRight } from '@/app/_components/svg/fa6-solid-chevron-right';
+import Fa6SolidChevronRight from "@/app/_components/svg/fa6-solid-chevron-right";
 import { capitalCase } from "change-case";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
