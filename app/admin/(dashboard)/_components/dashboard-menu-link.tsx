@@ -14,12 +14,12 @@ export default function DashboardMenuLink({
   current: string;
   text: string;
   icon?: ReactNode;
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
 }) {
   return (
     <Link href={href}
       className={`px-4 py-3 w-full space-x-2 block hover:bg-default-light/[.25] ${altText === current ? 'border-l-[4px] border-l-white bg-default-light/[.25]' : ''}`}
-      onClick={() => { onClick && onClick(); }}>
+      onClick={onClick}>
       {icon && icon}
       <span>{text}</span>
     </Link>

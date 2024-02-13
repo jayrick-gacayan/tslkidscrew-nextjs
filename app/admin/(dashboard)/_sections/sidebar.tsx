@@ -11,6 +11,9 @@ import { capitalCase } from "change-case";
 import CompanyLogo from "@/app/_components/company-logo";
 import { Fa6SolidGear } from "@/app/_components/svg/fa6-solid-gear";
 import { FeLogout } from "@/app/_components/svg/fe-logout";
+import { signOut } from "@/auth";
+import { authSignOut } from "@/actions/auth-actions/auth-actions";
+import LogoutButton from "@/app/_components/logout-button";
 
 export default function Sidebar({
   drawerOpen,
@@ -78,19 +81,15 @@ export default function Sidebar({
               </nav>
             </div>
             <div className="flex-none">
-              <nav className="w-full py-4">
+              <div className="w-full py-4">
                 <DashboardMenuLink href='/admin/settings'
                   altText='settings'
                   current={memoSegment}
                   icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
                   text='Settings' />
-                <DashboardMenuLink href={`/admin/login`}
-                  altText='logout'
-                  current={memoSegment}
-                  icon={<FeLogout className="text-[20px] align-middle inline-block" />}
-                  text='Logout'
-                  onClick={() => { router.push('/admin/login') }} />
-              </nav>
+                <LogoutButton redirect={true} redirectTo="/admin/login" />
+
+              </div>
             </div>
           </div>
         </Transition.Child>

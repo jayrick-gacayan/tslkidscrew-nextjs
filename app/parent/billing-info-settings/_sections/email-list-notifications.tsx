@@ -1,4 +1,4 @@
-import { Fa6SolidTrashCan } from "@/app/_components/svg/fa6-solid-trash-can";
+import Fa6SolidTrashCan from "@/app/_components/svg/fa6-solid-trash-can";
 
 const emails = [{ id: 1, email: 'jake@kodakollectiv.com' }];
 
