@@ -1,17 +1,6 @@
 import Credentials from "@auth/core/providers/credentials"
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth from "next-auth"
 import { authConfig } from "./auth.config";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      firstName?: string | null;
-      lastName?: string | null;
-    } & DefaultSession['user'];
-    accessToken?: string;
-  }
-
-}
 
 export const {
   handlers: {

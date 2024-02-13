@@ -21,8 +21,6 @@ export default function CompanyLogo({
         height={`${height}`}
         width={`${width}`}
         src='/static/tsl-kids-crew-logo-white.png'
-
-        style={{ width: width, height: 'auto' }}
       />
     </Link>
   )

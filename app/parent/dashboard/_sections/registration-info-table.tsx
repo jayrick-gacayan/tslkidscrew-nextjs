@@ -2,6 +2,7 @@ import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import Link from "next/link";
 
 export default function RegistrationInfoTable() {
+
   return (
     <>
       <div className="block overflow-auto rounded bg-secondary h-96">
