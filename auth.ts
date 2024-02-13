@@ -15,43 +15,32 @@ export const {
   ...authConfig,
   providers: [
     Credentials({
-      credentials: {},
-      async authorize(credentials, request) {
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+      credentials: {} as any,
+      async authorize(credentials, request): Promise<any> {
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null
+        let { email, password } = credentials;
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        const result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/sign_in`,
+          {
+            method: "POST",
+            body: JSON.stringify({ user: { email, password } }),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        )
+
+        const response = await result.json();
+
+        if (result.status === 200) {
+          let { user: { access_token, ...rest } } = response;
+          return {
+            ...rest,
+            accessToken: response.token
+          }
         }
-        // if (!response.ok) return null
-        // return await response.json() ?? null
+        return null;
       }
     })
   ],
-
-  // pages: {
-  //   signIn: '/admin/login'
-  // },
-  // callbacks: {
-  //   jwt: async ({ token, user, trigger, session }) => {
-  //     user && (token.user = user);
-  //     if (trigger === "update") {
-  //       return session
-  //     }
-  //     return token;
-  //   },
-  //   session: async ({ session, token, trigger, newSession }) => {
-  //     session.user = (token.user as any).user as any
-
-  //     return session;
-  //   },
-  //   signIn: async () => {
-  //     return Promise.resolve(true);
-  //   },
-  // },
 })
