@@ -16,7 +16,7 @@ export default function EditAdminUserButton({
         reduxStore.dispatch(editAdminUserFields({
           email: admin.email!,
           name: admin.name!,
-          isActive: admin.is_active!,
+          isActive: admin.active!,
           isSuperAdmin: admin.is_super_admin!,
           id: admin.id!
         }))

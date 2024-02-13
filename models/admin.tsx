@@ -1,10 +1,10 @@
 export interface Admin {
   id?: number;
-  name?: string;
+  name?: string | null;
   email?: string;
-  is_active?: boolean;
+  active?: boolean;
   is_super_admin?: boolean;
-  created_by?: Admin | null;
+  user_created_by?: Admin | null;
   created_at?: string;
   updated_at?: string;
 }
