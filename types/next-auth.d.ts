@@ -4,12 +4,12 @@ import { DefaultSession } from "next-auth"
 import { DefaultJWT } from "next-auth/jwt";
 
 declare module "next-auth" {
-  interface Session {
-    user: (Admin | Parent) & DefaultSession['user'];
+  interface Session<T> {
+    user: T & DefaultSession['expires'];
     accessToken?: string;
   }
 
-  interface JWT extends DefaultJWT, (Admin | Parent) {
-
+  interface JWT<T> extends T {
+    accessToken?: string;
   }
 }
