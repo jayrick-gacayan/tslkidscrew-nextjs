@@ -1,21 +1,9 @@
 'use server';
 
-import { signIn } from "@/auth";
-import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
+import { authSignIn } from "@/actions/auth-actions/auth-actions";
 
 export async function adminLogin(formData: FormData) {
+  formData.set('role', 'admin')
 
-  redirect('/admin/dashboard');
-  // try {
-  //   let result = await signIn('credentials', {
-  //     email: formData.get('email'),
-  //     password: formData.get('password'),
-  //   });
-
-  //   console.log('result', result);
-  // } catch (error) {
-  //   if (error instanceof AuthError) // Handle auth errors
-  //     throw error // Rethrow all other errors
-  // }
+  let result = await authSignIn(formData, '/admin/dashboard', true);
 }
