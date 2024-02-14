@@ -1,12 +1,12 @@
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
+import { isAdmin } from "./types/helpers/checking-interfaces";
 
 export const authConfig = {
   callbacks: {
-
     async authorized({ auth, request }) {
-      console.log('auth', auth?.user)
-      console.log('request', request.nextUrl);
+      // console.log('auth', auth?.user)
+      // console.log('request', request.nextUrl);
       if (auth?.user === null &&
         (request.nextUrl.href.includes('admin') && request.nextUrl.pathname !== '/admin/login')
       ) {
@@ -23,13 +23,21 @@ export const authConfig = {
       else if (auth?.user && request.nextUrl.pathname === '/parent/login') {
         return NextResponse.redirect(new URL('/parent/dashboard', request.url))
       }
+      else if (isAdmin(auth?.user) && request.nextUrl.pathname.includes('parent')) {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+      }
 
       return NextResponse.next();
 
     },
 
-    async signIn({ user, account, profile, email, credentials }) {
-      return true
+    async signIn({ user, account, profile, email, credentials, }) {
+      console.log('sign in user', user);
+      console.log('sign in account', account);
+      console.log('sign in profile', profile);
+      console.log('sign in email', email);
+      console.log('sign in credentials', credentials);
+      return true;
     },
     async redirect({ url, baseUrl, }) {
       // console.log('url', url);
@@ -62,6 +70,7 @@ export const authConfig = {
 
   },
   secret: process.env.AUTH_SECRET,
+
   providers: [],
   trustHost: true
 } satisfies NextAuthConfig

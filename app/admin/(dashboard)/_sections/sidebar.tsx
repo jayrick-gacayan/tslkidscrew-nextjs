@@ -10,16 +10,16 @@ import {
 import { capitalCase } from "change-case";
 import CompanyLogo from "@/app/_components/company-logo";
 import { Fa6SolidGear } from "@/app/_components/svg/fa6-solid-gear";
-import { FeLogout } from "@/app/_components/svg/fe-logout";
-import { signOut } from "@/auth";
-import { authSignOut } from "@/actions/auth-actions/auth-actions";
 import LogoutButton from "@/app/_components/logout-button";
+import { FeLogout } from "@/app/_components/svg/fe-logout";
 
 export default function Sidebar({
   drawerOpen,
+  authLogout,
   onDrawerOpen,
 }: {
   drawerOpen: boolean;
+  authLogout: () => Promise<void>;
   onDrawerOpen: (open: boolean) => void;
 }) {
   const router = useRouter();
@@ -87,7 +87,13 @@ export default function Sidebar({
                   current={memoSegment}
                   icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
                   text='Settings' />
-                <LogoutButton redirect={true} redirectTo="/admin/login" />
+                <form action={authLogout}>
+                  <button
+                    className="px-4 py-3 w-full space-x-2 block hover:bg-default-light/[.25] text-left">
+                    <FeLogout className="text-[20px] align-middle inline-block" />
+                    <span>Logout</span>
+                  </button>
+                </form>
 
               </div>
             </div>

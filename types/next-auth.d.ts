@@ -8,8 +8,7 @@ declare module "next-auth" {
     user: T & DefaultSession['expires'];
     accessToken?: string;
   }
-
-  interface JWT<T> extends T {
+  interface JWT<T> extends T, DefaultJWT {
     accessToken?: string;
   }
 }

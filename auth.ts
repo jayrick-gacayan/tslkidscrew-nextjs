@@ -1,6 +1,7 @@
 import Credentials from "@auth/core/providers/credentials"
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config";
+import { isAdmin } from "./types/helpers/checking-interfaces";
 
 export const {
   handlers: {
@@ -33,12 +34,21 @@ export const {
         const response = await result.json();
 
         if (result.status === 200) {
-          let { user: { access_token, ...rest } } = response;
-          return {
-            ...rest,
-            accessToken: response.token
+          if (response.status === 200) {
+            let { user: { access_token, ...rest } } = response;
+            if (isAdmin(rest)) {
+              return {
+                ...rest,
+                accessToken: response.token
+              }
+            }
+            return null;
+          }
+          else if (response.status === 300) {
+            throw new Error(response.error)
           }
         }
+
         return null;
       }
     })

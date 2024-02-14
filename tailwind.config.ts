@@ -21,6 +21,7 @@ const config: Config = {
       "primary": "#1565C0",
       "primary-light": "#68aefe",
       "danger": "#DC2626",
+      "danger-light": "#f29696",
       "warning": "#F9C13A",
       "success": "#00B915"
     },

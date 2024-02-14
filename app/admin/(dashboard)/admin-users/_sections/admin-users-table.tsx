@@ -5,18 +5,18 @@ import { Admin } from "@/models/admin";
 import { Result } from "@/models/result";
 import { Paginate } from "@/models/paginate";
 import { SearchParamsProps } from "@/types/props/search-params-props";
-import { adminUsers } from "@/services/admin_services";
+import { adminUsers } from "@/services/admin-services";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-import Fa6SolidTrashCan from "@/app/_components/svg/fa6-solid-trash-can";
+import AdminUserInactiveButton from "./admin-inactive-user-button";
 
 export default async function AdminUsersTable({
   searchParams,
 }: {
   searchParams: SearchParamsProps;
 }) {
-  let admin: Session<Admin> | null = await auth();
-  let result: Result<Paginate<Admin>> = await adminUsers(searchParams, admin?.accessToken);
+  let currentAdmin: Session<Admin> | null = await auth();
+  let result: Result<Paginate<Admin>> = await adminUsers(searchParams, currentAdmin?.accessToken);
 
   let data = result.data?.data ?? [];
 
@@ -89,12 +89,7 @@ export default async function AdminUsersTable({
                         className="text-primary block cursor-pointer">
                         <Fa6SolidEye />
                       </Link>
-                      <button className="text-danger">
-                        <Fa6SolidTrashCan className="inline-block" />
-
-
-
-                      </button>
+                      <AdminUserInactiveButton id={admin.id!} />
                       {
                         admin.id! !== 1 && (<EditAdminUserButton admin={admin} />)
                       }

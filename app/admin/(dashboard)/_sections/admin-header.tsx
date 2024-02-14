@@ -1,15 +1,22 @@
 'use client';
 
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import { Admin } from "@/models/admin";
 import { Menu, Transition } from "@headlessui/react";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
 export default function AdminHeader({
+  admin,
+  authLogout,
   onDrawerOpen
 }: {
+  admin: Session<Admin> | null;
+  authLogout: () => Promise<void>
   onDrawerOpen: () => void;
 }) {
   const router = useRouter();
+
   return (
     <div className="fixed top-0 left-0 z-50 lg:ps-64 bg-white w-full">
       <div className="flex justify-between lg:justify-end px-12 py-4 gap-4 w-full">
@@ -25,13 +32,13 @@ export default function AdminHeader({
           </label>
         </div>
         <div>
-          <Menu as='div' className='relative w-36'>
+          <Menu as='div' className='relative w-auto'>
             {({ open, close }) => {
               return (
                 <>
                   <Menu.Button as="div" className="flex items-center gap-2 w-full cursor-pointer">
                     <div className="size-10 rounded-full bg-primary inline-block" />
-                    <div>Deanver</div>
+                    <div>{admin?.user?.name ?? admin?.user?.email}</div>
                     <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                   </Menu.Button>
                   <Transition enter="transition duration-100 ease-out"
@@ -45,10 +52,10 @@ export default function AdminHeader({
                         className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'>
                         Profile
                       </Menu.Item>
-                      <Menu.Item as='div'
+                      <Menu.Item as='form'
+                        action={authLogout}
                         className='block'>
-                        <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'
-                          onClick={() => { router.push('/admin/login'); close(); }}>
+                        <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'>
                           Logout
                         </button>
                       </Menu.Item>

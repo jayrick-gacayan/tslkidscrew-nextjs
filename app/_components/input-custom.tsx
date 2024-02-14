@@ -1,3 +1,4 @@
+import { ValidationType } from "@/types/enums/validation-type";
 import { ForwardedRef, InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -5,6 +6,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
   suffixIcon?: ReactNode;
   prefixIcon?: ReactNode;
+  errorText?: string;
+  validationType?: ValidationType;
 }
 
 function InputCustom(
@@ -13,6 +16,8 @@ function InputCustom(
     className,
     suffixIcon,
     prefixIcon,
+    errorText = '',
+    validationType = ValidationType.NONE,
     id,
     ...props
   }: InputProps,
@@ -23,24 +28,30 @@ function InputCustom(
       {
         labelText &&
         (<label htmlFor={id}
-          className="font-medium 
-          peer-has-[input:invalid]:text-danger peer-has-[input:focus]:text-primary">{labelText}</label>)
+          className={
+            twMerge(
+              "font-medium peer-has-[input:focus]:text-primary",
+              validationType === ValidationType.ERROR ? 'text-danger' : ''
+            )
+          }>{labelText}</label>)
       }
       <div className="relative w-full">
         <input ref={ref}
+          id={id}
           className={
             twMerge(
-              'peer w-full bg-white p-3 border border-secondary-light rounded outline-0 outline-transparent' +
+              'w-full bg-white p-3 border border-secondary-light rounded outline-0 outline-transparent' +
               ' placeholder:text-secondary-light font-light' +
               ' disabled:text-secondary-light disabled:cursor-not-allowed' +
-              ' focus:border-primary focus:text-inherit' +
-              ' invalid:text-danger invalid:border-danger',
-              className
+              ' focus:border-primary focus:text-inherit',
+              className,
+              validationType === ValidationType.ERROR ? 'border-danger bg-danger-light' : '',
             )
           } {...props} />
         {prefixIcon && prefixIcon}
         {suffixIcon && suffixIcon}
       </div>
+      {errorText !== '' && <div className="text-danger">{errorText}</div>}
     </div>
   )
 }

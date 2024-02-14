@@ -2,12 +2,11 @@ import { ChangeEvent, useState } from "react";
 import InputCustom from "@/app/_components/input-custom";
 import PasswordIcon from "../password-icon";
 
-export default function LoginForm() {
+export default function LoginForm({ state }: { state?: any }) {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     let inputField = event.target as HTMLInputElement;
-
     inputField.setCustomValidity('');
   }
 
@@ -19,7 +18,9 @@ export default function LoginForm() {
         type="text"
         placeholder="Email Address:"
         onChange={onChange}
-        className="bg-secondary border-transparent p-2 px-3" />
+        className="bg-secondary border-transparent p-2 px-3"
+        errorText={state?.email?.errorText}
+        validationType={state?.email?.errorText} />
       <InputCustom labelText="Password"
         id='login-password'
         name='password'
@@ -27,7 +28,9 @@ export default function LoginForm() {
         type={passwordShow ? 'text' : 'password'}
         suffixIcon={<PasswordIcon passwordShow={passwordShow} onPasswordShown={setPasswordShow} />}
         onChange={onChange}
-        className="bg-secondary border-transparent p-2 px-3 pr-10" />
+        className="bg-secondary border-transparent p-2 px-3 pr-10"
+        errorText={state?.password?.errorText}
+        validationType={state?.password?.errorText} />
     </div>
   )
 }
