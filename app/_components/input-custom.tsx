@@ -40,7 +40,7 @@ function InputCustom(
           id={id}
           className={
             twMerge(
-              'w-full bg-white p-3 border border-secondary-light rounded outline-0 outline-transparent' +
+              'transition-all delay-100 w-full bg-white p-3 border border-secondary-light rounded outline-0 outline-transparent' +
               ' placeholder:text-secondary-light font-light' +
               ' disabled:text-secondary-light disabled:cursor-not-allowed' +
               ' focus:border-primary focus:text-inherit',

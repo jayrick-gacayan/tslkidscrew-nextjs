@@ -1,5 +1,5 @@
 
-import { authSignOut } from "@/actions/auth-actions/auth-actions";
+import { authSignOut } from "@/actions/auth-actions";
 import { FeLogout } from "./svg/fe-logout";
 
 export default function LogoutButton({

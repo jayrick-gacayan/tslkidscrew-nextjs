@@ -1,7 +1,7 @@
 'use server';
 
 import * as Joi from 'joi';
-import { authSignIn } from "@/actions/auth-actions/auth-actions";
+import { authSignIn } from "@/actions/auth-actions";
 import { ValidationType } from '@/types/enums/validation-type';
 
 export async function adminLogin(prevState: any, formData: FormData) {

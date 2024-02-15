@@ -12,7 +12,7 @@ export default async function Page({
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
 
   return (
-    <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
+    <div className="rounded bg-white drop-shadow-lg p-4 space-y-6 relative">
       <AdminUsersHeader searchParams={searchParams}
         showEntry={showEntry}
         redirectURL={redirectURL} />

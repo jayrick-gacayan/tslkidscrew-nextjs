@@ -9,6 +9,7 @@ import { locationPlaces } from "@/services/location-services";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import { Session } from "next-auth";
 import Link from "next/link";
+import LocationTableClient from "./location-table-client";
 
 
 export default async function LocationsTable({ searchParams }: { searchParams: SearchParamsProps }) {
@@ -30,35 +31,7 @@ export default async function LocationsTable({ searchParams }: { searchParams: S
             <th className="w-24">ACTION</th>
           </tr>
         </thead>
-        <tbody>
-          {
-            data.map((location: LocationPlace, idx: number) => {
-              return (
-                <tr key={`locations-table-${location.name!}-${idx}`}
-                  className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
-                  <td className="w-56">{location.name ?? 'N/A'}</td>
-                  <td className="w-auto">{location.address ?? 'N/A'}</td>
-                  <td className="w-56">qwerty@gmail.com</td>
-                  <td className="w-24">3</td>
-                  <td className="w-40">{location.minimum_age!}</td>
-                  <td className="w-24">
-                    <div className="flex items-center justify-center gap-2 w-full">
-                      <Link href={`/admin/locations/${location.id!}`}
-                        className="text-primary block">
-                        <Fa6SolidEye />
-                      </Link>
-                      <Link href={`/admin/locations/${location.id!}/edit`}
-                        className="text-warning block">
-                        <Fa6SolidPen />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })
-          }
-
-        </tbody>
+        <LocationTableClient locationPlaces={data} />
       </table>
     </div>
   )

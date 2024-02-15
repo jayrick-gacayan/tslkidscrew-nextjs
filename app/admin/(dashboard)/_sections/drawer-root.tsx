@@ -26,7 +26,7 @@ export default function DrawerRoot({
         authLogout={authLogout}
         onDrawerOpen={(open: boolean) => { setDrawerOpen(open) }} />
       <div className="w-full lg:ps-64 pt-12 overflow-auto h-full relative">
-        <div className="p-12">
+        <div className="p-12 relative">
           {children}
         </div>
       </div>
