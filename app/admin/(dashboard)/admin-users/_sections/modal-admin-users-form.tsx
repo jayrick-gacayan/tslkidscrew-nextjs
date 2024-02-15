@@ -97,7 +97,7 @@ export default function ModalAdminUsersForm({
         break;
     }
 
-  }, [requestStatus, type, formReset])
+  }, [requestStatus, type, formReset, admin?.accessToken, revalidateUsers])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
