@@ -6,23 +6,18 @@ import { LocationPlace } from "@/models/location";
 import { useState } from "react";
 import { editLocationPlace } from "@/actions/location-actions";
 import { useFormState, useFormStatus } from "react-dom";
-
-let directorItems = [
-  { id: 1, email: "alexisLarose.tsl@gmail.com" },
-  { id: 2, email: "jake.tsl@gmail.com" },
-  { id: 3, email: "missmaria.tsl@gmail.com" },
-  { id: 4, email: "rhay26.tsl@gmail.com" },
-  { id: 5, email: "peter.harding.tsl@gmail.com" },
-];
+import { Admin } from "@/models/admin";
 
 export function EditFormLocation({
-  locationPlace
+  locationPlace,
+  admins,
 }: {
   locationPlace: LocationPlace
+  admins: Partial<Admin>[]
 }) {
   const [state, formAction] = useFormState(editLocationPlace, {} as any);
   const { pending } = useFormStatus();
-  const [director, setDirector] = useState<any>(undefined);
+  const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
   return (
     <form action={formAction} className="block space-y-4">
@@ -46,12 +41,10 @@ export function EditFormLocation({
           errorText={state?.address?.errorText}
           validationType={state?.address?.validationStatus} />
         <CustomListbox value={director}
-          name="director"
+          name='director'
           placeholder='Director'
-          onChange={(value: any) => {
-            setDirector(value);
-          }}
-          items={directorItems}
+          onChange={(value: any) => { setDirector(value); }}
+          items={admins}
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}

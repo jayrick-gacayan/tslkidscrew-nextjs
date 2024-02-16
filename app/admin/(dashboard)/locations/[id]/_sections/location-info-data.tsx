@@ -7,9 +7,9 @@ export default function LocationInfoData({ locationPlace }: { locationPlace: Loc
       <div className="w-fulll lg:w-6/12 block">
         <InfoContainer label='Name' data={locationPlace.name} />
         <InfoContainer label='Address' data={locationPlace.address} />
-        <InfoContainer label='Primary Director' data='alexislarose.tsl@gmail.com' />
+        <InfoContainer label='Primary Director' data={locationPlace.director?.email ?? 'N/A'} />
         <InfoContainer label='Minimum Age For Children' data={locationPlace.minimum_age} />
-        <InfoContainer label='Programs' data='3' />
+        <InfoContainer label='Programs' data={locationPlace?.program_count ?? 'N/A'} />
       </div>
     </div>
   )

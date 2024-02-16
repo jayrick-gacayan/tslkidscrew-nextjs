@@ -2,7 +2,7 @@
 
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
-import Fa6SolidTrashCan from "@/app/_components/svg/fa6-solid-trash-can";
+import Fa6SolidSchoolCircleXmark from "@/app/_components/svg/fa6-solid-school-circle-xmark";
 import { LocationPlace } from "@/models/location"
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -89,8 +89,10 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
               <td className="w-56">{locationPlace.name ?? 'N/A'}</td>
               <td className="w-auto">{locationPlace.address ?? 'N/A'}</td>
-              <td className="w-56">qwerty@gmail.com</td>
-              <td className="w-24">3</td>
+              <td className="w-56">
+                {locationPlace.director?.email ?? 'N?A'}
+              </td>
+              <td className="w-24">{locationPlace?.program_count ?? "N/A"}</td>
               <td className="w-40">{locationPlace.minimum_age!}</td>
               <td className="w-24">
                 <div className="flex items-center justify-center gap-2 w-full">
@@ -101,7 +103,7 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
                   <button onClick={() => { showSwal(locationPlace); }}
                     className="text-danger cursor-pointer disabled:cursor-not-allowed"
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
-                    <Fa6SolidTrashCan className="inline-block" />
+                    <Fa6SolidSchoolCircleXmark className="inline-block" />
                   </button>
                   <Link href={`/admin/locations/${locationPlace.id!}/edit`}
                     className="text-warning block">

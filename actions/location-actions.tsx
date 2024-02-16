@@ -6,6 +6,7 @@ import * as Joi from "joi";
 export async function addLocationPlace(prevState: any, formData: FormData) {
   const rawFormData = Object.fromEntries(formData.entries());
 
+  console.log('rawformdata', rawFormData);
   let errors = validateErrors(rawFormData);
 
   if (errors) {

@@ -2,6 +2,12 @@ import { redirectURL } from "@/types/common-use-server-functions/use-server-func
 import AdminUsersHeader from "./_sections/admin-users-header";
 import { AdminUsersPaginationClient } from "./_sections/admin-users-pagination-client";
 import AdminUsersTable from "./_sections/admin-users-table";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Admin Users',
+  description: 'Admin Users Page'
+}
 
 export default async function Page({
   searchParams

@@ -8,24 +8,18 @@ type AdminUserInputs = {
   isSuperAdmin: boolean,
 }
 
-function headers(token: string) {
+function headers(token: string, isImage: boolean = false) {
+  let headers = { Authorization: `Bearer ${token!}` };
   return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
+    headers: !isImage ? { ...headers, 'Content-Type': 'application/json' } : headers
   }
 }
 
 export async function adminUser(id: string, token?: string) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! +
-    `/admin_accounts/${id}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token!}`
-      }
-    });
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
+    { ...headers(token!) }
+  );
 
   let response = await result.json();
 
@@ -43,14 +37,11 @@ export async function adminUsers(
 ) {
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! +
-    `/admin_accounts${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token!}`
-      }
-    });
+  let strSP = urlSearchParams.toString();
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts${strSP === '' ? '' : `?${strSP}`}`,
+    { ...headers(token!) }
+  );
 
   let response = await result.json();
 
@@ -65,8 +56,16 @@ export async function adminUsers(
   });
 }
 
-export async function addAdminUser({ email, name, isSuperAdmin }: AdminUserInputs, token: string) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
+export async function addAdminUser(
+  {
+    email,
+    name,
+    isSuperAdmin
+  }: AdminUserInputs,
+  token: string
+) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -76,10 +75,7 @@ export async function addAdminUser({ email, name, isSuperAdmin }: AdminUserInput
           is_super_admin: isSuperAdmin ? "true" : "false"
         }
       }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
+      ...headers(token!)
     });
 
   let response = await result.json();
@@ -93,13 +89,11 @@ export async function addAdminUser({ email, name, isSuperAdmin }: AdminUserInput
 }
 
 export async function updateAdminUser({ email, name, isSuperAdmin, isActive }: AdminUserInputs & { isActive: boolean }, token: string) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
+      ...headers(token!),
       body: JSON.stringify({
         admin: {
           email,
@@ -121,14 +115,13 @@ export async function updateAdminUser({ email, name, isSuperAdmin, isActive }: A
 }
 
 export async function adminUserInactive(id: number, token: string) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
     {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
-    });
+      ...headers(token!)
+    }
+  );
 
   let response = await result.json();
   // console.log('response', response)
@@ -138,4 +131,22 @@ export async function adminUserInactive(id: number, token: string) {
     statusCode: result.status,
     response: response
   })
+}
+
+
+
+export async function activeAdminUsers(token?: string | null) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/active_admins`,
+    { ...headers(token!) }
+  );
+
+  let response = await result.json();
+
+  return new Result<Admin[]>({
+    ...response,
+    data: response.admins ?? undefined,
+    statusCode: result.status,
+    response: response
+  });
 }

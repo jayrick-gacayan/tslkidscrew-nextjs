@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { ToastContentProps, toast } from "react-toastify";
-import Fa6UserXmark from "@/app/_components/svg/fa6-user-xmark";
+import Fa6UserXmark from "@/app/_components/svg/fa6-solid-user-xmark";
 import { inactiveAdminUser } from "../_actions/admin-user-actions";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { reduxStore } from "@/react-redux/redux-store";

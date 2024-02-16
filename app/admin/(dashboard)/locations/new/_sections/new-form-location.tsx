@@ -3,21 +3,18 @@
 import { addLocationPlace } from "@/actions/location-actions";
 import InputCustom from "@/app/_components/input-custom";
 import CustomListbox from "@/app/_components/listbox-custom";
+import { Admin } from "@/models/admin";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
-let directorItems = [
-  { id: 1, email: "alexisLarose.tsl@gmail.com" },
-  { id: 2, email: "jake.tsl@gmail.com" },
-  { id: 3, email: "missmaria.tsl@gmail.com" },
-  { id: 4, email: "rhay26.tsl@gmail.com" },
-  { id: 5, email: "peter.harding.tsl@gmail.com" },
-];
-
-export function NewFormLocation() {
+export function NewFormLocation({
+  admins
+}: {
+  admins: Partial<Admin>[]
+}) {
   const [state, formAction] = useFormState(addLocationPlace, {} as any);
   const { pending } = useFormStatus();
-  const [director, setDirector] = useState<any>(undefined);
+  const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 
   // console.log('state', state)
   return (
@@ -42,10 +39,8 @@ export function NewFormLocation() {
         <CustomListbox value={director}
           name='director'
           placeholder='Director'
-          onChange={(value: any) => {
-            setDirector(value);
-          }}
-          items={directorItems}
+          onChange={(value: any) => { setDirector(value); }}
+          items={admins}
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}

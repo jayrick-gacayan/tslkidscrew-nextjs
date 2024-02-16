@@ -19,7 +19,7 @@ export default function LoginForm({
   return (
     <div className="space-y-2">
       <input type='hidden' name='role' value={role} />
-      < InputCustom labelText="Email"
+      <InputCustom labelText="Email"
         id='login-email'
         name='email'
         type="text"

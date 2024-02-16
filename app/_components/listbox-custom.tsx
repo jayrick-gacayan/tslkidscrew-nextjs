@@ -57,9 +57,6 @@ function CustomListbox(
                       {labelText}
                     </Listbox.Label>
                   }
-                  {/* <input type='hidden' name='location'
-                value={typeof value === 'string' ? value : value ? value.id : ''}
-                onChange={() => { return null; }} /> */}
                   <Listbox.Button
                     className={
                       twMerge(
@@ -86,7 +83,11 @@ function CustomListbox(
                   leaveTo="transform scale-95 opacity-0">
                   <Listbox.Options as={Fragment}>
                     <div
-                      className="absolute top-[115%] left-0 w-full bg-white z-[60] rounded drop-shadow overflow-hidden">
+                      className={
+                        twMerge(
+                          `absolute top-[115%] left-0 w-full bg-white z-[60] rounded drop-shadow` +
+                          ` ${items.length === 5 ? `h-auto overflow-hidden` : `h-[240px] overflow-auto`}`
+                        )}>
                       {items.map((value: any, index: any) => (
                         <Listbox.Option
                           as='div'

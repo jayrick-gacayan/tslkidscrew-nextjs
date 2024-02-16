@@ -8,7 +8,6 @@ import { Result } from "@/models/result";
 import { locationPlaces } from "@/services/location-services";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import { Session } from "next-auth";
-import Link from "next/link";
 import LocationTableClient from "./location-table-client";
 
 

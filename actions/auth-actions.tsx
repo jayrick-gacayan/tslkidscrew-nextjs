@@ -1,7 +1,7 @@
 'use server'
 
 
-import { nextauthSignIn, nextauthSignOut } from "@/services/auth-services";
+import { nextauthSignIn, nextauthSignOut } from "@/services/nextauth-services";
 import { redirect } from "next/navigation";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";

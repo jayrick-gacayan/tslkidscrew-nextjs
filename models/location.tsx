@@ -8,5 +8,6 @@ export interface LocationPlace {
   updated_at?: string | null;
   deleted?: false,
   minimum_age?: number | null;
-  director?: Admin | null
+  director?: Admin | null;
+  program_count?: number | null;
 }

@@ -25,11 +25,11 @@ export async function locationPlaces(
 ) {
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! +
-    `/locations${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`,
-    {
-      ...headers(token!)
-    });
+  let strSP = urlSearchParams.toString();
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations${strSP === '' ? '' : `?${strSP}`}`,
+    { ...headers(token!) }
+  );
 
   let response = await result.json();
 
@@ -45,11 +45,10 @@ export async function locationPlaces(
 }
 
 export async function locationPlace(id: string, token?: string) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! +
-    `/locations/${id}`,
-    {
-      ...headers(token!)
-    });
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
+    { ...headers(token!) }
+  );
 
   let response = await result.json();
 
@@ -69,7 +68,8 @@ export async function createLocationPlace({
 }: LocationPlaceInputs,
   token: string
 ) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -81,7 +81,8 @@ export async function createLocationPlace({
         }
       }),
       ...headers(token)
-    });
+    }
+  );
 
   let response = await result.json();
 
@@ -103,7 +104,8 @@ export async function updateLocationPlace(
   }: LocationPlaceInputs,
   token: string
 ) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
       method: "PUT",
       body: JSON.stringify({
@@ -115,7 +117,8 @@ export async function updateLocationPlace(
         }
       }),
       ...headers(token)
-    });
+    }
+  );
 
   let response = await result.json();
 
@@ -131,11 +134,13 @@ export async function removeLocationPlace(
   id: string,
   token: string
 ) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
       method: "DELETE",
       ...headers(token)
-    });
+    }
+  );
 
   let response = await result.json();
 

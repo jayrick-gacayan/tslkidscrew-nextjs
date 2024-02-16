@@ -10,20 +10,20 @@ export async function nextauthSignIn(
   redirectTo: string,
 ) {
   try {
-    let result = await signIn('credentials', {
-      email: formData.get('email'),
-      password: formData.get('password'),
-      role: formData.get('role'),
-      redirect: false,
-      redirectTo: redirectTo,
-    },);
+    let result = await signIn('credentials',
+      {
+        email: formData.get('email'),
+        password: formData.get('password'),
+        role: formData.get('role'),
+        redirect: false,
+        redirectTo: redirectTo,
+      }
+    );
 
     return result;
   } catch (error) {
     if (error instanceof AuthError) {
-      return {
-        error: error.cause?.err?.message,
-      }
+      return { error: error.cause?.err?.message }
     }
   }
 }

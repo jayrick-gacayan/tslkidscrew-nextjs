@@ -4,11 +4,14 @@ import { LocationsPaginationClient } from "./_sections/locations-pagination-clie
 import LocationsTable from "./_sections/locations-table";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 
-export default function Page({
-  searchParams
-}: {
-  searchParams: SearchParamsProps;
-}) {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Locations',
+  description: 'Locations Page'
+}
+
+export default function Page({ searchParams }: { searchParams: SearchParamsProps; }) {
 
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
 
