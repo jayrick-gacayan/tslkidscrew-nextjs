@@ -1,22 +1,31 @@
-
 import { authSignOut } from "@/actions/auth-actions";
-import { FeLogout } from "./svg/fe-logout";
-
-export default function LogoutButton({
-  redirectTo,
-}: {
+import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
+import { twMerge } from "tailwind-merge";
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   redirectTo: string;
-}) {
+}
 
+function LogoutButton(
+  {
+    redirectTo,
+    className,
+    ...props
+  }: ButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>
+) {
   return (
-    <form action={async () => {
-      await authSignOut(redirectTo);
-    }}>
-      <button
-        className="px-4 py-3 w-full space-x-2 block hover:bg-default-light/[.25] text-left">
-        <FeLogout className="text-[20px] align-middle inline-block" />
-        <span>Logout</span>
-      </button>
+    <form action={async () => { await authSignOut(redirectTo); }}>
+      <button ref={ref}
+        className={
+          twMerge(
+            'px-3 py-2 block w-full text-left cursor-pointer',
+            className!
+          )
+        }
+        {...props} />
     </form>
   )
 }
+
+export default forwardRef<HTMLButtonElement, ButtonProps>(LogoutButton);
+
