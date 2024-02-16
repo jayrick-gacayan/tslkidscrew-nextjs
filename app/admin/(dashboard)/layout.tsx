@@ -7,7 +7,5 @@ import { Session } from "next-auth";
 export default async function Layout({ children }: { children: ReactNode }) {
   let admin: Session<Admin> | null = await auth();
 
-  console.log('admin', admin)
-
   return (<DrawerRoot admin={admin}>{children}</DrawerRoot>);
 }

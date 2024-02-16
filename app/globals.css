@@ -76,3 +76,8 @@
 .react-datepicker__month-text--selected, .react-datepicker__day--selected {
   @apply bg-primary text-white rounded-lg
 }
+
+/* CSS Classname for react-toastify */
+.Toastify__toast-container {
+  @apply z-[99999]
+}

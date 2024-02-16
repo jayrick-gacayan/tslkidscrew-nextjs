@@ -14,6 +14,7 @@ import { reduxStore } from "@/react-redux/redux-store";
 import { editAdminUserFields, modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
+  const [dataAdmins, setDataAdmins] = useState(admins);
   const [adminId, setAdminId] = useState<any>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
 

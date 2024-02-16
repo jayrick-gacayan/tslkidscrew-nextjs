@@ -1,21 +1,19 @@
 import { redirectURL } from "@/types/common-use-server-functions/use-server-functions";
 import AdminUsersHeader from "./_sections/admin-users-header";
-import { AdminUsersPaginationClient } from "./_sections/admin-users-pagination-client";
 import AdminUsersTable from "./_sections/admin-users-table";
 import type { Metadata } from "next";
+import Pagination from "@/app/_components/pagination";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export const metadata: Metadata = {
   title: 'Admin Users',
   description: 'Admin Users Page'
 }
 
-export default async function Page({
-  searchParams
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
 
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
+  let totalPages = Math.ceil(1 / showEntry) ?? 1
 
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6 relative">
@@ -23,9 +21,18 @@ export default async function Page({
         showEntry={showEntry}
         redirectURL={redirectURL} />
       <AdminUsersTable searchParams={searchParams} />
-      <AdminUsersPaginationClient searchParams={searchParams}
-        totalPages={Math.ceil(1 / showEntry) ?? 1}
-        redirectURL={redirectURL} />
+      {
+        totalPages < 2 ? null :
+          (
+            <div className="w-fit m-auto block">
+              <Pagination baseURL="/admin/admin-users"
+                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                searchParams={searchParams}
+                totalPages={totalPages}
+              />
+            </div>
+          )
+      }
     </div>
   )
 }
