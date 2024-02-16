@@ -14,8 +14,7 @@ export default async function Layout({
   return (
     <>
       {children}
-      <ModalAdminUsersForm admin={admin}
-        revalidateUsers={revalidateUsers} />
+      <ModalAdminUsersForm admin={admin} />
     </>
   )
 }

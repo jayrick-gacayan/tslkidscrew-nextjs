@@ -1,6 +1,3 @@
-import Link from "next/link";
-import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
-import EditAdminUserButton from "./edit-admin-user-button";
 import { Admin } from "@/models/admin";
 import { Result } from "@/models/result";
 import { Paginate } from "@/models/paginate";
@@ -10,11 +7,7 @@ import { auth } from "@/auth";
 import { Session } from "next-auth";
 import AdminUsersTableClient from "./admin-users-table-client";
 
-export default async function AdminUsersTable({
-  searchParams,
-}: {
-  searchParams: SearchParamsProps;
-}) {
+export default async function AdminUsersTable({ searchParams }: { searchParams: SearchParamsProps; }) {
   let currentAdmin: Session<Admin> | null = await auth();
   let result: Result<Paginate<Admin>> = await adminUsers(searchParams, currentAdmin?.accessToken);
 

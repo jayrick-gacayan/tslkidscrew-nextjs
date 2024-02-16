@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import Providers from './_sections/providers'
 import ToastComponentClient from './_sections/toast-component-client'
 
-import './globals.css'
 import 'react-toastify/dist/ReactToastify.css';
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Create Next App',

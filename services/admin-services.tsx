@@ -124,7 +124,7 @@ export async function adminUserInactive(id: number, token: string) {
   );
 
   let response = await result.json();
-  // console.log('response', response)
+
   return new Result<Admin>({
     ...response,
     data: response.data ?? undefined,

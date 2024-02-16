@@ -29,15 +29,9 @@ import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { Session } from "next-auth";
 import { Admin } from "@/models/admin";
+import { revalidateUsers } from "../_actions/admin-user-actions";
 
-export default function ModalAdminUsersForm({
-  admin,
-  revalidateUsers
-}: {
-  admin: Session<Admin> | null;
-  revalidateUsers: (baseUrl: string) => Promise<void>
-}) {
-
+export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> | null; }) {
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -63,7 +57,6 @@ export default function ModalAdminUsersForm({
   let pending = requestStatus === RequestStatus.WAITING || requestStatus === RequestStatus.IN_PROGRESS;
 
   const formReset = useCallback(() => {
-
     reduxStore.dispatch(modalFormOpenStateSet(false));
     let timeout = setTimeout(() => {
       reduxStore.dispatch(adminUserFormReset());
@@ -76,6 +69,10 @@ export default function ModalAdminUsersForm({
   }, [])
 
   useEffect(() => {
+    async function userRevalidate() {
+      await revalidateUsers('/admin/admin-users');
+    }
+
     switch (requestStatus) {
       case RequestStatus.IN_PROGRESS:
         if (admin?.accessToken) {
@@ -88,9 +85,6 @@ export default function ModalAdminUsersForm({
         }
         break;
       case RequestStatus.SUCCESS:
-        async function userRevalidate() {
-          await revalidateUsers('/admin/admin-users');
-        }
         userRevalidate();
         formReset();
         break;

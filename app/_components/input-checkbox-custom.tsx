@@ -22,7 +22,7 @@ function InputCustomCheckbox(
   return (
     <div className="block form-control">
       <label htmlFor={id}
-        className="flex items-center gap-4 w-fit">
+        className="flex items-center gap-3 w-fit">
         <input ref={ref}
           type="checkbox"
           className={
