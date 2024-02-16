@@ -8,7 +8,6 @@ import { SearchParamsProps } from "@/types/props/search-params-props";
 import { adminUsers } from "@/services/admin-services";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-import AdminUserInactiveButton from "./admin-inactive-user-button";
 import AdminUsersTableClient from "./admin-users-table-client";
 
 export default async function AdminUsersTable({

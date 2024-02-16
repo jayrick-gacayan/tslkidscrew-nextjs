@@ -19,7 +19,7 @@ export function NewFormLocation() {
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<any>(undefined);
 
-  console.log('state', state)
+  // console.log('state', state)
   return (
     <form action={formAction} className="block space-y-4">
       <div className="space-y-4">

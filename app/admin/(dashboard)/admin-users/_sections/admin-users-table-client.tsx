@@ -3,13 +3,15 @@
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Admin } from "@/models/admin";
 import Link from "next/link";
-import EditAdminUserButton from "./edit-admin-user-button";
 import { useEffect, useState } from "react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { ToastContentProps, toast } from "react-toastify";
 import Fa6UserXmark from "@/app/_components/svg/fa6-user-xmark";
 import { inactiveAdminUser } from "../_actions/admin-user-actions";
+import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
+import { reduxStore } from "@/react-redux/redux-store";
+import { editAdminUserFields, modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [adminId, setAdminId] = useState<any>(undefined);
@@ -42,11 +44,9 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
         actions: 'flex gap-2',
         confirmButton: 'bg-primary text-white p-2 rounded',
         cancelButton: 'bg-danger text-white p-2 rounded',
-
       },
       showCancelButton: true,
       buttonsStyling: false,
-
     }).then((result) => {
       if (result.isConfirmed) {
         setAdminId(admin.id)
@@ -70,11 +70,11 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
           hideProgressBar: true,
           onClose: (props) => {
             setToastStatus('closed')
-            console.log('close props', props)
+            // console.log('close props', props)
           },
           onOpen: (props) => {
             setToastStatus('opened')
-            console.log('open props', props)
+            // console.log('open props', props)
           }
         })
       }
@@ -143,7 +143,24 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     <Fa6UserXmark className="inline-block" />
                   </button>
                   {
-                    admin.id! !== 1 && (<EditAdminUserButton admin={admin} />)
+                    admin.id! !== 1 &&
+                    (
+                      <button className="text-warning block cursor-pointer"
+                        onClick={() => {
+                          reduxStore.dispatch(editAdminUserFields({
+                            email: admin.email!,
+                            name: admin.name!,
+                            isActive: admin.active!,
+                            isSuperAdmin: admin.is_super_admin!,
+                            id: admin.id!
+                          }))
+                          reduxStore.dispatch(modalFormOpenStateSet(true));
+                          reduxStore.dispatch(modalFormTypeSet('update'));
+
+                        }}>
+                        <Fa6SolidPen />
+                      </button>
+                    )
                   }
                 </div>
               </td>

@@ -11,7 +11,6 @@ export async function revalidateUsers(baseURL: string) {
 }
 
 export async function inactiveAdminUser(id: number) {
-  console.log('admin', id)
   let admin: Session<Admin> | null = await auth();
 
   let result = await adminUserInactive(id, admin?.accessToken!);

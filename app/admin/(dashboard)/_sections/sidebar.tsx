@@ -1,6 +1,6 @@
-import { Fragment, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import DashboardMenuLink from "../_components/dashboard-menu-link";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import {
   useEventListener,
@@ -10,23 +10,28 @@ import {
 import { capitalCase } from "change-case";
 import CompanyLogo from "@/app/_components/company-logo";
 import { Fa6SolidGear } from "@/app/_components/svg/fa6-solid-gear";
-import LogoutButton from "@/app/_components/logout-button";
 import { FeLogout } from "@/app/_components/svg/fe-logout";
+import { authSignOut } from "@/actions/auth-actions";
 
 export default function Sidebar({
   drawerOpen,
-  authLogout,
   onDrawerOpen,
 }: {
   drawerOpen: boolean;
-  authLogout: () => Promise<void>;
   onDrawerOpen: (open: boolean) => void;
 }) {
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const drawerRef = useRef(null);
   let segment = useSelectedLayoutSegment();
 
   const { width } = useWindowSize();
+
+  useEffect(() => {
+    if (!isMounted) {
+      if (width <= 1024) { onDrawerOpen(false); }
+      setIsMounted(true)
+    }
+  }, [isMounted, width, onDrawerOpen])
 
   const memoSegment = useMemo(() => { return segment ?? '' }, [segment]);
 
@@ -87,7 +92,7 @@ export default function Sidebar({
                   current={memoSegment}
                   icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
                   text='Settings' />
-                <form action={authLogout}>
+                <form action={async () => { await authSignOut('/admin/login'); }}>
                   <button
                     className="px-4 py-3 w-full space-x-2 block hover:bg-default-light/[.25] text-left">
                     <FeLogout className="text-[20px] align-middle inline-block" />

@@ -86,7 +86,6 @@ export default function ModalAdminUsersForm({
             reduxStore.dispatch(updateUserAdmin(admin.accessToken));
           }
         }
-
         break;
       case RequestStatus.SUCCESS:
         async function userRevalidate() {
@@ -97,7 +96,13 @@ export default function ModalAdminUsersForm({
         break;
     }
 
-  }, [requestStatus, type, formReset, admin?.accessToken, revalidateUsers])
+  }, [
+    requestStatus,
+    type,
+    formReset,
+    admin?.accessToken,
+    revalidateUsers
+  ])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -167,7 +172,6 @@ export default function ModalAdminUsersForm({
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {
                       reduxStore.dispatch(adminUserIsActiveChanged(isActive ? false : true))
                     }} />
-
                 )
               }
               <InputCheckboxCustom labelText="Super Admin"
@@ -176,8 +180,6 @@ export default function ModalAdminUsersForm({
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   reduxStore.dispatch(adminUserIsSuperAdminChanged(isSuperAdmin ? false : true))
                 }} />
-
-
               <div className="flex items-center justify-end gap-4">
                 <button type='button'
                   className='bg-white text-primary p-2 disabled:cursor-not-allowed'

@@ -69,11 +69,11 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
           hideProgressBar: true,
           onClose: (props) => {
             setToastStatus('closed')
-            console.log('close props', props)
+            // console.log('close props', props)
           },
           onOpen: (props) => {
             setToastStatus('opened')
-            console.log('open props', props)
+            // console.log('open props', props)
           }
         })
       }

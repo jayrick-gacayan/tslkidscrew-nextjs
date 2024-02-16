@@ -1,21 +1,18 @@
 'use client';
 
+import { authSignOut } from "@/actions/auth-actions";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Admin } from "@/models/admin";
 import { Menu, Transition } from "@headlessui/react";
 import { Session } from "next-auth";
-import { useRouter } from "next/navigation";
 
 export default function AdminHeader({
   admin,
-  authLogout,
   onDrawerOpen
 }: {
   admin: Session<Admin> | null;
-  authLogout: () => Promise<void>
   onDrawerOpen: () => void;
 }) {
-  const router = useRouter();
 
   return (
     <div className="fixed top-0 left-0 z-50 lg:ps-64 bg-white w-full">
@@ -52,12 +49,15 @@ export default function AdminHeader({
                         className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'>
                         Profile
                       </Menu.Item>
-                      <Menu.Item as='form'
-                        action={authLogout}
+                      <Menu.Item as='div'
                         className='block'>
-                        <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'>
-                          Logout
-                        </button>
+                        <form action={async () => {
+                          await authSignOut('/admin/login');
+                        }}>
+                          <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'>
+                            Logout
+                          </button>
+                        </form>
                       </Menu.Item>
                     </div>
                   </Transition>

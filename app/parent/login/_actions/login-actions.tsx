@@ -4,7 +4,7 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
-export async function parentLogin(formData: FormData) {
+export async function parentLogin(prevState: any, formData: FormData) {
 
   redirect('/parent/dashboard');
   // try {

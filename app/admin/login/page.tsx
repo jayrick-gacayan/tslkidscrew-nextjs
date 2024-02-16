@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import FormContainer from "./_sections/form-container";
-import { adminLogin } from "./_actions/login-actions";
 
 export const metadata: Metadata = {
   title: 'Admin Login',

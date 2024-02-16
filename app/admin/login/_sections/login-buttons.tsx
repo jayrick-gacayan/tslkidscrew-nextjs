@@ -11,7 +11,7 @@ export default function LoginButtons() {
         className="bg-primary px-4 py-2 w-fit text-white rounded-sm disabled:cursor-not-allowed">
         {pending ? '...Checking' : 'Login'}
       </button>
-      <Link href='#'
+      <Link href='/admin/forgot-password'
         className="text-primary hover:underline font-medium">
         Forgot Password
       </Link>

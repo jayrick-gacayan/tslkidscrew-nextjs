@@ -2,7 +2,13 @@ import { ChangeEvent, useState } from "react";
 import InputCustom from "@/app/_components/input-custom";
 import PasswordIcon from "../password-icon";
 
-export default function LoginForm({ state }: { state?: any }) {
+export default function LoginForm({
+  role,
+  state,
+}: {
+  role: string;
+  state?: any;
+}) {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
@@ -12,7 +18,8 @@ export default function LoginForm({ state }: { state?: any }) {
 
   return (
     <div className="space-y-2">
-      <InputCustom labelText="Email"
+      <input type='hidden' name='role' value={role} />
+      < InputCustom labelText="Email"
         id='login-email'
         name='email'
         type="text"
