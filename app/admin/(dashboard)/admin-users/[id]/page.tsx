@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import BackButtonClient from "../../_components/back-button-client";
-import InfoContainer from "../../_components/info-container";
 import EditInfoButton from "./_sections/edit-info-button";
-import { adminUser } from "@/services/admin_services";
+import { adminUser } from "@/services/admin-services";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { Admin } from "@/models/admin";
@@ -21,7 +20,7 @@ export default async function Page({
 
   if (!result.data) { notFound(); }
 
-  let admin = result.data;
+  let admin: Admin = result.data;
 
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
@@ -29,7 +28,7 @@ export default async function Page({
       <AdminHeaderWithEntries headerText='Admin Information' />
       <div className="bg-secondary p-6">
         <AdminInfoData admin={admin} />
-        <EditInfoButton />
+        <EditInfoButton admin={admin} />
       </div>
     </div>
   )

@@ -2,10 +2,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AdminUsersState } from "./admin-users-state";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
-
-import { z } from 'zod';
+import * as  Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
-
 
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
@@ -64,50 +62,57 @@ const adminUsersSlice = createSlice({
       }
     },
     adminUserFormSubmitted: (state: AdminUsersState) => {
-      const schema = z.object({
-        email: z.string().min(1, 'Email is required').email(),
-        name: z.string().min(1, 'Name is required')
+      let { email, name } = state.adminUserForm;
+      const adminUserSchema = Joi.object({
+        email: Joi.string()
+          .email({ tlds: { allow: false } })
+          .required()
+          .messages({
+            "string.empty": "Email is required.",
+            "string.email": "Email is in invalid format.",
+            "any.required": "Email is required",
+          }),
+        name: Joi.string()
+          .required()
+          .messages({
+            "string.empty": "Name is required.",
+            "any.required": "Name is required",
+          })
       });
 
-      const validatedFields = schema.safeParse({
-        email: state.adminUserForm.email.value,
-        name: state.adminUserForm.name.value
-      });
 
-      if (validatedFields.success) {
-        return {
-          ...state,
-          email: {
-            ...state.adminUserForm.email,
-            validationStatus: ValidationType.VALID,
-          },
-          name: {
-            ...state.adminUserForm.name,
-            validationStatus: ValidationType.VALID,
-          },
-          requestStatus: RequestStatus.IN_PROGRESS
-        }
-      } else {
+      let validate = adminUserSchema.validate({
+        email: email.value,
+        name: name.value
+      }, { abortEarly: false });
 
-        let errors = validatedFields.error.flatten().fieldErrors;
-        return {
-          ...state,
-          adminUserForm: {
-            ...state.adminUserForm,
-            email: {
-              ...state.adminUserForm.email,
-              validationStatus: ValidationType.ERROR,
-              errorText: errors["email"]![0],
-            },
-            name: {
-              ...state.adminUserForm.name,
-              validationStatus: ValidationType.ERROR,
-              errorText: errors["name"]![0],
-            },
-            requestStatus: RequestStatus.FAILURE
+      let errors: any = validate.error?.details.reduce((prev, curr) => {
+        return Object.assign({
+          [curr.context?.key ?? '']: {
+            value: curr.context?.value,
+            errorText: curr.message,
+            validationStatus: ValidationType.ERROR,
           }
+        }, prev)
+      }, {});
+
+      return {
+        ...state,
+        adminUserForm: {
+          ...state.adminUserForm,
+          email: errors ? errors?.email : {
+            ...state.adminUserForm.email,
+            validationStatus: ValidationType.VALID
+          },
+          name: errors ? errors?.name : {
+            ...state.adminUserForm.name,
+            validationStatus: ValidationType.VALID
+          },
+          requestStatus: errors ? RequestStatus.FAILURE : RequestStatus.IN_PROGRESS
         }
       }
+
+
     },
     adminUserRequestStatusSet: (state: AdminUsersState, action: PayloadAction<RequestStatus>) => {
       return {

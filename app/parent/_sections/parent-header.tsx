@@ -7,6 +7,7 @@ import FormsMenu from "./forms-menu";
 import SettingsMenu from "./settings-menu";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import Link from "next/link";
+import { authSignOut } from "@/actions/auth-actions";
 
 export default function ParentHeader() {
   const pathname = usePathname();
@@ -63,10 +64,13 @@ export default function ParentHeader() {
                                     </Menu.Item>
                                     <Menu.Item as='div'
                                       className='block'>
-                                      <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'
-                                        onClick={() => { router.push('/parent/login'); close(); }}>
-                                        Logout
-                                      </button>
+                                      <form action={async () => {
+                                        await authSignOut('/parent/login');
+                                      }}>
+                                        <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'>
+                                          Logout
+                                        </button>
+                                      </form>
                                     </Menu.Item>
                                   </div>
                                 </Transition>

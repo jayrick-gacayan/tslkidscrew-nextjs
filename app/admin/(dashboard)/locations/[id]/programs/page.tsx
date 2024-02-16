@@ -4,6 +4,13 @@ import ProgramsPaginationClient from "./_sections/programs-pagination-client";
 import ProgramsTable from "./_sections/programs-table";
 import BackButtonClient from "../../../_components/back-button-client";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Location Programs',
+  description: 'Location Programs Page'
+}
+
 export default function Page({
   params,
   searchParams

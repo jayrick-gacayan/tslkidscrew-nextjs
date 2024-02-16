@@ -1,6 +1,13 @@
 'use client';
 
-import { FormEvent, Fragment, useContext, useEffect, useMemo, useRef } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo
+} from "react";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
@@ -9,19 +16,28 @@ import {
   adminUserEmailChanged,
   adminUserFormReset,
   adminUserFormSubmitted,
+  adminUserIsActiveChanged,
+  adminUserIsSuperAdminChanged,
   adminUserNameChanged,
   adminUserRequestStatusSet,
   modalFormOpenStateSet,
   modalFormTypeSet,
 } from "../_redux/admin-users-slice";
-import CustomCheckbox from "@/app/_components/custom-checkbox";
-import { useFormState, useFormStatus } from "react-dom";
-
-import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
 import InputCustom from "@/app/_components/input-custom";
+import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
+import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
+import { Session } from "next-auth";
+import { Admin } from "@/models/admin";
 
-export default function ModalAdminUsersForm() {
+export default function ModalAdminUsersForm({
+  admin,
+  revalidateUsers
+}: {
+  admin: Session<Admin> | null;
+  revalidateUsers: (baseUrl: string) => Promise<void>
+}) {
+
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -44,26 +60,49 @@ export default function ModalAdminUsersForm() {
     return { ...adminUsersState.adminUserForm };
   }, [adminUsersState.adminUserForm]);
 
-  const { pending, data, action, method } = useFormStatus();
+  let pending = requestStatus === RequestStatus.WAITING || requestStatus === RequestStatus.IN_PROGRESS;
+
+  const formReset = useCallback(() => {
+
+    reduxStore.dispatch(modalFormOpenStateSet(false));
+    let timeout = setTimeout(() => {
+      reduxStore.dispatch(adminUserFormReset());
+      reduxStore.dispatch(modalFormTypeSet(''));
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [])
 
   useEffect(() => {
     switch (requestStatus) {
       case RequestStatus.IN_PROGRESS:
-        if (type === 'add') {
-
+        if (admin?.accessToken) {
+          if (type === 'add') {
+            reduxStore.dispatch(addUserAdmin(admin.accessToken));
+          }
+          else if (type === 'update') {
+            reduxStore.dispatch(updateUserAdmin(admin.accessToken));
+          }
         }
         break;
+      case RequestStatus.SUCCESS:
+        async function userRevalidate() {
+          await revalidateUsers('/admin/admin-users');
+        }
+        userRevalidate();
+        formReset();
+        break;
     }
-  }, [requestStatus, type])
 
-  function formReset() {
-    reduxStore.dispatch(adminUserFormReset());
-
-    reduxStore.dispatch(modalFormOpenStateSet(false));
-    setTimeout(() => {
-      reduxStore.dispatch(modalFormTypeSet(''));
-    }, 500)
-  }
+  }, [
+    requestStatus,
+    type,
+    formReset,
+    admin?.accessToken,
+    revalidateUsers
+  ])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,28 +142,48 @@ export default function ModalAdminUsersForm() {
                   name="admin-user-email"
                   type="text"
                   placeholder='Email Address:'
-                  className="bg-secondary border-0" />
+                  value={email.value}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    reduxStore.dispatch(adminUserEmailChanged(event.target.value));
+                  }}
+                  className="bg-secondary border-0"
+                  errorText={email.errorText}
+                  validationType={email.validationStatus}
+                  disabled={type === 'update'} />
                 <InputCustom labelText="Name"
                   id="admin-user-name"
                   name="admin-user-name"
                   type="text"
                   placeholder="Name: "
-                  className="bg-secondary border-0" />
+                  value={name.value}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    reduxStore.dispatch(adminUserNameChanged(event.target.value));
+                  }}
+                  className="bg-secondary border-0"
+                  errorText={name.errorText}
+                  validationType={name.validationStatus} />
               </div>
               {
                 type === 'update' &&
                 (
-                  <CustomCheckbox value={isActive}
-                    name="isActive"
-                    text='Active' />
+                  <InputCheckboxCustom labelText="Active"
+                    id={`${type}-is-active`}
+                    checked={isActive}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                      reduxStore.dispatch(adminUserIsActiveChanged(isActive ? false : true))
+                    }} />
                 )
               }
-              <CustomCheckbox value={isSuperAdmin}
-                name="isAdmin"
-                text='Super Admin' />
+              <InputCheckboxCustom labelText="Super Admin"
+                id={`${type}-is-super-admin`}
+                checked={isSuperAdmin}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  reduxStore.dispatch(adminUserIsSuperAdminChanged(isSuperAdmin ? false : true))
+                }} />
               <div className="flex items-center justify-end gap-4">
                 <button type='button'
-                  className='bg-white text-primary p-2'
+                  className='bg-white text-primary p-2 disabled:cursor-not-allowed'
+                  disabled={pending}
                   onClick={formReset}>Cancel</button>
                 <button type="submit"
                   className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'

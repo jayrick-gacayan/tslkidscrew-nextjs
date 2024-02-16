@@ -1,19 +1,23 @@
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
+import { isAdmin, isParent } from "./types/helpers/checking-interfaces";
+import {
+  ADMIN_PUBLIC_ROUTES,
+  PARENT_PUBLIC_ROUTES
+} from "./types/constants/page-routes";
 
 export const authConfig = {
   callbacks: {
-
     async authorized({ auth, request }) {
-      console.log('auth', auth?.user)
-      console.log('request', request.nextUrl);
+      // console.log('auth', auth?.user)
+      // console.log('request', request.nextUrl);
       if (auth?.user === null &&
-        (request.nextUrl.href.includes('admin') && request.nextUrl.pathname !== '/admin/login')
+        (request.nextUrl.href.includes('admin') && !ADMIN_PUBLIC_ROUTES.includes(request.nextUrl.pathname))
       ) {
         return NextResponse.redirect('/admin/login');
       }
       else if (auth?.user === null &&
-        (request.nextUrl.href.includes('parent') && request.nextUrl.pathname !== '/parent/login')
+        (request.nextUrl.href.includes('parent') && !PARENT_PUBLIC_ROUTES.includes(request.nextUrl.pathname))
       ) {
         return NextResponse.redirect('/parent/login');
       }
@@ -23,18 +27,15 @@ export const authConfig = {
       else if (auth?.user && request.nextUrl.pathname === '/parent/login') {
         return NextResponse.redirect(new URL('/parent/dashboard', request.url))
       }
+      else if (isAdmin(auth?.user) && request.nextUrl.pathname.includes('parent')) {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+      }
+      else if (isParent(auth?.user) && request.nextUrl.pathname.includes('admin')) {
+        return NextResponse.redirect(new URL('/parent/dashboard', request.url))
+      }
 
-      return NextResponse.next();
+      return true;
 
-    },
-
-    async signIn({ user, account, profile, email, credentials }) {
-      return true
-    },
-    async redirect({ url, baseUrl, }) {
-      // console.log('url', url);
-      // console.log('baseUrl', baseUrl);
-      return baseUrl
     },
     async session({ session, user, token, newSession, trigger }) {
       let { accessToken, ...rest } = token;
@@ -54,12 +55,11 @@ export const authConfig = {
       // console.log('account', account);
       // console.log('profile', profile);
       // console.log('session', session);
-
-
       return token;
     }
-
-
+  },
+  pages: {
+    signIn: '/parent/login'
   },
   secret: process.env.AUTH_SECRET,
   providers: [],

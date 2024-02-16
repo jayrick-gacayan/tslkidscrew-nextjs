@@ -2,6 +2,12 @@ import { redirectURL } from "@/types/common-use-server-functions/use-server-func
 import AdminUsersHeader from "./_sections/admin-users-header";
 import { AdminUsersPaginationClient } from "./_sections/admin-users-pagination-client";
 import AdminUsersTable from "./_sections/admin-users-table";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Admin Users',
+  description: 'Admin Users Page'
+}
 
 export default async function Page({
   searchParams
@@ -12,7 +18,7 @@ export default async function Page({
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
 
   return (
-    <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
+    <div className="rounded bg-white drop-shadow-lg p-4 space-y-6 relative">
       <AdminUsersHeader searchParams={searchParams}
         showEntry={showEntry}
         redirectURL={redirectURL} />

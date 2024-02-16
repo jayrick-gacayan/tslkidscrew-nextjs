@@ -1,5 +1,11 @@
 import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client"
 import NewProgramForm from "./sections/new-program-form"
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Create Location Program',
+  description: 'Create Location Program Page'
+}
 
 export default function Page(props: any) {
   return (
