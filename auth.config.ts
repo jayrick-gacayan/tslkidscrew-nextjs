@@ -11,26 +11,25 @@ export const authConfig = {
     async authorized({ auth, request }) {
       // console.log('auth', auth?.user)
       // console.log('request', request.nextUrl);
-      if (auth?.user === null &&
-        (request.nextUrl.href.includes('admin') && !ADMIN_PUBLIC_ROUTES.includes(request.nextUrl.pathname))
+      let { nextUrl: { pathname, href } } = request;
+      if (auth?.user === null && (href.includes('admin') && !ADMIN_PUBLIC_ROUTES.includes(pathname))
       ) {
         return NextResponse.redirect('/admin/login');
       }
-      else if (auth?.user === null &&
-        (request.nextUrl.href.includes('parent') && !PARENT_PUBLIC_ROUTES.includes(request.nextUrl.pathname))
+      else if (auth?.user === null && (href.includes('parent') && !PARENT_PUBLIC_ROUTES.includes(pathname))
       ) {
         return NextResponse.redirect('/parent/login');
       }
-      else if (auth?.user && request.nextUrl.pathname === '/admin/login') {
+      else if (auth?.user && ADMIN_PUBLIC_ROUTES.includes(pathname)) {
         return NextResponse.redirect(new URL('/admin/dashboard', request.url))
       }
-      else if (auth?.user && request.nextUrl.pathname === '/parent/login') {
+      else if (auth?.user && PARENT_PUBLIC_ROUTES.includes(pathname)) {
         return NextResponse.redirect(new URL('/parent/dashboard', request.url))
       }
-      else if (isAdmin(auth?.user) && request.nextUrl.pathname.includes('parent')) {
+      else if (isAdmin(auth?.user) && pathname.includes('parent')) {
         return NextResponse.redirect(new URL('/admin/dashboard', request.url))
       }
-      else if (isParent(auth?.user) && request.nextUrl.pathname.includes('admin')) {
+      else if (isParent(auth?.user) && pathname.includes('admin')) {
         return NextResponse.redirect(new URL('/parent/dashboard', request.url))
       }
 
