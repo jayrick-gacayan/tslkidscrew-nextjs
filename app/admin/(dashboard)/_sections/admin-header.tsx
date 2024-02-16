@@ -1,6 +1,6 @@
 'use client';
 
-import { authSignOut } from "@/actions/auth-actions";
+import LogoutButton from "@/app/_components/logout-button";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Admin } from "@/models/admin";
 import { Menu, Transition } from "@headlessui/react";
@@ -51,13 +51,10 @@ export default function AdminHeader({
                       </Menu.Item>
                       <Menu.Item as='div'
                         className='block'>
-                        <form action={async () => {
-                          await authSignOut('/admin/login');
-                        }}>
-                          <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'>
-                            Logout
-                          </button>
-                        </form>
+                        <LogoutButton redirectTo='/admin/login'
+                          className="hover:bg-primary hover:text-white">
+                          Logout
+                        </LogoutButton>
                       </Menu.Item>
                     </div>
                   </Transition>

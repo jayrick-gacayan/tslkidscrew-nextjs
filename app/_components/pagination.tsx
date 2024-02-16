@@ -2,7 +2,6 @@ import { SearchParamsProps } from "@/types/props/search-params-props";
 import Link from "next/link";
 import PaginationIcon from "./pagination-icon";
 
-
 export default function Pagination({
   baseURL,
   currentPage,

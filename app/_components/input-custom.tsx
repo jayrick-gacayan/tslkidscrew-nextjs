@@ -56,6 +56,6 @@ function InputCustom(
   )
 }
 
-export default forwardRef(InputCustom)
+export default forwardRef<HTMLInputElement, InputProps>(InputCustom)
 
 
