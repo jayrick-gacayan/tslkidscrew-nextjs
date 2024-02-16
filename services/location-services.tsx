@@ -1,12 +1,11 @@
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
-import { Admin } from "@/models/admin";
 
 type LocationPlaceInputs = {
   name: string;
   address: string;
-  director: Admin;
+  director_id: number;
   minimum_age: number;
 }
 
@@ -63,28 +62,29 @@ export async function locationPlace(id: string, token?: string) {
 export async function createLocationPlace({
   name,
   address,
-  director,
+  director_id,
   minimum_age
 }: LocationPlaceInputs,
   token: string
 ) {
-  let result = await fetch(
-    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
+  let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
     {
       method: "POST",
       body: JSON.stringify({
-        location: {
+        ["location"]: {
           name,
           address,
-          director_id: director.id!,
-          minimum_age: minimum_age
+          director_id,
+          minimum_age
         }
       }),
-      ...headers(token)
+      ...headers(token!)
     }
   );
 
   let response = await result.json();
+
+  console.log('response', response)
 
   return new Result<LocationPlace>({
     ...response,
@@ -99,7 +99,7 @@ export async function updateLocationPlace(
   {
     name,
     address,
-    director,
+    director_id,
     minimum_age
   }: LocationPlaceInputs,
   token: string
@@ -109,11 +109,11 @@ export async function updateLocationPlace(
     {
       method: "PUT",
       body: JSON.stringify({
-        location: {
+        ['location']: {
           name,
           address,
-          director_id: director.id!,
-          minimum_age: minimum_age
+          director_id,
+          minimum_age
         }
       }),
       ...headers(token)
