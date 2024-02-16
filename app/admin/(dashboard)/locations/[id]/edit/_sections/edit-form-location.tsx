@@ -3,10 +3,12 @@
 import CustomListbox from "@/app/_components/listbox-custom";
 import InputCustom from "@/app/_components/input-custom";
 import { LocationPlace } from "@/models/location";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { editLocationPlace } from "@/actions/location-actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { Admin } from "@/models/admin";
+import { toast, ToastContentProps } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export function EditFormLocation({
   locationPlace,
@@ -15,9 +17,37 @@ export function EditFormLocation({
   locationPlace: LocationPlace
   admins: Partial<Admin>[]
 }) {
-  const [state, formAction] = useFormState(editLocationPlace, {} as any);
+  const router = useRouter();
+  const [state, formAction] = useFormState(editLocationPlace.bind(null, locationPlace.id?.toString()!), {} as any);
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
+
+  useEffect(() => {
+    if (state?.success !== undefined) {
+      let { message, success } = state;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">
+            {message}
+          </div>
+        )
+      }, {
+        toastId: `update-location-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      })
+
+      if (success) {
+        router.back();
+      }
+    }
+  }, [
+    state?.message,
+    state?.success
+  ]);
+
+  console.log('state', state?.message, state?.success);
 
   return (
     <form action={formAction} className="block space-y-4">

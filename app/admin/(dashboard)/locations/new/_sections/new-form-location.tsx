@@ -4,19 +4,46 @@ import { addLocationPlace } from "@/actions/location-actions";
 import InputCustom from "@/app/_components/input-custom";
 import CustomListbox from "@/app/_components/listbox-custom";
 import { Admin } from "@/models/admin";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { ToastContentProps, toast } from "react-toastify";
 
 export function NewFormLocation({
   admins
 }: {
   admins: Partial<Admin>[]
 }) {
+  const router = useRouter();
   const [state, formAction] = useFormState(addLocationPlace, {} as any);
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 
-  // console.log('state', state)
+  useEffect(() => {
+    if (state?.success !== undefined) {
+      let { message, success } = state;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">
+            {message}
+          </div>
+        )
+      }, {
+        toastId: `create-location-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      })
+
+      if (success) {
+        router.back();
+      }
+    }
+  }, [
+    state?.message,
+    state?.success
+  ]);
+
   return (
     <form action={formAction} className="block space-y-4">
       <div className="space-y-4">
