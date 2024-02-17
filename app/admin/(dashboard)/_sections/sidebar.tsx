@@ -1,6 +1,6 @@
-import { Fragment, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import DashboardMenuLink from "../_components/dashboard-menu-link";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import {
   useEventListener,
@@ -11,8 +11,6 @@ import { capitalCase } from "change-case";
 import CompanyLogo from "@/app/_components/company-logo";
 import { Fa6SolidGear } from "@/app/_components/svg/fa6-solid-gear";
 import { FeLogout } from "@/app/_components/svg/fe-logout";
-import { signOut } from "@/auth";
-import { authSignOut } from "@/actions/auth-actions/auth-actions";
 import LogoutButton from "@/app/_components/logout-button";
 
 export default function Sidebar({
@@ -22,11 +20,18 @@ export default function Sidebar({
   drawerOpen: boolean;
   onDrawerOpen: (open: boolean) => void;
 }) {
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const drawerRef = useRef(null);
   let segment = useSelectedLayoutSegment();
 
   const { width } = useWindowSize();
+
+  useEffect(() => {
+    if (!isMounted) {
+      if (width <= 1024) { onDrawerOpen(false); }
+      setIsMounted(true)
+    }
+  }, [isMounted, width, onDrawerOpen])
 
   const memoSegment = useMemo(() => { return segment ?? '' }, [segment]);
 
@@ -87,8 +92,11 @@ export default function Sidebar({
                   current={memoSegment}
                   icon={<Fa6SolidGear className="text-[20px] align-middle inline-block" />}
                   text='Settings' />
-                <LogoutButton redirect={true} redirectTo="/admin/login" />
-
+                <LogoutButton redirectTo='/admin/login'
+                  className="hover:bg-default-light/[.25] space-x-2 px-4 py-3">
+                  <FeLogout className="text-[20px] align-middle inline-block" />
+                  <span>Logout</span>
+                </LogoutButton>
               </div>
             </div>
           </div>

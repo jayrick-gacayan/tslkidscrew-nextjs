@@ -6,7 +6,8 @@ export const metadata: Metadata = {
   description: 'Admin Login Page'
 }
 
-export default function Page() {
+export default async function Page() {
+
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="w-[448px] m-auto block bg-white rounded p-8 shadow-lg space-y-4">

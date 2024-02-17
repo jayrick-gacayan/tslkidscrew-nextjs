@@ -2,19 +2,16 @@ import { SearchParamsProps } from "@/types/props/search-params-props";
 import Link from "next/link";
 import PaginationIcon from "./pagination-icon";
 
-
 export default function Pagination({
   baseURL,
   currentPage,
   searchParams,
   totalPages,
-  onButtonClick
 }: {
   baseURL: string
   currentPage: string | undefined;
   searchParams: SearchParamsProps;
   totalPages: number;
-  onButtonClick: (url: string) => void;
 }) {
 
   let pageNumber = !currentPage ? 1 : parseInt(currentPage);
@@ -33,16 +30,12 @@ export default function Pagination({
     return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`
   }
 
-  function onClickButton(pageNumber?: number) {
-    onButtonClick(urlPaginate(searchParams, pageNumber));
-  }
-
   return totalPages === 1 ? null :
     (
       <div className="w-fit flex items-center rounded border border-primary divide-x divide-primary overflow-hidden">
         <div>
           <PaginationIcon condition={pageNumber === 1}
-            onClick={() => { onClickButton(pageNumber - 1 === 1 ? undefined : pageNumber - 1); }}
+            href={urlPaginate(searchParams, pageNumber - 1 === 1 ? undefined : pageNumber - 1)}
             direction="left" />
         </div>
         {
@@ -64,7 +57,7 @@ export default function Pagination({
         }
         <div>
           <PaginationIcon condition={pageNumber === totalPages}
-            onClick={() => { onClickButton(pageNumber === totalPages ? totalPages : pageNumber + 1); }}
+            href={urlPaginate(searchParams, pageNumber === totalPages ? undefined : pageNumber + 1)}
             direction="right" />
         </div>
       </div>

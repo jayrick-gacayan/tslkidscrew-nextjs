@@ -16,7 +16,6 @@ function PasswordIcon(
     ref={ref}
     className="text-default/90 absolute right-3 z-20 top-3 block cursor-pointer"
     onClick={() => { onPasswordShown(passwordShow ? false : true); }} />);
-
 }
 
 export default forwardRef(PasswordIcon)

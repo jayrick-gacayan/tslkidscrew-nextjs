@@ -1,16 +1,17 @@
 'use client';
 
 import { Menu, Transition } from "@headlessui/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, } from "next/navigation";
 import CompanyLogo from "@/app/_components/company-logo";
 import FormsMenu from "./forms-menu";
 import SettingsMenu from "./settings-menu";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import Link from "next/link";
+import LogoutButton from "@/app/_components/logout-button";
+import { PARENT_PUBLIC_ROUTES } from "@/types/constants/page-routes";
 
 export default function ParentHeader() {
   const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <div className="sticky top-0 left-0 z-[20] bg-primary w-full">
@@ -22,7 +23,7 @@ export default function ParentHeader() {
           <div className="flex-none w-[368px]">
             <div className="flex items-center w-full gap-4 justify-end">
               {
-                pathname.includes('login') ?
+                PARENT_PUBLIC_ROUTES.includes(pathname) ?
                   (
                     <>
                       <Link href='/parent/login'
@@ -63,10 +64,9 @@ export default function ParentHeader() {
                                     </Menu.Item>
                                     <Menu.Item as='div'
                                       className='block'>
-                                      <button className='px-3 py-2 block w-full text-left cursor-pointer hover:bg-primary hover:text-white'
-                                        onClick={() => { router.push('/parent/login'); close(); }}>
+                                      <LogoutButton redirectTo='/parent/login' className="hover:bg-primary hover:text-white">
                                         Logout
-                                      </button>
+                                      </LogoutButton>
                                     </Menu.Item>
                                   </div>
                                 </Transition>

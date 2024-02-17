@@ -17,7 +17,7 @@ export default function SummerCampWeekPrices() {
   const [week, setWeek] = useState('week-1');
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pt-4">
       <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center w-full">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Update Weeks</h1>

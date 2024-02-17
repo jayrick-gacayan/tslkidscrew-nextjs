@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
 import DrawerRoot from "./_sections/drawer-root";
+import { auth } from "@/auth";
+import { Admin } from "@/models/admin";
+import { Session } from "next-auth";
 
-export default function Layout({ children }: { children: ReactNode }) {
-
-  return (<DrawerRoot>{children}</DrawerRoot>);
+export default async function Layout({ children }: { children: ReactNode }) {
+  let admin: Session<Admin> | null = await auth();
+  console.log('hello test');
+  return (<DrawerRoot admin={admin}>{children}</DrawerRoot>);
 }

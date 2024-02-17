@@ -1,9 +1,7 @@
 import { ResultStatus } from "@/types/enums/result-status";
 
 export class Result<T> {
-
   data?: T | null = undefined;
-
   success?: boolean = false;
   statusCode: number = 0;
   response?: any | null = null;
