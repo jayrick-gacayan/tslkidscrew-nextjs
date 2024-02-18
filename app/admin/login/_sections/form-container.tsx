@@ -1,18 +1,39 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-
-
 import LoginForm from '@/app/_components/login/login-form';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { roleLogin } from '@/actions/auth-actions';
 import LoginButtons from '@/app/_components/login/login-buttons';
 import RememberMe from '@/app/_components/login/remember-me';
-
+import { redirectToPath } from '@/actions/common-actions';
+import { toast, ToastContentProps } from 'react-toastify';
 
 export default function FormContainer() {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(roleLogin.bind(null, '/admin/dashboard'), {} as any);
+
+  useEffect(() => {
+    if (state?.success) {
+      if (state.success && state?.redirectTo) {
+        toast((props: ToastContentProps<unknown>) => {
+          return (
+            <div className="text-black">
+              {state?.message}
+            </div>
+          )
+        }, {
+          toastId: `admin-login-success-${Date.now()}`,
+          type: 'success',
+          hideProgressBar: true,
+        })
+        redirectToPath(state.redirectTo);
+      }
+    }
+  }, [
+    state?.redirectTo,
+    state?.success
+  ]);
 
   return (
     <>

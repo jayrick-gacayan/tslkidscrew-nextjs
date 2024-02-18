@@ -54,7 +54,7 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Name:"
           errorText={state?.name?.errorText}
-          validationType={state?.name?.validationStatus} />
+          validationStatus={state?.name?.validationStatus} />
         <InputCustom labelText='Address'
           id='location-address'
           type="text"
@@ -62,7 +62,7 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Address:"
           errorText={state?.address?.errorText}
-          validationType={state?.address?.validationStatus} />
+          validationStatus={state?.address?.validationStatus} />
         <CustomListbox value={director}
           name='director'
           placeholder='Director'
@@ -79,7 +79,7 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Minimum Age:"
           errorText={state?.['location-minimum-age']?.errorText}
-          validationType={state?.['location-minimum-age']?.validationStatus} />
+          validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
       <button className="bg-primary p-2 rounded text-white w-32 block m-auto"
         disabled={pending}>

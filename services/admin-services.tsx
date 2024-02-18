@@ -1,12 +1,8 @@
 import { Admin } from "@/models/admin";
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
+import { AdminUserInputs } from "@/types/input-types/admin-input-types";
 
-type AdminUserInputs = {
-  email: string,
-  name: string,
-  isSuperAdmin: boolean,
-}
 
 function headers(token: string, isImage: boolean = false) {
   let headers = { Authorization: `Bearer ${token!}` };
@@ -64,7 +60,7 @@ export async function addAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
-  let result = await fetch(
+  return await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
@@ -77,19 +73,18 @@ export async function addAdminUser(
       }),
       ...headers(token!)
     });
-
-  let response = await result.json();
-
-  return new Result<Admin>({
-    ...response,
-    data: response.data ?? undefined,
-    statusCode: result.status,
-    response: response
-  })
 }
 
-export async function updateAdminUser({ email, name, isSuperAdmin, isActive }: AdminUserInputs & { isActive: boolean }, token: string) {
-  let result = await fetch(
+export async function updateAdminUser(
+  {
+    email,
+    name,
+    isSuperAdmin,
+    isActive
+  }: AdminUserInputs,
+  token: string
+) {
+  return await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
       method: "POST",
@@ -103,15 +98,6 @@ export async function updateAdminUser({ email, name, isSuperAdmin, isActive }: A
         }
       })
     });
-
-  let response = await result.json();
-
-  return new Result<Admin>({
-    ...response,
-    data: response.data ?? undefined,
-    statusCode: result.status,
-    response: response
-  })
 }
 
 export async function adminUserInactive(id: number, token: string) {

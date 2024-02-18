@@ -13,10 +13,26 @@ export const metadata: Metadata = {
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  style: ['normal', 'italic'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  style: [
+    'normal',
+    'italic'
+  ],
+  weight: [
+    '100',
+    '200',
+    '300',
+    '400',
+    '500',
+    '600',
+    '700',
+    '800',
+    '900'
+  ],
   display: 'swap',
-  fallback: ['system-ui', 'arial'],
+  fallback: [
+    'system-ui',
+    'arial'
+  ],
 })
 
 export default function RootLayout({
