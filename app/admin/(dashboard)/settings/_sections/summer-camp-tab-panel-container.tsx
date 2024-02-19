@@ -18,10 +18,7 @@ export default function SummerCampTabPanelContainer({
     <Tab.Panel as={Fragment}>
       <div className="space-y-8 divide-y-2 divide-secondary-light">
         <SummerCampSwimPrices summerCampSwimSettings={summerCampSwimSettings} />
-        <SummerCampWeekPricesProvider summerCampWeekSettings={summerCampWeekSettings}>
-          <SummerCampWeekPrices />
-        </SummerCampWeekPricesProvider>
-
+        <SummerCampWeekPrices summerCampWeekSettings={summerCampWeekSettings} />
         <SummerCampPromos />
       </div>
     </Tab.Panel >
