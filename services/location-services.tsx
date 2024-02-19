@@ -2,6 +2,8 @@ import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
 import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
+import { adminUser } from "./admin-services";
+import { ResultStatus } from "@/types/enums/result-status";
 
 function headers(token: string) {
   return {
@@ -42,12 +44,26 @@ export async function locationPlace(id: string, token?: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     { ...headers(token!) }
   );
-
   let response = await result.json();
+  if (result.status === 200) {
+    let adminResult = await adminUser(response.location.director_id, token!);
+
+    if (adminResult.resultStatus === ResultStatus.SUCCESS) {
+      response['location']['director'] = adminResult.data ?? null;
+    }
+
+    return new Result<LocationPlace>({
+      ...response,
+      data: response.location,
+      statusCode: result.status,
+      response: response
+    });
+  }
+
 
   return new Result<LocationPlace>({
     ...response,
-    data: response.location ?? undefined,
+    data: undefined,
     statusCode: result.status,
     response: response
   });

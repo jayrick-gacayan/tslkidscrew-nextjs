@@ -10,7 +10,6 @@ import {
 } from "@/actions/admin-actions";
 
 export async function addUserAdmin(dispatch: AppDispatch, getState: typeof reduxStore.getState) {
-
   let adminUserState: AdminUsersState = getState().adminUsers;
 
   let { email, name, isSuperAdmin } = adminUserState.adminUserForm;
