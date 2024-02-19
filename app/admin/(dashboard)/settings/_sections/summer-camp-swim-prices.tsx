@@ -2,13 +2,27 @@
 
 import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-export default function SummerCampSwimPrices() {
-  const [withSwim, setWithSwim] = useState<string>('with-swimming-rates');
+export default function SummerCampSwimPrices({
+  summerCampSwimSettings
+}: {
+  summerCampSwimSettings: SummerCampSwimSetting[];
+}) {
+  const [withSwim, setWithSwim] = useState<string>('without-swimming-rates');
 
+  const summerCampSwimSettingsMemo = useMemo(() => {
+    return summerCampSwimSettings.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
+      return summerCampSwimSetting.with_swim_trip === (withSwim === 'with-swimming-rates')
+    })
+  }, [
+    withSwim, summerCampSwimSettings
+  ])
+
+  console.log('summerCamp memo',)
   const cbTableHeader = useCallback(() => {
     let length = withSwim.length;
     return noCase(withSwim.substring(0, length - 6));
@@ -89,12 +103,30 @@ export default function SummerCampSwimPrices() {
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
                     <td className="w-56">Children #{childValue}</td>
                     {
-                      weeksSwimArray.map((value) => {
+                      summerCampSwimSettingsMemo.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
+                        return summerCampSwimSetting.child_record_count === childValue
+                      }).map((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return (
-                          <td key={`prices-${withSwim}-${childValue}-${value}`} className="capitalize">
-                            <InputCustom type="text"
-                              inputMode="numeric"
-                              className="bg-white text-center border-transparent" />
+                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`} className="capitalize">
+                            <div className="group/summer-camp-swim-prices">
+                              <span className="border border-secondary-light p-3 bg-white rounded text-center block group-hover/summer-camp-swim-prices:hidden">
+                                {
+                                  Intl.NumberFormat('en-US', {
+                                    style: "currency",
+                                    currency: 'USD',
+                                  }).format(summerCampSwimSetting.price!)
+                                }
+                              </span>
+                              <div className="group-hover/summer-camp-swim-prices:block hidden space-y-2">
+                                <input type='hidden' value={summerCampSwimSetting.id}
+                                  name={`swim-${summerCampSwimSetting.id}`} />
+                                <InputCustom type="text"
+                                  inputMode="numeric"
+                                  defaultValue={summerCampSwimSetting.price?.toString() ?? ''}
+                                  className="bg-white text-center border-transparent" />
+                                <button className="bg-primary text-white p-2 rounded w-24 block ml-auto">Save</button>
+                              </div>
+                            </div>
                           </td>
                         );
                       })

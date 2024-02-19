@@ -77,6 +77,10 @@
   @apply bg-primary text-white rounded-lg
 }
 
+.react-datepicker-popper {
+  @apply z-50;
+}
+
 /* CSS Classname for react-toastify */
 .Toastify__toast-container {
   @apply z-[99999]
