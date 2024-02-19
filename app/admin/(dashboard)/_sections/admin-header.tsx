@@ -4,13 +4,12 @@ import LogoutButton from "@/app/_components/logout-button";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Admin } from "@/models/admin";
 import { Menu, Transition } from "@headlessui/react";
-import { Session } from "next-auth";
 
 export default function AdminHeader({
   admin,
   onDrawerOpen
 }: {
-  admin: Session<Admin> | null;
+  admin: Admin;
   onDrawerOpen: () => void;
 }) {
 
@@ -35,7 +34,7 @@ export default function AdminHeader({
                 <>
                   <Menu.Button as="div" className="flex items-center gap-2 w-full cursor-pointer">
                     <div className="size-10 rounded-full bg-primary inline-block" />
-                    <div>{admin?.user?.name ?? admin?.user?.email}</div>
+                    <div>{admin?.name! ?? admin?.email!}</div>
                     <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                   </Menu.Button>
                   <Transition enter="transition duration-100 ease-out"

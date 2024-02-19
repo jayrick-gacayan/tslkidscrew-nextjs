@@ -1,5 +1,3 @@
-import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
-import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
 import { LocationPlace } from "@/models/location";
@@ -10,7 +8,6 @@ import { SearchParamsProps } from "@/types/props/search-params-props";
 import { Session } from "next-auth";
 import LocationTableClient from "./location-table-client";
 
-
 export default async function LocationsTable({ searchParams }: { searchParams: SearchParamsProps }) {
   let admin: Session<Admin> | null = await auth();
   let result: Result<Paginate<LocationPlace>> = await locationPlaces(searchParams, admin?.accessToken)
@@ -18,7 +15,7 @@ export default async function LocationsTable({ searchParams }: { searchParams: S
   let data = result.data?.data ?? [];
 
   return (
-    <div className="block overflow-auto rounded bg-secondary h-96">
+    <div className={`block overflow-auto rounded bg-secondary h-[448px]`}>
       <table className="min-w-[1024px] w-full">
         <thead>
           <tr className="bg-secondary-light [&>th]:text-sm [&>th]:font-medium [&>th]:px-3 [&>th]:py-2">

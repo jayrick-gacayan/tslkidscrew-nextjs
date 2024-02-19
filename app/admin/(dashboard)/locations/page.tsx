@@ -2,7 +2,6 @@ import { redirectURL } from "@/types/common-use-server-functions/use-server-func
 import LocationsHeader from "./_sections/locations-header";
 import LocationsTable from "./_sections/locations-table";
 import { SearchParamsProps } from "@/types/props/search-params-props";
-
 import type { Metadata } from "next";
 import Pagination from "@/app/_components/pagination";
 

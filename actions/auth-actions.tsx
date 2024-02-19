@@ -1,6 +1,5 @@
 'use server'
 
-
 import { nextauthSignIn, nextauthSignOut } from "@/services/nextauth-services";
 import { redirect } from "next/navigation";
 import * as Joi from "joi";
@@ -21,7 +20,11 @@ export async function authSignIn(
   return result;
 }
 
-export async function roleLogin(redirectTo: string, prevState: any, formData: FormData) {
+export async function roleLogin(
+  redirectTo: string,
+  prevState: any,
+  formData: FormData
+) {
 
   const loginSchema = Joi.object({
     email: Joi.string()
@@ -40,19 +43,28 @@ export async function roleLogin(redirectTo: string, prevState: any, formData: Fo
       })
   });
 
-  let validate = loginSchema.validate({
-    email: formData.get('email'),
-    password: formData.get('password')
-  }, { abortEarly: false, });
+  let validate = loginSchema.validate(
+    {
+      email: formData.get('email'),
+      password: formData.get('password')
+    },
+    { abortEarly: false }
+  );
 
   if (validate.error) {
-    const errors: { [key: string]: { value: any, errorText: string, validationType: ValidationType } } = {};
+    const errors: {
+      [key: string]: {
+        value: any,
+        errorText: string,
+        validationStatus: ValidationType
+      }
+    } = {};
 
     validate.error.details.forEach(err => {
       errors[err.context?.key ?? ''] = {
         value: err.context?.value,
         errorText: err.message,
-        validationType: ValidationType.ERROR,
+        validationStatus: ValidationType.ERROR,
       };
     });
 
@@ -62,9 +74,16 @@ export async function roleLogin(redirectTo: string, prevState: any, formData: Fo
   let result = await authSignIn(formData, redirectTo);
 
   if (result?.error) {
-    return { error: result.error }
+    return {
+      error: result.error,
+      success: false,
+      message: result.error,
+    }
   }
 
-
-  redirect(result);
+  return {
+    redirectTo: result,
+    success: true,
+    message: 'Successfully login account.'
+  };
 }
