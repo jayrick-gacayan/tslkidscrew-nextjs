@@ -14,6 +14,7 @@ function CustomInputDefault(props: any, ref: ForwardedRef<HTMLButtonElement>) {
         )
       }
       type="button">
+      <input type='hidden' name={props.name} value={props.value} onChange={() => { }} />
       {props.value === '' ? <>Place a start date:</> : format(new Date(props.value), "MMMM d, yyyy")}
     </button>
   )

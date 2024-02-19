@@ -1,5 +1,6 @@
 import { Result } from "@/models/result";
-import { SummerCampWeekSetting } from "@/models/summer-week-setting";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 
 function headers(token: string) {
   return {
@@ -10,11 +11,22 @@ function headers(token: string) {
   }
 }
 
-export async function summerSwimPrices(token: string, isSwimming: boolean) {
+export async function getSummerCampSwimPrices(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-summer-camp-prices`,
+    { ...headers(token) }
+  );
 
+  let response = await result.json();
+
+  return new Result<SummerCampSwimSetting[]>({
+    ...response,
+    data: response.summer_camp_prices ?? [],
+    statusCode: result.status,
+  })
 }
 
-export async function getSummerWeekPrices(token: string) {
+export async function getSummerCampWeekPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/edit`,
     { ...headers(token) }
@@ -24,7 +36,8 @@ export async function getSummerWeekPrices(token: string) {
 
   return new Result<SummerCampWeekSetting[]>({
     ...response,
-    data: response.week_settings ?? []
+    data: response.week_settings ?? [],
+    statusCode: result.status,
   })
 }
 

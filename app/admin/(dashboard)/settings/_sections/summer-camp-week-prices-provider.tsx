@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks/redux-hooks";
-import { SummerCampWeekSetting } from "@/models/summer-week-setting";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { ReactNode, useEffect, useMemo } from "react";
 import { AdminSettingsState } from "../_redux/admin-settings-state";

@@ -8,7 +8,7 @@ import { editLocationPlace } from "@/actions/location-actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { Admin } from "@/models/admin";
 import { toast, ToastContentProps } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { redirectToURL } from "@/actions/common-actions";
 
 export function EditFormLocation({
   locationPlace,
@@ -17,13 +17,20 @@ export function EditFormLocation({
   locationPlace: LocationPlace
   admins: Partial<Admin>[]
 }) {
-  const router = useRouter();
   const [state, formAction] = useFormState(editLocationPlace.bind(null, locationPlace.id?.toString()!), {} as any);
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
   useEffect(() => {
     if (state?.success !== undefined) {
+
+      async function redirectToPath() {
+        await redirectToURL(
+          `/admin/locations/${locationPlace.id!}`,
+          `/admin/locations/${locationPlace.id!}`,
+        )
+      }
+
       let { message, success } = state;
 
       toast((props: ToastContentProps<unknown>) => {
@@ -39,7 +46,7 @@ export function EditFormLocation({
       })
 
       if (success) {
-        router.push(`/admin/locations/${locationPlace.id!}`);
+        redirectToPath();
       }
     }
   }, [
@@ -47,8 +54,6 @@ export function EditFormLocation({
     state?.success,
     locationPlace?.id
   ]);
-
-  console.log('state', state?.message, state?.success);
 
   return (
     <form action={formAction} className="block space-y-4">
