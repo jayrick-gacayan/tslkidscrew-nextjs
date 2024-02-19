@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 const { auth } = NextAuth(authConfig);
 export default auth((req: NextAuthRequest) => {
 
-  if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+  if (!req.nextUrl.origin.includes('http://localhost')) {
     if (req.nextUrl.pathname.startsWith('/api/auth')) {
       return NextResponse.json({})
     }
