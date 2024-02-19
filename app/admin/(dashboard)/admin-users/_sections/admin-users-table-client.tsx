@@ -11,7 +11,12 @@ import Fa6UserXmark from "@/app/_components/svg/fa6-solid-user-xmark";
 import { inactiveAdminUser } from "../_actions/admin-user-actions";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { reduxStore } from "@/react-redux/redux-store";
-import { editAdminUserFields, modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
+import {
+  editAdminUserFields,
+  modalFormOpenStateSet,
+  modalFormTypeSet
+} from "../_redux/admin-users-slice";
+
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [dataAdmins, setDataAdmins] = useState(admins);
@@ -19,15 +24,18 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [toastStatus, setToastStatus] = useState('none');
 
   useEffect(() => {
-    if (toastStatus === 'closed') {
-      if (adminId) {
-        async function userAdminInactive() {
-          await inactiveAdminUser(adminId);
+    switch (toastStatus) {
+      case 'closed':
+        if (adminId) {
+          async function userAdminInactive() {
+            await inactiveAdminUser(adminId);
+          }
+          userAdminInactive();
+          setAdminId(undefined);
         }
-        userAdminInactive();
-      }
-      setToastStatus('none');
-      setAdminId(undefined);
+
+        setToastStatus('none');
+        break;
     }
   }, [toastStatus, adminId]);
 
@@ -50,6 +58,10 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
+          return dataAdmin.id !== admin.id ? dataAdmin :
+            { ...admin, active: !admin.active }
+        }));
         setAdminId(admin.id)
         toast((props: ToastContentProps<Admin>) => {
           return (
@@ -57,7 +69,10 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
               <div className="flex-1">{props.data.name ?? props.data.email} has been inactived from the admin list.</div>
               <div className="underline text-primary"
                 onClick={() => {
-                  setAdminId(null);
+                  setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
+                    return dataAdmin.id === admin.id ? admin : dataAdmin
+                  }));
+                  setAdminId(undefined);
                   props.closeToast();
                 }}>
                 Undo
@@ -69,23 +84,18 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
           toastId: `admin-${admin.id}`,
           type: 'success',
           hideProgressBar: true,
-          onClose: (props) => {
-            setToastStatus('closed')
-            // console.log('close props', props)
-          },
-          onOpen: (props) => {
-            setToastStatus('opened')
-            // console.log('open props', props)
-          }
+          onClose: (props) => { setToastStatus('closed') },
+          onOpen: (props) => { setToastStatus('opened') }
         })
       }
     });
   }
 
+  console.log('adminID', toastStatus)
   return (
     <tbody>
       {
-        admins.map((admin: Admin, idx: number) => {
+        dataAdmins.map((admin: Admin, idx: number) => {
           return (
             <tr key={`admin-users-table-${admin.name!}-${idx}`}
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">

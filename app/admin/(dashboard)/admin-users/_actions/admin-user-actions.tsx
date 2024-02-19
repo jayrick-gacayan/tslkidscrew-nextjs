@@ -14,5 +14,5 @@ export async function inactiveAdminUser(id: number) {
   let admin: Session<Admin> | null = await auth();
 
   let result = await adminUserInactive(id, admin?.accessToken!);
-  await revalidateUsers('/admin/admin-users');
+  revalidatePath('/admin/admin-users');
 }

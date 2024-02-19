@@ -1,13 +1,7 @@
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
-
-type LocationPlaceInputs = {
-  name: string;
-  address: string;
-  director_id: number;
-  minimum_age: number;
-}
+import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
 
 function headers(token: string) {
   return {
@@ -136,10 +130,7 @@ export async function removeLocationPlace(
 ) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    {
-      method: "DELETE",
-      ...headers(token)
-    }
+    { ...headers(token), method: "DELETE", }
   );
 
   let response = await result.json();
