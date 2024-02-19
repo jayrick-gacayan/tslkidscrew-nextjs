@@ -39,12 +39,13 @@ export function EditFormLocation({
       })
 
       if (success) {
-        router.back();
+        router.push(`/admin/locations/${locationPlace.id!}`);
       }
     }
   }, [
     state?.message,
-    state?.success
+    state?.success,
+    locationPlace?.id
   ]);
 
   console.log('state', state?.message, state?.success);

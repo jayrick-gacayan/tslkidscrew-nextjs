@@ -2,11 +2,12 @@
 
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { createLocationPlace, updateLocationPlace } from "@/services/location-services";
+import { createLocationPlace, removeLocationPlace, updateLocationPlace } from "@/services/location-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import * as Joi from "joi";
 import { Session } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function addLocationPlace(prevState: any, formData: FormData) {
   let admin: Session<Admin> | null = await auth();
@@ -65,7 +66,15 @@ export async function editLocationPlace(id: string, prevState: any, formData: Fo
     message: 'Successfully updated a location.',
     success: true,
   };
+}
 
+export async function destroyLocationPlace(id: string) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await removeLocationPlace(id, admin?.accessToken!);
+
+  console.log('result location', result)
+  revalidatePath('/admin/locations')
 }
 
 /* helpers */
