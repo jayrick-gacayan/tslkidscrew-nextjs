@@ -1,4 +1,3 @@
-import CustomCheckbox from "@/app/_components/custom-checkbox";
 import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
@@ -7,14 +6,57 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import TextareaCustom from "@/app/_components/textarea-custom";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
 import DatePicker from "react-datepicker";
-
-let today = new Date();
+import { AdminSettingsState } from "../_redux/admin-settings-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import {
+  summerCampWeekSettingCapacityChanged,
+  summerCampWeekSettingEnabledSet,
+  summerCampWeekSettingFormSubmit,
+  summerCampWeekSettingNameChanged,
+  summerCampWeekSettingNotesSet,
+  summerCampWeekSettingRequestStatusSet,
+  summerCampWeekSettingStartDateSet,
+  summerCampWeekSettingWeekChanged
+} from "../_redux/admin-settings-slice";
+import { RequestStatus } from "@/types/enums/request-status";
+import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
+import { format } from "date-fns";
 
 export default function SummerCampWeekPrices() {
-  const [weekDate, setWeekDate] = useState<Date | null>(today);
-  const [week, setWeek] = useState('week-1');
+  const adminSettingsState: AdminSettingsState = useAppSelector((state: RootState) => {
+    return state.adminSettings;
+  });
+
+  const {
+    name,
+    capacity,
+    week,
+    notes,
+    startDate,
+    enabled,
+    requestStatus,
+  } = useMemo(() => {
+    return adminSettingsState.summerCampWeekSetting
+  }, [adminSettingsState.summerCampWeekSetting]);
+
+  const pending = useMemo(() => {
+    return requestStatus === RequestStatus.WAITING || requestStatus === RequestStatus.IN_PROGRESS;
+  }, [requestStatus]);
+
+  useEffect(() => {
+    switch (requestStatus) {
+      case RequestStatus.WAITING:
+        reduxStore.dispatch(summerCampWeekSettingFormSubmit());
+        break;
+    }
+  }, [
+    requestStatus
+  ])
+
+  console.log(requestStatus === RequestStatus.FAILURE)
 
   return (
     <div className="space-y-4 pt-4">
@@ -23,12 +65,19 @@ export default function SummerCampWeekPrices() {
           <h1 className="font-medium text-[24px] text-black">Update Weeks</h1>
         </div>
         <div className="flex-none sm:w-auto w-full">
-          <div className="flex w-full sm:w-64 items-center gap-4">
+          <div className="flex w-full sm:w-72 items-center gap-2">
             <div className="w-full">
-              <CustomCheckbox value={false} onChange={(value: boolean) => { return }} text='Enabled' />
+              <InputCheckboxCustom labelText="Enabled"
+                id={`${week}-is-enabled`}
+                checked={enabled}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  reduxStore.dispatch(summerCampWeekSettingEnabledSet(enabled ? false : true))
+                }} />
             </div>
             <div className="relative w-full">
-              <Listbox value={week} onChange={(value: string) => { setWeek(value); }}>
+              <Listbox value={week} onChange={(value: string) => {
+                reduxStore.dispatch(summerCampWeekSettingWeekChanged(value))
+              }}>
                 <Listbox.Button
                   as="div"
                   className="bg-primary rounded text-white flex items-center w-full justify-between">
@@ -77,15 +126,22 @@ export default function SummerCampWeekPrices() {
         <div className="w-full md:w-8/12 block space-y-4">
           <InputCustom labelText="Name"
             id='week-name'
-            name='week-name'
             type="text"
             className="bg-white p-2 px-3"
-            placeholder="Week Name:" />
-          <div className="space-y-1 w-full">
+            placeholder="Week Name:"
+            value={name.value}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              reduxStore.dispatch(summerCampWeekSettingNameChanged(event.target.value));
+            }}
+            errorText={name.errorText}
+            validationStatus={name.validationStatus} />
+          <div className="space-y-1 w-full relative ">
             <div className="font-medium">Start Date</div>
-            <DatePicker selected={weekDate}
+            <DatePicker selected={!!startDate ? new Date(startDate) : null}
               customInput={<CustomInputDefault className='bg-white' />}
-              onChange={(date) => { setWeekDate(date) }}
+              onChange={(date) => {
+                reduxStore.dispatch(summerCampWeekSettingStartDateSet(!!date ? format(date, 'yyyy-MM-dd') : null))
+              }}
               calendarContainer={calendarContainer}
               renderCustomHeader={renderCustomHeaderDefault}
               formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)} />
@@ -95,14 +151,34 @@ export default function SummerCampWeekPrices() {
             name='week-capacity'
             type="text"
             className="bg-white p-2 px-3"
-            placeholder="Capacity:" />
+            placeholder="Capacity:"
+            inputMode="numeric"
+            value={capacity.value}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              reduxStore.dispatch(summerCampWeekSettingCapacityChanged(event.target.value));
+            }}
+            errorText={capacity.errorText}
+            validationStatus={capacity.validationStatus} />
           <TextareaCustom labelText="Notes"
             id='week-name-notes'
             name='notes'
             className="bg-white"
             placeholder='Enter your note/s here:'
-            rows={7} />
+            rows={7}
+            value={notes}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
+              reduxStore.dispatch(summerCampWeekSettingNotesSet(event.target.value));
+            }} />
         </div>
+      </div>
+      <div className="w-fit ml-auto block">
+        <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
+          disabled={pending}
+          onClick={() => {
+            reduxStore.dispatch(summerCampWeekSettingRequestStatusSet(RequestStatus.WAITING));
+          }}>
+          {pending ? '...Processing' : 'Update Week Prices'}
+        </button>
       </div>
     </div>
   )
