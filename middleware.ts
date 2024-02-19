@@ -1,15 +1,18 @@
 import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import { NextAuthRequest } from "next-auth/lib";
+import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 export default auth((req: NextAuthRequest) => {
-  // const isLoggedIn = !!req.auth;
 
-  // console.log('Route', req.nextUrl);
-  // console.log('is logged in', isLoggedIn)
+  if (process.env.NODE_ENV === 'production') {
+    if (req.nextUrl.pathname.startsWith('/api/auth')) {
+      return NextResponse.redirect(new URL('/', req.nextUrl))
+    }
+  }
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/api/auth"],
 }

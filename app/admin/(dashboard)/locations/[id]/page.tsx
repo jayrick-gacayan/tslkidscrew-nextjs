@@ -10,6 +10,7 @@ import { LocationPlace } from "@/models/location";
 import { locationPlace } from "@/services/location-services";
 import { notFound } from "next/navigation";
 import LocationInfoData from "./_sections/location-info-data";
+import { adminUser } from "@/services/admin-services";
 
 export default async function Page({
   params
@@ -23,6 +24,9 @@ export default async function Page({
   if (!result.data) { notFound(); }
 
   let locationPlaceData = result.data;
+
+  let director: Result<Admin> = await adminUser(locationPlaceData?.director_id?.toString()!, currentAdmin?.accessToken)
+
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <BackButtonClient />
