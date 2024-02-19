@@ -37,8 +37,9 @@ export const authConfig = {
 
     },
     async session({ session, user, token, newSession, trigger }) {
-      let { accessToken, role, ...rest } = token.user;
-      session.user = rest as any;
+      console.log('token', token.user);
+      let { accessToken, ...rest } = token.user as any;
+      session.user = token.user;
       session.accessToken = accessToken as any;
       // console.log('token', token);
       // console.log('user', user);

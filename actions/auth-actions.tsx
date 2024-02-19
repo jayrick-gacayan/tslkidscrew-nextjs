@@ -1,6 +1,5 @@
 'use server'
 
-
 import { nextauthSignIn, nextauthSignOut } from "@/services/nextauth-services";
 import { redirect } from "next/navigation";
 import * as Joi from "joi";
@@ -87,5 +86,4 @@ export async function roleLogin(
     success: true,
     message: 'Successfully login account.'
   };
-
 }
