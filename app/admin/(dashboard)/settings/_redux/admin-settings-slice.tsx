@@ -1,7 +1,7 @@
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { AdminSettingsState } from "./admin-settings-state";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SummerCampWeekSetting } from "@/models/summer-week-setting";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { RequestStatus } from "@/types/enums/request-status";
 import * as  Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
@@ -16,8 +16,14 @@ const summerCampWeekSettingInitValues = {
   enabled: false,
 }
 
+const summerCampSwimSettingInitValues = {
+  switRate: 'without-swimming-rates',
+  summerCampSwimSettings: []
+}
+
 const initialState: AdminSettingsState = {
-  summerCampWeekSetting: summerCampWeekSettingInitValues
+  summerCampWeekSetting: summerCampWeekSettingInitValues,
+  summerCampSwimSetting: summerCampSwimSettingInitValues,
 }
 
 const adminSettingsSlice = createSlice({
@@ -136,8 +142,6 @@ const adminSettingsSlice = createSlice({
         }, prev)
       }, {});
 
-      console.log('errors', errors)
-
       return {
         ...state,
         summerCampWeekSetting: {
@@ -154,7 +158,18 @@ const adminSettingsSlice = createSlice({
         }
       }
 
-    }
+    },
+
+    // for summer camp swim setting
+    summerCampSwimSettingRateChanged: (state: AdminSettingsState, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        summerCampSwimSetting: {
+          ...state.summerCampSwimSetting
+        }
+      }
+    },
+
   },
 });
 
@@ -169,6 +184,8 @@ export const {
   summerCampWeekSettingRequestStatusSet,
   summerCampWeekSettingEnabledSet,
   summerCampWeekSettingFormSubmit,
+
+  // for summer camp swim setting
 
 
 } = adminSettingsSlice.actions
