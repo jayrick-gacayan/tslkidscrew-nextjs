@@ -1,5 +1,6 @@
 'use client';
 
+import { destroyLocationPlace } from "@/actions/location-actions";
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidSchoolCircleXmark from "@/app/_components/svg/fa6-solid-school-circle-xmark";
@@ -11,6 +12,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 export default function LocationTableClient({ locationPlaces }: { locationPlaces: LocationPlace[] }) {
+  const [dataLocationPlaces, setDataLocationPlaces] = useState(locationPlaces);
   const [locationPlaceId, setLocationPlaceId] = useState<any>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
 
@@ -18,14 +20,17 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
     if (toastStatus === 'closed') {
       if (locationPlaceId) {
         async function locationPlaceDeleted() {
-
+          await destroyLocationPlace(locationPlaceId)
         }
         locationPlaceDeleted();
       }
       setToastStatus('none');
       setLocationPlaceId(undefined);
     }
-  }, [toastStatus, locationPlaceId]);
+  }, [
+    toastStatus,
+    locationPlaceId
+  ]);
 
   const showSwal = (locationPlace: LocationPlace) => {
     withReactContent(Swal).fire({
@@ -41,13 +46,17 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
         actions: 'flex gap-2',
         confirmButton: 'bg-primary text-white p-2 rounded',
         cancelButton: 'bg-danger text-white p-2 rounded',
-
       },
       showCancelButton: true,
       buttonsStyling: false,
 
     }).then((result) => {
       if (result.isConfirmed) {
+
+        setDataLocationPlaces(dataLocationPlaces.filter((dataLocationPlace: LocationPlace) => {
+          return dataLocationPlace.id !== locationPlace.id
+        }));
+
         setLocationPlaceId(locationPlace.id)
         toast((props: ToastContentProps<LocationPlace>) => {
           return (
@@ -55,6 +64,7 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
               <div className="flex-1">{props.data.name} has been deleted from the locations list.</div>
               <div className="underline text-primary"
                 onClick={() => {
+                  setDataLocationPlaces(locationPlaces);
                   setLocationPlaceId(null);
                   props.closeToast();
                 }}>
@@ -67,14 +77,8 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
           toastId: `admin-${locationPlace.id}`,
           type: 'success',
           hideProgressBar: true,
-          onClose: (props) => {
-            setToastStatus('closed')
-            // console.log('close props', props)
-          },
-          onOpen: (props) => {
-            setToastStatus('opened')
-            // console.log('open props', props)
-          }
+          onClose: (props) => { setToastStatus('closed') },
+          onOpen: (props) => { setToastStatus('opened') }
         })
       }
     });
@@ -83,7 +87,7 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
   return (
     <tbody>
       {
-        locationPlaces.map((locationPlace: LocationPlace, idx: number) => {
+        dataLocationPlaces.map((locationPlace: LocationPlace, idx: number) => {
           return (
             <tr key={`locations-table-${locationPlace.name!}-${idx}`}
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">

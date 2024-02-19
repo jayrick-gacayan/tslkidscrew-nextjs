@@ -1,13 +1,7 @@
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
-
-type LocationPlaceInputs = {
-  name: string;
-  address: string;
-  director_id: number;
-  minimum_age: number;
-}
+import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
 
 function headers(token: string) {
   return {
