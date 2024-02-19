@@ -2,6 +2,12 @@
 
 import { useRouter } from 'next/navigation'
 import { PhSmileyXEyesBold } from './_components/svg/ph-smiley-x-eyes-bold';
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Page Not Found',
+  description: 'Page not found',
+}
 
 export default function NotFound() {
   const router = useRouter();

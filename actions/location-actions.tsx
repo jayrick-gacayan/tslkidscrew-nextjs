@@ -12,16 +12,18 @@ export async function addLocationPlace(prevState: any, formData: FormData) {
   let admin: Session<Admin> | null = await auth();
 
   let errors = validateErrors(formData);
-  if (errors) {
-    return errors;
-  }
 
-  let result = await createLocationPlace({
-    name: formData.get('name') as string ?? "",
-    address: formData.get('address') as string ?? "",
-    director_id: parseInt(formData.get('director[id]') as string ?? ''),
-    minimum_age: parseInt(formData.get('location-minimum-age') as string ?? '')
-  }, admin?.accessToken!)
+  if (errors) { return errors; }
+
+  let result = await createLocationPlace(
+    {
+      name: formData.get('name') as string ?? "",
+      address: formData.get('address') as string ?? "",
+      director_id: parseInt(formData.get('director[id]') as string ?? ''),
+      minimum_age: parseInt(formData.get('location-minimum-age') as string ?? '')
+    },
+    admin?.accessToken!
+  )
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -40,9 +42,7 @@ export async function editLocationPlace(id: string, prevState: any, formData: Fo
   let admin: Session<Admin> | null = await auth();
   let errors = validateErrors(formData);
 
-  if (errors) {
-    return errors;
-  }
+  if (errors) { return errors; }
 
   let result = await updateLocationPlace(id,
     {
@@ -99,19 +99,20 @@ const locationSchema = Joi.object({
     })
 });
 
-
-
 type LocationKeys = 'name' | 'address' | 'location-minimum-age' | 'director[id]';
 
 function validateErrors(formData: FormData) {
-  const validate = locationSchema.validate({
-    name: formData.get('name') ?? "",
-    address: formData.get('address') ?? "",
-    'director[id]': formData.get('director[id]') ?? "",
-    'location-minimum-age': formData.get('location-minimum-age') ?? "",
-  }, {
-    abortEarly: false,
-  });
+  const validate = locationSchema.validate(
+    {
+      name: formData.get('name') ?? "",
+      address: formData.get('address') ?? "",
+      'director[id]': formData.get('director[id]') ?? "",
+      'location-minimum-age': formData.get('location-minimum-age') ?? "",
+    },
+    {
+      abortEarly: false,
+    }
+  );
 
 
   if (validate?.error) {

@@ -27,7 +27,7 @@ export default function LoginForm({
         onChange={onChange}
         className="bg-secondary border-transparent p-2 px-3"
         errorText={state?.email?.errorText}
-        validationType={state?.email?.errorText} />
+        validationStatus={state?.email?.validationStatus} />
       <InputCustom labelText="Password"
         id='login-password'
         name='password'
@@ -37,7 +37,7 @@ export default function LoginForm({
         onChange={onChange}
         className="bg-secondary border-transparent p-2 px-3 pr-10"
         errorText={state?.password?.errorText}
-        validationType={state?.password?.errorText} />
+        validationStatus={state?.password?.validationStatus} />
     </div>
   )
 }

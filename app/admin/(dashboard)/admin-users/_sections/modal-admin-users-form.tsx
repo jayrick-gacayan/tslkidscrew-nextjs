@@ -27,11 +27,9 @@ import { RequestStatus } from "@/types/enums/request-status";
 import InputCustom from "@/app/_components/input-custom";
 import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
-import { Session } from "next-auth";
-import { Admin } from "@/models/admin";
 import { revalidateUsers } from "../_actions/admin-user-actions";
 
-export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> | null; }) {
+export default function ModalAdminUsersForm() {
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -75,16 +73,12 @@ export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> |
 
     switch (requestStatus) {
       case RequestStatus.IN_PROGRESS:
-        if (admin?.accessToken) {
-          if (type === 'add') {
-            reduxStore.dispatch(addUserAdmin(admin.accessToken));
-          }
-          else if (type === 'update') {
-            reduxStore.dispatch(updateUserAdmin(admin.accessToken));
-          }
+        if (type !== '') {
+          reduxStore.dispatch(type === 'add' ? addUserAdmin : updateUserAdmin);
         }
         break;
       case RequestStatus.SUCCESS:
+        console.log('I am here....')
         userRevalidate();
         formReset();
         break;
@@ -94,7 +88,6 @@ export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> |
     requestStatus,
     type,
     formReset,
-    admin?.accessToken,
     revalidateUsers
   ])
 
@@ -142,7 +135,7 @@ export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> |
                   }}
                   className="bg-secondary border-0"
                   errorText={email.errorText}
-                  validationType={email.validationStatus}
+                  validationStatus={email.validationStatus}
                   disabled={type === 'update'} />
                 <InputCustom labelText="Name"
                   id="admin-user-name"
@@ -155,7 +148,7 @@ export default function ModalAdminUsersForm({ admin }: { admin: Session<Admin> |
                   }}
                   className="bg-secondary border-0"
                   errorText={name.errorText}
-                  validationType={name.validationStatus} />
+                  validationStatus={name.validationStatus} />
               </div>
               {
                 type === 'update' &&

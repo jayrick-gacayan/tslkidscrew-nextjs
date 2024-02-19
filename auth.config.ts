@@ -37,8 +37,9 @@ export const authConfig = {
 
     },
     async session({ session, user, token, newSession, trigger }) {
-      let { accessToken, ...rest } = token;
-      session.user = rest as any;
+      console.log('token', token.user);
+      let { accessToken, ...rest } = token.user as any;
+      session.user = token.user;
       session.accessToken = accessToken as any;
       // console.log('token', token);
       // console.log('user', user);
@@ -48,7 +49,8 @@ export const authConfig = {
       return session
     },
     async jwt({ token, user, account, profile, session, trigger }) {
-      user && (token = user as any);
+      console.log('user on jwt', user);
+      user && (token.user = user as any);
       // console.log('token', token);
       // console.log('user', user);
       // console.log('account', account);
