@@ -25,19 +25,17 @@ export default async function Page({
 
   let locationPlaceData = result.data;
 
-  let director: Result<Admin> = await adminUser(locationPlaceData?.director_id?.toString()!, currentAdmin?.accessToken)
-
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <BackButtonClient />
       <AdminHeaderWithEntries headerText='Location Information' />
       <LocationInfoData locationPlace={locationPlaceData} />
       <div className="w-fit ml-auto block space-x-2">
-        <Link href='/admin/locations/1/programs'
+        <Link href={`/admin/locations/${params.id}/programs`}
           className="w-fit px-4 py-2 rounded bg-primary text-white">
           View All Programs
         </Link>
-        <Link href='/admin/locations/1/edit'
+        <Link href={`/admin/locations/${params.id}/edit`}
           className="w-fit px-4 py-2 rounded bg-primary text-white">
           Edit Info
         </Link>
