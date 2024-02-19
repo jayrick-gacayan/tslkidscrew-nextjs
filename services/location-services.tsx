@@ -130,10 +130,7 @@ export async function removeLocationPlace(
 ) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    {
-      method: "DELETE",
-      ...headers(token)
-    }
+    { ...headers(token), method: "DELETE", }
   );
 
   let response = await result.json();
