@@ -3,7 +3,6 @@ import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { AdminUserInputs } from "@/types/input-types/admin-input-types";
 
-
 function headers(token: string, isImage: boolean = false) {
   let headers = { Authorization: `Bearer ${token!}` };
   return {
@@ -60,18 +59,32 @@ export async function addAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
+  console.log('email, name, isSuperAdmin', email, name, isSuperAdmin);
+  console.log('token', token);
+  console.log('json stringify', JSON.stringify({
+    admin: {
+      email: email,
+      name: name,
+      is_super_admin: isSuperAdmin ? "true" : "false",
+      active: "true",
+    }
+  }))
   return await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         admin: {
           email: email,
           name: name,
-          is_super_admin: isSuperAdmin ? "true" : "false"
+          is_super_admin: isSuperAdmin ? "true" : "false",
+          active: "true",
         }
       }),
-      ...headers(token!)
     });
 }
 
