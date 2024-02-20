@@ -20,11 +20,7 @@ export async function addAdminUserAction({
     isSuperAdmin
   }, admin?.accessToken!);
 
-  let resultbody = await result.body;
   let response = await result.json();
-
-  console.log('status', resultbody);
-  console.log('response', response);
 
   let resultClass = new Result<Admin>({
     ...response,
