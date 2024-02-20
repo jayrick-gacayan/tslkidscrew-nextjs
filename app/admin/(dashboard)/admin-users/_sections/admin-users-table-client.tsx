@@ -91,7 +91,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     });
   }
 
-  console.log('adminID', toastStatus)
+
   return (
     <tbody>
       {

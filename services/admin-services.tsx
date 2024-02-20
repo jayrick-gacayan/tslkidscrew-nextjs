@@ -44,7 +44,7 @@ export async function adminUsers(
     ...response,
     data: {
       data: response.admins ?? [],
-      total: response.total ?? 20,
+      total: response.total_admins ?? 1,
     } ?? undefined,
     statusCode: result.status,
     response: response
