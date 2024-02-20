@@ -14,5 +14,4 @@ export async function updateSummerCampWeekSetting(
 
   console.log('result', rawFormData);
 
-  return {}
 }

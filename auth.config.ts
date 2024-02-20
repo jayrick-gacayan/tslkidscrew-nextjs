@@ -57,7 +57,6 @@ export const authConfig = {
       // console.log('profile', profile);
       // console.log('session', session);
       return token;
-    }
   },
   pages: {
     signIn: '/parent/login'
@@ -65,4 +64,4 @@ export const authConfig = {
   secret: process.env.AUTH_SECRET,
   providers: [],
   trustHost: true
-} satisfies NextAuthConfig
+}
