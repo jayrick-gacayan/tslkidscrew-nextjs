@@ -1,7 +1,10 @@
 import { Admin } from "@/models/admin";
 import AdminUsersTableClient from "./admin-users-table-client";
 
-export default function AdminUsersTable({ data }: { data: Admin[]; }) {
+export default function AdminUsersTable({ admins }: {
+  admins: Admin[]
+}) {
+
   return (
     <div className="block overflow-auto rounded bg-secondary h-[476px] relative">
       <table className="min-w-[1024px] w-full">
@@ -16,7 +19,7 @@ export default function AdminUsersTable({ data }: { data: Admin[]; }) {
             <th className="w-32">ACTION</th>
           </tr>
         </thead>
-        <AdminUsersTableClient admins={data} />
+        <AdminUsersTableClient admins={admins} />
       </table>
     </div>
   )

@@ -1,8 +1,7 @@
 export type SummerCampWeekSettingInputTypes = {
   name: string,
   start_date: string,
-  id: number;
+  id: string;
   capacity: number;
   notes: string;
-  enabled: boolean;
 }

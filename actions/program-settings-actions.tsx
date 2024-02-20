@@ -53,12 +53,11 @@ export async function updateSummerCampWeekSettingAction(
   }
 
   let result: Result<any> = await updateSummerCampWeekSetting({
-    id: id,
+    id: id.toString(),
     name: formData.get('week-name') as string ?? '',
-    capacity: parseInt(formData.get('week') as string) ?? 1,
+    capacity: parseInt(formData.get('week-capacity') as string) ?? 1,
     notes: formData.get('week-notes') as string ?? '',
     start_date: formData.get('week-start-date') as string ?? '',
-    enabled: !!formData.get('week-enabled')
   }, admin?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -108,11 +107,12 @@ export async function updateSummerCampSwimSettingAction(
     }, {}) as SummerCampSwimSettingFormStateProps;
   }
 
-  console.log('validate', validate.error)
-
   let result: Result<any> = await updateSummerCampSwimSetting({
-    id: id,
-    price: formData.get('swim-price') as string ?? '',
+    id: id.toString(),
+    price: parseInt(formData.get('swim-price') as string) ?? 1,
+    child_record_count: formData.get('chlld-record-count') as string ?? '1',
+    week_count: formData.get('week-count') as string ?? '1',
+    with_swim_trip: formData.get('with-swim-trip') as string ?? 'false',
   }, admin?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {

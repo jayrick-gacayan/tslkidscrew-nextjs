@@ -2,6 +2,7 @@ import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { Result } from "@/models/result";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { SummerCampSwimSettingInputTypes } from "@/types/input-types/summer-camp-swim-setting-input-types";
 import { SummerCampWeekSettingInputTypes } from "@/types/input-types/summer-camp-week-setting-input-types";
 
 function headers(token: string) {
@@ -46,8 +47,11 @@ export async function getSummerCampSwimPrices(token: string) {
 export async function updateSummerCampSwimSetting(
   {
     id,
-    price
-  }: any,
+    price,
+    child_record_count,
+    week_count,
+    with_swim_trip
+  }: SummerCampSwimSettingInputTypes,
   token: string
 ) {
   let result = await fetch(
@@ -58,21 +62,31 @@ export async function updateSummerCampSwimSetting(
         summer_camp_price: {
           id,
           price,
+          child_record_count,
+          week_count,
+          with_swim_trip,
         }
       }),
       ...headers(token)
     }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  console.log('response', response)
-
-  return new Result<any>({
-    ...response,
-    data: response.summer_camp_prices ?? [],
-    statusCode: result.status,
-  })
+    return new Result<any>({
+      ...response,
+      data: response.summer_camp_prices ?? [],
+      statusCode: result.status,
+    });
+  } catch (error) {
+    console.log('error', error)
+    return new Result<any>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function getSummerCampWeekPrices(token: string) {
@@ -97,10 +111,10 @@ export async function updateSummerCampWeekSetting(
     start_date,
     capacity,
     notes,
-    enabled,
   }: SummerCampWeekSettingInputTypes
   , token: string
 ) {
+
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/update`,
     {
@@ -112,29 +126,59 @@ export async function updateSummerCampWeekSetting(
           start_date,
           capacity,
           notes,
-          enabled,
         }
       }),
       ...headers(token)
     }
   );
 
+  try {
+    let response = await result.json();
+
+    return new Result<any>({
+      ...response,
+      data: response.week_settings ?? [],
+      statusCode: result.status,
+    });
+  } catch (error) {
+    return new Result<any>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
+
+}
+
+export async function getSummerCampPromoSettings(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/edit-all`,
+    { ...headers(token) }
+  );
+
   let response = await result.json();
 
   return new Result<any>({
     ...response,
-    data: response.data ?? undefined,
-    statusCode: result.status
+    data: response.promos ?? [],
+    statusCode: result.status,
   })
-
 }
 
-export async function summerCampPromos(token: string, week: string) {
+export async function getVacationCampSchedulesSettings(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
+    { ...headers(token) }
+  );
 
-}
+  let response = await result.json();
 
-export async function vacationCampSchedules(token: string, camp: string) {
-
+  console.log('response', response)
+  return new Result<any>({
+    ...response,
+    data: response.promos ?? [],
+    statusCode: result.status,
+  })
 }
 
 export async function beforeOrAfterSchoolPromos(token: string, cycleYear: string) { }

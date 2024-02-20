@@ -26,7 +26,7 @@ export default function Page({
       <BackButtonClient />
       <ProgramsHeader />
       <ProgramsTable />
-      {
+      {/* {
         totalPages < 2 ? null :
           (
             <div className="w-fit m-auto block">
@@ -37,7 +37,7 @@ export default function Page({
               />
             </div>
           )
-      }
+      } */}
     </div>
   )
 }
