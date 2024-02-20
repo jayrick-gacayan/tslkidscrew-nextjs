@@ -2,16 +2,19 @@
 
 import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import Fa6SolidSquareCheck from "@/app/_components/svg/fa6-solid-square-check";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { useCallback, useMemo, useState } from "react";
+import { SetStateAction, useCallback, useMemo, useState } from "react";
+import SummerCampSwimSettingForm from "./summer-camp-swim-prices-form";
 
 export default function SummerCampSwimPrices({
   summerCampSwimSettings
 }: {
   summerCampSwimSettings: SummerCampSwimSetting[];
 }) {
+  const [focusId, setFocusId] = useState<number | undefined>(undefined);
   const [withSwim, setWithSwim] = useState<string>('without-swimming-rates');
 
   const summerCampSwimSettingsMemo = useMemo(() => {
@@ -22,7 +25,6 @@ export default function SummerCampSwimPrices({
     withSwim, summerCampSwimSettings
   ])
 
-  console.log('summerCamp memo',)
   const cbTableHeader = useCallback(() => {
     let length = withSwim.length;
     return noCase(withSwim.substring(0, length - 6));
@@ -83,7 +85,7 @@ export default function SummerCampSwimPrices({
         <table className="min-w-[1024px] w-full">
           <thead>
             <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
-              <th className="w-56">Name</th>
+              <th className="w-48">Name</th>
               {
                 weeksSwimArray.map((value) => {
                   return (
@@ -101,32 +103,17 @@ export default function SummerCampSwimPrices({
                 return (
                   <tr key={`prices-${withSwim}-${childValue}`}
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
-                    <td className="w-56">Children #{childValue}</td>
+                    <td className="w-48">Children #{childValue}</td>
                     {
                       summerCampSwimSettingsMemo.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return summerCampSwimSetting.child_record_count === childValue
                       }).map((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return (
-                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`} className="capitalize">
-                            <div className="group/summer-camp-swim-prices">
-                              <span className="border border-secondary-light p-3 bg-white rounded text-center block group-hover/summer-camp-swim-prices:hidden">
-                                {
-                                  Intl.NumberFormat('en-US', {
-                                    style: "currency",
-                                    currency: 'USD',
-                                  }).format(summerCampSwimSetting.price!)
-                                }
-                              </span>
-                              <div className="group-hover/summer-camp-swim-prices:block hidden space-y-2">
-                                <input type='hidden' value={summerCampSwimSetting.id}
-                                  name={`swim-${summerCampSwimSetting.id}`} />
-                                <InputCustom type="text"
-                                  inputMode="numeric"
-                                  defaultValue={summerCampSwimSetting.price?.toString() ?? ''}
-                                  className="bg-white text-center border-transparent" />
-                                <button className="bg-primary text-white p-2 rounded w-24 block ml-auto">Save</button>
-                              </div>
-                            </div>
+                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`}
+                            className="capitalize">
+                            <SummerCampSwimSettingForm summerCampSwimSetting={summerCampSwimSetting}
+                              setFocusId={setFocusId}
+                              focusId={focusId} />
                           </td>
                         );
                       })

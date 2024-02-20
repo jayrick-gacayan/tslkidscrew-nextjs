@@ -46,15 +46,10 @@ export async function locationPlace(id: string, token?: string) {
   );
   let response = await result.json();
   if (result.status === 200) {
-    let adminResult = await adminUser(response.location.director_id, token!);
-
-    if (adminResult.resultStatus === ResultStatus.SUCCESS) {
-      response['location']['director'] = adminResult.data ?? null;
-    }
 
     return new Result<LocationPlace>({
       ...response,
-      data: response.location,
+      data: { ...response.location, director: response.director ?? null },
       statusCode: result.status,
       response: response
     });
