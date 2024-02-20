@@ -8,17 +8,26 @@ import LoginButtons from '@/app/_components/login/login-buttons';
 import RememberMe from '@/app/_components/login/remember-me';
 import { redirectToPath } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { LoginFormStateProps } from '@/types/props/login-form-state-props';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
 
 export default function FormContainer() {
-  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(roleLogin.bind(null, '/admin/dashboard'), {} as any);
+  const [state, formAction] = useFormState(
+    roleLogin.bind(null, '/admin/dashboard'),
+    {
+      email: fieldInputValue<string>(''),
+      password: fieldInputValue<string>(''),
+    } as LoginFormStateProps
+  );
 
   useEffect(() => {
+    async function pathToRedirect(redirectTo: string) {
+      await redirectToPath(redirectTo);
+    }
+
     if (state?.success) {
       if (state.success && state?.redirectTo) {
-        console.log('state', state)
         toast((props: ToastContentProps<unknown>) => {
           return (
             <div className="text-black">
@@ -30,13 +39,13 @@ export default function FormContainer() {
           type: 'success',
           hideProgressBar: true,
         });
-        router.push(state.redirectTo);
+        formRef.current?.reset();
+        pathToRedirect(state.redirectTo)
       }
     }
   }, [
     state?.redirectTo,
     state?.success,
-    redirectToPath
   ]);
 
   return (

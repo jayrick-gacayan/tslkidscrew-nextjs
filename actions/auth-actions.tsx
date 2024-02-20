@@ -4,6 +4,7 @@ import { nextauthSignIn, nextauthSignOut } from "@/services/nextauth-services";
 import { redirect } from "next/navigation";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
+import { LoginFormStateProps } from "@/types/props/login-form-state-props";
 
 export async function authSignOut(redirectTo: string) {
   let result = await nextauthSignOut(redirectTo);
@@ -22,7 +23,7 @@ export async function authSignIn(
 
 export async function roleLogin(
   redirectTo: string,
-  prevState: any,
+  prevState: LoginFormStateProps,
   formData: FormData
 ) {
 
@@ -51,24 +52,17 @@ export async function roleLogin(
     { abortEarly: false }
   );
 
+
   if (validate.error) {
-    const errors: {
-      [key: string]: {
-        value: any,
-        errorText: string,
-        validationStatus: ValidationType
-      }
-    } = {};
-
-    validate.error.details.forEach(err => {
-      errors[err.context?.key ?? ''] = {
-        value: err.context?.value,
-        errorText: err.message,
-        validationStatus: ValidationType.ERROR,
-      };
-    });
-
-    return errors;
+    return validate.error?.details.reduce((prev, curr) => {
+      return Object.assign({
+        [curr.context?.key ?? '']: {
+          value: curr.context?.value,
+          errorText: curr.message,
+          validationStatus: ValidationType.ERROR,
+        }
+      }, prev)
+    }, {}) as LoginFormStateProps;
   }
 
   let result = await authSignIn(formData, redirectTo);
