@@ -27,6 +27,10 @@
   @apply flex items-stretch w-full justify-evenly gap-2
 }
 
+.react-datepicker__year-wrapper {
+  @apply columns-3 gap-2
+}
+
 .react-datepicker__triangle {
   @apply fill-white stroke-white drop-shadow-lg stroke-0
 }
@@ -71,6 +75,10 @@
 
 .react-datepicker__month-text {
   @apply w-[120px] text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
+}
+
+.react-datepicker__year-text {
+  @apply w-[100px] text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
 }
 
 .react-datepicker__month-text--selected, .react-datepicker__day--selected {

@@ -100,7 +100,7 @@ const locationSchema = Joi.object({
     }),
   'location-minimum-age': Joi.string()
     .required()
-    .pattern(/^[0-9]$/)
+    .pattern(/^\d+$/)
     .messages({
       'string.empty': 'Minimum age is required.',
       'any.required': 'Minimum age is required.',

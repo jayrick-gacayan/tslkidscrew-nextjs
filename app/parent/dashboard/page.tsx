@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
     <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">
       <RegistrationInfoHeader />
       <RegistrationInfoTable />
-      {
+      {/* {
         totalPages < 2 ? null :
           (
             <div className="w-fit m-auto block">
@@ -33,7 +33,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
               />
             </div>
           )
-      }
+      } */}
     </div>
   )
 }

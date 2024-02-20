@@ -19,7 +19,7 @@ export default function Page({ searchParams }: { searchParams: SearchParamsProps
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <LocationsHeader searchParams={searchParams} showEntry={showEntry} redirectURL={redirectURL} />
       <LocationsTable searchParams={searchParams} />
-      {
+      {/* {
         totalPages < 2 ? null :
           (
             <div className="w-fit m-auto block">
@@ -30,7 +30,7 @@ export default function Page({ searchParams }: { searchParams: SearchParamsProps
               />
             </div>
           )
-      }
+      } */}
     </div>
   )
 }

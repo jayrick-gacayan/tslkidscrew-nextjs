@@ -28,7 +28,6 @@ export default function FormContainer() {
 
     if (state?.success) {
       if (state.success && state?.redirectTo) {
-        pathToRedirect(state.redirectTo)
         toast((props: ToastContentProps<unknown>) => {
           return (
             <div className="text-black">
@@ -40,7 +39,8 @@ export default function FormContainer() {
           type: 'success',
           hideProgressBar: true,
         });
-
+        formRef.current?.reset();
+        pathToRedirect(state.redirectTo)
       }
     }
   }, [
