@@ -14,5 +14,5 @@ export default auth((req: NextAuthRequest) => {
 });
 
 export const config = {
-  matcher: ["/api/auth"],
-}
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};

@@ -32,7 +32,7 @@ export const {
           }
         }
         else if (role === 'admin') {
-          console.log('admin url', process.env.NEXT_PUBLIC_API_ADMIN_URL);
+          // console.log('admin url', process.env.NEXT_PUBLIC_API_ADMIN_URL);
           const result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/sign_in`,
             {
               method: "POST",

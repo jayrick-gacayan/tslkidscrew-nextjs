@@ -6,7 +6,7 @@ import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-w
 import { Session } from "next-auth";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
-import { updateSummerCampSwimSetting, updateSummerCampWeekSetting } from "@/services/program-settings-services";
+import { updateProgramYearCycleSetting, updateSummerCampSwimSetting, updateSummerCampWeekSetting } from "@/services/program-settings-services";
 import { Result } from "@/models/result";
 import { ResultStatus } from "@/types/enums/result-status";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
@@ -126,4 +126,31 @@ export async function updateSummerCampSwimSettingAction(
     success: true,
     message: 'Successfully update week setting.'
   };
+}
+
+export async function updateProgramYearCycleSettingAction(
+  id: number,
+  prevState: any,
+  formData: FormData
+) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await updateProgramYearCycleSetting({
+    id: id.toString(),
+    current_year_cycle: formData.get('current-year') as string ?? '',
+    next_year_cycle: formData.get('next-year') as string ?? '',
+  }, admin?.accessToken!);
+
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      message: result.message,
+      success: false
+    }
+  }
+
+  return {
+    message: 'Successfully updated',
+    success: true
+  }
 }
