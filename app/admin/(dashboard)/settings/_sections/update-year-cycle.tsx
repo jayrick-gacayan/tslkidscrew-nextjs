@@ -2,7 +2,7 @@ import calendarContainer from "@/app/_components/react-datepicker/calendar-conta
 import DatepickerYearToYearInputCustom from "@/app/_components/react-datepicker/datepicker-year-to-year-input-custom";
 import { renderCustomHeaderYearToYear } from "@/app/_components/react-datepicker/render-custom-header-year-to-year";
 import { renderYearContent } from "@/app/_components/react-datepicker/render-year-content";
-import { addYears, subYears } from "date-fns";
+import { addYears, format, subYears } from "date-fns";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -26,12 +26,14 @@ export default function UpdateYearCycle() {
               <DatePicker selected={currentYearCycle}
                 customInput={<DatepickerYearToYearInputCustom />}
                 onChange={(date) => { setCurrentYearCycle(date) }}
+                minDate={minDate}
                 maxDate={maxDate}
                 popperClassName="z-50"
                 calendarContainer={calendarContainer}
                 renderCustomHeader={renderCustomHeaderYearToYear}
-
-                showYearPicker />
+                renderYearContent={renderYearContent}
+                showYearPicker
+              />
             </div>
           </div>
           <div className="flex items-center w-full gap-4">
@@ -42,12 +44,14 @@ export default function UpdateYearCycle() {
               <DatePicker selected={nextYearCycle}
                 customInput={<DatepickerYearToYearInputCustom />}
                 onChange={(date) => { setNextYearCycle(date) }}
+                minDate={minDate}
                 maxDate={maxDate}
                 popperClassName="z-50"
                 calendarContainer={calendarContainer}
                 renderCustomHeader={renderCustomHeaderYearToYear}
-                renderMonthContent={renderYearContent}
-                showYearPicker />
+                renderYearContent={renderYearContent}
+                showYearPicker
+              />
             </div>
           </div>
         </div>

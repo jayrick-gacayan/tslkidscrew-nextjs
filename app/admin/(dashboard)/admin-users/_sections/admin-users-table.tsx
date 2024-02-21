@@ -1,9 +1,7 @@
 import { Admin } from "@/models/admin";
 import AdminUsersTableClient from "./admin-users-table-client";
 
-export default function AdminUsersTable({ admins }: {
-  admins: Admin[]
-}) {
+export default function AdminUsersTable({ admins }: { admins: Admin[] }) {
 
   return (
     <div className="block overflow-auto rounded bg-secondary h-[476px] relative">

@@ -17,10 +17,9 @@ export default function PaginationIcon({
     <Link href={href}
       className={
         `transition-all delay-100 px-3 py-2 inline-block hover:bg-secondary-light 
-        ${condition ? 'pointer-events-none cursor-not-allowed bg-secondary-light text-tertiary' :
-          'cursor-pointer'}`
+        ${condition ? 'pointer-events-none bg-secondary-light text-tertiary' : 'cursor-pointer'}`
       }>
-      <Icon className="inline-block text-primary text-sm" />
+      <Icon className="inline-block text-primary text-sm cursor-not-allowed" />
     </Link>
   )
 }

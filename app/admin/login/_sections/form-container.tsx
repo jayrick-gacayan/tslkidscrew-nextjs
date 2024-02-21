@@ -10,6 +10,7 @@ import { redirectToPath } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
 import { LoginFormStateProps } from '@/types/props/login-form-state-props';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
+import { useRouter } from 'next/navigation';
 
 export default function FormContainer() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -27,26 +28,24 @@ export default function FormContainer() {
     }
 
     if (state?.success) {
-      if (state.success && state?.redirectTo) {
-        toast((props: ToastContentProps<unknown>) => {
-          return (
-            <div className="text-black">
-              {state?.message}
-            </div>
-          )
-        }, {
-          toastId: `admin-login-success-${Date.now()}`,
-          type: 'success',
-          hideProgressBar: true,
-        });
+      let { message, success, redirectTo } = state;
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">{message}</div>
+        )
+      }, {
+        toastId: `admin-login-success-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+
+      if (success) {
         formRef.current?.reset();
-        pathToRedirect(state.redirectTo)
+        // router.push(redirectTo);
+        pathToRedirect(redirectTo)
       }
     }
-  }, [
-    state?.redirectTo,
-    state?.success,
-  ]);
+  }, [state]);
 
   return (
     <>

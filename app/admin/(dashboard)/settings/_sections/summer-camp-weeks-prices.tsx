@@ -1,9 +1,5 @@
-import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { Listbox, Transition } from "@headlessui/react";
-import { capitalCase, noCase } from "change-case";
 import { useMemo, useState } from "react";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
-import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import SummerCampWeekSettingForm from "./summer-camp-week-setting-form";
 
 export default function SummerCampWeekPrices({
@@ -24,6 +20,7 @@ export default function SummerCampWeekPrices({
     weekStr,
     summerCampWeekSettings
   ])
+
 
   return (
     <div className="space-y-4 pt-4">
