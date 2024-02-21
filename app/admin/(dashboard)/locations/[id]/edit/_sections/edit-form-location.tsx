@@ -50,8 +50,7 @@ export function EditFormLocation({
       }
     }
   }, [
-    state?.message,
-    state?.success,
+    state,
     locationPlace?.id
   ]);
 

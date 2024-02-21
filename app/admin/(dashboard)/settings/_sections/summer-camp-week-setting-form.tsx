@@ -59,10 +59,7 @@ export default function SummerCampWeekSettingForm({
         pathToRevalidate();
       }
     }
-  }, [
-    state?.message,
-    state?.success
-  ])
+  }, [state])
 
   return (
     <>

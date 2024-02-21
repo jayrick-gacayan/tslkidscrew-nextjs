@@ -10,6 +10,7 @@ import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { LoginFormStateProps } from '@/types/props/login-form-state-props';
 import { redirectToPath } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function FormContainer() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -37,15 +38,14 @@ export default function FormContainer() {
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       });
+
       if (success && redirectTo) {
         formRef.current?.reset();
-        pathToRedirect(state.redirectTo)
+        // router.push(redirectTo);
+        pathToRedirect(redirectTo)
       }
     }
-  }, [
-    state?.redirectTo,
-    state?.success,
-  ]);
+  }, [state]);
 
   return (
     <form action={formAction} ref={formRef} className='space-y-4'>
