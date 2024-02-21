@@ -1,17 +1,9 @@
 import { Admin } from "@/models/admin";
-import { Result } from "@/models/result";
-import { Paginate } from "@/models/paginate";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { adminUsers } from "@/services/admin-services";
-import { auth } from "@/auth";
-import { Session } from "next-auth";
 import AdminUsersTableClient from "./admin-users-table-client";
 
-export default async function AdminUsersTable({ searchParams }: { searchParams: SearchParamsProps; }) {
-  let currentAdmin: Session<Admin> | null = await auth();
-  let result: Result<Paginate<Admin>> = await adminUsers(searchParams, currentAdmin?.accessToken);
-
-  let data = result.data?.data ?? [];
+export default function AdminUsersTable({ admins }: {
+  admins: Admin[]
+}) {
 
   return (
     <div className="block overflow-auto rounded bg-secondary h-[476px] relative">
@@ -27,7 +19,7 @@ export default async function AdminUsersTable({ searchParams }: { searchParams: 
             <th className="w-32">ACTION</th>
           </tr>
         </thead>
-        <AdminUsersTableClient admins={data} />
+        <AdminUsersTableClient admins={admins} />
       </table>
     </div>
   )

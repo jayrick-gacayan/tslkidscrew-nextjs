@@ -27,18 +27,17 @@ export default function FormContainer() {
     }
 
     if (state?.success) {
-      if (state.success && state?.redirectTo) {
-        toast((props: ToastContentProps<unknown>) => {
-          return (
-            <div className="text-black">
-              {state?.message}
-            </div>
-          )
-        }, {
-          toastId: `parent-login-success-${Date.now()}`,
-          type: 'success',
-          hideProgressBar: true,
-        });
+      let { message, success, redirectTo } = state;
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">{message}</div>
+        )
+      }, {
+        toastId: `parent-login-success-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+      if (success && redirectTo) {
         formRef.current?.reset();
         pathToRedirect(state.redirectTo)
       }

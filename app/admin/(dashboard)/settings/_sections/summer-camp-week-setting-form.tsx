@@ -42,22 +42,21 @@ export default function SummerCampWeekSettingForm({
       await pathRevalidate('/admin/settings')
     }
 
-    if (state?.success) {
-      if (state.success) {
-        toast((props: ToastContentProps<unknown>) => {
-          return (
-            <div className="text-black">
-              {state?.message}
-            </div>
-          )
-        }, {
-          toastId: `update-summer-camp-week-setting-success-${Date.now()}`,
-          type: 'success',
-          hideProgressBar: true,
-          onOpen(props) {
-            pathToRevalidate();
-          },
-        });
+    if (state.success !== undefined) {
+      let { message, success } = state;
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">{message}</div>
+        )
+      }, {
+        toastId: `update-summer-camp-week-setting-success-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+
+
+      if (success) {
+        pathToRevalidate();
       }
     }
   }, [
@@ -142,7 +141,7 @@ export default function SummerCampWeekSettingForm({
               type="text"
               className="bg-white p-2 px-3"
               placeholder="Week Name:"
-              defaultValue={state?.['week-name']?.value ?? ''}
+              defaultValue={weekData?.name ?? ''}
               errorText={state?.['week-name']?.errorText}
               validationStatus={state?.['week-name']?.validationStatus} />
             <div className="space-y-1 w-full relative ">
@@ -163,7 +162,7 @@ export default function SummerCampWeekSettingForm({
               className="bg-white p-2 px-3"
               placeholder="Capacity:"
               inputMode="numeric"
-              defaultValue={state?.['week-capacity']?.value ?? ''}
+              defaultValue={weekData?.capacity ?? ''}
               errorText={state?.['week-capacity']?.errorText}
               validationStatus={state?.['week-capacity']?.validationStatus} />
             <TextareaCustom labelText="Notes"
@@ -172,7 +171,7 @@ export default function SummerCampWeekSettingForm({
               className="bg-white"
               placeholder='Enter your note/s here:'
               rows={7}
-              defaultValue={state?.['week-notes'] ?? ''} />
+              defaultValue={weekData?.notes ?? ''} />
           </div>
         </div>
         <div className="w-fit ml-auto block">

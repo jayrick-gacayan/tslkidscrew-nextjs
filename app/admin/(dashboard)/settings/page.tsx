@@ -5,8 +5,10 @@ import { Admin } from "@/models/admin";
 import { Session } from "next-auth";
 import {
   getProgramYearCycleSettings,
+  getSummerCampPromoSettings,
   getSummerCampSwimPrices,
-  getSummerCampWeekPrices
+  getSummerCampWeekPrices,
+  getVacationCampSchedulesSettings
 } from "@/services/program-settings-services";
 import { Result } from "@/models/result";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
@@ -18,6 +20,9 @@ export default async function Page() {
 
   let summerCampWeekSettings: Result<SummerCampWeekSetting[]> = await getSummerCampWeekPrices(currentAdmin?.accessToken!);
   let summerCampSwimSettings: Result<SummerCampSwimSetting[]> = await getSummerCampSwimPrices(currentAdmin?.accessToken!);
+  let summerCampPromoSettings: Result<any> = await getSummerCampPromoSettings(currentAdmin?.accessToken!);
+
+  let vacationCampScheduleSetttings: Result<any> = await getVacationCampSchedulesSettings(currentAdmin?.accessToken!);
   let programYearCycleSetting: Result<ProgramYearCycleSetting> = await getProgramYearCycleSettings(currentAdmin?.accessToken!);
 
   return (

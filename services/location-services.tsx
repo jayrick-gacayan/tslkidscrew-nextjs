@@ -2,8 +2,6 @@ import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
 import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
-import { adminUser } from "./admin-services";
-import { ResultStatus } from "@/types/enums/result-status";
 
 function headers(token: string) {
   return {
@@ -28,6 +26,7 @@ export async function locationPlaces(
 
   let response = await result.json();
 
+  console.log('response', response)
   return new Result<Paginate<LocationPlace>>({
     ...response,
     data: {
@@ -88,8 +87,6 @@ export async function createLocationPlace({
   );
 
   let response = await result.json();
-
-  console.log('response', response)
 
   return new Result<LocationPlace>({
     ...response,

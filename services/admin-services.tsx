@@ -33,6 +33,7 @@ export async function adminUsers(
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
   let strSP = urlSearchParams.toString();
+
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts${strSP === '' ? '' : `?${strSP}`}`,
     { ...headers(token!) }
@@ -44,7 +45,7 @@ export async function adminUsers(
     ...response,
     data: {
       data: response.admins ?? [],
-      total: response.total ?? 20,
+      total: response.total_admins ?? 1,
     } ?? undefined,
     statusCode: result.status,
     response: response
