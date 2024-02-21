@@ -3,7 +3,6 @@ import { Fragment } from "react";
 import SummerCampSwimPrices from "./summer-camp-swim-prices";
 import SummerCampWeekPrices from "./summer-camp-weeks-prices";
 import SummerCampPromos from "./summer-camp-promos";
-import SummerCampWeekPricesProvider from "./summer-camp-week-prices-provider";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 

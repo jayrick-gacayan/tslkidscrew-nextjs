@@ -51,8 +51,8 @@ export default function SummerCampSwimSettingForm({
       }
     }
   }, [
-    state?.message,
-    state?.success
+    state,
+    setFocusId,
   ])
 
   useOnClickOutside(formContainerRef, () => {
@@ -90,7 +90,6 @@ export default function SummerCampSwimSettingForm({
           className="cursor-pointer disabled:cursor-not-allowed">
           <Fa6SolidSquareCheck className="text-success text-[32px]" />
         </button>
-
       </form>
     </div>
   )

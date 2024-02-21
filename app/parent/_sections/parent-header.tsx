@@ -9,8 +9,13 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import Link from "next/link";
 import LogoutButton from "@/app/_components/logout-button";
 import { PARENT_PUBLIC_ROUTES } from "@/types/constants/page-routes";
+import { Parent } from "@/models/parent";
 
-export default function ParentHeader() {
+export default function ParentHeader({
+  parent
+}: {
+  parent: Parent
+}) {
   const pathname = usePathname();
 
   return (
@@ -30,7 +35,7 @@ export default function ParentHeader() {
                         className="text-white hover:text-primary-light/70">
                         Login
                       </Link>
-                      <Link href='/parent/dashboard'
+                      <Link href='/parent/register'
                         className="text-white hover:text-primary-light/70">
                         Register
                       </Link>
@@ -48,7 +53,7 @@ export default function ParentHeader() {
                                 <Menu.Button as="div"
                                   className="flex items-center gap-2 w-full cursor-pointer text-white">
                                   <div className="size-10 rounded-full bg-white inline-block" />
-                                  <div>Deanver</div>
+                                  <div>{parent?.first_name ?? ''}</div>
                                   <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                                 </Menu.Button>
                                 <Transition enter="transition duration-100 ease-out"

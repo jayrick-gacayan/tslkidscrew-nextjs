@@ -40,8 +40,8 @@ export function NewFormLocation({
       }
     }
   }, [
-    state?.message,
-    state?.success
+    router,
+    state,
   ]);
 
   return (

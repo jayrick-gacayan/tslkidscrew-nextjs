@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import FormContainer from "./_sections/form-container";
 
+import type { Metadata } from 'next'
+
 export const metadata: Metadata = {
-  title: 'Admin Login',
+
   description: 'Admin Login Page'
 }
 
-export default async function Page() {
+export default function Page() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">

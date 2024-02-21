@@ -1,10 +1,12 @@
-import type { NextAuthConfig } from "next-auth";
+import type { JWT, NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
 import { isAdmin, isParent } from "./types/helpers/checking-interfaces";
 import {
   ADMIN_PUBLIC_ROUTES,
   PARENT_PUBLIC_ROUTES
 } from "./types/constants/page-routes";
+import { Admin } from "./models/admin";
+import { Parent } from "./models/parent";
 
 export const authConfig = {
   callbacks: {
@@ -33,12 +35,16 @@ export const authConfig = {
         return NextResponse.redirect(new URL('/parent/dashboard', request.url))
       }
 
-      return true;
+      return Promise.resolve(true);
 
     },
+    async signIn({ user, account, credentials, profile }) {
+      return Promise.resolve(true)
+    },
+
     async session({ session, user, token, newSession, trigger }) {
       // console.log('token', token.user);
-      let { accessToken, ...rest } = token.user as any;
+      let { accessToken, ...rest } = token.user as JWT<Admin | Parent>;
       session.user = token.user;
       session.accessToken = accessToken as any;
       // console.log('token', token);
@@ -57,7 +63,8 @@ export const authConfig = {
       // console.log('profile', profile);
       // console.log('session', session);
       return token;
-    }
+    },
+
   },
   pages: {
     signIn: '/parent/login'
