@@ -2,6 +2,7 @@ import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { Result } from "@/models/result";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { ProgramYearCycleSettingInputTypes } from "@/types/input-types/program-year-cycle-setting-input-types";
 import { SummerCampSwimSettingInputTypes } from "@/types/input-types/summer-camp-swim-setting-input-types";
 import { SummerCampWeekSettingInputTypes } from "@/types/input-types/summer-camp-week-setting-input-types";
 
@@ -27,6 +28,48 @@ export async function getProgramYearCycleSettings(token: string) {
     data: response.program_settings ?? undefined,
     statusCode: result.status,
   })
+}
+
+export async function updateProgramYearCycleSetting(
+  {
+    id,
+    current_year_cycle,
+    next_year_cycle
+  }: ProgramYearCycleSettingInputTypes,
+  token: string
+) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/update-program-settings`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        program_setting: {
+          id,
+          current_year_cycle,
+          next_year_cycle
+        }
+      }),
+      ...headers(token)
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    console.log('response', response)
+
+    return new Result<any>({
+      ...response,
+      data: response.summer_camp_prices ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<any>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function getSummerCampSwimPrices(token: string) {
@@ -80,7 +123,7 @@ export async function updateSummerCampSwimSetting(
       statusCode: result.status,
     });
   } catch (error) {
-    console.log('error', error)
+
     return new Result<any>({
       message: result.statusText,
       error: result.statusText,

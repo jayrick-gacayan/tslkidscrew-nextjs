@@ -44,11 +44,12 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   }, [admins])
 
   const showSwal = (admin: Admin, activeAdmin: string) => {
+    let { id, name, email, active } = admin
     withReactContent(Swal).fire({
       html: (
         <div className="space-y-[4px] text-center font-semibold">
           <div className="text-[20px]">Are you sure you want to {activeAdmin === 'No' ? 'in' : ''}active</div>
-          <div className="text-[28px]">{admin.name ?? admin.email}?</div>
+          <div className="text-[28px]">{name ?? email}?</div>
         </div>
       ),
       confirmButtonText: "Confirm",
@@ -63,8 +64,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     }).then((result) => {
       if (result.isConfirmed) {
         setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-          return dataAdmin.id !== admin.id ? dataAdmin :
-            { ...admin, active: !admin.active }
+          return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active }
         }));
         setAdminId(admin.id)
         toast((props: ToastContentProps<Admin>) => {
@@ -74,7 +74,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
               <div className="underline text-primary"
                 onClick={() => {
                   setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-                    return dataAdmin.id === admin.id ? admin : dataAdmin
+                    return dataAdmin.id === id ? admin : dataAdmin
                   }));
                   setAdminId(undefined);
                   props.closeToast();
@@ -85,7 +85,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
           )
         }, {
           data: admin,
-          toastId: `admin-${admin.id}`,
+          toastId: `admin-${id}`,
           type: 'success',
           hideProgressBar: true,
           onClose: (props) => { setToastStatus('closed') },
@@ -95,16 +95,15 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     });
   }
 
-  console.log('admins', admins)
-
   return (
     <tbody>
       {
         dataAdmins.map((admin: Admin, idx: number) => {
-          let { id, name, active, created_at, email, is_super_admin, updated_at, user_created_by } = admin;
+          let { id, name, active, created_at, email, is_super_admin, updated_at, } = admin;
           let adminActive = (active === undefined || !active) ? 'No' : 'Yes'
 
           let ActiveIcon = adminActive === 'Yes' ? Fa6UserXmark : Fa6SolidUserCheck;
+
           return (
             <tr key={`admin-users-table-${name!}-${idx}`}
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
@@ -160,9 +159,9 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     <Fa6SolidEye />
                   </Link>
                   <button onClick={() => { showSwal(admin, adminActive); }}
-                    className={`${adminActive === 'No' ? 'text-success' : 'text-danger'} cursor-pointer disabled:cursor-not-allowed`}
+                    className={`${adminActive === 'No' ? 'text-success' : 'text-danger'} 
+                    cursor-pointer disabled:cursor-not-allowed`}
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
-
                     <ActiveIcon className="inline-block" />
                   </button>
                   {
