@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
-import BackButtonClient from "../../_components/back-button-client";
+import BackButtonClient from "../../../../_components/back-button-client";
 import EditInfoButton from "./_sections/edit-info-button";
 import { adminUser } from "@/services/admin-services";
 import { auth } from "@/auth";

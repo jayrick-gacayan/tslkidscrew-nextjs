@@ -10,7 +10,7 @@ export async function registerParent({
   confirm_password: string
 }) {
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/registration_records`,
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/register`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -29,8 +29,9 @@ export async function registerParent({
   try {
     return new Result<any>({
       ...response,
+      data: response.user ?? undefined,
       response: response,
-      statusCode: result.status,
+      statusCode: response.status ?? result.status,
     });
   } catch (error) {
     return new Result<any>({

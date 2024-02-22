@@ -1,7 +1,7 @@
 'use client';
 
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
-import ShowEntriesSelect from "../../_components/show-entries-select";
+import ShowEntriesSelect from "../../../../_components/show-entries-select";
 import Link from "next/link";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 

@@ -1,4 +1,4 @@
-import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client"
+import BackButtonClient from "@/app/_components/back-button-client"
 import NewProgramForm from "./sections/new-program-form"
 import type { Metadata } from "next";
 
