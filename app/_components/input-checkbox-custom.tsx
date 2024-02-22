@@ -1,7 +1,6 @@
 import { ValidationType } from "@/types/enums/validation-type";
 import { ForwardedRef, InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
-
 export interface InputPropsCheckbox extends InputHTMLAttributes<HTMLInputElement> {
   labelText?: string | ReactNode;
   errorText?: string;

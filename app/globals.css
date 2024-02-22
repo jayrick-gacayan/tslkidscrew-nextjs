@@ -27,6 +27,10 @@
   @apply flex items-stretch w-full justify-evenly gap-2
 }
 
+.react-datepicker__year-wrapper {
+  @apply text-center pt-2
+}
+
 .react-datepicker__triangle {
   @apply fill-white stroke-white drop-shadow-lg stroke-0
 }
@@ -73,12 +77,25 @@
   @apply w-[120px] text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
 }
 
-.react-datepicker__month-text--selected, .react-datepicker__day--selected {
+.react-datepicker__year-text {
+  @apply w-full text-center py-2 px-3 cursor-pointer bg-inherit hover:bg-secondary-light
+}
+
+.react-datepicker__month-text--selected,
+.react-datepicker__day--selected {
   @apply bg-primary text-white rounded-lg
+}
+
+.react-datepicker__year-text--selected {
+  @apply bg-primary text-white
 }
 
 .react-datepicker-popper {
   @apply z-50;
+}
+
+.react-datepicker__year-text--disabled {
+  @apply hidden
 }
 
 /* CSS Classname for react-toastify */

@@ -16,7 +16,7 @@ import {
   modalFormOpenStateSet,
   modalFormTypeSet
 } from "../_redux/admin-users-slice";
-
+import Fa6SolidUserCheck from "@/app/_components/svg/fa6-solid-user-check";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [dataAdmins, setDataAdmins] = useState(admins);
@@ -39,12 +39,17 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     }
   }, [toastStatus, adminId]);
 
-  const showSwal = (admin: Admin) => {
+  useEffect(() => {
+    setDataAdmins(admins);
+  }, [admins])
+
+  const showSwal = (admin: Admin, activeAdmin: string) => {
+    let { id, name, email, active } = admin
     withReactContent(Swal).fire({
       html: (
         <div className="space-y-[4px] text-center font-semibold">
-          <div className="text-[20px]">Are you sure you want to inactive</div>
-          <div className="text-[28px]">{admin.name ?? admin.email}?</div>
+          <div className="text-[20px]">Are you sure you want to {activeAdmin === 'No' ? 'in' : ''}active</div>
+          <div className="text-[28px]">{name ?? email}?</div>
         </div>
       ),
       confirmButtonText: "Confirm",
@@ -59,18 +64,17 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     }).then((result) => {
       if (result.isConfirmed) {
         setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-          return dataAdmin.id !== admin.id ? dataAdmin :
-            { ...admin, active: !admin.active }
+          return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active }
         }));
         setAdminId(admin.id)
         toast((props: ToastContentProps<Admin>) => {
           return (
             <div className="text-black flex gap-2">
-              <div className="flex-1">{props.data.name ?? props.data.email} has been inactived from the admin list.</div>
+              <div className="flex-1">{props.data.name ?? props.data.email} has been {activeAdmin === 'No' ? 'in' : ''}active from the admin list.</div>
               <div className="underline text-primary"
                 onClick={() => {
                   setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-                    return dataAdmin.id === admin.id ? admin : dataAdmin
+                    return dataAdmin.id === id ? admin : dataAdmin
                   }));
                   setAdminId(undefined);
                   props.closeToast();
@@ -81,7 +85,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
           )
         }, {
           data: admin,
-          toastId: `admin-${admin.id}`,
+          toastId: `admin-${id}`,
           type: 'success',
           hideProgressBar: true,
           onClose: (props) => { setToastStatus('closed') },
@@ -91,33 +95,39 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     });
   }
 
-  console.log('adminID', toastStatus)
   return (
     <tbody>
       {
         dataAdmins.map((admin: Admin, idx: number) => {
+          let { id, name, active, created_at, email, is_super_admin, updated_at, } = admin;
+          let adminActive = (active === undefined || !active) ? 'No' : 'Yes'
+
+          let ActiveIcon = adminActive === 'Yes' ? Fa6UserXmark : Fa6SolidUserCheck;
+
           return (
-            <tr key={`admin-users-table-${admin.name!}-${idx}`}
+            <tr key={`admin-users-table-${name!}-${idx}`}
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
-              <td className="w-56">{admin.email}</td>
-              <td className="w-auto">{admin.name}</td>
-              <td className="w-12">
-                {
-                  admin.active === undefined ? 'No' :
-                    admin.active ? 'Yes' : 'No'
-                }
-              </td>
+              <td className="w-56">{email}</td>
+              <td className="w-auto">{name}</td>
+              <td className="w-12">{adminActive}</td>
+              <td className="w-48"> {(is_super_admin === undefined || !is_super_admin) ? 'No' : 'Yes'}</td>
               <td className="w-48">
                 {
-                  admin.is_super_admin === undefined ? 'No' :
-                    admin.is_super_admin ? 'Yes' : 'No'
+                  new Date(created_at!)
+                    .toLocaleDateString(
+                      'en-US',
+                      {
+                        month: 'short',
+                        day: 'numeric',
+                        year: "numeric"
+                      }
+                    )
                 }
               </td>
-              <td className="w-48">{new Date(admin.created_at!).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: "numeric" })}</td>
               <td className="w-48 space-y-1">
                 <div>
                   {
-                    new Date(admin.updated_at!)
+                    new Date(updated_at!)
                       .toLocaleDateString(
                         'en-US',
                         {
@@ -130,7 +140,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                 </div>
                 <div>
                   {
-                    new Date(admin.updated_at!)
+                    new Date(updated_at!)
                       .toLocaleString(
                         'en-US',
                         {
@@ -144,26 +154,27 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
               </td>
               <td className="w-32">
                 <div className="flex items-center justify-center w-full gap-2 relative">
-                  <Link href={`/admin/admin-users/${admin.id!}`}
+                  <Link href={`/admin/admin-users/${id!}`}
                     className="text-primary block cursor-pointer">
                     <Fa6SolidEye />
                   </Link>
-                  <button onClick={() => { showSwal(admin); }}
-                    className="text-danger cursor-pointer disabled:cursor-not-allowed"
+                  <button onClick={() => { showSwal(admin, adminActive); }}
+                    className={`${adminActive === 'No' ? 'text-success' : 'text-danger'} 
+                    cursor-pointer disabled:cursor-not-allowed`}
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
-                    <Fa6UserXmark className="inline-block" />
+                    <ActiveIcon className="inline-block" />
                   </button>
                   {
-                    admin.id! !== 1 &&
+                    id! !== 1 &&
                     (
                       <button className="text-warning block cursor-pointer"
                         onClick={() => {
                           reduxStore.dispatch(editAdminUserFields({
-                            email: admin.email!,
-                            name: admin.name!,
-                            isActive: admin.active!,
-                            isSuperAdmin: admin.is_super_admin!,
-                            id: admin.id!
+                            email: email!,
+                            name: name!,
+                            isActive: active!,
+                            isSuperAdmin: is_super_admin!,
+                            id: id!
                           }))
                           reduxStore.dispatch(modalFormOpenStateSet(true));
                           reduxStore.dispatch(modalFormTypeSet('update'));

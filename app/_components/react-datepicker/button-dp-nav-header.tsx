@@ -17,10 +17,8 @@ export default function ButtonDPNavHeader({
   return (
     <button type="button"
       onClick={onClick}
-      className={`p-3 
-        ${disabled ? 'disabled:cursor-not-allowed' : 'cursor-pointer'} 
-        ${conditionCustomHeaderCount === undefined || conditionCustomHeaderCount ? 'visible' : 'invisible'}`
-      }
+      className={`p-3 disabled:cursor-not-allowed 'cursor-pointer' 
+      ${conditionCustomHeaderCount === undefined || conditionCustomHeaderCount ? 'visible' : 'invisible'}`}
       disabled={disabled}>
       <Icon className="inline-block text-[20px] font-medium" />
     </button>

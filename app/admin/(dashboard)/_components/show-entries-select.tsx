@@ -41,7 +41,7 @@ export default function ShowEntriesSelect({
               leaveTo="transform scale-95 opacity-0"
             >
               <Listbox.Options as='div'
-                className="absolute top-[105%] left-0 w-full bg-white rounded drop-shadow overflow-hidden">
+                className="absolute top-[105%] z-50 left-0 w-full bg-white rounded drop-shadow overflow-hidden">
                 {items.map((value: any, index: any) => (
                   <Listbox.Option
                     as='div'

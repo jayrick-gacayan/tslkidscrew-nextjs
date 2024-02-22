@@ -9,6 +9,8 @@ import { useFormState, useFormStatus } from "react-dom";
 import { Admin } from "@/models/admin";
 import { toast, ToastContentProps } from "react-toastify";
 import { redirectToURL } from "@/actions/common-actions";
+import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 export function EditFormLocation({
   locationPlace,
@@ -17,7 +19,15 @@ export function EditFormLocation({
   locationPlace: LocationPlace
   admins: Partial<Admin>[]
 }) {
-  const [state, formAction] = useFormState(editLocationPlace.bind(null, locationPlace.id?.toString()!), {} as any);
+  const [state, formAction] = useFormState(
+    editLocationPlace.bind(null, locationPlace.id?.toString()!),
+    {
+      name: fieldInputValue(''),
+      address: fieldInputValue(''),
+      ['location-minimum-age']: fieldInputValue(''),
+      ['director[id]']: fieldInputValue(''),
+    } as LocationPlaceFormStateProps
+  );
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
@@ -50,8 +60,7 @@ export function EditFormLocation({
       }
     }
   }, [
-    state?.message,
-    state?.success,
+    state,
     locationPlace?.id
   ]);
 
@@ -65,8 +74,8 @@ export function EditFormLocation({
           className="bg-secondary border-0"
           placeholder="Name:"
           defaultValue={locationPlace.name!}
-          errorText={state?.name?.errorText}
-          validationStatus={state?.name?.validationStatus} />
+          errorText={state.name?.errorText}
+          validationStatus={state.name?.validationStatus} />
         <InputCustom labelText='Address'
           id='location-address'
           type="text"
