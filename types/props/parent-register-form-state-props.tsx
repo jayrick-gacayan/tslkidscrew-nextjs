@@ -5,4 +5,5 @@ export interface ParentRegisterFormStateProps extends FormStateProps {
   email?: InputProps<string>;
   password?: InputProps<string>;
   confirm_password?: InputProps<string>;
+
 }

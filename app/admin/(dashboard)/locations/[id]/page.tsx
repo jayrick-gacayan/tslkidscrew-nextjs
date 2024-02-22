@@ -1,7 +1,7 @@
 import Link from "next/link";
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import InfoContainer from "../../_components/info-container";
-import BackButtonClient from "../../_components/back-button-client";
+import BackButtonClient from "../../../../_components/back-button-client";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { Admin } from "@/models/admin";

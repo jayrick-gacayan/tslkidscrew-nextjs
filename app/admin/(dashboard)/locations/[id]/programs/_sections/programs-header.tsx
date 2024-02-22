@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries";
-import ShowEntriesSelect from "@/app/admin/(dashboard)/_components/show-entries-select";
+import ShowEntriesSelect from "@/app/_components/show-entries-select";
 
 export default function ProgramsHeader() {
   const [entries, setEntries] = useState<number>(10);
