@@ -8,7 +8,6 @@ import RememberMe from '@/app/_components/login/remember-me';
 import { useEffect, useRef } from 'react';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { LoginFormStateProps } from '@/types/props/login-form-state-props';
-import { redirectToPath } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
 
 export default function FormContainer() {
@@ -18,34 +17,27 @@ export default function FormContainer() {
     {
       email: fieldInputValue<string>(''),
       password: fieldInputValue<string>(''),
-    } as LoginFormStateProps
+    } as LoginFormStateProps || {}
   );
 
   useEffect(() => {
-    async function pathToRedirect(redirectTo: string) {
-      await redirectToPath(redirectTo);
-    }
+    let { message } = state;
 
-    if (state?.success) {
-      let { message, success, redirectTo } = state;
+    if (message) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
         )
       }, {
-        toastId: `parent-login-success-${Date.now()}`,
-        type: success ? 'success' : 'error',
+        toastId: `admin-login-success-${Date.now()}`,
+        type: 'error',
         hideProgressBar: true,
       });
-      if (success && redirectTo) {
-        formRef.current?.reset();
-        pathToRedirect(state.redirectTo)
-      }
     }
-  }, [
-    state?.redirectTo,
-    state?.success,
-  ]);
+
+  }, [state]);
+
+  console.log('state', state)
 
   return (
     <form action={formAction} ref={formRef} className='space-y-4'>

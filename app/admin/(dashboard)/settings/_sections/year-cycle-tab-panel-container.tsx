@@ -59,10 +59,7 @@ export default function YearCycleTabPanelContainer({
         pathToRevalidate();
       }
     }
-  }, [
-    state?.message,
-    state?.success
-  ])
+  }, [state])
 
   return (
     <Tab.Panel as={Fragment}>
@@ -90,7 +87,6 @@ export default function YearCycleTabPanelContainer({
               Update Year Cycle
             </button>
           </form>
-
         </div>
       </div>
     </Tab.Panel>

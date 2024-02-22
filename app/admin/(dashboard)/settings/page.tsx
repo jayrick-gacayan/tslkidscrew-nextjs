@@ -25,6 +25,8 @@ export default async function Page() {
   let vacationCampScheduleSetttings: Result<any> = await getVacationCampSchedulesSettings(currentAdmin?.accessToken!);
   let programYearCycleSetting: Result<ProgramYearCycleSetting> = await getProgramYearCycleSettings(currentAdmin?.accessToken!);
 
+  console.log('promos ', summerCampPromoSettings);
+  console.log('vacation camp ', vacationCampScheduleSetttings)
   return (
     <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-4">
       <AdminHeaderWithEntries headerText='Settings' />

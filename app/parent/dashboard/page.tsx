@@ -8,7 +8,6 @@ import Pagination from "@/app/_components/pagination";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Parent Dashboard',
   description: 'Parent Dashboard Page'
 }
 

@@ -2,13 +2,17 @@
 
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { Session } from "next-auth";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
-import { updateProgramYearCycleSetting, updateSummerCampSwimSetting, updateSummerCampWeekSetting } from "@/services/program-settings-services";
+import {
+  updateProgramYearCycleSetting,
+  updateSummerCampSwimSetting,
+  updateSummerCampWeekSetting
+} from "@/services/program-settings-services";
 import { Result } from "@/models/result";
 import { ResultStatus } from "@/types/enums/result-status";
+import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
 
 export async function updateSummerCampWeekSettingAction(

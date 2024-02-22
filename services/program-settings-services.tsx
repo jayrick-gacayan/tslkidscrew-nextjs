@@ -21,13 +21,24 @@ export async function getProgramYearCycleSettings(token: string) {
     { ...headers(token) }
   )
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<ProgramYearCycleSetting>({
-    ...response,
-    data: response.program_settings ?? undefined,
-    statusCode: result.status,
-  })
+    return new Result<ProgramYearCycleSetting>({
+      ...response,
+      data: response.program_settings ?? undefined,
+      statusCode: result.status,
+    })
+  }
+  catch (error) {
+    return new Result<ProgramYearCycleSetting>({
+      response: undefined,
+      data: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function updateProgramYearCycleSetting(
@@ -78,13 +89,24 @@ export async function getSummerCampSwimPrices(token: string) {
     { ...headers(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<SummerCampSwimSetting[]>({
-    ...response,
-    data: response.summer_camp_prices ?? [],
-    statusCode: result.status,
-  })
+    return new Result<SummerCampSwimSetting[]>({
+      ...response,
+      data: response.summer_camp_prices ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampSwimSetting[]>({
+      response: undefined,
+      data: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
+
 }
 
 export async function updateSummerCampSwimSetting(
@@ -190,7 +212,6 @@ export async function updateSummerCampWeekSetting(
       statusCode: result.status,
     })
   }
-
 }
 
 export async function getSummerCampPromoSettings(token: string) {
@@ -216,12 +237,15 @@ export async function getVacationCampSchedulesSettings(token: string) {
 
   let response = await result.json();
 
-  console.log('response', response)
   return new Result<any>({
     ...response,
     data: response.promos ?? [],
     statusCode: result.status,
   })
+}
+
+export async function updateVacationCampScheduleSetting(token: string) {
+
 }
 
 export async function beforeOrAfterSchoolPromos(token: string, cycleYear: string) { }

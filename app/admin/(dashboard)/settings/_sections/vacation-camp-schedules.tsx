@@ -15,11 +15,13 @@ import renderDayContents from "@/app/_components/react-datepicker/render-day-con
 import renderCustomHeaderRange from "@/app/_components/react-datepicker/render-custom-header-range";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import InputCustom from "@/app/_components/input-custom";
+import { useFormStatus } from "react-dom";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
 
 export default function VacationCampSchedules() {
+  const { pending } = useFormStatus();
   const [camp, setCamp] = useState('camp-1');
   const [monthYearDate, setMonthYearDate] = useState<Date | null>(today);
   const [rangeDate, setRangeDate] = useState<[Date | null, Date | null]>([today, today]);
@@ -141,6 +143,12 @@ export default function VacationCampSchedules() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="w-fit ml-auto block">
+        <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
+          disabled={pending}>
+          {pending ? '...Processing' : 'Update Schedule'}
+        </button>
       </div>
     </div>
   )

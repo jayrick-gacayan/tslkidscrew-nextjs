@@ -9,7 +9,7 @@ export default function BeforeAfterNextYearCyclePrice() {
   const [daySelection, setDaySelection] = useState('up-to-3-days-a-week');
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pt-4">
       <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
         <div className="flex-1">
           <h1 className="font-medium text-[24px] text-black">Update Price for Next Year Cycle</h1>
@@ -57,15 +57,13 @@ export default function BeforeAfterNextYearCyclePrice() {
               </Transition>
             </Listbox>
           </div>
-
-
         </div>
       </div>
       <div className="block overflow-auto">
         <table className="min-w-[1024px] w-full">
           <thead>
             <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
-              <th>Name</th>
+              <th className="w-48">Name</th>
               <th>Before Care</th>
               <th>After Care</th>
               <th>Both</th>
@@ -77,15 +75,39 @@ export default function BeforeAfterNextYearCyclePrice() {
                 return (
                   <tr key={`before-after-next-year-cycle-${childValue}`}
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
-                    <td>Children #{childValue}</td>
+                    <td className="w-48">Children #{childValue}</td>
                     <td className="capitalize">
-                      <input className="rounded w-full outline-0 outline-transparent bg-white p-2" />
+                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
+                        onClick={() => { }}>
+                        {
+                          Intl.NumberFormat('en-US', {
+                            style: "currency",
+                            currency: 'USD',
+                          }).format(12.00)
+                        }
+                      </span>
                     </td>
                     <td className="capitalize">
-                      <input className="rounded w-full outline-0 outline-transparent bg-white p-2" />
+                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
+                        onClick={() => { }}>
+                        {
+                          Intl.NumberFormat('en-US', {
+                            style: "currency",
+                            currency: 'USD',
+                          }).format(12.00)
+                        }
+                      </span>
                     </td>
                     <td className="capitalize">
-                      <input className="rounded w-full outline-0 outline-transparent bg-white p-2" />
+                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
+                        onClick={() => { }}>
+                        {
+                          Intl.NumberFormat('en-US', {
+                            style: "currency",
+                            currency: 'USD',
+                          }).format(12.00)
+                        }
+                      </span>
                     </td>
                   </tr>
                 )
