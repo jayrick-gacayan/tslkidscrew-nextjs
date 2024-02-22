@@ -1,5 +1,5 @@
 import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries"
-import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client"
+import BackButtonClient from "@/app/_components/back-button-client"
 import InfoContainer from "@/app/admin/(dashboard)/_components/info-container"
 import { auth } from "@/auth"
 import { Admin } from "@/models/admin"

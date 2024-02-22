@@ -1,6 +1,6 @@
 'use client';
 
-import { registerParentAction } from "@/actions/auth-actions";
+import { registerParentAction, roleLogin } from "@/actions/auth-actions";
 import InputCustom from "@/app/_components/input-custom";
 import PasswordIcon from "@/app/_components/password-icon";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
@@ -22,8 +22,9 @@ export default function RegisterForm() {
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
   useEffect(() => {
+
     if (state.success !== undefined) {
-      let { message, success, redirectTo } = state;
+      let { message, success } = state;
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -35,7 +36,11 @@ export default function RegisterForm() {
       });
 
       if (success) {
+        let formData = new FormData();
+        formData.set('email', state?.email?.value ?? '');
+        formData.set('password', state?.password?.value ?? '');
         formRef.current?.reset();
+        // roleLogin.bind({ formData, state }, '/parent/dashboard',)
       }
     }
   }, [state]);
