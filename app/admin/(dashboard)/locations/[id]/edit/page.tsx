@@ -1,5 +1,5 @@
 import { Session } from "next-auth";
-import BackButtonClient from "../../../_components/back-button-client";
+import BackButtonClient from "../../../../../_components/back-button-client";
 import { EditFormLocation } from "./_sections/edit-form-location";
 import { Admin } from "@/models/admin";
 import { auth } from "@/auth";
