@@ -9,6 +9,7 @@ import { ParentRegisterFormStateProps } from "@/types/props/parent-register-form
 import { registerParent } from "@/services/parent-authentication-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { Result } from "@/models/result";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 export async function authSignOut(redirectTo: string) {
   let result = await nextauthSignOut(redirectTo);
@@ -111,6 +112,7 @@ export async function registerParentAction(
       }),
   })
 
+
   let registerDetails = {
     email: formData.get('email') as string ?? '',
     password: formData.get('password') as string ?? '',
@@ -142,7 +144,9 @@ export async function registerParentAction(
   }
 
   return {
+    password: fieldInputValue(formData.get('password') as string ?? ''),
+    email: fieldInputValue(formData.get('email') as string ?? ''),
     success: true,
-    message: 'Successfully register parent account.'
+    message: 'Successfully registered parent account.'
   };
 }

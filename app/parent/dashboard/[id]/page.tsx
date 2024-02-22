@@ -1,4 +1,4 @@
-import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client";
+import BackButtonClient from "@/app/_components/back-button-client";
 import ChildrenInformation from "./_sections/children-information";
 import ProgramTypeInformation from "./_sections/program-type-information";
 
@@ -20,6 +20,5 @@ export default function Page({ params }: { params: { id: string } }) {
         <ProgramTypeInformation />
       </div>
     </div>
-
   )
 }
