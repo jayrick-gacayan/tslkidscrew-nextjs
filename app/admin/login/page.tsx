@@ -1,13 +1,12 @@
+import { redirect } from "next/navigation";
 import FormContainer from "./_sections/form-container";
-
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-
   description: 'Admin Login Page'
 }
 
-export default function Page() {
+export default async function Page() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">

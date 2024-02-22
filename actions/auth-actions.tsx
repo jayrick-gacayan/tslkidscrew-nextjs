@@ -71,7 +71,6 @@ export async function roleLogin(
 
   let result = await authSignIn(formData, redirectTo);
 
-  console.log('parent', result);
   if (result?.error) {
     return {
       error: result.error,
@@ -80,11 +79,7 @@ export async function roleLogin(
     }
   }
 
-  return {
-    redirectTo: result,
-    success: true,
-    message: 'Successfully login account.'
-  };
+  redirect(result);
 }
 
 export async function registerParentAction(
@@ -138,7 +133,6 @@ export async function registerParentAction(
 
   let result: Result<any> = await registerParent(registerDetails);
 
-  console.log('result', result);
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,

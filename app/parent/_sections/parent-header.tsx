@@ -11,11 +11,7 @@ import LogoutButton from "@/app/_components/logout-button";
 import { PARENT_PUBLIC_ROUTES } from "@/types/constants/page-routes";
 import { Parent } from "@/models/parent";
 
-export default function ParentHeader({
-  parent
-}: {
-  parent: Parent
-}) {
+export default function ParentHeader({ parent }: { parent: Parent }) {
   const pathname = usePathname();
 
   return (
@@ -23,7 +19,9 @@ export default function ParentHeader({
       <div className="px-12 py-4 w-full">
         <div className="flex items-center justify-between gap-4 w-full">
           <div className="flex-1">
-            <CompanyLogo height={164} width={128} href="/parent/dashboard" />
+            <div className="w-fit">
+              <CompanyLogo height={164} width={128} href="/parent/dashboard" />
+            </div>
           </div>
           <div className="flex-none w-[368px]">
             <div className="flex items-center w-full gap-4 justify-end">
