@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { twMerge } from "tailwind-merge";
 
 export default function CompanyLogo({
@@ -13,15 +13,28 @@ export default function CompanyLogo({
   height: number;
   className?: string;
 }) {
+
+  const {
+    props: {
+      srcSet,
+      ...rest
+    },
+  } = getImageProps({
+    alt: 'tsl-kids-crew-logo',
+    width: width,
+    height: height,
+    src: '/static/tsl-kids-crew-logo-white.png',
+    quality: 100,
+  })
+
   return (
     <Link href={href}
       className={twMerge('block', className!)}
       aria-label="Brand">
-      <Image alt="tsl-kids-crew-logo"
-        height={`${height}`}
-        width={`${width}`}
-        src='/static/tsl-kids-crew-logo-white.png'
-      />
+      <picture>
+        <img {...rest} />
+      </picture>
+
     </Link>
   )
 }

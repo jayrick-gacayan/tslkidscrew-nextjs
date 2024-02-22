@@ -4,14 +4,12 @@ import { ResultStatus } from "@/types/enums/result-status";
 import { adminUserRequestStatusSet } from "./admin-users-slice";
 import { RequestStatus } from "@/types/enums/request-status";
 import { ToastContentProps, toast, TypeOptions } from "react-toastify";
-import { auth } from '@/auth';
 import {
   addAdminUserAction,
   updateAdminUserAction
 } from "@/actions/admin-actions";
 
 export async function addUserAdmin(dispatch: AppDispatch, getState: typeof reduxStore.getState) {
-
   let adminUserState: AdminUsersState = getState().adminUsers;
 
   let { email, name, isSuperAdmin } = adminUserState.adminUserForm;
@@ -25,14 +23,14 @@ export async function addUserAdmin(dispatch: AppDispatch, getState: typeof redux
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     dispatch(adminUserRequestStatusSet(RequestStatus.FAILURE));
     toastResponse(
-      'Successfully created an admin user.',
+      'Something went wrong. Please try again.',
       'create',
       'error'
     );
   }
   else {
     toastResponse(
-      'Something went wrong. Please try again.',
+      'Successfully created an admin.',
       'create',
       'success'
     );
