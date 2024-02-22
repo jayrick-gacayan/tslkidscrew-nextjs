@@ -3,15 +3,23 @@ import { Fragment } from "react";
 import SummerCampSwimPrices from "./summer-camp-swim-prices";
 import SummerCampWeekPrices from "./summer-camp-weeks-prices";
 import SummerCampPromos from "./summer-camp-promos";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 
-export default function SummerCampTabPanelContainer() {
+export default function SummerCampTabPanelContainer({
+  summerCampWeekSettings,
+  summerCampSwimSettings,
+}: {
+  summerCampWeekSettings: SummerCampWeekSetting[];
+  summerCampSwimSettings: SummerCampSwimSetting[];
+}) {
   return (
     <Tab.Panel as={Fragment}>
       <div className="space-y-8 divide-y-2 divide-secondary-light">
-        <SummerCampSwimPrices />
-        <SummerCampWeekPrices />
+        <SummerCampSwimPrices summerCampSwimSettings={summerCampSwimSettings} />
+        <SummerCampWeekPrices summerCampWeekSettings={summerCampWeekSettings} />
         <SummerCampPromos />
       </div>
-    </Tab.Panel>
+    </Tab.Panel >
   )
 }

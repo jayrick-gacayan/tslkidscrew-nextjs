@@ -1,7 +1,8 @@
 export interface Parent {
-  id?: number;
-  name?: string;
+  customer_id?: number;
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
   email?: string;
-  address?: string
-  emergencyNumber?: string;
+  emergency_phone_number?: string;
 }

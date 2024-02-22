@@ -3,7 +3,6 @@ import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { AdminUserInputs } from "@/types/input-types/admin-input-types";
 
-
 function headers(token: string, isImage: boolean = false) {
   let headers = { Authorization: `Bearer ${token!}` };
   return {
@@ -34,6 +33,7 @@ export async function adminUsers(
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
   let strSP = urlSearchParams.toString();
+
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts${strSP === '' ? '' : `?${strSP}`}`,
     { ...headers(token!) }
@@ -45,7 +45,7 @@ export async function adminUsers(
     ...response,
     data: {
       data: response.admins ?? [],
-      total: response.total ?? 20,
+      total: response.total_admins ?? 1,
     } ?? undefined,
     statusCode: result.status,
     response: response
@@ -60,18 +60,23 @@ export async function addAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
+
   return await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         admin: {
           email: email,
           name: name,
-          is_super_admin: isSuperAdmin ? "true" : "false"
+          is_super_admin: isSuperAdmin ? "true" : "false",
+          active: "true",
         }
       }),
-      ...headers(token!)
     });
 }
 

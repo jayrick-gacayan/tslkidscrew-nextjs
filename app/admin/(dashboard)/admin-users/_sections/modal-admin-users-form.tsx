@@ -88,7 +88,6 @@ export default function ModalAdminUsersForm() {
     requestStatus,
     type,
     formReset,
-    revalidateUsers
   ])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {

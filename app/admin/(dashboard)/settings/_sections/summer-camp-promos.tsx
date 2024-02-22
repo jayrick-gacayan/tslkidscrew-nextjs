@@ -6,8 +6,10 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 
 export default function SummerCampPromos() {
+  const { pending } = useFormStatus();
   const [week, setWeek] = useState('week-1');
 
   return (
@@ -89,6 +91,12 @@ export default function SummerCampPromos() {
             })
           }
         </div>
+      </div>
+      <div className="w-fit ml-auto block">
+        <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
+          disabled={pending}>
+          {pending ? '...Processing' : 'Update Promos'}
+        </button>
       </div>
     </div>
   )

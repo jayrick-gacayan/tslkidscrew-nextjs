@@ -7,8 +7,19 @@ import VacationCampTabPanelContainer from "./vacation-camp-tab-panel-container";
 import BeforeAfterSchoolTabPanelContainer from "./before-after-school-tab-panel-container";
 import CustomTabItem from "@/app/_components/custom-tab-item";
 import YearCycleTabPanelContainer from "./year-cycle-tab-panel-container";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
+import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 
-export default function TabsContainer() {
+export default function TabsContainer({
+  summerCampWeekSettings,
+  summerCampSwimSettings,
+  programYearCycleSetting,
+}: {
+  summerCampWeekSettings: SummerCampWeekSetting[];
+  summerCampSwimSettings: SummerCampSwimSetting[];
+  programYearCycleSetting: ProgramYearCycleSetting;
+}) {
 
   return (
     <Tab.Group as={Fragment}>
@@ -22,10 +33,11 @@ export default function TabsContainer() {
           </div>
         </div>
         <Tab.Panels as={Fragment}>
-          <SummerCampTabPanelContainer />
+          <SummerCampTabPanelContainer summerCampWeekSettings={summerCampWeekSettings}
+            summerCampSwimSettings={summerCampSwimSettings} />
           <VacationCampTabPanelContainer />
           <BeforeAfterSchoolTabPanelContainer />
-          <YearCycleTabPanelContainer />
+          <YearCycleTabPanelContainer programYearCycleSetting={programYearCycleSetting} />
         </Tab.Panels>
       </div>
     </Tab.Group>

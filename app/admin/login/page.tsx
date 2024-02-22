@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import FormContainer from "./_sections/form-container";
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Admin Login',
   description: 'Admin Login Page'
 }
 

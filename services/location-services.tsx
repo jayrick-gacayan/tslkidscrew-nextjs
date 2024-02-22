@@ -26,6 +26,7 @@ export async function locationPlaces(
 
   let response = await result.json();
 
+  console.log('response', response)
   return new Result<Paginate<LocationPlace>>({
     ...response,
     data: {
@@ -42,12 +43,21 @@ export async function locationPlace(id: string, token?: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     { ...headers(token!) }
   );
-
   let response = await result.json();
+  if (result.status === 200) {
+
+    return new Result<LocationPlace>({
+      ...response,
+      data: { ...response.location, director: response.director ?? null },
+      statusCode: result.status,
+      response: response
+    });
+  }
+
 
   return new Result<LocationPlace>({
     ...response,
-    data: response.location ?? undefined,
+    data: undefined,
     statusCode: result.status,
     response: response
   });
@@ -77,8 +87,6 @@ export async function createLocationPlace({
   );
 
   let response = await result.json();
-
-  console.log('response', response)
 
   return new Result<LocationPlace>({
     ...response,
