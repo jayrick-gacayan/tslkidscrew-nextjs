@@ -10,6 +10,7 @@ import Link from "next/link";
 import LogoutButton from "@/app/_components/logout-button";
 import { PARENT_PUBLIC_ROUTES } from "@/types/constants/page-routes";
 import { Parent } from "@/models/parent";
+import BillingsMenu from "./billings-menu";
 
 export default function ParentHeader({ parent }: { parent: Parent }) {
   const pathname = usePathname();
@@ -42,6 +43,7 @@ export default function ParentHeader({ parent }: { parent: Parent }) {
                   (
                     <>
                       <FormsMenu pathname={pathname} />
+                      <BillingsMenu pathname={pathname} />
                       <SettingsMenu pathname={pathname} />
                       <div className="w-full">
                         <Menu as='div' className='relative'>
@@ -51,7 +53,7 @@ export default function ParentHeader({ parent }: { parent: Parent }) {
                                 <Menu.Button as="div"
                                   className="flex items-center gap-2 w-full cursor-pointer text-white">
                                   <div className="size-10 rounded-full bg-white inline-block" />
-                                  <div>{parent?.first_name ?? ''}</div>
+                                  <div>{parent?.first_name ?? parent.email}</div>
                                   <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                                 </Menu.Button>
                                 <Transition enter="transition duration-100 ease-out"

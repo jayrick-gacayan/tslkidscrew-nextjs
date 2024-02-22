@@ -1,6 +1,6 @@
 'use client';
 
-import ShowEntriesSelect from "@/app/admin/(dashboard)/_components/show-entries-select";
+import ShowEntriesSelect from "@/app/_components/show-entries-select";
 import { useState } from "react";
 
 export default function RegistrationInfoHeader() {

@@ -1,4 +1,4 @@
-import BackButtonClient from "@/app/admin/(dashboard)/_components/back-button-client"
+import BackButtonClient from "@/app/_components/back-button-client"
 import EditProgramForm from "./sections/edit-program-form"
 
 export default function Page(props: any) {
