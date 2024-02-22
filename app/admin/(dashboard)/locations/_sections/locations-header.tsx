@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from "react";
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import ShowEntriesSelect from "../../_components/show-entries-select";
 import Link from "next/link";
@@ -16,7 +15,6 @@ export default function LocationsHeader({
   redirectURL: (url: string) => Promise<void>
 }) {
   let baseURL = "/admin/locations";
-  const [entries, setEntries] = useState<number>(showEntry);
 
   function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
     let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
@@ -36,11 +34,10 @@ export default function LocationsHeader({
   return (
     <AdminHeaderWithEntries headerText='Locations'>
       <div className='flex w-full sm:w-fit items-center gap-4'>
-        <ShowEntriesSelect value={entries}
+        <ShowEntriesSelect value={showEntry} items={[10, 20, 30]}
           onChange={(value: any) => {
             redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
-          }}
-          items={[10, 20, 30]} />
+          }} />
         <div className="w-full">
           <Link href='/admin/locations/new'
             className="rounded text-white bg-primary px-4 py-2 text-sm block text-center">

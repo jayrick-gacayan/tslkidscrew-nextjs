@@ -60,11 +60,10 @@ export default function SummerCampSwimSettingForm({
   })
 
   return (
-    <div ref={formContainerRef} onClick={() => {
-      setFocusId(summerCampSwimSetting.id)
-    }}>
+    <div ref={formContainerRef}>
       <span className={`border border-secondary-light p-3 bg-white rounded text-center 
-        ${focusId === summerCampSwimSetting.id ? 'hidden' : 'block'}`}>
+        ${focusId === summerCampSwimSetting.id ? 'hidden' : 'block'}`}
+        onClick={() => { setFocusId(summerCampSwimSetting.id) }}>
         {
           Intl.NumberFormat('en-US', {
             style: "currency",

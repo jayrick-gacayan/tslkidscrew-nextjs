@@ -4,6 +4,8 @@ import { addLocationPlace } from "@/actions/location-actions";
 import InputCustom from "@/app/_components/input-custom";
 import CustomListbox from "@/app/_components/listbox-custom";
 import { Admin } from "@/models/admin";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -15,7 +17,15 @@ export function NewFormLocation({
   admins: Partial<Admin>[]
 }) {
   const router = useRouter();
-  const [state, formAction] = useFormState(addLocationPlace, {} as any);
+  const [state, formAction] = useFormState(
+    addLocationPlace,
+    {
+      name: fieldInputValue(''),
+      address: fieldInputValue(''),
+      ['location-minimum-age']: fieldInputValue(''),
+      ['director[id]']: fieldInputValue(''),
+    } as LocationPlaceFormStateProps
+  );
   const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 

@@ -1,9 +1,9 @@
-import { redirectURL } from "@/types/common-use-server-functions/use-server-functions";
 import LocationsHeader from "./_sections/locations-header";
 import LocationsTable from "./_sections/locations-table";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import type { Metadata } from "next";
 import Pagination from "@/app/_components/pagination";
+import { redirectToPath } from "@/actions/common-actions";
 
 export const metadata: Metadata = {
   title: 'Locations',
@@ -17,9 +17,9 @@ export default function Page({ searchParams }: { searchParams: SearchParamsProps
 
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
-      <LocationsHeader searchParams={searchParams} showEntry={showEntry} redirectURL={redirectURL} />
+      <LocationsHeader searchParams={searchParams} showEntry={showEntry} redirectURL={redirectToPath} />
       <LocationsTable searchParams={searchParams} />
-      {/* {
+      {
         totalPages < 2 ? null :
           (
             <div className="w-fit m-auto block">
@@ -30,7 +30,7 @@ export default function Page({ searchParams }: { searchParams: SearchParamsProps
               />
             </div>
           )
-      } */}
+      }
     </div>
   )
 }

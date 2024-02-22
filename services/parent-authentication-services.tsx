@@ -9,17 +9,19 @@ export async function registerParent({
   password: string;
   confirm_password: string
 }) {
-  let result = await fetch(process.env.NEXT_PUBLIC_API_PARENT_URL! + `/registration_records`, {
-    method: "POST",
-    body: JSON.stringify({
-      customer_user: {
-        email,
-        password,
-        confirm_password
-      }
-    }),
-    headers: { 'Content-Type': 'application/json' }
-  });
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/registration_records`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        customer_user: {
+          email,
+          password,
+          confirm_password
+        }
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    });
 
 
   let response = await result.json();
@@ -39,6 +41,4 @@ export async function registerParent({
       statusCode: result.status,
     })
   }
-
-
 }

@@ -5,7 +5,7 @@ import VacationCampSchedules from "./vacation-camp-schedules";
 export default function VacationCampTabPanelContainer() {
   return (
     <Tab.Panel as={Fragment}>
-      <div className="space-y-8">
+      <div className="space-y-">
         <VacationCampSchedules />
       </div>
     </Tab.Panel>
