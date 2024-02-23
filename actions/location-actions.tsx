@@ -34,6 +34,7 @@ export async function addLocationPlace(
   }
 
   return {
+    data: result.data ?? undefined,
     message: 'Successfully created a location.',
     success: true,
   };
@@ -59,6 +60,7 @@ export async function editLocationPlace(
   }
 
   return {
+
     message: 'Successfully updated a location.',
     success: true,
   };

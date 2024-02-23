@@ -86,7 +86,7 @@ function CustomListbox(
                       className={
                         twMerge(
                           `absolute top-[115%] left-0 w-full bg-white z-[60] rounded drop-shadow` +
-                          ` ${items.length === 5 ? `h-auto overflow-hidden` : `h-[240px] overflow-auto`}`
+                          ` ${items.length < 6 ? `h-auto overflow-hidden` : `h-[240px] overflow-auto`}`
                         )}>
                       {items.map((value: any, index: any) => (
                         <Listbox.Option

@@ -31,11 +31,14 @@ export default async function Page({
       <BackButtonClient />
       <AdminHeaderWithEntries headerText='Location Program Information' />
       <div className="bg-secondary p-6">
-        <div className="w-6/12 block">
+        <div className="columns-1 lg:columns-2">
           <InfoContainer label='Name' data={locationProgramData.name!} />
           <InfoContainer label='Suffix' data='n/a' />
           <InfoContainer label='Type' data='Daycare' />
-          <InfoContainer label='Director' data='alexislarose.tsl@gmail.com' />
+          <InfoContainer label='Status' data={!!locationProgramData.active ? 'Active' : 'Inactive'} />
+          <InfoContainer label='Package Activation' data={!!locationProgramData.is_package_active ? 'Active' : 'Inactive'} />
+          <InfoContainer label='Subsidized Enrollment Enabled' data={!!locationProgramData.is_package_active ? 'Enabled' : 'Disabled'} />
+          <InfoContainer label='Director' data={locationProgramData.director?.email ?? 'N/A'} />
           <InfoContainer label='Capacity' data={locationProgramData.capacity?.toString()} />
           <InfoContainer label='Price'
             data={`${Intl.NumberFormat('en-US', {
