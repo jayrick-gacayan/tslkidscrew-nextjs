@@ -1,8 +1,15 @@
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
+import { LocationProgram } from "@/models/location-program";
 import Link from "next/link";
 
-export default function ProgramsTable() {
+export default function ProgramsTable({
+  location_id,
+  locationPrograms
+}: {
+  location_id: string;
+  locationPrograms: LocationProgram[];
+}) {
   return (
     <div className="block overflow-auto rounded bg-secondary h-96">
       <table className="min-w-[1024px] w-full">
@@ -18,26 +25,37 @@ export default function ProgramsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
-            <td className="w-auto">Day Care</td>
-            <td className="w-48">n/a</td>
-            <td className="w-72">rhay26.tsl@gmail.com</td>
-            <td className="w-24">Active</td>
-            <td className="w-40">50</td>
-            <td className="w-40">12</td>
-            <td className="w-24">
-              <div className="flex items-center justify-center gap-2 w-full">
-                <Link href='/admin/locations/1/programs/1'
-                  className="text-primary block">
-                  <Fa6SolidEye />
-                </Link>
-                <Link href='/admin/locations/1/programs/1/edit'
-                  className="text-warning block">
-                  <Fa6SolidPen />
-                </Link>
-              </div>
-            </td>
-          </tr>
+          {
+            locationPrograms.map((locationProgram: LocationProgram, index: number) => {
+              let activeProgram = locationProgram.active === undefined || locationProgram.active ?
+                'Active' : 'Inactive';
+              return (
+                <tr key={`location-program-${locationProgram.id}-${index}-${locationProgram.name}`}
+                  className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
+                  <td className="w-auto">{locationProgram.name!}</td>
+                  <td className="w-48">{locationProgram.name_suffix === '' ? 'N/A' : locationProgram.name_suffix}</td>
+                  <td className="w-72">rhay26.tsl@gmail.com</td>
+                  <td className="w-24">
+                    {activeProgram}
+                  </td>
+                  <td className="w-40">{locationProgram.capacity ?? 1}</td>
+                  <td className="w-40">12</td>
+                  <td className="w-24">
+                    <div className="flex items-center justify-center gap-2 w-full">
+                      <Link href={`/admin/locations/${location_id}/programs/${locationProgram.id!}`}
+                        className="text-primary block">
+                        <Fa6SolidEye />
+                      </Link>
+                      <Link href={`/admin/locations/${location_id}/programs/${locationProgram.id!}/edit`}
+                        className="text-warning block">
+                        <Fa6SolidPen />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })
+          }
         </tbody>
       </table>
     </div>

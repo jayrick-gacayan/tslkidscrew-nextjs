@@ -1,12 +1,12 @@
 'use client';
 
+import { pathRevalidate, redirectToPath } from "@/actions/common-actions";
 import { addLocationPlace } from "@/actions/location-actions";
 import InputCustom from "@/app/_components/input-custom";
 import CustomListbox from "@/app/_components/listbox-custom";
 import { Admin } from "@/models/admin";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
@@ -16,7 +16,6 @@ export function NewFormLocation({
 }: {
   admins: Partial<Admin>[]
 }) {
-  const router = useRouter();
   const [state, formAction] = useFormState(
     addLocationPlace,
     {
@@ -30,14 +29,16 @@ export function NewFormLocation({
   const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 
   useEffect(() => {
-    if (state?.success !== undefined) {
-      let { message, success } = state;
+    async function pathToRedirect(id: number) {
+      await redirectToPath(`/admin/locations/${id}`);
+    }
+    let { message, success, data } = state;
+
+    if (success !== undefined) {
 
       toast((props: ToastContentProps<unknown>) => {
         return (
-          <div className="text-black">
-            {message}
-          </div>
+          <div className="text-black">{message}</div>
         )
       }, {
         toastId: `create-location-${Date.now()}`,
@@ -45,12 +46,11 @@ export function NewFormLocation({
         hideProgressBar: true,
       })
 
-      if (success) {
-        router.back();
+      if (success && data) {
+        pathToRedirect(data.id!);
       }
     }
   }, [
-    router,
     state,
   ]);
 
@@ -91,7 +91,7 @@ export function NewFormLocation({
           errorText={state?.['location-minimum-age']?.errorText}
           validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
-      <button className="bg-primary p-2 rounded text-white w-32 block m-auto"
+      <button className="bg-primary p-2 rounded text-white w-32 block m-auto disabled:cursor-not-allowed"
         disabled={pending}>
         {pending ? '...Checking' : 'Submit'}
       </button>

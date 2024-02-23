@@ -4,6 +4,8 @@ import { LocationPlace } from "./location";
 export interface LocationProgram {
   id?: number;
   name?: string | null;
+  director_id?: number | null;
+  location_id?: number | null;
   director?: Admin | null;
   created_at?: string | null;
   updated_at?: string | null;
