@@ -21,7 +21,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let result: Result<Paginate<Admin>> = await adminUsers(searchParams, currentAdmin?.accessToken!);
 
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
-  let totalPages = Math.ceil(result.data?.total ?? 1 / showEntry) ?? 1
+  let totalPages = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1
 
   let data = result.data?.data ?? [];
 

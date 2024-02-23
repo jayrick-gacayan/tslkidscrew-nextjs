@@ -31,7 +31,7 @@ export async function locationPlaces(
     ...response,
     data: {
       data: response.locations ?? [],
-      total: response.total ?? 1,
+      total: response.locations_count ?? 1,
     } ?? undefined,
     statusCode: result.status,
     response: response

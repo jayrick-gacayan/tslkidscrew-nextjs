@@ -1,18 +1,7 @@
-import { auth } from "@/auth";
-import { Admin } from "@/models/admin";
 import { LocationPlace } from "@/models/location";
-import { Paginate } from "@/models/paginate";
-import { Result } from "@/models/result";
-import { locationPlaces } from "@/services/location-services";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { Session } from "next-auth";
 import LocationTableClient from "./location-table-client";
 
-export default async function LocationsTable({ searchParams }: { searchParams: SearchParamsProps }) {
-  let admin: Session<Admin> | null = await auth();
-  let result: Result<Paginate<LocationPlace>> = await locationPlaces(searchParams, admin?.accessToken)
-
-  let data = result.data?.data ?? [];
+export default function LocationsTable({ locationPlaces }: { locationPlaces: LocationPlace[] }) {
 
   return (
     <div className={`block overflow-auto rounded bg-secondary h-[448px]`}>
@@ -27,7 +16,7 @@ export default async function LocationsTable({ searchParams }: { searchParams: S
             <th className="w-24">ACTION</th>
           </tr>
         </thead>
-        <LocationTableClient locationPlaces={data} />
+        <LocationTableClient locationPlaces={locationPlaces} />
       </table>
     </div>
   )
