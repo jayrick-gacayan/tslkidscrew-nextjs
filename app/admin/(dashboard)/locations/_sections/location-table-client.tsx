@@ -32,6 +32,10 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
     locationPlaceId
   ]);
 
+  useEffect(() => {
+    setDataLocationPlaces(locationPlaces);
+  }, [locationPlaces])
+
   const showSwal = (locationPlace: LocationPlace) => {
     withReactContent(Swal).fire({
       html: (
