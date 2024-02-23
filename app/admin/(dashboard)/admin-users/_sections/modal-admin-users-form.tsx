@@ -28,8 +28,10 @@ import InputCustom from "@/app/_components/input-custom";
 import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { revalidateUsers } from "../_actions/admin-user-actions";
+import { useSearchParams } from "next/navigation";
 
 export default function ModalAdminUsersForm() {
+  const searchParams = useSearchParams();
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -65,6 +67,7 @@ export default function ModalAdminUsersForm() {
       clearTimeout(timeout);
     }
   }, [])
+
 
   useEffect(() => {
     async function userRevalidate() {
