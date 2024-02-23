@@ -3,12 +3,11 @@ import { authConfig } from "./auth.config";
 import { NextAuthRequest } from "next-auth/lib";
 import { NextResponse } from "next/server";
 import { ADMIN_PUBLIC_ROUTES, PARENT_PUBLIC_ROUTES } from "./types/constants/page-routes";
-import { isAdmin, isParent } from "./types/helpers/checking-interfaces";
 
 const { auth } = NextAuth(authConfig);
+
 export default auth((req: NextAuthRequest) => {
   let { auth, nextUrl: { pathname, ...rest } } = req;
-
 
   if (!req.nextUrl.origin.includes('http://localhost')) {
     if (req.nextUrl.pathname.startsWith('/api/auth')) {
@@ -21,22 +20,32 @@ export default auth((req: NextAuthRequest) => {
   }
   else {
     if (!!auth) {
-      console.log('auth', auth.user)
       let { accessToken, role, ...rest } = auth.user;
 
-      if (isAdmin(rest)) {
+      if (role === 'admin') {
         if (ADMIN_PUBLIC_ROUTES.includes(pathname) || pathname.includes('parent')) {
           return NextResponse.redirect(`${req.nextUrl.origin}/admin/dashboard`)
         }
 
         return NextResponse.next();
       }
-      else if (isParent(rest)) {
-        if (PARENT_PUBLIC_ROUTES.includes(pathname) || pathname.includes('admin')) {
-          return NextResponse.redirect(`${req.nextUrl.origin}/admin/dashboard`)
-        }
+      else if (role === 'parent') {
 
-        return NextResponse.next();
+        if (PARENT_PUBLIC_ROUTES.includes(pathname) || pathname.includes('admin')) {
+          console.log('I am here...')
+          if (!rest.first_name) {
+            return NextResponse.redirect(`${req.nextUrl.origin}/parent/customer-info`);
+          }
+
+          return NextResponse.redirect(`${req.nextUrl.origin}/parent/dashboard`)
+        }
+        else {
+          if (!rest.first_name && !req.nextUrl.pathname.includes('customer-info')) {
+            return NextResponse.redirect(`${req.nextUrl.origin}/parent/customer-info`);
+          }
+
+          return NextResponse.next();
+        }
       }
     }
     else {

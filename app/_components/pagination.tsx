@@ -30,6 +30,8 @@ export default function Pagination({
     return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`
   }
 
+  console.log('total pages', totalPages)
+
   return totalPages === 1 ? null :
     (
       <div className="w-fit flex items-center rounded border border-primary divide-x divide-primary overflow-hidden">
