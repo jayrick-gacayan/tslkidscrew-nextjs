@@ -17,11 +17,12 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
-  let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
   let currentAdmin: Session<Admin> | null = await auth();
   let result: Result<Paginate<Admin>> = await adminUsers(searchParams, currentAdmin?.accessToken!);
 
-  let totalPages = Math.ceil(result.data?.total ?? 1 / showEntry) ?? 1
+  let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
+  let totalPages = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1
+
   let data = result.data?.data ?? [];
 
   return (

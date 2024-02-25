@@ -66,6 +66,7 @@ export default function ModalAdminUsersForm() {
     }
   }, [])
 
+
   useEffect(() => {
     async function userRevalidate() {
       await revalidateUsers('/admin/admin-users');
@@ -78,7 +79,6 @@ export default function ModalAdminUsersForm() {
         }
         break;
       case RequestStatus.SUCCESS:
-        console.log('I am here....')
         userRevalidate();
         formReset();
         break;

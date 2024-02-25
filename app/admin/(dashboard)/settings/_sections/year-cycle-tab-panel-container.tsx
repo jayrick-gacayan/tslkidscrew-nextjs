@@ -87,7 +87,6 @@ export default function YearCycleTabPanelContainer({
               Update Year Cycle
             </button>
           </form>
-
         </div>
       </div>
     </Tab.Panel>

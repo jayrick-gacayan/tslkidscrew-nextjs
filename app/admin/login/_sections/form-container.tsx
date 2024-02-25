@@ -6,11 +6,9 @@ import { useEffect, useRef } from 'react';
 import { roleLogin } from '@/actions/auth-actions';
 import LoginButtons from '@/app/_components/login/login-buttons';
 import RememberMe from '@/app/_components/login/remember-me';
-import { redirectToPath } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
 import { LoginFormStateProps } from '@/types/props/login-form-state-props';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
-import { useRouter } from 'next/navigation';
 
 export default function FormContainer() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -19,33 +17,27 @@ export default function FormContainer() {
     {
       email: fieldInputValue<string>(''),
       password: fieldInputValue<string>(''),
-    } as LoginFormStateProps
+    } as LoginFormStateProps || {}
   );
 
   useEffect(() => {
-    async function pathToRedirect(redirectTo: string) {
-      await redirectToPath(redirectTo);
-    }
+    let { message } = state;
 
-    if (state?.success) {
-      let { message, success, redirectTo } = state;
+    if (message) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
         )
       }, {
         toastId: `admin-login-success-${Date.now()}`,
-        type: success ? 'success' : 'error',
+        type: 'error',
         hideProgressBar: true,
       });
-
-      if (success) {
-        formRef.current?.reset();
-        // router.push(redirectTo);
-        pathToRedirect(redirectTo)
-      }
     }
+
   }, [state]);
+
+  console.log('state', state)
 
   return (
     <>

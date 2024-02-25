@@ -3,4 +3,5 @@ export interface FormStateProps {
   success?: boolean;
   redirectTo?: string;
   error?: string;
+  data?: any;
 }

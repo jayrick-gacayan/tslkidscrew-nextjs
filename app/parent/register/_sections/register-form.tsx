@@ -1,8 +1,9 @@
 'use client';
 
-import { registerParentAction } from "@/actions/auth-actions";
+import { registerParentAction, roleLogin } from "@/actions/auth-actions";
 import InputCustom from "@/app/_components/input-custom";
 import PasswordIcon from "@/app/_components/password-icon";
+import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { ParentRegisterFormStateProps } from "@/types/props/parent-register-form-state-props";
 import Link from "next/link";
@@ -22,8 +23,20 @@ export default function RegisterForm() {
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
   useEffect(() => {
+    async function autoLoginAccount() {
+      let formData = new FormData();
+      formData.set('email', state?.email?.value ?? '');
+      formData.set('password', state?.password?.value ?? '');
+      formData.set('role', 'parent');
+
+      let result = await roleLogin('/parent/dashboard', {
+        email: fieldInputValue(state.email?.value ?? '')
+      }, formData);
+
+    }
+
     if (state.success !== undefined) {
-      let { message, success, redirectTo } = state;
+      let { message, success } = state;
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -35,10 +48,12 @@ export default function RegisterForm() {
       });
 
       if (success) {
-        formRef.current?.reset();
+        autoLoginAccount();
       }
     }
   }, [state]);
+
+  console.log('state', state)
 
   return (
     <form ref={formRef} action={formAction} className="space-y-4">
@@ -74,9 +89,15 @@ export default function RegisterForm() {
           validationStatus={state.confirm_password?.validationStatus} />
       </div>
       <div className="w-full space-y-2">
-        <button className="bg-primary px-4 py-2 w-fit text-white rounded ml-auto block"
+        <button className="bg-primary px-4 py-2 w-fit text-white rounded ml-auto block disabled:cursor-not-allowed"
           disabled={pending}>
-          Register
+          {!pending ? 'Register' :
+            (
+              <>
+                <Spinners3DotsScale /> Checking
+              </>
+            )
+          }
         </button>
         <div>
           <span>Already have an account? </span>
