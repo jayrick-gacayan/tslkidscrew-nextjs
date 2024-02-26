@@ -62,7 +62,7 @@ export default function YearCycleTabPanelContainer({
   }, [state])
 
   return (
-    <Tab.Panel as={Fragment}>
+    <Tab.Panel as='div' id="year-cycle-panel">
       <div className="space-y-8">
         <div className="space-y-4">
           <h1 className="font-medium text-[24px] text-black">Update Year Cycle</h1>

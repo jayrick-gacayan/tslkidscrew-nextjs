@@ -3,12 +3,13 @@ import { ForwardedRef, forwardRef } from "react"
 
 function DatepickerInputCustomRange(props: any, ref: ForwardedRef<HTMLButtonElement>) {
   const splitValue = props.value.split(' - ');
-
+  console.log('props', props.value)
   return (
     <button ref={ref}
       onClick={props.onClick}
       className='relative z-0 w-full focus:border-primary text-left border bg-white text-black p-3 rounded border-secondary-light'
       type="button">
+      <input type='hidden' name={props.name} value={props.value} onChange={() => { }} />
       {
         splitValue[1] !== '' ?
           (
