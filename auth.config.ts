@@ -9,7 +9,7 @@ export const authConfig = {
       let { accessToken, ...rest } = token.user as JWT<Admin | Parent>;
       session.user = token.user;
       session.accessToken = accessToken as any;
-      console.log('token on session', token.user);
+      // console.log('token on session', token.user);
       // console.log('user', user);
       // console.log('session', session);
       // console.log('newSession', newSession);
@@ -20,8 +20,8 @@ export const authConfig = {
     async jwt({ token, user, account, profile, session, trigger, }) {
       // console.log('user on jwt', user);
       user && (token.user = user as any);
-      console.log('token on jwt', token);
-      console.log('user on jwt', user);
+      // console.log('token on jwt', token);
+      // console.log('user on jwt', user);
       // console.log('account', account);
       // console.log('profile', profile);
       // console.log('session', session);

@@ -11,6 +11,7 @@ import { toast, ToastContentProps } from "react-toastify";
 import { redirectToURL } from "@/actions/common-actions";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 
 export function EditFormLocation({
   locationPlace,
@@ -93,7 +94,12 @@ export function EditFormLocation({
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}
-          validationStatus={state?.['director[id]']?.validationStatus} />
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          validationStatus={state?.['director[id]']?.validationStatus}
+          keyDescription="edit-form-location" />
         <InputCustom labelText='Minimum Age For Children'
           id='location-minimum-age-for-children'
           type="text"
