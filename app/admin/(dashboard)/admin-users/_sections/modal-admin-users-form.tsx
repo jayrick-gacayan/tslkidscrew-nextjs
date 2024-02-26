@@ -5,6 +5,7 @@ import {
   FormEvent,
   Fragment,
   useCallback,
+  useContext,
   useEffect,
   useMemo
 } from "react";
@@ -28,8 +29,10 @@ import InputCustom from "@/app/_components/input-custom";
 import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { revalidateUsers } from "../_actions/admin-user-actions";
+import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 
 export default function ModalAdminUsersForm() {
+  const { state, modalOpen, modalType, setDumpData } = useAdminUserHook();
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -55,8 +58,11 @@ export default function ModalAdminUsersForm() {
   let pending = requestStatus === RequestStatus.WAITING || requestStatus === RequestStatus.IN_PROGRESS;
 
   const formReset = useCallback(() => {
+    modalOpen(false);
     reduxStore.dispatch(modalFormOpenStateSet(false));
     let timeout = setTimeout(() => {
+      modalType('')
+      setDumpData(undefined);
       reduxStore.dispatch(adminUserFormReset());
       reduxStore.dispatch(modalFormTypeSet(''));
     }, 500);

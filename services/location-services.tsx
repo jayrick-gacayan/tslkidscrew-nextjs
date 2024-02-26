@@ -2,18 +2,11 @@ import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
 import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
-
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
+import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export async function locationPlaces(
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: SearchParamsProps,
   token?: string | null
 ) {
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
@@ -21,7 +14,7 @@ export async function locationPlaces(
   let strSP = urlSearchParams.toString();
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations${strSP === '' ? '' : `?${strSP}`}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
@@ -41,7 +34,7 @@ export async function locationPlaces(
 export async function locationPlace(id: string, token?: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
   let response = await result.json();
   if (result.status === 200) {
@@ -82,7 +75,7 @@ export async function createLocationPlace({
           minimum_age
         }
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   );
 
@@ -118,7 +111,7 @@ export async function updateLocationPlace(
           minimum_age
         }
       }),
-      ...headers(token)
+      ...authHeaders(token)
     }
   );
 
@@ -138,7 +131,10 @@ export async function removeLocationPlace(
 ) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    { ...headers(token), method: "DELETE", }
+    {
+      ...authHeaders(token),
+      method: "DELETE"
+    }
   );
 
   let response = await result.json();

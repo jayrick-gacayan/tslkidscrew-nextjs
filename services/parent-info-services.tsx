@@ -1,5 +1,6 @@
 import { Parent } from "@/models/parent";
 import { Result } from "@/models/result";
+import { authHeaders } from "@/types/helpers/auth-headers";
 
 export async function registerParent({
   email,
@@ -87,10 +88,7 @@ export async function registerCustomer({
           how_did_you_here_about_us
         }
       }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token!}`
-      }
+      ...authHeaders(token)
     });
 
   let response = await result.json();

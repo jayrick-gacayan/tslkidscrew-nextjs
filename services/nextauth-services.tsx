@@ -2,7 +2,10 @@ import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth";
 
 export async function nextauthSignOut(redirectTo: string) {
-  return await signOut({ redirect: false, redirectTo: redirectTo });
+  return await signOut({
+    redirect: false,
+    redirectTo: redirectTo
+  });
 }
 
 export async function nextauthSignIn(
