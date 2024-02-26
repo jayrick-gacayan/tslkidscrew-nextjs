@@ -4,6 +4,7 @@ import { ForwardedRef, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 function CustomInputDefault(props: any, ref: ForwardedRef<HTMLButtonElement>) {
+
   return (
     <button ref={ref}
       {...props}
