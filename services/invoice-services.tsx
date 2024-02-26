@@ -1,22 +1,12 @@
 import { Invoice } from "@/models/invoice";
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
-
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
+import { authHeaders } from "@/types/helpers/auth-headers";
 
 export async function getAllCustomerInvoices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_invoices`,
-    {
-      ...headers(token!)
-    }
+    { ...authHeaders(token) }
   );
 
   let response = await result.json();
@@ -57,9 +47,7 @@ export async function getAllCustomerInvoices(token: string) {
 export async function getCustomerInvoice(id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/invoices/${id}`,
-    {
-      ...headers(token!)
-    }
+    { ...authHeaders(token) }
   );
 
 

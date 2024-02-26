@@ -3,7 +3,6 @@ import { ToastContentProps } from "react-toastify";
 
 export interface ToastProps<T> extends ToastContentProps<T>,
   HTMLAttributes<HTMLDivElement> {
-
 }
 
 function ToastComponent<T>(

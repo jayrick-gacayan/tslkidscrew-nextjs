@@ -32,14 +32,12 @@ export default function ShowEntriesSelect({
                 }
               }
             </Listbox.Button>
-            <Transition
-              enter="transition duration-100 ease-out"
+            <Transition enter="transition duration-100 ease-out"
               enterFrom="transform scale-95 opacity-0"
               enterTo="transform scale-100 opacity-100"
               leave="transition duration-75 ease-out"
               leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
+              leaveTo="transform scale-95 opacity-0">
               <Listbox.Options as='div'
                 className="absolute top-[105%] z-50 left-0 w-full bg-white rounded drop-shadow overflow-hidden">
                 {items.map((value: any, index: any) => (
