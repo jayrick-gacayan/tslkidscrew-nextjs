@@ -5,20 +5,13 @@ import { Result } from "@/models/result";
 import { adminUser } from "./admin-services";
 import { locationPlace } from "./location-services";
 import { Paginate } from "@/models/paginate";
-
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
+import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export async function locationProgram(id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
@@ -49,7 +42,7 @@ export async function locationProgram(id: string, token: string) {
 }
 
 export async function locationPrograms(
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: SearchParamsProps,
   location_id: string,
   token: string
 ) {
@@ -59,9 +52,7 @@ export async function locationPrograms(
 
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs?${strSP}`,
-    {
-      ...headers(token!)
-    }
+    { ...authHeaders(token!) }
   )
 
   let response = await result.json();
@@ -110,7 +101,7 @@ export async function addLocationProgram({
         }
 
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   )
 
@@ -139,7 +130,10 @@ export async function removeLocationProgram(
 ) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
-    { ...headers(token!), method: "DELETE" }
+    {
+      ...authHeaders(token!),
+      method: "DELETE"
+    }
   );
 
   let response = await result.json();
@@ -179,7 +173,7 @@ export async function updateLocationProgram(
           director_id: director.id!.toString(),
         }
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   )
 }

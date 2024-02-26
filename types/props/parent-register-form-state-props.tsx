@@ -1,9 +1,6 @@
-import { FormStateProps } from "./form-state-props";
 import { InputProps } from "./input-props";
+import { LoginFormStateProps } from "./login-form-state-props";
 
-export interface ParentRegisterFormStateProps extends FormStateProps {
-  email?: InputProps<string>;
-  password?: InputProps<string>;
+export interface ParentRegisterFormStateProps extends LoginFormStateProps {
   confirm_password?: InputProps<string>;
-
 }
