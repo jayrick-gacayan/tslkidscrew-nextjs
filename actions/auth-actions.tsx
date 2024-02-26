@@ -6,7 +6,7 @@ import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LoginFormStateProps } from "@/types/props/login-form-state-props";
 import { ParentRegisterFormStateProps } from "@/types/props/parent-register-form-state-props";
-import { registerCustomer, registerParent } from "@/services/parent-authentication-services";
+import { registerCustomer, registerParent } from "@/services/parent-info-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { Result } from "@/models/result";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
@@ -36,22 +36,7 @@ export async function roleLogin(
   formData: FormData
 ) {
 
-  const loginSchema = Joi.object({
-    email: Joi.string()
-      .required()
-      .email()
-      .messages({
-        "string.empty": "Email is required.",
-        "string.email": "Email is in invalid format.",
-        "any.required": "Email is required",
-      }),
-    password: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Password is required.",
-        "any.required": "Password is required",
-      })
-  });
+  const loginSchema = Joi.object(emailPassSchema);
 
   let validate = loginSchema.validate(
     {
@@ -92,20 +77,7 @@ export async function registerParentAction(
   formData: FormData
 ) {
   let registerSchema = Joi.object({
-    email: Joi.string()
-      .required()
-      .email()
-      .messages({
-        "string.empty": "Email is required.",
-        "string.email": "Email is in invalid format.",
-        "any.required": "Email is required",
-      }),
-    password: Joi.string()
-      .required()
-      .messages({
-        "string.empty": "Password is required.",
-        "any.required": "Password is required",
-      }),
+    ...emailPassSchema,
     confirm_password: Joi.string()
       .valid(Joi.ref('password'))
       .required()
@@ -237,4 +209,22 @@ export async function registerCustomerAction(
     message: result.message,
     success: true,
   }
+}
+
+/* helpers */
+const emailPassSchema = {
+  email: Joi.string()
+    .required()
+    .email()
+    .messages({
+      "string.empty": "Email is required.",
+      "string.email": "Email is in invalid format.",
+      "any.required": "Email is required",
+    }),
+  password: Joi.string()
+    .required()
+    .messages({
+      "string.empty": "Password is required.",
+      "any.required": "Password is required",
+    }),
 }
