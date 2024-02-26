@@ -11,6 +11,7 @@ import CustomListbox from "@/app/_components/listbox-custom";
 import { LocationPlace } from "@/models/location";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 
 let programTypes = [
   'After School',
@@ -69,7 +70,12 @@ export default function NewProgramForm({
           items={programTypes}
           labelText="Program"
           errorText={state?.name?.errorText}
-          validationStatus={state?.name?.validationStatus} />
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          validationStatus={state?.name?.validationStatus}
+          keyDescription="new-program-form-name" />
         <InputCustom labelText="Name"
           id='location-program-name-suffix'
           name='name-suffix'
@@ -86,7 +92,8 @@ export default function NewProgramForm({
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}
-          validationStatus={state?.['director[id]']?.validationStatus} />
+          validationStatus={state?.['director[id]']?.validationStatus}
+          keyDescription="new-program-form-director" />
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
             <InputCustom labelText="Capacity"
