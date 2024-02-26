@@ -2,23 +2,15 @@ import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { Result } from "@/models/result";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { authHeaders } from "@/types/helpers/auth-headers";
 import { ProgramYearCycleSettingInputTypes } from "@/types/input-types/program-year-cycle-setting-input-types";
 import { SummerCampSwimSettingInputTypes } from "@/types/input-types/summer-camp-swim-setting-input-types";
 import { SummerCampWeekSettingInputTypes } from "@/types/input-types/summer-camp-week-setting-input-types";
 
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
-
 export async function getProgramYearCycleSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-program-settings`,
-    { ...headers(token) }
+    { ...authHeaders(token) }
   )
 
   try {
@@ -60,14 +52,12 @@ export async function updateProgramYearCycleSetting(
           next_year_cycle
         }
       }),
-      ...headers(token)
+      ...authHeaders(token)
     }
   );
 
   try {
     let response = await result.json();
-
-    console.log('response', response)
 
     return new Result<any>({
       ...response,
@@ -86,7 +76,7 @@ export async function updateProgramYearCycleSetting(
 export async function getSummerCampSwimPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-summer-camp-prices`,
-    { ...headers(token) }
+    { ...authHeaders(token) }
   );
 
   try {
@@ -132,7 +122,7 @@ export async function updateSummerCampSwimSetting(
           with_swim_trip,
         }
       }),
-      ...headers(token)
+      ...authHeaders(token)
     }
   );
 
@@ -157,7 +147,7 @@ export async function updateSummerCampSwimSetting(
 export async function getSummerCampWeekPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/edit`,
-    { ...headers(token) }
+    { ...authHeaders(token) }
   );
 
   let response = await result.json();
@@ -193,7 +183,7 @@ export async function updateSummerCampWeekSetting(
           notes,
         }
       }),
-      ...headers(token)
+      ...authHeaders(token)
     }
   );
 
@@ -217,7 +207,7 @@ export async function updateSummerCampWeekSetting(
 export async function getSummerCampPromoSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/edit-all`,
-    { ...headers(token) }
+    { ...authHeaders(token) }
   );
 
   let response = await result.json();
@@ -232,7 +222,7 @@ export async function getSummerCampPromoSettings(token: string) {
 export async function getVacationCampSchedulesSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
-    { ...headers(token) }
+    { ...authHeaders(token) }
   );
 
   let response = await result.json();

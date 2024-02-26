@@ -17,8 +17,10 @@ import {
   modalFormTypeSet
 } from "../_redux/admin-users-slice";
 import Fa6SolidUserCheck from "@/app/_components/svg/fa6-solid-user-check";
+import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
+  const { modalOpen, modalType, setDumpData } = useAdminUserHook();
   const [dataAdmins, setDataAdmins] = useState(admins);
   const [adminId, setAdminId] = useState<any>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
@@ -169,6 +171,9 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     (
                       <button className="text-warning block cursor-pointer"
                         onClick={() => {
+                          modalOpen(true);
+                          modalType('update');
+                          setDumpData(admin);
                           reduxStore.dispatch(editAdminUserFields({
                             email: email!,
                             name: name!,
