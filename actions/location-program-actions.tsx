@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { addLocationProgram } from "@/services/location-program-services";
+import { addLocationProgram, updateLocationProgram } from "@/services/location-program-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
@@ -23,7 +23,25 @@ export async function editLocationProgramAction(
     return errors;
   }
 
-  return prevState
+  let result = await updateLocationProgram(
+    getProgramInputs(location_id.toString(), formData),
+    id,
+    admin?.accessToken!
+  );
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      message: result.message ?? result.error,
+      error: result.message ?? result.error,
+      success: false
+    }
+  }
+
+  return {
+    data: result.data,
+    message: 'Successfully updated a location program',
+    success: true
+  }
 }
 
 export async function addLocationProgramAction(
@@ -39,26 +57,23 @@ export async function addLocationProgramAction(
     return errors;
   }
 
-  let result = await addLocationProgram({
-    active: !!formData.get('active') ? 'true' : 'false',
-    capacity: formData.get('capacity') as string ?? '',
-    director_id: formData.get('director[id]') as string ?? '',
-    location_id: id.toString(),
-    name: formData.get('name') as string ?? '',
-    name_suffix: formData.get('name-suffix') as string ?? '',
-    is_package_active: !!formData.get('promo-package') ? 'true' : 'false'
-  }, admin?.accessToken!);
+  let result = await addLocationProgram(
+    getProgramInputs(id.toString(), formData),
+    admin?.accessToken!
+  );
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
+      message: result.message ?? 'Something went wrong.',
       error: result.error ?? result.message,
       success: false
     }
   }
 
   return {
+    data: result.data,
     message: 'Successfully created a program',
-    success: false
+    success: true
   }
 }
 
@@ -92,13 +107,25 @@ const locationProgramSchema = Joi.object({
     }),
 })
 
+function getProgramInputs(id: string, formData: FormData) {
+  return {
+    active: !!formData.get('active') ? 'true' : 'false',
+    capacity: formData.get('capacity') as string ?? '',
+    director_id: formData.get('director[id]') as string ?? '',
+    location_id: id.toString(),
+    name: formData.get('name') as string ?? '',
+    name_suffix: formData.get('name-suffix') as string ?? '',
+    is_package_active: !!formData.get('promo-package') ? 'true' : 'false'
+  }
+}
+
 function locationProgramValidateErrors(formData: FormData): LocationProgramFormStateProps | undefined {
   const validate = locationProgramSchema.validate(
     {
       name: formData.get('name') ?? "",
-      address: formData.get('address') ?? "",
+      'name-suffix': formData.get('name-suffix') ?? "",
       'director[id]': formData.get('director[id]') ?? "",
-      'location-minimum-age': formData.get('location-minimum-age') ?? "",
+      'capacity': formData.get('capacity') ?? "",
     },
     {
       abortEarly: false,
