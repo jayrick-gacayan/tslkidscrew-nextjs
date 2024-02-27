@@ -1,13 +1,13 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment, Ref, forwardRef } from "react";
+import { Fragment, ReactNode, Ref, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { Fa6SolidCaretDown } from "./svg/fa6-solid-caret-down";
 import { ValidationType } from "@/types/enums/validation-type";
 
 type MyListboxProps = {
-  name: string;
+  name?: string;
   value: any;
-  placeholder: string;
+  placeholder?: string;
   onChange: (value: any) => void;
   items: any[];
   by?: string;
@@ -15,6 +15,9 @@ type MyListboxProps = {
   labelText?: string;
   errorText?: string;
   validationStatus?: ValidationType;
+  valueClassName?: (value: string, placeholder: string) => string;
+  listboxDropdownIcon?: (open: boolean) => ReactNode;
+  keyDescription: string;
 }
 
 function CustomListbox(
@@ -29,11 +32,14 @@ function CustomListbox(
     labelText,
     errorText = '',
     validationStatus,
+    valueClassName,
+    listboxDropdownIcon,
+    keyDescription,
   }: MyListboxProps,
   ref: Ref<HTMLElement> | undefined
 ) {
   return (
-    <div className="space-y-[2px] relative">
+    <div className="relative w-full">
       <Listbox ref={ref}
         value={value}
         onChange={onChange}
@@ -42,10 +48,10 @@ function CustomListbox(
         {
           ({ open, value }) => {
             let getValue = typeof value === 'string' ? (value !== '' ? value : placeholder) :
-              value ? (value.email ?? value.name) : placeholder;
+              value ? (value.email ?? value.name) : placeholder
             return (
               <>
-                <div>
+                <div className="space-y-[2px]">
                   {
                     labelText &&
                     <Listbox.Label className={
@@ -66,10 +72,10 @@ function CustomListbox(
                         listButtonClassName!
                       )
                     }>
-                    <div className={`p-2 flex-1 ${getValue === placeholder ? 'text-secondary-light' : 'text-black'}`}>{getValue}</div>
-                    <div className="p-2 text-tertiary">
-                      <Fa6SolidCaretDown className={`text-[20px] transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                    <div className={valueClassName ? valueClassName(getValue, placeholder ?? '') : ``}>
+                      {getValue}
                     </div>
+                    {listboxDropdownIcon && listboxDropdownIcon(open)}
                   </Listbox.Button>
                   {errorText !== '' && (<div className="text-danger">{errorText}</div>)}
                 </div>
@@ -91,7 +97,7 @@ function CustomListbox(
                       {items.map((value: any, index: any) => (
                         <Listbox.Option
                           as='div'
-                          key={`show-entries-admin-users-${value}${index}`}
+                          key={`${keyDescription}-${value}${index}`}
                           className={({ selected, active }) => {
                             return `p-2 hover:cursor-pointer hover:bg-primary hover:text-white ${selected ? 'bg-primary text-white' : 'bg-white text-black'}`
                           }}

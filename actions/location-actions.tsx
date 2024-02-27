@@ -60,7 +60,6 @@ export async function editLocationPlace(
   }
 
   return {
-
     message: 'Successfully updated a location.',
     success: true,
   };
@@ -71,8 +70,7 @@ export async function destroyLocationPlace(id: string) {
 
   let result = await removeLocationPlace(id, admin?.accessToken!);
 
-  console.log('result location', result)
-  revalidatePath('/admin/locations')
+  revalidatePath('/admin/locations');
 }
 
 /* helpers */

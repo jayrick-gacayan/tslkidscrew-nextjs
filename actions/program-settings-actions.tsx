@@ -14,6 +14,7 @@ import { Result } from "@/models/result";
 import { ResultStatus } from "@/types/enums/result-status";
 import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
+import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
 
 export async function updateSummerCampWeekSettingAction(
   id: number,
@@ -21,27 +22,38 @@ export async function updateSummerCampWeekSettingAction(
   formData: FormData
 ) {
   let admin: Session<Admin> | null = await auth();
+  // const rawFormData = Object.fromEntries(formData.entries())
 
+  // console.log('rawformdata', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
-    ['week-name']: Joi.string()
+    'week-name': Joi.string()
       .required()
       .messages({
         "string.empty": "Week name is required.",
         "any.required": "Week name is required",
       }),
-    ['week-capacity']: Joi.string()
+    'week-capacity': Joi.string()
       .required()
       .pattern(/^\d+$/)
       .messages({
         'string.empty': 'Capacity is required.',
         'any.required': 'Capacity is required.',
         'string.pattern.base': `Capacity must be numeric.`
-      })
+      }),
+    'week-start-date': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Week start date is required.',
+        'any.required': 'Week start date is required.',
+      }),
   })
 
+  console.log('sdfsdfsd', new Date(Date.parse(formData.get('week-start-date') as string ?? '')))
+
   let validate = updateSummerCampWeekSettingSchema.validate({
-    ['week-name']: formData.get('week-name') ?? '',
-    ['week-capacity']: formData.get('week-capacity') ?? ''
+    'week-name': formData.get('week-name') as string ?? '',
+    'week-capacity': formData.get('week-capacity') as string ?? '',
+    'week-start-date': formData.get('week-start-date') as string ?? '',
   }, { abortEarly: false });
 
   if (validate.error) {
@@ -64,6 +76,8 @@ export async function updateSummerCampWeekSettingAction(
     start_date: formData.get('week-start-date') as string ?? '',
   }, admin?.accessToken!);
 
+
+
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,
@@ -85,7 +99,7 @@ export async function updateSummerCampSwimSettingAction(
   let admin: Session<Admin> | null = await auth();
 
   let updateSummerCampSwimSettingSchema = Joi.object({
-    ['swim-price']: Joi.string()
+    'summer-camp-swim-swim-price': Joi.string()
       .required()
       .pattern(/^\d+$/)
       .messages({
@@ -95,8 +109,10 @@ export async function updateSummerCampSwimSettingAction(
       })
   })
 
+
+  console.log('swim price', formData.get('summer-camp-swim-swim-price') ?? '',)
   let validate = updateSummerCampSwimSettingSchema.validate({
-    ['swim-price']: formData.get('swim-price') ?? '',
+    'summer-camp-swim-swim-price': formData.get('summer-camp-swim-swim-price') ?? '',
   }, { abortEarly: false });
 
   if (validate.error) {
@@ -113,10 +129,10 @@ export async function updateSummerCampSwimSettingAction(
 
   let result: Result<any> = await updateSummerCampSwimSetting({
     id: id.toString(),
-    price: parseInt(formData.get('swim-price') as string) ?? 1,
-    child_record_count: formData.get('chlld-record-count') as string ?? '1',
-    week_count: formData.get('week-count') as string ?? '1',
-    with_swim_trip: formData.get('with-swim-trip') as string ?? 'false',
+    price: parseInt(formData.get('summer-camp-swim-swim-price') as string) ?? 1,
+    child_record_count: formData.get('summer-camp-swim-chlld-record-count') as string ?? '1',
+    week_count: formData.get('summer-camp-swim-week-count') as string ?? '1',
+    with_swim_trip: formData.get('summer-camp-swim-with-swim-trip') as string ?? 'false',
   }, admin?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -130,6 +146,20 @@ export async function updateSummerCampSwimSettingAction(
     success: true,
     message: 'Successfully update week setting.'
   };
+}
+
+export async function updateVacationCampSettingAction(
+  id: number,
+  prevState: VacationCampSettingFormStateProps,
+  formData: FormData
+) {
+  let admin: Session<Admin> | null = await auth();
+
+  const rawFormData = Object.fromEntries(formData.entries())
+
+  console.log('dafdfd', rawFormData)
+
+  return prevState;
 }
 
 export async function updateProgramYearCycleSettingAction(

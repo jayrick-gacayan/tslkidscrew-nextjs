@@ -12,6 +12,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import CustomListbox from "@/app/_components/listbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 
 export default function CustomerInfoForm({ parent }: { parent: Parent }) {
   const { pending } = useFormStatus();
@@ -141,7 +142,12 @@ export default function CustomerInfoForm({ parent }: { parent: Parent }) {
           placeholder='How did you hear about us?'
           onChange={(value: any) => { setHowDidYouHearAboutUs(value); }}
           items={HOW_DID_YOU_HEAR_ABOUT_US}
-          labelText="How did you hear about us" />
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          labelText="How did you hear about us"
+          keyDescription="how-did-you-hear-about-us-customer-info-form" />
       </div>
       <button className="w-48 m-auto block bg-primary text-white rounded p-2 disabled:cursor-not-allowed"
         disabled={pending}>

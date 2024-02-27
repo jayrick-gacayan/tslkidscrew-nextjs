@@ -5,20 +5,16 @@ import { Result } from "@/models/result";
 import { adminUser } from "./admin-services";
 import { locationPlace } from "./location-services";
 import { Paginate } from "@/models/paginate";
+import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
+import { LocationProgramInputs } from "@/types/input-types/location-program-input-types";
 
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
+
 
 export async function locationProgram(id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
@@ -49,7 +45,7 @@ export async function locationProgram(id: string, token: string) {
 }
 
 export async function locationPrograms(
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: SearchParamsProps,
   location_id: string,
   token: string
 ) {
@@ -59,9 +55,7 @@ export async function locationPrograms(
 
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs?${strSP}`,
-    {
-      ...headers(token!)
-    }
+    { ...authHeaders(token!) }
   )
 
   let response = await result.json();
@@ -76,23 +70,18 @@ export async function locationPrograms(
   })
 }
 
-export async function addLocationProgram({
-  name,
-  name_suffix,
-  location_id,
-  director_id,
-  active,
-  capacity,
-  is_package_active,
-}: {
-  name: string;
-  name_suffix: string;
-  location_id: string;
-  director_id: string;
-  active: string;
-  capacity: string;
-  is_package_active: string;
-}, token: string) {
+export async function addLocationProgram(
+  {
+    name,
+    name_suffix,
+    location_id,
+    director_id,
+    active,
+    capacity,
+    is_package_active,
+  }: LocationProgramInputs,
+  token: string
+) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs`,
     {
@@ -106,21 +95,21 @@ export async function addLocationProgram({
           active,
           capacity,
           is_package_active,
-          subsidized_enrollment_enabled: 'false'
         }
-
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   )
 
   try {
     let response = await result.json();
 
+    console.log('result status', result.status, location_id)
+    console.log('response', response)
     return new Result<LocationProgram>({
       ...response,
       data: response.program ?? undefined,
-      statusCode: response.status ?? result.status,
+      statusCode: result.status,
       message: response.message ?? result.statusText
     })
   }
@@ -139,7 +128,10 @@ export async function removeLocationProgram(
 ) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
-    { ...headers(token!), method: "DELETE" }
+    {
+      ...authHeaders(token!),
+      method: "DELETE"
+    }
   );
 
   let response = await result.json();
@@ -156,15 +148,13 @@ export async function updateLocationProgram(
   {
     name,
     name_suffix,
-    locationPlace,
-    director,
-  }: {
-    name: string;
-    name_suffix: string;
-    locationPlace: LocationPlace;
-    director: Admin;
-  },
-  id: string,
+    location_id,
+    director_id,
+    active,
+    capacity,
+    is_package_active,
+  }: LocationProgramInputs,
+  id: number,
   token: string
 ) {
   let result = await fetch(
@@ -173,13 +163,35 @@ export async function updateLocationProgram(
       method: 'PUT',
       body: JSON.stringify({
         program: {
-          location_id: locationPlace.id!.toString(),
+          location_id,
           name,
           name_suffix,
-          director_id: director.id!.toString(),
+          director_id,
+          active,
+          capacity,
+          is_package_active,
         }
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   )
+
+  try {
+    let response = await result.json();
+
+    return new Result<LocationProgram>({
+      ...response,
+      data: response.program ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
 }

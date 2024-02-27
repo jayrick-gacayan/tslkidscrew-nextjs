@@ -1,13 +1,11 @@
 'use client';
 
-import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import Fa6SolidSquareCheck from "@/app/_components/svg/fa6-solid-square-check";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { SetStateAction, useCallback, useMemo, useState } from "react";
-import SummerCampSwimSettingForm from "./summer-camp-swim-prices-form";
+import { useCallback, useMemo, useState } from "react";
+import SummerCampSwimSettingTableData from "./summer-camp-swim-prices-form";
 
 export default function SummerCampSwimPrices({
   summerCampSwimSettings
@@ -89,7 +87,7 @@ export default function SummerCampSwimPrices({
               {
                 weeksSwimArray.map((value) => {
                   return (
-                    <th key={`prices-${withSwim}-${value}`} className="capitalize">
+                    <th key={`prices-${withSwim}-${value}`} className="w-auto">
                       {value} Weeks or More {cbTableHeader()} Trip
                     </th>
                   );
@@ -109,9 +107,8 @@ export default function SummerCampSwimPrices({
                         return summerCampSwimSetting.child_record_count === childValue
                       }).map((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return (
-                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`}
-                            className="capitalize">
-                            <SummerCampSwimSettingForm summerCampSwimSetting={summerCampSwimSetting}
+                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`}>
+                            <SummerCampSwimSettingTableData summerCampSwimSetting={summerCampSwimSetting}
                               setFocusId={setFocusId}
                               focusId={focusId} />
                           </td>

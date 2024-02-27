@@ -1,33 +1,37 @@
 import { Admin } from "@/models/admin";
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
+import { authHeaders } from "@/types/helpers/auth-headers";
 import { AdminUserInputs } from "@/types/input-types/admin-input-types";
-
-function headers(token: string, isImage: boolean = false) {
-  let headers = { Authorization: `Bearer ${token!}` };
-  return {
-    headers: !isImage ? { ...headers, 'Content-Type': 'application/json' } : headers
-  }
-}
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export async function adminUser(id: string, token?: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Admin>({
-    ...response,
-    data: response.admins ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<Admin>({
+      ...response,
+      data: response.admins ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<Admin>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status,
+    });
+  }
+
 }
 
 export async function adminUsers(
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: SearchParamsProps,
   token?: string | null
 ) {
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
@@ -36,7 +40,7 @@ export async function adminUsers(
 
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts${strSP === '' ? '' : `?${strSP}`}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
@@ -65,10 +69,7 @@ export async function addAdminUser(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
+      ...authHeaders(token),
       body: JSON.stringify({
         admin: {
           email: email,
@@ -93,7 +94,7 @@ export async function updateAdminUser(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
       method: "POST",
-      ...headers(token!),
+      ...authHeaders(token!),
       body: JSON.stringify({
         admin: {
           email,
@@ -110,7 +111,7 @@ export async function adminUserInactive(id: number, token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
     {
       method: "DELETE",
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   );
 
@@ -129,7 +130,7 @@ export async function adminUserInactive(id: number, token: string) {
 export async function activeAdminUsers(token?: string | null) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/active_admins`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
