@@ -11,16 +11,16 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
-import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { toast, ToastContentProps } from "react-toastify";
 import { pathRevalidate } from "@/actions/common-actions";
+import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 
 export default function SummerCampWeekSettingForm({
   weekData,
 }: {
   weekData: SummerCampWeekSetting | undefined;
 }) {
-  const [startDate, setStartDate] = useState<Date | null>(!!weekData?.start_date ? new Date(weekData.start_date) : null)
+  const [startDate, setStartDate] = useState<Date | undefined>(!!weekData?.start_date ? new Date(weekData.start_date) : undefined)
   const [dataWeek, setDataWeek] = useState({
     'week-name': weekData?.name ?? '',
     'week-capacity': weekData?.capacity?.toString() ?? '',
@@ -90,16 +90,19 @@ export default function SummerCampWeekSettingForm({
             onChange={handleOnChange}
             errorText={state?.['week-name']?.errorText}
             validationStatus={state?.['week-name']?.validationStatus} />
-          <div className="space-y-1 w-full relative ">
+          <div className="space-y-1 w-full">
             <div className="font-medium">Start Date</div>
-            <DatePicker selected={startDate}
-              name="week-start-date"
-              value={!!startDate ? format(new Date(startDate), `yyyy-MM-dd`) : ''}
-              customInput={<CustomInputDefault className='bg-white' />}
-              onChange={(date) => { setStartDate(date); }}
-              calendarContainer={calendarContainer}
-              renderCustomHeader={renderCustomHeaderDefault}
-              formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)} />
+            <div className="relative w-full">
+              <PopoverReactDayPicker selected={startDate}
+                placeholder="Enter date"
+                inputName='week-start-date'
+                options={{
+                  mode: "single",
+                  selected: startDate,
+                  onSelect: setStartDate,
+                  today: startDate,
+                }} />
+            </div>
           </div>
           <InputCustom labelText="Capacity"
             id='week-capacity'

@@ -174,10 +174,11 @@ export async function updateSummerCampWeekSetting(
   , token: string
 ) {
 
+  console.log('id', id)
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/update`,
     {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify({
         summer_camp_weeks: {
           id,
@@ -191,9 +192,10 @@ export async function updateSummerCampWeekSetting(
     }
   );
 
+
   try {
     let response = await result.json();
-
+    console.log("dsfsdf", response)
     return new Result<any>({
       ...response,
       data: response.week_settings ?? [],

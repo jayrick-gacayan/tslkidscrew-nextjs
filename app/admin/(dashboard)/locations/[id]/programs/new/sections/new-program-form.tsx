@@ -12,6 +12,7 @@ import { LocationPlace } from "@/models/location";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import { redirectToPath } from "@/actions/common-actions";
 
 let programTypes = [
   'After School',
@@ -39,8 +40,12 @@ export default function NewProgramForm({
   const [program, setProgram] = useState<string>('');
 
   useEffect(() => {
-    let { message, success } = state;
-    if (success !== undefined) {
+    async function pathToBeRedirected(locationPlaceId: number, id: number) {
+      await redirectToPath(`/admin/locations/${locationPlaceId}/programs/${id}`);
+    }
+    if (state?.success !== undefined) {
+      let { message, success, data } = state;
+
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -50,8 +55,14 @@ export default function NewProgramForm({
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       })
+
+      if (success && data) {
+        pathToBeRedirected(data.location_id, data.id!);
+      }
     }
-  }, [state])
+  }, [
+    state
+  ])
 
   return (
     <form action={formAction} className="space-y-4" id='new-location-program'>
@@ -93,7 +104,10 @@ export default function NewProgramForm({
           by="id"
           errorText={state?.['director[id]']?.errorText}
           validationStatus={state?.['director[id]']?.validationStatus}
-          keyDescription="new-program-form-director" />
+          keyDescription="new-program-form-director"
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }} />
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
             <InputCustom labelText="Capacity"
