@@ -32,7 +32,6 @@ export default auth((req: NextAuthRequest) => {
       else if (role === 'parent') {
 
         if (PARENT_PUBLIC_ROUTES.includes(pathname) || pathname.includes('admin')) {
-          console.log('I am here...')
           if (!rest.first_name) {
             return NextResponse.redirect(`${req.nextUrl.origin}/parent/customer-info`);
           }

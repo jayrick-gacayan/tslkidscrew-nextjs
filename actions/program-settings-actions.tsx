@@ -26,25 +26,34 @@ export async function updateSummerCampWeekSettingAction(
 
   // console.log('rawformdata', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
-    ['week-name']: Joi.string()
+    'week-name': Joi.string()
       .required()
       .messages({
         "string.empty": "Week name is required.",
         "any.required": "Week name is required",
       }),
-    ['week-capacity']: Joi.string()
+    'week-capacity': Joi.string()
       .required()
       .pattern(/^\d+$/)
       .messages({
         'string.empty': 'Capacity is required.',
         'any.required': 'Capacity is required.',
         'string.pattern.base': `Capacity must be numeric.`
-      })
+      }),
+    'week-start-date': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Week start date is required.',
+        'any.required': 'Week start date is required.',
+      }),
   })
 
+  console.log('sdfsdfsd', new Date(Date.parse(formData.get('week-start-date') as string ?? '')))
+
   let validate = updateSummerCampWeekSettingSchema.validate({
-    ['week-name']: formData.get('week-name') ?? '',
-    ['week-capacity']: formData.get('week-capacity') ?? ''
+    'week-name': formData.get('week-name') as string ?? '',
+    'week-capacity': formData.get('week-capacity') as string ?? '',
+    'week-start-date': formData.get('week-start-date') as string ?? '',
   }, { abortEarly: false });
 
   if (validate.error) {
@@ -67,13 +76,14 @@ export async function updateSummerCampWeekSettingAction(
     start_date: formData.get('week-start-date') as string ?? '',
   }, admin?.accessToken!);
 
+
+
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,
       message: result.message,
     }
   }
-
 
   return {
     success: true,
