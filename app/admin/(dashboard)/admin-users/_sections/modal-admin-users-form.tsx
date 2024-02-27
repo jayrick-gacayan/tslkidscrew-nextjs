@@ -5,7 +5,6 @@ import {
   FormEvent,
   Fragment,
   useCallback,
-  useContext,
   useEffect,
   useMemo
 } from "react";
@@ -28,10 +27,12 @@ import { RequestStatus } from "@/types/enums/request-status";
 import InputCustom from "@/app/_components/input-custom";
 import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
-import { revalidateUsers } from "../_actions/admin-user-actions";
 import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
+import { usePathname } from "next/navigation";
+import { pathRevalidate } from "@/actions/common-actions";
 
 export default function ModalAdminUsersForm() {
+  const pathname = usePathname();
   const { state, modalOpen, modalType, setDumpData } = useAdminUserHook();
   const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
@@ -74,8 +75,16 @@ export default function ModalAdminUsersForm() {
 
 
   useEffect(() => {
-    async function userRevalidate() {
-      await revalidateUsers('/admin/admin-users');
+    async function pathToRevalidate(pathName: string, id?: number) {
+      if (pathname !== '/admin/admin-users') {
+
+        await pathRevalidate(pathName);
+      }
+      else {
+        await pathRevalidate('/admin/admin-users');
+      }
+
+
     }
 
     switch (requestStatus) {
@@ -85,7 +94,7 @@ export default function ModalAdminUsersForm() {
         }
         break;
       case RequestStatus.SUCCESS:
-        userRevalidate();
+        pathToRevalidate(pathname);
         formReset();
         break;
     }
@@ -94,6 +103,7 @@ export default function ModalAdminUsersForm() {
     requestStatus,
     type,
     formReset,
+    pathname,
   ])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -102,6 +112,8 @@ export default function ModalAdminUsersForm() {
     reduxStore.dispatch(adminUserRequestStatusSet(RequestStatus.WAITING));
     reduxStore.dispatch(adminUserFormSubmitted())
   }
+
+  console.log('pathname', pathname)
 
   return (
     <Transition show={open} as={Fragment}>

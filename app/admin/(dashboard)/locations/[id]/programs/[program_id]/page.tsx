@@ -33,7 +33,7 @@ export default async function Page({
       <div className="bg-secondary p-6">
         <div className="columns-1 lg:columns-2">
           <InfoContainer label='Name' data={locationProgramData.name!} />
-          <InfoContainer label='Suffix' data='n/a' />
+          <InfoContainer label='Suffix' data={locationProgramData.name_suffix!} />
           <InfoContainer label='Type' data='Daycare' />
           <InfoContainer label='Status' data={!!locationProgramData.active ? 'Active' : 'Inactive'} />
           <InfoContainer label='Package Activation' data={!!locationProgramData.is_package_active ? 'Active' : 'Inactive'} />

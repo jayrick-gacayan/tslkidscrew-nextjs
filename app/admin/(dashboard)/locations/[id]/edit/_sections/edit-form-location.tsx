@@ -8,7 +8,7 @@ import { editLocationPlace } from "@/actions/location-actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { Admin } from "@/models/admin";
 import { toast, ToastContentProps } from "react-toastify";
-import { redirectToURL } from "@/actions/common-actions";
+import { redirectToPath } from "@/actions/common-actions";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
@@ -33,14 +33,11 @@ export function EditFormLocation({
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
   useEffect(() => {
-    if (state?.success !== undefined) {
+    async function pathToBeRedirected() {
+      await redirectToPath(`/admin/locations/${locationPlace.id!}`,)
+    }
 
-      async function redirectToPath() {
-        await redirectToURL(
-          `/admin/locations/${locationPlace.id!}`,
-          `/admin/locations/${locationPlace.id!}`,
-        )
-      }
+    if (state?.success !== undefined) {
 
       let { message, success } = state;
 
@@ -57,7 +54,7 @@ export function EditFormLocation({
       })
 
       if (success) {
-        redirectToPath();
+        pathToBeRedirected();
       }
     }
   }, [
