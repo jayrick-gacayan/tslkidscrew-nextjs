@@ -41,7 +41,7 @@ export default function ProgramsHeader({
             redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} items={[10, 20, 30]} />
         <div>
-          <Link href='/admin/locations/1/programs/new'
+          <Link href={`/admin/locations/${location_id}/programs/new`}
             className="rounded text-white bg-primary px-4 py-2 text-sm block text-center">
             Create a New Program
           </Link>
