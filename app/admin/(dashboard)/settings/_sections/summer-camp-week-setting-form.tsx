@@ -11,7 +11,6 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
-import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { toast, ToastContentProps } from "react-toastify";
 import { pathRevalidate } from "@/actions/common-actions";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
@@ -96,7 +95,7 @@ export default function SummerCampWeekSettingForm({
             <div className="relative w-full">
               <PopoverReactDayPicker selected={startDate}
                 placeholder="Enter date"
-                inputName='week-start-dates'
+                inputName='week-start-date'
                 options={{
                   mode: "single",
                   selected: startDate,

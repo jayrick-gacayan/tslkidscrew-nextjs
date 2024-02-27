@@ -11,14 +11,23 @@ export async function adminUser(id: string, token?: string) {
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Admin>({
-    ...response,
-    data: response.admins ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<Admin>({
+      ...response,
+      data: response.admins ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<Admin>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status,
+    });
+  }
+
 }
 
 export async function adminUsers(

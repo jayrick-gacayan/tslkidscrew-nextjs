@@ -48,7 +48,7 @@ function CustomListbox(
         {
           ({ open, value }) => {
             let getValue = typeof value === 'string' ? (value !== '' ? value : placeholder) :
-              value ? (value.email ?? value.name) : placeholder ?? '';
+              value ? (value.email ?? value.name) : placeholder
             return (
               <>
                 <div className="space-y-[2px]">
