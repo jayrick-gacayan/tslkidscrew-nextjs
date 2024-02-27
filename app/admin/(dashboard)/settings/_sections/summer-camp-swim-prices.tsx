@@ -87,7 +87,7 @@ export default function SummerCampSwimPrices({
               {
                 weeksSwimArray.map((value) => {
                   return (
-                    <th key={`prices-${withSwim}-${value}`} className="capitalize">
+                    <th key={`prices-${withSwim}-${value}`} className="w-auto">
                       {value} Weeks or More {cbTableHeader()} Trip
                     </th>
                   );
