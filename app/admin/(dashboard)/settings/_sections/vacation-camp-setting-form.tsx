@@ -1,24 +1,28 @@
-import { ChangeEvent, Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState
+} from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { addYears } from "date-fns";
 import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
-import calendarContainerRange from "@/app/_components/react-datepicker/calendar-container-range";
-import renderCustomHeaderRange from "@/app/_components/react-datepicker/render-custom-header-range";
 import { renderCustomHeaderYearOnly } from "@/app/_components/react-datepicker/render-custom-header-year-only";
-import renderDayContents from "@/app/_components/react-datepicker/render-day-contents";
 import { renderMonthContent } from "@/app/_components/react-datepicker/render-month-content";
 import DatePicker from "react-datepicker";
 import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import ListboxIconDropdownTwo from "@/app/_components/listbox-icon-dropdown-two";
 import CustomListbox from "@/app/_components/listbox-custom";
-import DatepickerCustomInput from "@/app/_components/react-datepicker/datepicker-custom-input-range";
 import DatepickerMonthYearInputCustom from '@/app/_components/react-datepicker/datepicker-month-year-custom-input';
 import { parse, format } from 'date-fns';
 import { toFirstUpperCase } from "@/types/helpers/string-helpers";
 import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
 import { updateVacationCampSettingAction } from "@/actions/program-settings-actions";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
@@ -52,6 +56,14 @@ export default function VacationCampSettingForm({
   }, [
     vacationCampData
   ])
+
+  const [daysSelection, setDaysSelection] = useState<Date[] | undefined>(
+    arrDays.length === 0 ? [today] :
+      arrDays.map((value: any) => {
+        return cbParseDate(value.toString(), 'yyyy-MMMM-d')
+      })
+  );
+
   const [state, formAction] = useFormState(
     updateVacationCampSettingAction.bind(null, vacationCampData?.id!),
     {
@@ -61,10 +73,7 @@ export default function VacationCampSettingForm({
   )
   const { pending } = useFormStatus();
   const [monthYearDate, setMonthYearDate] = useState<Date | null>(cbParseDate());
-  const [rangeDate, setRangeDate] = useState<[Date | null, Date | null]>([
-    arrDays.length === 0 ? today : cbParseDate(arrDays[0]?.toString(), 'yyyy-MMMM-d'),
-    arrDays.length === 0 ? today : cbParseDate(arrDays[arrDays.length - 1]?.toString(), 'yyyy-MMMM-d'),
-  ]);
+
 
   useEffect(() => {
     setDataVacationCamp({
@@ -74,10 +83,13 @@ export default function VacationCampSettingForm({
 
     setMonthYearDate(cbParseDate());
 
-    setRangeDate([
-      arrDays.length === 0 ? today : cbParseDate(arrDays[0]?.toString(), 'yyyy-MMMM-d'),
-      arrDays.length === 0 ? today : cbParseDate(arrDays[arrDays.length - 1]?.toString(), 'yyyy-MMMM-d'),
-    ])
+    setDaysSelection(
+      arrDays.length === 0 ? [today] :
+        arrDays.map((value: any) => {
+          return cbParseDate(value.toString(), 'yyyy-MMMM-d')
+        })
+    )
+
   }, [vacationCampData]);
 
   function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
@@ -162,19 +174,20 @@ export default function VacationCampSettingForm({
                 <p className="font-semibold text-black">Date</p>
               </div>
               <div className="w-full lg:flex-1 relative">
-                <DatePicker selected={rangeDate[0]}
-                  name='vacation-camp-date-range'
-                  selectsRange
-                  monthsShown={2}
-                  customInput={<DatepickerCustomInput />}
-                  onChange={(date) => { setRangeDate(date) }}
-                  startDate={rangeDate[0]}
-                  endDate={rangeDate[1]}
-                  calendarContainer={calendarContainerRange}
-                  showPreviousMonths
-                  formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
-                  renderDayContents={renderDayContents}
-                  renderCustomHeader={renderCustomHeaderRange} />
+                <PopoverReactDayPicker selected={daysSelection}
+                  placeholder="Enter date"
+                  inputName='vacation-camp-dates'
+                  options={{
+                    mode: "multiple",
+                    defaultMonth: monthYearDate ?? undefined,
+                    selected: daysSelection,
+                    onSelect: (dates: Date[]) => {
+                      console.log('date', dates.sort((a, b) => {
+                        return a.getTime() - b.getTime();
+                      }))
+                      setDaysSelection(dates)
+                    }
+                  }} />
               </div>
             </div>
           </div>

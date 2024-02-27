@@ -19,7 +19,6 @@ export async function locationPlaces(
 
   let response = await result.json();
 
-  console.log('response', response)
   return new Result<Paginate<LocationPlace>>({
     ...response,
     data: {
@@ -36,8 +35,9 @@ export async function locationPlace(id: string, token?: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     { ...authHeaders(token!) }
   );
-  let response = await result.json();
-  if (result.status === 200) {
+
+  try {
+    let response = await result.json();
 
     return new Result<LocationPlace>({
       ...response,
@@ -45,15 +45,15 @@ export async function locationPlace(id: string, token?: string) {
       statusCode: result.status,
       response: response
     });
+
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
   }
-
-
-  return new Result<LocationPlace>({
-    ...response,
-    data: undefined,
-    statusCode: result.status,
-    response: response
-  });
 }
 
 export async function createLocationPlace({
@@ -79,14 +79,23 @@ export async function createLocationPlace({
     }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<LocationPlace>({
-    ...response,
-    data: response.location ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<LocationPlace>({
+      ...response,
+      data: response.location ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
 }
 
 export async function updateLocationPlace(
@@ -115,14 +124,24 @@ export async function updateLocationPlace(
     }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<LocationPlace>({
-    ...response,
-    data: response.location ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<LocationPlace>({
+      ...response,
+      data: response.location ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
+
 }
 
 export async function removeLocationPlace(
