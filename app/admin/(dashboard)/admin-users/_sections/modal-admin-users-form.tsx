@@ -1,22 +1,14 @@
 'use client';
 
-import {
-  Fragment,
-  useCallback,
-  useMemo,
-  useState
-} from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
-
 import AdminUserForm from "./admin-user-form";
 
 export default function ModalAdminUsersForm() {
-  const [randomId, setRandomId] = useState(Math.random());
   const { state, modalOpen, modalType, setDumpData } = useAdminUserHook();
 
   const { type, open } = useMemo(() => {
-
     return {
       type: state ? state?.modal?.type : '',
       open: state ? state?.modal?.open : false
@@ -29,7 +21,6 @@ export default function ModalAdminUsersForm() {
 
   const formReset = useCallback(() => {
     modalOpen(false);
-    setRandomId(Math.random())
     let timeout = setTimeout(() => {
       modalType('')
       setDumpData(undefined);
@@ -65,7 +56,7 @@ export default function ModalAdminUsersForm() {
           leaveTo="opacity-0 scale-95">
           <Dialog.Panel as="div" className='bg-white relative z-[50] space-y-8 p-8 w-[448px] rounded drop-shadow'>
             <h1 className='font-medium text-[24px]'>{type === 'add' ? 'Add' : 'Edit'} Admin Account</h1>
-            <AdminUserForm key={randomId} type={type} data={data} formReset={formReset} />
+            <AdminUserForm type={type} data={data} formReset={formReset} />
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>

@@ -30,19 +30,4 @@ export class Result<T> {
       default: return ResultStatus.NONE;
     }
   }
-
-  get getResponseData() {
-    return {
-      data: this.response,
-      success: this.success,
-      statusCode: this.statusCode,
-      response: this.response,
-      message: this.message,
-      errors: this.errors,
-      error: this.error,
-      resultStatus: this.resultStatus
-    }
-  }
 }
-
-

@@ -20,7 +20,6 @@ export default function SummerCampSwimSettingTableData({
 }) {
   const formContainerRef = useRef<HTMLDivElement>(null);
 
-
   const [state, formAction] = useFormState(
     updateSummerCampSwimSettingAction.bind(null, summerCampSwimSetting.id!),
     {

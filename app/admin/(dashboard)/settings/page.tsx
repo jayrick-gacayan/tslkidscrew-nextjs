@@ -4,6 +4,7 @@ import TabsContainer from "./_sections/tabs-container";
 import { Admin } from "@/models/admin";
 import { Session } from "next-auth";
 import {
+  getBeforeOrAfterSchoolSettings,
   getProgramYearCycleSettings,
   getSummerCampPromoSettings,
   getSummerCampSwimPrices,
@@ -16,19 +17,34 @@ import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import { VacationCampSetting } from "@/models/vacation-camp-setting";
+import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
 
 export default async function Page() {
   let currentAdmin: Session<Admin> | null = await auth();
 
-  let summerCampWeekSettings: Result<SummerCampWeekSetting[]> = await getSummerCampWeekPrices(currentAdmin?.accessToken!);
-  let summerCampSwimSettings: Result<SummerCampSwimSetting[]> = await getSummerCampSwimPrices(currentAdmin?.accessToken!);
-  let summerCampPromoSettings: Result<SummerCampPromoSetting[]> = await getSummerCampPromoSettings(currentAdmin?.accessToken!);
+  const [
+    summerCampWeekSettings,
+    summerCampSwimSettings,
+    summerCampPromoSettings,
+    vacationCampSettings,
+    programYearCycleSetting,
+    beforeOrAfterSchoolSettings,
+  ]: [
+      Result<SummerCampWeekSetting[]>,
+      Result<SummerCampSwimSetting[]>,
+      Result<SummerCampPromoSetting[]>,
+      Result<VacationCampSetting[]>,
+      Result<ProgramYearCycleSetting>,
+      Result<BeforeOrAfterSchoolSetting[]>
+    ] = await Promise.all([
+      getSummerCampWeekPrices(currentAdmin?.accessToken!),
+      getSummerCampSwimPrices(currentAdmin?.accessToken!),
+      getSummerCampPromoSettings(currentAdmin?.accessToken!),
+      getVacationCampSchedulesSettings(currentAdmin?.accessToken!),
+      getProgramYearCycleSettings(currentAdmin?.accessToken!),
+      getBeforeOrAfterSchoolSettings(currentAdmin?.accessToken!, '2024-2025')
+    ]);
 
-  let vacationCampSettings: Result<VacationCampSetting[]> = await getVacationCampSchedulesSettings(currentAdmin?.accessToken!);
-  let programYearCycleSetting: Result<ProgramYearCycleSetting> = await getProgramYearCycleSettings(currentAdmin?.accessToken!);
-
-  // console.log('promos ', summerCampPromoSettings);
-  // console.log('vacation camp ', vacationCampScheduleSetttings)
   return (
     <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-4">
       <AdminHeaderWithEntries headerText='Settings' />
@@ -36,7 +52,8 @@ export default async function Page() {
         summerCampSwimSettings={summerCampSwimSettings.data ?? []}
         summerCampPromoSettings={summerCampPromoSettings.data ?? []}
         programYearCycleSetting={programYearCycleSetting.data!}
-        vacationCampSettings={vacationCampSettings.data ?? []} />
+        vacationCampSettings={vacationCampSettings.data ?? []}
+        beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings.data ?? []} />
     </div>
   )
 }
