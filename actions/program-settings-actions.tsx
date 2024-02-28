@@ -22,9 +22,7 @@ export async function updateSummerCampWeekSettingAction(
   formData: FormData
 ) {
   let admin: Session<Admin> | null = await auth();
-  // const rawFormData = Object.fromEntries(formData.entries())
 
-  // console.log('rawformdata', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
     'week-name': Joi.string()
       .required()
@@ -47,8 +45,6 @@ export async function updateSummerCampWeekSettingAction(
         'any.required': 'Week start date is required.',
       }),
   })
-
-  console.log('sdfsdfsd', new Date(Date.parse(formData.get('week-start-date') as string ?? '')))
 
   let validate = updateSummerCampWeekSettingSchema.validate({
     'week-name': formData.get('week-name') as string ?? '',
@@ -109,8 +105,6 @@ export async function updateSummerCampSwimSettingAction(
       })
   })
 
-
-  console.log('swim price', formData.get('summer-camp-swim-swim-price') ?? '',)
   let validate = updateSummerCampSwimSettingSchema.validate({
     'summer-camp-swim-swim-price': formData.get('summer-camp-swim-swim-price') ?? '',
   }, { abortEarly: false });
@@ -154,10 +148,6 @@ export async function updateVacationCampSettingAction(
   formData: FormData
 ) {
   let admin: Session<Admin> | null = await auth();
-
-  const rawFormData = Object.fromEntries(formData.entries())
-
-  console.log('dafdfd', rawFormData)
 
   return prevState;
 }

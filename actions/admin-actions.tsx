@@ -16,8 +16,6 @@ export async function addAdminUserAction(
 ) {
   let admin: Session<Admin> = await auth();
 
-  const rawFormData = Object.fromEntries(formData.entries())
-  console.log('rawformdata add', rawFormData)
   let errors = adminUserFormValidate(formData);
 
   if (errors) { return errors; }
@@ -50,8 +48,6 @@ export async function updateAdminUserAction(
 
   formData.set('admin-user-email', email)
 
-  const rawFormData = Object.fromEntries(formData.entries())
-  console.log('rawformdata add', rawFormData)
   let errors = adminUserFormValidate(formData);
 
   if (errors) { return errors; }
