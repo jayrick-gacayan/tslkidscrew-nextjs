@@ -2,8 +2,6 @@
 
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import ShowEntriesSelect from "../../../../_components/show-entries-select";
-import { reduxStore } from "@/react-redux/redux-store";
-import { modalFormOpenStateSet, modalFormTypeSet } from "../_redux/admin-users-slice";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 
@@ -46,8 +44,6 @@ export default function AdminUsersHeader({
             onClick={() => {
               modalOpen(true);
               modalType('add');
-              reduxStore.dispatch(modalFormOpenStateSet(true));
-              reduxStore.dispatch(modalFormTypeSet('add'));
             }}>
             Add a New Admin User
           </button>
