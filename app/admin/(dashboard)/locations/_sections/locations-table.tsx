@@ -4,7 +4,7 @@ import LocationTableClient from "./location-table-client";
 export default function LocationsTable({ locationPlaces }: { locationPlaces: LocationPlace[] }) {
 
   return (
-    <div className={`block overflow-auto rounded bg-secondary h-[448px]`}>
+    <div className={`block overflow-auto rounded bg-secondary ${locationPlaces.length > 10 ? 'h-[520px]' : 'h-auto'}`}>
       <table className="min-w-[1024px] w-full">
         <thead>
           <tr className="bg-secondary-light [&>th]:text-sm [&>th]:font-medium [&>th]:px-3 [&>th]:py-2">

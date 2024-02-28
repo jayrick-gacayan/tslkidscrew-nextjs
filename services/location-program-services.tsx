@@ -123,7 +123,7 @@ export async function addLocationProgram(
 }
 
 export async function removeLocationProgram(
-  id: string,
+  id: number,
   token: string
 ) {
   let result = await fetch(

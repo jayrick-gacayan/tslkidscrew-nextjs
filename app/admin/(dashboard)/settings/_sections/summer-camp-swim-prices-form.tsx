@@ -20,7 +20,6 @@ export default function SummerCampSwimSettingTableData({
 }) {
   const formContainerRef = useRef<HTMLDivElement>(null);
 
-
   const [state, formAction] = useFormState(
     updateSummerCampSwimSettingAction.bind(null, summerCampSwimSetting.id!),
     {
@@ -53,10 +52,6 @@ export default function SummerCampSwimSettingTableData({
     state,
     setFocusId,
   ])
-
-  if (focusId === summerCampSwimSetting.id) {
-    console.log('state', summerCampSwimSetting)
-  }
 
   return (
     <div ref={formContainerRef}

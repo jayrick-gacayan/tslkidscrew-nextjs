@@ -1,3 +1,4 @@
+import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { Result } from "@/models/result";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
@@ -98,7 +99,6 @@ export async function getSummerCampSwimPrices(token: string) {
       statusCode: result.status,
     })
   }
-
 }
 
 export async function updateSummerCampSwimSetting(
@@ -244,4 +244,17 @@ export async function updateVacationCampScheduleSetting(token: string) {
 
 }
 
-export async function beforeOrAfterSchoolPromos(token: string, cycleYear: string) { }
+export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/edit-all?year_cycle=${cycleYear}`,
+    { ...authHeaders(token) }
+  );
+
+  let response = await result.json();
+
+  return new Result<BeforeOrAfterSchoolSetting[]>({
+    response: response,
+    data: response.master_prices ?? [],
+    statusCode: result.status,
+  })
+}

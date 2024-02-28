@@ -65,7 +65,7 @@ export async function editLocationPlace(
   };
 }
 
-export async function destroyLocationPlace(id: string) {
+export async function removeLocationPlaceAction(id: string) {
   let admin: Session<Admin> | null = await auth();
 
   let result = await removeLocationPlace(id, admin?.accessToken!);
@@ -106,10 +106,10 @@ const locationSchema = Joi.object({
 function locationPlaceValidateErrors(formData: FormData): LocationPlaceFormStateProps | undefined {
   const validate = locationSchema.validate(
     {
-      name: formData.get('name') ?? "",
-      address: formData.get('address') ?? "",
-      'director[id]': formData.get('director[id]') ?? "",
-      'location-minimum-age': formData.get('location-minimum-age') ?? "",
+      name: formData.get('name') as string ?? "",
+      address: formData.get('address') as string ?? "",
+      'director[id]': formData.get('director[id]') as string ?? "",
+      'location-minimum-age': formData.get('location-minimum-age') as string ?? "",
     },
     {
       abortEarly: false,

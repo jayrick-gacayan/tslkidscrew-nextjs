@@ -50,3 +50,17 @@ export function getMonthNumber(strMon: string) {
     default: return 11;
   }
 }
+
+export function dateString(
+  date: string,
+  options?: Intl.DateTimeFormatOptions
+) {
+  return new Date(date).toLocaleDateString('en-US', options);
+}
+
+export function dateTimeString(
+  date: string,
+  options?: Intl.DateTimeFormatOptions
+) {
+  return new Date(date).toLocaleString('en-US', options);
+}
