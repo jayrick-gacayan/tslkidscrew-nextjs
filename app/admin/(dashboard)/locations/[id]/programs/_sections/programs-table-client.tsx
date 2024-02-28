@@ -40,7 +40,7 @@ export default function ProgramsTableClient({
         setToastStatus('none');
         break;
     }
-  }, [toastStatus, programId]);
+  }, [toastStatus, programId, location_id]);
 
   const showSwal = async (program: LocationProgram) => {
     const { id, name_suffix } = program

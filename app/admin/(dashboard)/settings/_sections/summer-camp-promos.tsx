@@ -1,13 +1,7 @@
 'use client';
 
-import CustomCheckbox from "@/app/_components/custom-checkbox";
-import InputCustom from "@/app/_components/input-custom";
-import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { Listbox, Transition } from "@headlessui/react";
-import { capitalCase, noCase } from "change-case";
-import { SetStateAction, useMemo, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useMemo, useState } from "react";
 import SummerCampPromoPricesForm from "./summer-camp-promo-prices-form";
 
 export default function SummerCampPromos({
@@ -29,11 +23,21 @@ export default function SummerCampPromos({
     summerCampPromoSettings
   ]);
 
+  const weekNumbers: number[] = useMemo(() => {
+    return summerCampPromoSettings.filter((val: SummerCampPromoSetting, index: number, current: SummerCampPromoSetting[]) => {
+      let tempArr = current.map((val: SummerCampPromoSetting) => { return val.week_count });
+
+      return tempArr.indexOf(val.week_count) === index;
+    }).map((val: SummerCampPromoSetting) => { return val.week_count!; })
+  }, [summerCampPromoSettings])
+
+  console.log('dsfdsfsdf', summerCampPromoSettings)
   return (
     <div className="space-y-4 pt-4">
       <SummerCampPromoPricesForm weekStr={weekStr}
         setWeekStr={setWeekStr}
-        summerCampPromoData={weekDataMemo!} />
+        summerCampPromoData={weekDataMemo!}
+        weekNumbers={weekNumbers} />
     </div>
   )
 }

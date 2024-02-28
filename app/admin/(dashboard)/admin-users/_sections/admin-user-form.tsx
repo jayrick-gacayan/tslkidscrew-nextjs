@@ -5,7 +5,7 @@ import InputCustom from "@/app/_components/input-custom";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { AdminUserFormStateProps } from "@/types/props/admin-user-form-state-props";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
 
@@ -18,6 +18,7 @@ export default function AdminUserForm({
   data: any;
   formReset: () => void;
 }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const pathname = usePathname();
   const [state, formAction] = useFormState(
     type === 'update' ? updateAdminUserAction.bind(null, data?.email ?? '') : addAdminUserAction,
@@ -27,6 +28,7 @@ export default function AdminUserForm({
     } as AdminUserFormStateProps
   )
   const { pending } = useFormStatus();
+
 
   useEffect(() => {
     async function pathToRevalidate(pathName: string) {
@@ -49,6 +51,7 @@ export default function AdminUserForm({
 
       if (success) {
         pathToRevalidate(pathname);
+        formRef.current?.reset();
         formReset();
       }
     }
@@ -62,6 +65,7 @@ export default function AdminUserForm({
 
   return (
     <form action={formAction}
+      ref={formRef}
       className="space-y-8">
       <div className="space-y-4">
         <InputCustom labelText="Email"
@@ -78,7 +82,6 @@ export default function AdminUserForm({
           id="admin-user-name"
           name='admin-user-name'
           type="text"
-
           placeholder="Name: "
           defaultValue={data?.name ?? ''}
           className="bg-secondary border-0"
@@ -98,12 +101,14 @@ export default function AdminUserForm({
         id={`${type}-is-super-admin`}
         name="admin-user-is-super-admin"
         defaultChecked={data?.is_super_admin ?? false} />
-
       <div className="flex items-center justify-end gap-4">
         <button type='button'
           className='bg-white text-primary p-2 disabled:cursor-not-allowed'
           disabled={pending}
-          onClick={formReset}>Cancel</button>
+          onClick={() => {
+            formReset()
+            formRef.current?.reset();
+          }}>Cancel</button>
         <button type="submit"
           className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
           disabled={pending}>

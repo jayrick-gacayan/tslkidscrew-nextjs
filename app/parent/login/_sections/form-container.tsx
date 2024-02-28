@@ -37,8 +37,6 @@ export default function FormContainer() {
 
   }, [state]);
 
-  console.log('state', state)
-
   return (
     <form action={formAction} ref={formRef} className='space-y-4'>
       <LoginForm state={state} role='parent' />
