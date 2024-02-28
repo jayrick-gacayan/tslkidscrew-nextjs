@@ -119,9 +119,6 @@ export async function registerParentAction(
     }
   }
 
-  console.log('password', formData.get('password') as string ?? '');
-  console.log('email', formData.get('email') as string ?? '');
-
   return {
     password: fieldInputValue(formData.get('password') as string ?? ''),
     email: fieldInputValue(formData.get('email') as string ?? ''),

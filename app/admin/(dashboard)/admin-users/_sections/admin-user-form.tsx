@@ -60,8 +60,6 @@ export default function AdminUserForm({
     state
   ]);
 
-  console.log('state', state)
-
   return (
     <form action={formAction}
       className="space-y-8">

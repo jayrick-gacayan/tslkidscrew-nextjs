@@ -5,11 +5,11 @@ import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidTrashCan from "@/app/_components/svg/fa6-solid-trash-can";
 import { LocationProgram } from "@/models/location-program";
+import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ToastContentProps, toast } from "react-toastify";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { SweetAlertResult } from "sweetalert2";
 
 export default function ProgramsTableClient({
   location_id,
@@ -42,54 +42,39 @@ export default function ProgramsTableClient({
     }
   }, [toastStatus, programId]);
 
-  const showSwal = (program: LocationProgram) => {
+  const showSwal = async (program: LocationProgram) => {
     const { id, name_suffix } = program
-    withReactContent(Swal).fire({
-      html: (
-        <div className="space-y-[4px] text-center font-semibold">
-          <div className="text-[20px]">Are you sure you want to delete the program</div>
-          <div className="text-[28px]">{name_suffix!}</div>
-        </div>
-      ),
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        actions: 'flex gap-2',
-        confirmButton: 'bg-primary text-white p-2 rounded',
-        cancelButton: 'bg-danger text-white p-2 rounded',
-      },
-      showCancelButton: true,
-      buttonsStyling: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setDataPrograms(dataPrograms.filter((dataProgram: LocationProgram) => {
-          return dataProgram.id !== id
-        }));
-        setProgramId(id)
-        toast((props: ToastContentProps<LocationProgram>) => {
-          return (
-            <div className="text-black flex gap-2">
-              <div className="flex-1">{props.data.name} has been deleted from the programs list.</div>
-              <div className="underline text-primary"
-                onClick={() => {
-                  setDataPrograms(programs);
-                  setProgramId(undefined);
-                  props.closeToast();
-                }}>
-                Undo
-              </div>
+
+    let result: SweetAlertResult<any> = await confirmSwalInfo("Are you sure you want to delete", name_suffix!);
+
+    if (result.isConfirmed) {
+      setDataPrograms(dataPrograms.filter((dataProgram: LocationProgram) => {
+        return dataProgram.id !== id
+      }));
+      setProgramId(id)
+      toast((props: ToastContentProps<LocationProgram>) => {
+        return (
+          <div className="text-black flex gap-2">
+            <div className="flex-1">{props.data.name} has been deleted from the programs list.</div>
+            <div className="underline text-primary"
+              onClick={() => {
+                setDataPrograms(programs);
+                setProgramId(undefined);
+                props.closeToast();
+              }}>
+              Undo
             </div>
-          )
-        }, {
-          data: program,
-          toastId: `program-${id}`,
-          type: 'success',
-          hideProgressBar: true,
-          onClose: (props) => { setToastStatus('closed') },
-          onOpen: (props) => { setToastStatus('opened') }
-        })
-      }
-    });
+          </div>
+        )
+      }, {
+        data: program,
+        toastId: `program-${id}`,
+        type: 'success',
+        hideProgressBar: true,
+        onClose: (props) => { setToastStatus('closed') },
+        onOpen: (props) => { setToastStatus('opened') }
+      })
+    }
   }
 
   return (
@@ -115,7 +100,7 @@ export default function ProgramsTableClient({
                     className="text-primary block">
                     <Fa6SolidEye />
                   </Link>
-                  <button onClick={() => { showSwal(locationProgram); }}
+                  <button onClick={async () => { await showSwal(locationProgram); }}
                     className='text-danger cursor-pointer disabled:cursor-not-allowed'
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
                     <Fa6SolidTrashCan />
