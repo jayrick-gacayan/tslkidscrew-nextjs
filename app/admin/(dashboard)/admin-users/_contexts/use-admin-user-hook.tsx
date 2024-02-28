@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { AdminUserContext } from "./admin-users-context"
 
 export function useAdminUserHook() {
-  const context = useContext(AdminUserContext);
+  const context = useContext<any>(AdminUserContext);
 
   if (!context) {
     throw new Error(`useAdminUserHook must be used within a AdminUserProvider`)

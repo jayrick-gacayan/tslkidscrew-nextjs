@@ -29,8 +29,6 @@ export default function SummerCampPromos({
     summerCampPromoSettings
   ]);
 
-
-  // console.log('weekdata', weekDataMemo!)
   return (
     <div className="space-y-4 pt-4">
       <SummerCampPromoPricesForm weekStr={weekStr}

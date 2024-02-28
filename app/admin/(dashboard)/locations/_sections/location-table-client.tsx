@@ -1,15 +1,15 @@
 'use client';
 
-import { destroyLocationPlace } from "@/actions/location-actions";
+import { removeLocationPlaceAction } from "@/actions/location-actions";
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidSchoolCircleXmark from "@/app/_components/svg/fa6-solid-school-circle-xmark";
 import { LocationPlace } from "@/models/location"
+import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast, ToastContentProps } from "react-toastify";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { SweetAlertResult } from "sweetalert2";
 
 export default function LocationTableClient({ locationPlaces }: { locationPlaces: LocationPlace[] }) {
   const [dataLocationPlaces, setDataLocationPlaces] = useState(locationPlaces);
@@ -19,13 +19,13 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
   useEffect(() => {
     if (toastStatus === 'closed') {
       if (locationPlaceId) {
-        async function locationPlaceDeleted() {
-          await destroyLocationPlace(locationPlaceId)
+        async function deleteLocationPlace() {
+          await removeLocationPlaceAction(locationPlaceId)
         }
-        locationPlaceDeleted();
+        deleteLocationPlace();
+        setLocationPlaceId(undefined);
       }
       setToastStatus('none');
-      setLocationPlaceId(undefined);
     }
   }, [
     toastStatus,
@@ -36,56 +36,33 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
     setDataLocationPlaces(locationPlaces);
   }, [locationPlaces])
 
-  const showSwal = (locationPlace: LocationPlace) => {
-    withReactContent(Swal).fire({
-      html: (
-        <div className="space-y-[4px] text-center font-semibold">
-          <div className="text-[20px]">Are you sure you want to delete</div>
-          <div className="text-[28px]">{locationPlace.name}?</div>
-        </div>
-      ),
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        actions: 'flex gap-2',
-        confirmButton: 'bg-primary text-white p-2 rounded',
-        cancelButton: 'bg-danger text-white p-2 rounded',
-      },
-      showCancelButton: true,
-      buttonsStyling: false,
+  const showSwal = async (locationPlace: LocationPlace) => {
+    const { name, id } = locationPlace;
 
-    }).then((result) => {
-      if (result.isConfirmed) {
+    let result: SweetAlertResult<any> = await confirmSwalInfo("Are you sure you want to delete", name!);
 
-        setDataLocationPlaces(dataLocationPlaces.filter((dataLocationPlace: LocationPlace) => {
-          return dataLocationPlace.id !== locationPlace.id
-        }));
+    if (result.isConfirmed) {
+      setDataLocationPlaces(dataLocationPlaces.filter((dataLocationPlace: LocationPlace) => {
+        return dataLocationPlace.id !== id
+      }));
 
-        setLocationPlaceId(locationPlace.id)
-        toast((props: ToastContentProps<LocationPlace>) => {
-          return (
-            <div className="text-black flex gap-2">
-              <div className="flex-1">{props.data.name} has been deleted from the locations list.</div>
-              <div className="underline text-primary"
-                onClick={() => {
-                  setDataLocationPlaces(locationPlaces);
-                  setLocationPlaceId(null);
-                  props.closeToast();
-                }}>
-                Undo
-              </div>
-            </div>
-          )
-        }, {
-          data: locationPlace,
-          toastId: `admin-${locationPlace.id}`,
-          type: 'success',
-          hideProgressBar: true,
-          onClose: (props) => { setToastStatus('closed') },
-          onOpen: (props) => { setToastStatus('opened') }
-        })
-      }
-    });
+      setLocationPlaceId(locationPlace.id);
+      toast((props: ToastContentProps<LocationPlace>) => {
+        return (
+          <div className="text-black flex gap-2">
+            <div className="flex-1">{props.data.name} has been deleted from the locations list.</div>
+          </div>
+        )
+      }, {
+        data: locationPlace,
+        toastId: `admin-locations-${id}`,
+        type: 'success',
+        hideProgressBar: true,
+        onClose: (props) => { setToastStatus('closed') },
+        onOpen: (props) => { setToastStatus('opened') }
+      })
+    }
+
   }
 
   return (
@@ -108,7 +85,7 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
                     className="text-primary block">
                     <Fa6SolidEye />
                   </Link>
-                  <button onClick={() => { showSwal(locationPlace); }}
+                  <button onClick={async () => { await showSwal(locationPlace); }}
                     className="text-danger cursor-pointer disabled:cursor-not-allowed"
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
                     <Fa6SolidSchoolCircleXmark className="inline-block" />

@@ -1,119 +1,45 @@
 'use client';
 
 import {
-  ChangeEvent,
-  FormEvent,
   Fragment,
   useCallback,
-  useEffect,
-  useMemo
+  useMemo,
+  useState
 } from "react";
-import { AdminUsersState } from "../_redux/admin-users-state";
-import { useAppSelector } from "@/hooks/redux-hooks";
-import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { Transition, Dialog } from "@headlessui/react";
-import {
-  adminUserEmailChanged,
-  adminUserFormReset,
-  adminUserFormSubmitted,
-  adminUserIsActiveChanged,
-  adminUserIsSuperAdminChanged,
-  adminUserNameChanged,
-  adminUserRequestStatusSet,
-  modalFormOpenStateSet,
-  modalFormTypeSet,
-} from "../_redux/admin-users-slice";
-import { RequestStatus } from "@/types/enums/request-status";
-import InputCustom from "@/app/_components/input-custom";
-import { addUserAdmin, updateUserAdmin } from "../_redux/admin-users-thunk";
-import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
-import { usePathname } from "next/navigation";
-import { pathRevalidate } from "@/actions/common-actions";
+
+import AdminUserForm from "./admin-user-form";
 
 export default function ModalAdminUsersForm() {
-  const pathname = usePathname();
+  const [randomId, setRandomId] = useState(Math.random());
   const { state, modalOpen, modalType, setDumpData } = useAdminUserHook();
-  const adminUsersState: AdminUsersState = useAppSelector((state: RootState) => {
-    return state.adminUsers;
-  });
 
-  const {
-    type,
-    open
-  } = useMemo(() => {
-    return { ...adminUsersState.modalForm }
-  }, [adminUsersState.modalForm])
+  const { type, open } = useMemo(() => {
 
-  const {
-    email,
-    name,
-    isActive,
-    isSuperAdmin,
-    id,
-    requestStatus
-  } = useMemo(() => {
-    return { ...adminUsersState.adminUserForm };
-  }, [adminUsersState.adminUserForm]);
+    return {
+      type: state ? state?.modal?.type : '',
+      open: state ? state?.modal?.open : false
+    }
+  }, [state]);
 
-  let pending = requestStatus === RequestStatus.WAITING || requestStatus === RequestStatus.IN_PROGRESS;
+  const data = useMemo(() => {
+    return state?.data ?? undefined
+  }, [state]);
 
   const formReset = useCallback(() => {
     modalOpen(false);
-    reduxStore.dispatch(modalFormOpenStateSet(false));
+    setRandomId(Math.random())
     let timeout = setTimeout(() => {
       modalType('')
       setDumpData(undefined);
-      reduxStore.dispatch(adminUserFormReset());
-      reduxStore.dispatch(modalFormTypeSet(''));
+
     }, 500);
 
     return () => {
       clearTimeout(timeout);
     }
   }, [])
-
-
-  useEffect(() => {
-    async function pathToRevalidate(pathName: string, id?: number) {
-      if (pathname !== '/admin/admin-users') {
-
-        await pathRevalidate(pathName);
-      }
-      else {
-        await pathRevalidate('/admin/admin-users');
-      }
-
-
-    }
-
-    switch (requestStatus) {
-      case RequestStatus.IN_PROGRESS:
-        if (type !== '') {
-          reduxStore.dispatch(type === 'add' ? addUserAdmin : updateUserAdmin);
-        }
-        break;
-      case RequestStatus.SUCCESS:
-        pathToRevalidate(pathname);
-        formReset();
-        break;
-    }
-
-  }, [
-    requestStatus,
-    type,
-    formReset,
-    pathname,
-  ])
-
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    reduxStore.dispatch(adminUserRequestStatusSet(RequestStatus.WAITING));
-    reduxStore.dispatch(adminUserFormSubmitted())
-  }
-
-  console.log('pathname', pathname)
 
   return (
     <Transition show={open} as={Fragment}>
@@ -138,64 +64,8 @@ export default function ModalAdminUsersForm() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95">
           <Dialog.Panel as="div" className='bg-white relative z-[50] space-y-8 p-8 w-[448px] rounded drop-shadow'>
-            <h1 className='font-medium text-[24px]'>{type === 'add' ? 'Register' : 'Edit'} Admin Account</h1>
-            <form onSubmit={onSubmit} className="space-y-8">
-              <div className="space-y-4">
-                <InputCustom labelText="Email"
-                  id="admin-user-email"
-                  name="admin-user-email"
-                  type="text"
-                  placeholder='Email Address:'
-                  value={email.value}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    reduxStore.dispatch(adminUserEmailChanged(event.target.value));
-                  }}
-                  className="bg-secondary border-0"
-                  errorText={email.errorText}
-                  validationStatus={email.validationStatus}
-                  disabled={type === 'update'} />
-                <InputCustom labelText="Name"
-                  id="admin-user-name"
-                  name="admin-user-name"
-                  type="text"
-                  placeholder="Name: "
-                  value={name.value}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    reduxStore.dispatch(adminUserNameChanged(event.target.value));
-                  }}
-                  className="bg-secondary border-0"
-                  errorText={name.errorText}
-                  validationStatus={name.validationStatus} />
-              </div>
-              {
-                type === 'update' &&
-                (
-                  <InputCheckboxCustom labelText="Active"
-                    id={`${type}-is-active`}
-                    checked={isActive}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                      reduxStore.dispatch(adminUserIsActiveChanged(isActive ? false : true))
-                    }} />
-                )
-              }
-              <InputCheckboxCustom labelText="Super Admin"
-                id={`${type}-is-super-admin`}
-                checked={isSuperAdmin}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  reduxStore.dispatch(adminUserIsSuperAdminChanged(isSuperAdmin ? false : true))
-                }} />
-              <div className="flex items-center justify-end gap-4">
-                <button type='button'
-                  className='bg-white text-primary p-2 disabled:cursor-not-allowed'
-                  disabled={pending}
-                  onClick={formReset}>Cancel</button>
-                <button type="submit"
-                  className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
-                  disabled={pending}>
-                  {pending ? 'Processing' : 'Save'}
-                </button>
-              </div>
-            </form>
+            <h1 className='font-medium text-[24px]'>{type === 'add' ? 'Add' : 'Edit'} Admin Account</h1>
+            <AdminUserForm key={randomId} type={type} data={data} formReset={formReset} />
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>
