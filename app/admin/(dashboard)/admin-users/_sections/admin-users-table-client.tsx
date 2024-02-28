@@ -174,16 +174,6 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                           modalOpen(true);
                           modalType('update');
                           setDumpData(admin);
-                          reduxStore.dispatch(editAdminUserFields({
-                            email: email!,
-                            name: name!,
-                            isActive: active!,
-                            isSuperAdmin: is_super_admin!,
-                            id: id!
-                          }))
-                          reduxStore.dispatch(modalFormOpenStateSet(true));
-                          reduxStore.dispatch(modalFormTypeSet('update'));
-
                         }}>
                         <Fa6SolidPen />
                       </button>
