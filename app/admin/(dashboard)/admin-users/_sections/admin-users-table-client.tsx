@@ -38,7 +38,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
 
   useEffect(() => {
     setDataAdmins(admins);
-  }, [admins])
+  }, [admins]);
 
   const showSwal = async (admin: Admin, activeAdmin: string) => {
     let { id, name, email, active } = admin
@@ -78,7 +78,6 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
         onOpen: (props) => { setToastStatus('opened') }
       })
     }
-
   }
 
   return (

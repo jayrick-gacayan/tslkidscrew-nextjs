@@ -30,7 +30,7 @@ export default function ModalAdminUsersForm() {
     return () => {
       clearTimeout(timeout);
     }
-  }, [])
+  }, [modalOpen, modalType, setDumpData])
 
   return (
     <Transition show={open} as={Fragment}>

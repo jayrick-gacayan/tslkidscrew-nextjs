@@ -37,8 +37,6 @@ export default function FormContainer() {
 
   }, [state]);
 
-  console.log('state', state)
-
   return (
     <>
       {state?.error! && <div className='bg-danger-light rounded px-4 py-2 text-white'>{state?.error!}</div>}

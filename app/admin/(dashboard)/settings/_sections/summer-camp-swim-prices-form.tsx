@@ -53,10 +53,6 @@ export default function SummerCampSwimSettingTableData({
     setFocusId,
   ])
 
-  if (focusId === summerCampSwimSetting.id) {
-    console.log('state', summerCampSwimSetting)
-  }
-
   return (
     <div ref={formContainerRef}
       id={`summer-camp-swim-prices-${summerCampSwimSetting.id!}`}
