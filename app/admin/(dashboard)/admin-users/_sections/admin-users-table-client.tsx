@@ -4,8 +4,7 @@ import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Admin } from "@/models/admin";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import withReactContent from "sweetalert2-react-content";
-import Swal from "sweetalert2";
+import { SweetAlertResult } from "sweetalert2";
 import { ToastContentProps, toast } from "react-toastify";
 import Fa6UserXmark from "@/app/_components/svg/fa6-solid-user-xmark";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
@@ -13,6 +12,7 @@ import Fa6SolidUserCheck from "@/app/_components/svg/fa6-solid-user-check";
 import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 import { dateString, dateTimeString } from "@/types/helpers/date-helpers";
 import { changeAdminUserActiveStatusAction } from "@/actions/admin-actions";
+import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const { modalOpen, modalType, setDumpData } = useAdminUserHook();
@@ -38,58 +38,46 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
 
   useEffect(() => {
     setDataAdmins(admins);
-  }, [admins])
+  }, [admins]);
 
-  const showSwal = (admin: Admin, activeAdmin: string) => {
+  const showSwal = async (admin: Admin, activeAdmin: string) => {
     let { id, name, email, active } = admin
-    withReactContent(Swal).fire({
-      html: (
-        <div className="space-y-[4px] text-center font-semibold">
-          <div className="text-[20px]">Are you sure you want to {activeAdmin === 'No' ? 'in' : ''}activate</div>
-          <div className="text-[28px]">{name ?? email}?</div>
-        </div>
-      ),
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        actions: 'flex gap-2',
-        confirmButton: 'bg-primary text-white p-2 rounded',
-        cancelButton: 'bg-danger text-white p-2 rounded',
-      },
-      showCancelButton: true,
-      buttonsStyling: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-          return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active }
-        }));
-        setAdminId(admin.id)
-        toast((props: ToastContentProps<Admin>) => {
-          return (
-            <div className="text-black flex gap-2">
-              <div className="flex-1">{props.data.name ?? props.data.email} has been {activeAdmin === 'No' ? 'in' : ''}activated from the admin list.</div>
-              <div className="underline text-primary"
-                onClick={() => {
-                  setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-                    return dataAdmin.id === id ? admin : dataAdmin
-                  }));
-                  setAdminId(undefined);
-                  props.closeToast();
-                }}>
-                Undo
-              </div>
+
+    let result: SweetAlertResult<any> = await confirmSwalInfo(
+      `Are you sure you want to ${activeAdmin === 'No' ? 'in' : ''}activate`,
+      name! ?? email!
+    );
+
+    if (result.isConfirmed) {
+      setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
+        return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active }
+      }));
+      setAdminId(admin.id)
+      toast((props: ToastContentProps<Admin>) => {
+        return (
+          <div className="text-black flex gap-2">
+            <div className="flex-1">{props.data.name ?? props.data.email} has been {activeAdmin === 'No' ? 'in' : ''}activated from the admin list.</div>
+            <div className="underline text-primary"
+              onClick={() => {
+                setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
+                  return dataAdmin.id === id ? admin : dataAdmin
+                }));
+                setAdminId(undefined);
+                props.closeToast();
+              }}>
+              Undo
             </div>
-          )
-        }, {
-          data: admin,
-          toastId: `admin-${id}`,
-          type: 'success',
-          hideProgressBar: true,
-          onClose: (props) => { setToastStatus('closed') },
-          onOpen: (props) => { setToastStatus('opened') }
-        })
-      }
-    });
+          </div>
+        )
+      }, {
+        data: admin,
+        toastId: `admin-${id}`,
+        type: 'success',
+        hideProgressBar: true,
+        onClose: (props) => { setToastStatus('closed') },
+        onOpen: (props) => { setToastStatus('opened') }
+      })
+    }
   }
 
   return (
@@ -119,7 +107,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     className="text-primary block cursor-pointer">
                     <Fa6SolidEye />
                   </Link>
-                  <button onClick={() => { showSwal(admin, adminActive); }}
+                  <button onClick={async () => { await showSwal(admin, adminActive); }}
                     className={`${adminActive === 'No' ? 'text-success' : 'text-danger'} 
                     cursor-pointer disabled:cursor-not-allowed`}
                     disabled={toastStatus === 'opened' || toastStatus === 'closed'}>

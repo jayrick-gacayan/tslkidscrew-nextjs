@@ -53,8 +53,6 @@ export default function RegisterForm() {
     }
   }, [state]);
 
-  console.log('state', state)
-
   return (
     <form ref={formRef} action={formAction} className="space-y-4">
       <div className="space-y-2">

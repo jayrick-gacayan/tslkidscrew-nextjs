@@ -90,7 +90,7 @@ export default function VacationCampSettingForm({
         })
     )
 
-  }, [vacationCampData]);
+  }, [vacationCampData, arrDays, cbParseDate]);
 
   function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
