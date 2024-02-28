@@ -2,12 +2,13 @@
 
 import { auth } from '@/auth';
 import { Admin } from '@/models/admin';
-import { addAdminUser, updateAdminUser } from '@/services/admin-services';
+import { addAdminUser, changeAdminUserActiveStatus, updateAdminUser } from '@/services/admin-services';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
 import { Session } from 'next-auth';
 import * as Joi from 'joi';
 import { ValidationType } from '@/types/enums/validation-type';
 import { ResultStatus } from '@/types/enums/result-status';
+import { revalidatePath } from 'next/cache';
 
 export async function addAdminUserAction(
   prevState: AdminUserFormStateProps,
@@ -73,6 +74,13 @@ export async function updateAdminUserAction(
     message: 'Successfully updated an admin user',
     success: true,
   }
+}
+
+export async function changeAdminUserActiveStatusAction(id: number) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await changeAdminUserActiveStatus(id, admin?.accessToken!);
+  revalidatePath('/admin/admin-users');
 }
 
 const adminUserSchema = Joi.object({

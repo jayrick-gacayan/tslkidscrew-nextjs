@@ -1,7 +1,5 @@
-import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
-import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import { LocationProgram } from "@/models/location-program";
-import Link from "next/link";
+import ProgramsTableClient from "./programs-table-client";
 
 export default function ProgramsTable({
   location_id,
@@ -24,39 +22,7 @@ export default function ProgramsTable({
             <th className="w-24">ACTION</th>
           </tr>
         </thead>
-        <tbody>
-          {
-            locationPrograms.map((locationProgram: LocationProgram, index: number) => {
-              let activeProgram = locationProgram.active === undefined || locationProgram.active ?
-                'Active' : 'Inactive';
-              return (
-                <tr key={`location-program-${locationProgram.id}-${index}-${locationProgram.name}`}
-                  className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
-                  <td className="w-auto">{locationProgram.name!}</td>
-                  <td className="w-48">{locationProgram.name_suffix === '' ? 'N/A' : locationProgram.name_suffix}</td>
-                  <td className="w-72">rhay26.tsl@gmail.com</td>
-                  <td className="w-24">
-                    {activeProgram}
-                  </td>
-                  <td className="w-40">{locationProgram.capacity ?? 1}</td>
-                  <td className="w-40">12</td>
-                  <td className="w-24">
-                    <div className="flex items-center justify-center gap-2 w-full">
-                      <Link href={`/admin/locations/${location_id}/programs/${locationProgram.id!}`}
-                        className="text-primary block">
-                        <Fa6SolidEye />
-                      </Link>
-                      <Link href={`/admin/locations/${location_id}/programs/${locationProgram.id!}/edit`}
-                        className="text-warning block">
-                        <Fa6SolidPen />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })
-          }
-        </tbody>
+        <ProgramsTableClient location_id={location_id} programs={locationPrograms} />
       </table>
     </div>
   )

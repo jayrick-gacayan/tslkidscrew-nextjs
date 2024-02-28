@@ -1,6 +1,6 @@
 'use client';
 
-import { destroyLocationPlace } from "@/actions/location-actions";
+import { removeLocationPlaceAction } from "@/actions/location-actions";
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidSchoolCircleXmark from "@/app/_components/svg/fa6-solid-school-circle-xmark";
@@ -19,13 +19,13 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
   useEffect(() => {
     if (toastStatus === 'closed') {
       if (locationPlaceId) {
-        async function locationPlaceDeleted() {
-          await destroyLocationPlace(locationPlaceId)
+        async function deleteLocationPlace() {
+          await removeLocationPlaceAction(locationPlaceId)
         }
-        locationPlaceDeleted();
+        deleteLocationPlace();
+        setLocationPlaceId(undefined);
       }
       setToastStatus('none');
-      setLocationPlaceId(undefined);
     }
   }, [
     toastStatus,
@@ -66,19 +66,11 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
           return (
             <div className="text-black flex gap-2">
               <div className="flex-1">{props.data.name} has been deleted from the locations list.</div>
-              <div className="underline text-primary"
-                onClick={() => {
-                  setDataLocationPlaces(locationPlaces);
-                  setLocationPlaceId(null);
-                  props.closeToast();
-                }}>
-                Undo
-              </div>
             </div>
           )
         }, {
           data: locationPlace,
-          toastId: `admin-${locationPlace.id}`,
+          toastId: `admin-locations-${locationPlace.id}`,
           type: 'success',
           hideProgressBar: true,
           onClose: (props) => { setToastStatus('closed') },

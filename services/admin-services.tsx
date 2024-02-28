@@ -145,7 +145,7 @@ export async function updateAdminUser(
   }
 }
 
-export async function adminUserInactive(id: number, token: string) {
+export async function changeAdminUserActiveStatus(id: number, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
     {
