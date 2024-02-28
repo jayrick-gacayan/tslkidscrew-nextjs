@@ -65,7 +65,7 @@ export async function addAdminUser(
   token: string
 ) {
 
-  return await fetch(
+  let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
       method: "POST",
@@ -79,6 +79,25 @@ export async function addAdminUser(
         }
       }),
     });
+
+  try {
+    let response = await result.json();
+
+    return new Result<Admin>({
+      response: response,
+      data: response.admins ?? undefined,
+      message: response.message ?? result.statusText,
+      statusCode: response.status ?? result.status,
+    })
+  } catch (error) {
+    return new Result<Admin>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status,
+      error: result.statusText
+    })
+  }
+
 }
 
 export async function updateAdminUser(
@@ -90,7 +109,7 @@ export async function updateAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
-  return await fetch(
+  let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
       method: "POST",
@@ -104,9 +123,29 @@ export async function updateAdminUser(
         }
       })
     });
+
+  try {
+    let response = await result.json();
+
+    return new Result<Admin>({
+      respose: response,
+      ...response,
+      data: response.admin ?? undefined,
+      message: response.message ?? '',
+      statusCode: response.status ?? result.status
+    })
+  }
+  catch (error) {
+    return new Result<Admin>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status,
+      error: result.statusText
+    })
+  }
 }
 
-export async function adminUserInactive(id: number, token: string) {
+export async function changeAdminUserActiveStatus(id: number, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
     {

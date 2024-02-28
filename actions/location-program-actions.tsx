@@ -2,12 +2,13 @@
 
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { addLocationProgram, updateLocationProgram } from "@/services/location-program-services";
+import { addLocationProgram, removeLocationProgram, updateLocationProgram } from "@/services/location-program-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
 import * as Joi from "joi";
 import { Session } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function editLocationProgramAction(
   id: number,
@@ -75,6 +76,13 @@ export async function addLocationProgramAction(
     message: 'Successfully created a program',
     success: true
   }
+}
+
+export async function removeProgramAction(location_id: string, id: number) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await removeLocationProgram(id, admin?.accessToken!);
+  revalidatePath(`/admins/locations/${location_id}/programs`);
 }
 
 /* helpers */

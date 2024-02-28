@@ -2,7 +2,7 @@ import { addYears, format } from "date-fns"
 import { ForwardedRef, forwardRef } from "react"
 
 function DatepickerYearToYearInputCustom(props: any, ref: ForwardedRef<HTMLButtonElement>) {
-  console.log('props', props.name)
+
   return (
     <button ref={ref}
       onClick={props.onClick}

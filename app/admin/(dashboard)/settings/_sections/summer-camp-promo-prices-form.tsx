@@ -8,10 +8,12 @@ export default function SummerCampPromoPricesForm({
   weekStr,
   setWeekStr,
   summerCampPromoData,
+  weekNumbers,
 }: {
   weekStr: string;
   setWeekStr: Dispatch<SetStateAction<string>>;
   summerCampPromoData: SummerCampPromoSetting[];
+  weekNumbers: number[];
 }) {
 
   const { pending } = useFormStatus();
@@ -32,7 +34,7 @@ export default function SummerCampPromoPricesForm({
             </div>
             <SettingListboxCustom listboxData={weekStr}
               onChangeListbox={(value: any) => { setWeekStr(value) }}
-              items={[6, 7, 8, 9].map((numVal) => { return 'week-' + numVal; })}
+              items={weekNumbers.map((numVal) => { return 'week-' + numVal; })}
               keyDescription='show-summer-camp-promo-week-setting' />
           </div>
         </div>
@@ -42,7 +44,7 @@ export default function SummerCampPromoPricesForm({
         <div className="block bg-secondary p-4">
           <div className="w-full sm:w-8/12 block space-y-4">
             {
-              [1, 2, 3].map((value) => {
+              [1, 2, 3].map((value, index: number) => {
                 return (
                   <div key={`update-promos-children-${value}`}
                     className="flex sm:flex-row flex-col items-center justify-between gap-4 sm:gap-8">
@@ -53,8 +55,10 @@ export default function SummerCampPromoPricesForm({
                     </div>
                     <div className="w-full">
                       <InputCustom type="text"
+                        prefixIcon={<div className="absolute left-3 z-20 top-2 block">&#36;</div>}
                         inputMode="numeric"
-                        className="bg-white" />
+                        className="bg-white p-2 pl-10"
+                        defaultValue={summerCampPromoData[index].price ?? ''} />
                     </div>
                   </div>
                 )

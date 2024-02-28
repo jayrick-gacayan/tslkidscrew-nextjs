@@ -32,7 +32,7 @@ export default function CompanyLogo({
       className={twMerge('block', className!)}
       aria-label="Brand">
       <picture>
-        <img {...rest} />
+        <img alt='tsl-kids-crew-logo' {...rest} />
       </picture>
 
     </Link>
