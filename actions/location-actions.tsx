@@ -65,7 +65,7 @@ export async function editLocationPlace(
   };
 }
 
-export async function destroyLocationPlace(id: string) {
+export async function removeLocationPlaceAction(id: string) {
   let admin: Session<Admin> | null = await auth();
 
   let result = await removeLocationPlace(id, admin?.accessToken!);
