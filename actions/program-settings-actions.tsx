@@ -8,13 +8,18 @@ import { ValidationType } from "@/types/enums/validation-type";
 import {
   updateProgramYearCycleSetting,
   updateSummerCampSwimSetting,
-  updateSummerCampWeekSetting
+  updateSummerCampWeekSetting,
+  updateVacationCampScheduleSetting
 } from "@/services/program-settings-services";
 import { Result } from "@/models/result";
 import { ResultStatus } from "@/types/enums/result-status";
 import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
 import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
+import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { getMonthNumber } from "@/types/helpers/date-helpers";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 
 export async function updateSummerCampWeekSettingAction(
   id: number,
@@ -72,8 +77,6 @@ export async function updateSummerCampWeekSettingAction(
     start_date: formData.get('week-start-date') as string ?? '',
   }, admin?.accessToken!);
 
-
-
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,
@@ -95,7 +98,7 @@ export async function updateSummerCampSwimSettingAction(
   let admin: Session<Admin> | null = await auth();
 
   let updateSummerCampSwimSettingSchema = Joi.object({
-    'summer-camp-swim-swim-price': Joi.string()
+    'summer-camp-swim-price': Joi.string()
       .required()
       .pattern(/^\d+$/)
       .messages({
@@ -106,7 +109,7 @@ export async function updateSummerCampSwimSettingAction(
   })
 
   let validate = updateSummerCampSwimSettingSchema.validate({
-    'summer-camp-swim-swim-price': formData.get('summer-camp-swim-swim-price') ?? '',
+    'summer-camp-swim-price': formData.get('summer-camp-swim-price') ?? '',
   }, { abortEarly: false });
 
   if (validate.error) {
@@ -121,9 +124,9 @@ export async function updateSummerCampSwimSettingAction(
     }, {}) as SummerCampSwimSettingFormStateProps;
   }
 
-  let result: Result<any> = await updateSummerCampSwimSetting({
+  let result: Result<SummerCampSwimSetting> = await updateSummerCampSwimSetting({
     id: id.toString(),
-    price: parseInt(formData.get('summer-camp-swim-swim-price') as string) ?? 1,
+    price: parseInt(formData.get('summer-camp-swim-price') as string) ?? 1,
     child_record_count: formData.get('summer-camp-swim-chlld-record-count') as string ?? '1',
     week_count: formData.get('summer-camp-swim-week-count') as string ?? '1',
     with_swim_trip: formData.get('summer-camp-swim-with-swim-trip') as string ?? 'false',
@@ -138,7 +141,7 @@ export async function updateSummerCampSwimSettingAction(
 
   return {
     success: true,
-    message: 'Successfully update week setting.'
+    message: 'Successfully update summer camp swim setting.'
   };
 }
 
@@ -148,33 +151,139 @@ export async function updateVacationCampSettingAction(
   formData: FormData
 ) {
   let admin: Session<Admin> | null = await auth();
+  const rawFormData = Object.fromEntries(formData.entries())
 
-  return prevState;
+  let name = formData.get('vacation-camp-name') as string ?? '';
+  let capacity = formData.get('vacation-camp-capacity') as string ?? '';
+  let dates = formData.get('vacation-camp-dates') as string ?? '';
+
+  const [monthStr, yearStr] = (formData.get('vacation-camp-month-year-date') as string ?? '').split(' ');
+
+  let vacationCampSettingSchema = Joi.object({
+    'vacation-camp-name': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Name is required.',
+        'any.required': 'Name is required.',
+      }),
+    'vacation-camp-capacity': Joi.string()
+      .required()
+      .pattern(/^\d+$/)
+      .messages({
+        'string.empty': 'Capacity is required.',
+        'any.required': 'Capacity is required.',
+        'string.pattern.base': `Capacity must be numeric.`
+      }),
+    'vacation-camp-dates': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Dates is required.',
+        'any.required': 'Dates is required.',
+      }),
+  });
+
+  let validate = vacationCampSettingSchema.validate({
+    'vacation-camp-name': name,
+    'vacation-camp-capacity': capacity,
+    'vacation-camp-dates': dates,
+  }, {
+    abortEarly: false,
+  })
+
+  if (validate.error) {
+    return validate.error?.details.reduce((prev, curr) => {
+      return Object.assign({
+        [curr.context?.key ?? '']: {
+          value: curr.context?.value,
+          errorText: curr.message,
+          validationStatus: ValidationType.ERROR,
+        }
+      }, prev)
+    }, {}) as VacationCampSettingFormStateProps;
+  }
+
+  let formDataToSend = new FormData();
+
+  formDataToSend.append(`vacation_camp_schedules[${id}]name`, name);
+  formDataToSend.append(`vacation_camp_schedules[${id}]year`, yearStr)
+  formDataToSend.append(`vacation_camp_schedules[${id}]month`, monthStr);
+  formDataToSend.append(`vacation_camp_schedules[${id}]dates`, dates);
+
+  let result = await updateVacationCampScheduleSetting(formDataToSend, admin?.accessToken!);
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      message: result.message ?? result.error,
+      success: false,
+    }
+  }
+
+  return {
+    message: result.message ?? 'Successfully updated a vacation schedule',
+    success: true,
+  }
 }
 
 export async function updateProgramYearCycleSettingAction(
   id: number,
-  prevState: any,
+  prevState: ProgramYearCycleSettingFormStateProps,
   formData: FormData
 ) {
   let admin: Session<Admin> | null = await auth();
 
+  const programSettingSchema = Joi.object({
+    'current-year': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Current Year Cycle is required.',
+        'any.required': 'Current Year Cycle is required.',
+      }),
+    'next-year': Joi.string()
+      .required()
+      .messages({
+        'string.empty': 'Next Year Cycle is required.',
+        'any.required': 'Next Year Cycle is required.',
+      })
+  })
+
+  let currentYear = formData.get('current-year') as string ?? '';
+  let nextYear = formData.get('next-year') as string ?? ''
+
+  let validate = programSettingSchema.validate({
+    'current-year': currentYear,
+    'next-year': nextYear
+  }, { abortEarly: false })
+
+  if (validate.error) {
+    return validate.error?.details.reduce((prev, curr) => {
+      return Object.assign({
+        [curr.context?.key ?? '']: {
+          value: curr.context?.value,
+          errorText: curr.message,
+          validationStatus: ValidationType.ERROR,
+        }
+      }, prev)
+    }, {}) as ProgramYearCycleSettingFormStateProps;
+  }
+
   let result = await updateProgramYearCycleSetting({
     id: id.toString(),
-    current_year_cycle: formData.get('current-year') as string ?? '',
-    next_year_cycle: formData.get('next-year') as string ?? '',
+    current_year_cycle: `${currentYear}-${parseInt(currentYear) + 1}`,
+    next_year_cycle: `${nextYear}-${parseInt(nextYear) + 1}`,
   }, admin?.accessToken!);
 
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: result.message,
-      success: false
+      success: false,
+
     }
   }
 
   return {
-    message: 'Successfully updated',
-    success: true
+    message: 'Successfully updated program setting year cycle.',
+    success: true,
+
   }
 }
