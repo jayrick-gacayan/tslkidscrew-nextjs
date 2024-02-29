@@ -86,9 +86,9 @@ export default function ProgramsTableClient({
           return (
             <tr key={`location-program-${locationProgram.id}-${index}-${locationProgram.name}`}
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
-              <td className="w-auto">{locationProgram.name!}</td>
-              <td className="w-48">{locationProgram.name_suffix === '' ? 'N/A' : locationProgram.name_suffix}</td>
-              <td className="w-72">rhay26.tsl@gmail.com</td>
+              <td className="w-42">{locationProgram.name!}</td>
+              <td className="w-auto">{locationProgram.name_suffix === '' ? 'N/A' : locationProgram.name_suffix}</td>
+              <td className="w-72">{locationProgram.director?.email ?? 'N/A'}</td>
               <td className="w-24">
                 {activeProgram}
               </td>

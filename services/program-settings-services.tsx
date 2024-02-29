@@ -132,9 +132,10 @@ export async function updateSummerCampSwimSetting(
   try {
     let response = await result.json();
 
-    return new Result<any>({
+    return new Result<SummerCampSwimSetting>({
       ...response,
-      data: response.summer_camp_prices ?? [],
+      message: response.message ?? result.statusText,
+      data: response.summer_camp_prices ?? undefined,
       statusCode: result.status,
     });
   } catch (error) {
@@ -195,7 +196,6 @@ export async function updateSummerCampWeekSetting(
 
   try {
     let response = await result.json();
-    console.log("dsfsdf", response)
     return new Result<any>({
       ...response,
       data: response.week_settings ?? [],
@@ -240,8 +240,36 @@ export async function getVacationCampSchedulesSettings(token: string) {
   })
 }
 
-export async function updateVacationCampScheduleSetting(token: string) {
+export async function updateVacationCampScheduleSetting(formData: FormData, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/update-all`,
+    {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token!}`,
+      }
+    }
+  );
 
+  try {
+    let response = await result.json();
+
+    return new Result<VacationCampSetting[]>({
+      ...response,
+      data: response.vacation_camp ?? undefined,
+      statusCode: result.status,
+      message: response.message ?? result.statusText
+    })
+  }
+  catch (error) {
+    return new Result<VacationCampSetting[]>({
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: string) {
@@ -257,4 +285,35 @@ export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: s
     data: response.master_prices ?? [],
     statusCode: result.status,
   })
+}
+
+export async function updateBeforeOrAfterSchoolSettings(formData: FormData, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/update-all`,
+    {
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token!}`,
+      }
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      ...response,
+      data: response.vacation_camp ?? undefined,
+      statusCode: result.status,
+      message: response.message ?? result.statusText
+    })
+  }
+  catch (error) {
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
