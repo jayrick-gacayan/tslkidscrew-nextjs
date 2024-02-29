@@ -4,12 +4,12 @@ import InputCustom from "@/app/_components/input-custom";
 import Fa6SolidSquareCheck from "@/app/_components/svg/fa6-solid-square-check";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
 import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast, ToastContentProps } from "react-toastify";
-import { useOnClickOutside } from "usehooks-ts";
 
-export default function SummerCampSwimSettingTableData({
+export default function SummerCampSwimSettingTableFormData({
   summerCampSwimSetting,
   setFocusId,
   focusId,
@@ -23,8 +23,8 @@ export default function SummerCampSwimSettingTableData({
   const [state, formAction] = useFormState(
     updateSummerCampSwimSettingAction.bind(null, summerCampSwimSetting.id!),
     {
-      ["summer-camp-swim-swim-price"]: fieldInputValue(summerCampSwimSetting.price?.toString() ?? '')
-    }
+      ["summer-camp-swim-price"]: fieldInputValue(summerCampSwimSetting.price?.toString() ?? '')
+    } as SummerCampSwimSettingFormStateProps
   )
 
   const { pending } = useFormStatus();
@@ -58,7 +58,7 @@ export default function SummerCampSwimSettingTableData({
       id={`summer-camp-swim-prices-${summerCampSwimSetting.id!}`}
       className="relative">
       <div className={(focusId && summerCampSwimSetting.id === focusId) ? 'block' : 'hidden'}>
-        <form className='flex items-center justify-between gap-[4px]'
+        <form className='relative z-0 flex items-center justify-between gap-[4px]'
           id={`summer-camp-swim-setting-${summerCampSwimSetting.with_swim_trip}-${summerCampSwimSetting.id}`}
           onSubmit={(event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
@@ -69,14 +69,14 @@ export default function SummerCampSwimSettingTableData({
             name='summer-camp-swim-chlld-record-count' />
           <input type="hidden"
             value={summerCampSwimSetting.week_count}
-            name='summer-camp-swim--week-count' />
+            name='summer-camp-swim-week-count' />
           <input type="hidden"
             value={summerCampSwimSetting.with_swim_trip ? 'true' : 'false'}
             name='summer-camp-swim-with-swim-trip' />
           <InputCustom type="text"
             id={`summer-camp-swim-prices-input-${summerCampSwimSetting.id!}`}
             inputMode="numeric"
-            name="summer-camp-swim-swim-price"
+            name="summer-camp-swim-price"
             defaultValue={summerCampSwimSetting.price?.toString() ?? ''}
             className="bg-white text-center" />
           <button type="submit"

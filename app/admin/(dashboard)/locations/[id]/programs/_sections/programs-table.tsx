@@ -9,12 +9,12 @@ export default function ProgramsTable({
   locationPrograms: LocationProgram[];
 }) {
   return (
-    <div className="block overflow-auto rounded bg-secondary h-96">
+    <div className={`block overflow-auto rounded bg-secondary ${locationPrograms.length > 10 ? 'h-[512px]' : 'h-auto'}`}>
       <table className="min-w-[1024px] w-full">
         <thead>
           <tr className="bg-secondary-light [&>th]:text-sm [&>th]:font-medium [&>th]:px-3 [&>th]:py-2">
-            <th className="w-auto">NAME</th>
-            <th className="w-48">NAME SUFFIX</th>
+            <th className="w-42">NAME</th>
+            <th className="w-auto">NAME SUFFIX</th>
             <th className="w-72">DIRECTOR</th>
             <th className="w-24">STATUS</th>
             <th className="w-40">CAPACITY</th>

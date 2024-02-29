@@ -1,5 +1,5 @@
 import { Listbox, Tab, Transition } from "@headlessui/react";
-import { Fragment, SetStateAction, useMemo, useState } from "react";
+import { Fragment, SetStateAction, useEffect, useMemo, useState } from "react";
 import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import CustomListbox from "@/app/_components/listbox-custom";
@@ -52,7 +52,13 @@ export default function VacationCampTabPanelContainer({
     return result;
   }, [
     vacationCampData
-  ])
+  ]);
+
+  useEffect(() => {
+    setVacationCamp(partialVCSettings.find((value: VacationCampSetting) => {
+      return value.id === vacationCamp?.id!;
+    }))
+  }, [partialVCSettings, vacationCamp])
 
   return (
     <Tab.Panel as='div' id="vacation-camp-panel">
