@@ -1,7 +1,7 @@
 export interface FormStateProps {
-  message?: string;
-  success?: boolean;
-  redirectTo?: string;
-  error?: string;
-  data?: any;
+  message?: string | undefined;
+  success?: boolean | undefined;
+  redirectTo?: string | undefined;
+  error?: string | undefined;
+  data?: any | undefined;
 }

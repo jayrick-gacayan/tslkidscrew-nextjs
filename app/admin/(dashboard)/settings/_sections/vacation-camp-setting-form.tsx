@@ -23,6 +23,8 @@ import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-s
 import { updateVacationCampSettingAction } from "@/actions/program-settings-actions";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
+import { pathRevalidate } from "@/actions/common-actions";
+import { toast, ToastContentProps } from "react-toastify";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
@@ -74,7 +76,6 @@ export default function VacationCampSettingForm({
   const { pending } = useFormStatus();
   const [monthYearDate, setMonthYearDate] = useState<Date | null>(cbParseDate());
 
-
   useEffect(() => {
     setDataVacationCamp({
       'vacation-camp-name': vacationCampData?.name ?? '',
@@ -92,14 +93,28 @@ export default function VacationCampSettingForm({
 
   }, [vacationCampData, arrDays, cbParseDate]);
 
-  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
+  useEffect(() => {
+    async function pathToRevalidate() {
+      await pathRevalidate('/admin/settings')
+    }
 
-    setDataVacationCamp({
-      ...dataVacationCamp,
-      [name]: value,
-    })
-  };
+    if (state.success !== undefined) {
+      let { message, success } = state;
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">{message}</div>
+        )
+      }, {
+        toastId: `update-vacation-setting-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+
+      if (success) {
+        pathToRevalidate();
+      }
+    }
+  }, [state])
 
   return (
     <div className="space-y-4">
@@ -131,8 +146,9 @@ export default function VacationCampSettingForm({
                   type="text"
                   className="bg-white p-2 px-3"
                   placeholder="Name:"
-                  value={dataVacationCamp["vacation-camp-name"]}
-                  onChange={handleOnChange} />
+                  defaultValue={dataVacationCamp["vacation-camp-name"]}
+                  errorText={state["vacation-camp-name"]?.errorText}
+                  validationStatus={state["vacation-camp-name"]?.validationStatus} />
               </div>
             </div>
             <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
@@ -146,8 +162,9 @@ export default function VacationCampSettingForm({
                   inputMode="numeric"
                   className="bg-white p-2 px-3"
                   placeholder="Capacity:"
-                  value={dataVacationCamp["vacation-camp-capacity"]}
-                  onChange={handleOnChange} />
+                  defaultValue={dataVacationCamp["vacation-camp-capacity"]}
+                  errorText={state["vacation-camp-capacity"]?.errorText}
+                  validationStatus={state["vacation-camp-capacity"]?.validationStatus} />
               </div>
             </div>
             <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
@@ -173,7 +190,7 @@ export default function VacationCampSettingForm({
               <div className="basis-full lg:basis-5/12">
                 <p className="font-semibold text-black">Date</p>
               </div>
-              <div className="w-full lg:flex-1 relative">
+              <div className="w-full lg:flex-1">
                 <PopoverReactDayPicker selected={daysSelection}
                   placeholder="Enter date"
                   inputName='vacation-camp-dates'
@@ -188,6 +205,10 @@ export default function VacationCampSettingForm({
                       setDaysSelection(dates)
                     }
                   }} />
+                {
+                  state["vacation-camp-dates"]?.errorText &&
+                  <div className="text-danger">You must select at least one date.</div>
+                }
               </div>
             </div>
           </div>

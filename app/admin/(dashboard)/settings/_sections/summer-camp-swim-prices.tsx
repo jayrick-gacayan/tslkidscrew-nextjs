@@ -5,7 +5,7 @@ import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
 import { useCallback, useMemo, useState } from "react";
-import SummerCampSwimSettingTableData from "./summer-camp-swim-prices-form";
+import SummerCampSwimSettingTableFormData from "../_components/summer-camp-swim-form-data";
 
 export default function SummerCampSwimPrices({
   summerCampSwimSettings
@@ -105,10 +105,12 @@ export default function SummerCampSwimPrices({
                     {
                       summerCampSwimSettingsMemo.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return summerCampSwimSetting.child_record_count === childValue
+                      }).sort((b: SummerCampSwimSetting, a: SummerCampSwimSetting) => {
+                        return a.week_count! - b.week_count!;
                       }).map((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return (
                           <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`}>
-                            <SummerCampSwimSettingTableData summerCampSwimSetting={summerCampSwimSetting}
+                            <SummerCampSwimSettingTableFormData summerCampSwimSetting={summerCampSwimSetting}
                               setFocusId={setFocusId}
                               focusId={focusId} />
                           </td>

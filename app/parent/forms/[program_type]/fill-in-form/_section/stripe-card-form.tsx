@@ -27,7 +27,6 @@ export default function StripeCardForm() {
     const { paymentMethod, error } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardNumberElement!,
-
     });
 
     if (error) {
