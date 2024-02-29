@@ -31,7 +31,6 @@ export default function SummerCampPromos({
     }).map((val: SummerCampPromoSetting) => { return val.week_count!; })
   }, [summerCampPromoSettings])
 
-  console.log('dsfdsfsdf', summerCampPromoSettings)
   return (
     <div className="space-y-4 pt-4">
       <SummerCampPromoPricesForm weekStr={weekStr}
