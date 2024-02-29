@@ -9,6 +9,8 @@ import { useFormState, useFormStatus } from "react-dom";
 import { updateProgramYearCycleSettingAction } from "@/actions/program-settings-actions";
 import { pathRevalidate } from "@/actions/common-actions";
 import { toast, ToastContentProps } from "react-toastify";
+import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 let today = new Date();
 let minDate = subYears(today, 1);
@@ -19,11 +21,6 @@ export default function YearCycleTabPanelContainer({
 }: {
   programYearCycleSetting: ProgramYearCycleSetting;
 }) {
-  const { pending } = useFormStatus();
-  const [state, formAction] = useFormState(
-    updateProgramYearCycleSettingAction.bind(null, programYearCycleSetting.id!),
-    {} as any
-  );
   const cbNextYear = useMemo(() => {
     let { current_year_cycle, next_year_cycle } = programYearCycleSetting;
     let splitCurrent = current_year_cycle?.split('-');
@@ -37,6 +34,16 @@ export default function YearCycleTabPanelContainer({
 
   const [currentYearCycle, setCurrentYearCycle] = useState<Date | null>(cbNextYear.currentYear);
   const [nextYearCycle, setNextYearCycle] = useState<Date | null>(cbNextYear.nextYear);
+
+  const [state, formAction] = useFormState(
+    updateProgramYearCycleSettingAction.bind(null, programYearCycleSetting.id!),
+    {
+      "current-year": fieldInputValue(''),
+      "next-year": fieldInputValue(''),
+    } as ProgramYearCycleSettingFormStateProps
+  );
+
+  const { pending } = useFormStatus();
 
   useEffect(() => {
     async function pathToRevalidate() {
@@ -83,8 +90,9 @@ export default function YearCycleTabPanelContainer({
                   setYearCycle={setNextYearCycle} />
               </div>
             </div>
-            <button className="p-2 bg-primary w-auto ml-auto block rounded text-white">
-              Update Year Cycle
+            <button className="p-2 bg-primary w-auto ml-auto block rounded text-white disabled:cursor-not-allowed"
+              disabled={pending}>
+              {pending ? '...Checking' : 'Update Year Cycle'}
             </button>
           </form>
         </div>

@@ -46,7 +46,7 @@ export default function PopoverReactDayPicker({
   ]);
 
   return (
-    <>
+    <div className="relative w-full">
       <button ref={refs.setReference}
         type="button"
         className="w-full focus:border-primary text-left border bg-white text-black p-3 rounded border-secondary-light"
@@ -56,8 +56,8 @@ export default function PopoverReactDayPicker({
             !Array.isArray(selected) ? format(selected, 'yyyy-MM-dd') :
               selected.length === 0 ? '' :
                 selected.map((value: Date) => {
-                  return format(value, 'LLL. d, yyyy')
-                }).join('- ')
+                  return format(value, 'LLLL-d-yyyy')
+                }).join(',')
         } />
         {
           !selected ? placeholder :
@@ -95,6 +95,6 @@ export default function PopoverReactDayPicker({
           </div>
         )
       }
-    </>
+    </div>
   )
 }
