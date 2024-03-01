@@ -70,11 +70,12 @@ export default function AdminUserForm({
     }
 
   }, [
-    type,
     formReset,
     pathname,
     state
   ]);
+
+  console.log('pathname', pathname)
 
   return (
     <form action={formAction}
