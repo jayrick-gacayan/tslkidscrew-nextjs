@@ -225,6 +225,10 @@ export async function getSummerCampPromoSettings(token: string) {
   })
 }
 
+export async function updateSummerCampPromoSettings(token: string) {
+
+}
+
 export async function getVacationCampSchedulesSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
