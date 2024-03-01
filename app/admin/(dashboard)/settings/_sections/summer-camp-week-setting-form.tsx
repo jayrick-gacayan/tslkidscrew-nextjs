@@ -14,6 +14,20 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { toast, ToastContentProps } from "react-toastify";
 import { pathRevalidate } from "@/actions/common-actions";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
+import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
+
+function ButtonSubmit() {
+  const { pending } = useFormStatus();
+
+  return (
+    <div className="w-fit ml-auto block">
+      <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
+        disabled={pending}>
+        {pending ? <><Spinners3DotsScale className="text-white text-[24px] inline-block mr-1" /></> : 'Update Week Prices'}
+      </button>
+    </div>
+  )
+}
 
 export default function SummerCampWeekSettingForm({
   weekData,
@@ -125,12 +139,7 @@ export default function SummerCampWeekSettingForm({
             onChange={handleOnChange} />
         </div>
       </div>
-      <div className="w-fit ml-auto block">
-        <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
-          disabled={pending}>
-          {pending ? '...Processing' : 'Update Week Prices'}
-        </button>
-      </div>
+
     </form>
   )
 }

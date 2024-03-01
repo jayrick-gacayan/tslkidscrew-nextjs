@@ -25,9 +25,23 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 import { pathRevalidate } from "@/actions/common-actions";
 import { toast, ToastContentProps } from "react-toastify";
+import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
+
+function ButtonSubmit() {
+  const { pending } = useFormStatus();
+
+  return (
+    <div className="w-fit ml-auto block">
+      <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed w-48 text-center"
+        disabled={pending}>
+        {pending ? <><Spinners3DotsScale className="text-white text-[24px] inline-block mr-1" />Checking</> : 'Update Schedule'}
+      </button>
+    </div>
+  )
+}
 
 export default function VacationCampSettingForm({
   vacationCamp,
@@ -73,7 +87,7 @@ export default function VacationCampSettingForm({
       'vacation-camp-capacity': fieldInputValue(''),
     } as VacationCampSettingFormStateProps
   )
-  const { pending } = useFormStatus();
+
   const [monthYearDate, setMonthYearDate] = useState<Date | null>(cbParseDate());
 
   useEffect(() => {
@@ -213,12 +227,7 @@ export default function VacationCampSettingForm({
             </div>
           </div>
         </div>
-        <div className="w-fit ml-auto block">
-          <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
-            disabled={pending}>
-            {pending ? '...Processing' : 'Update Schedule'}
-          </button>
-        </div>
+        <ButtonSubmit />
       </form>
     </div>
   )

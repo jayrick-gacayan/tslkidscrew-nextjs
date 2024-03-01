@@ -6,6 +6,7 @@ import { Session } from "next-auth";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import {
+  updateBeforeOrAfterSchoolSettings,
   updateProgramYearCycleSetting,
   updateSummerCampSwimSetting,
   updateSummerCampWeekSetting,
@@ -219,7 +220,7 @@ export async function updateVacationCampSettingAction(
   }
 
   return {
-    message: result.message ?? 'Successfully updated a vacation schedule',
+    message: 'Successfully updated a vacation schedule',
     success: true,
   }
 }
@@ -286,4 +287,28 @@ export async function updateProgramYearCycleSettingAction(
     success: true,
 
   }
+}
+
+export async function updateBeforeOrAfterSchoolSettingAction(
+  prevState: any,
+  formData: FormData,
+) {
+  let admin: Session<Admin> | null = await auth();
+
+  const rawFormData = Object.fromEntries(formData.entries());
+  console.log('fdsfsd', rawFormData)
+
+  let result = await updateBeforeOrAfterSchoolSettings(formData, admin?.accessToken!);
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      success: false,
+      message: result.message,
+    }
+  }
+
+  return {
+    success: true,
+    message: 'Successfully update the before or after school setting data.'
+  };
 }

@@ -291,6 +291,7 @@ export async function updateBeforeOrAfterSchoolSettings(formData: FormData, toke
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/update-all`,
     {
+      method: 'POST',
       body: formData,
       headers: {
         Authorization: `Bearer ${token!}`,

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useContext, useMemo } from "react";
-import { FillInFormContext } from "../_context/fill-in-form-context";
+import { useCallback } from "react";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 export default function FillInFormButtons({
   program_type,
@@ -12,7 +12,7 @@ export default function FillInFormButtons({
   program_type: string;
   step: string | undefined;
 }) {
-  const { dispatch } = useContext(FillInFormContext);
+  const { stripeModalToggle } = useFillInFormHook();
   const router = useRouter();
 
   const stepInNumber = !step ? 1 : parseInt(step);
@@ -54,7 +54,7 @@ export default function FillInFormButtons({
                 programTypePath(stepInNumber + 1)
               }
               else {
-                dispatch({ type: 'MODAL_TOGGLE' });
+                stripeModalToggle();
               }
 
             }}>

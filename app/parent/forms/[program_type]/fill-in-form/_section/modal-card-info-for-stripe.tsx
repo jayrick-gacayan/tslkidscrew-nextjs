@@ -6,18 +6,19 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Fragment, useContext } from "react";
 import StripeCardForm from "./stripe-card-form";
 import { FillInFormContext } from "../_context/fill-in-form-context";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
 
 export default function ModalCardInfoForStripe() {
-  const { dispatch, state } = useContext(FillInFormContext)
+  const { state, stripeModalToggle } = useFillInFormHook();
 
   return (
     <Transition appear show={state.stripeModalOpen} as={Fragment}>
       <Dialog as="div"
         className='fixed h-screen w-screen top-0 left-0 z-[500] flex items-center justify-center'
         onClose={() => {
-          dispatch({ type: 'MODAL_TOGGLE' });
+          stripeModalToggle();
         }}>
         <Transition.Child as={Fragment}
           enter="ease-out duration-300"
