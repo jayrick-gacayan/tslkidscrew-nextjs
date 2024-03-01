@@ -58,7 +58,7 @@ export default function AdminUserForm({
           <div className="text-black">{message}</div>
         )
       }, {
-        toastId: `${type}-admin-user-form-${Date.now()}`,
+        toastId: `modal-admin-user-form-${Date.now()}`,
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       })
