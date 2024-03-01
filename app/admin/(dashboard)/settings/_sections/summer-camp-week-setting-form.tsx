@@ -32,7 +32,6 @@ export default function SummerCampWeekSettingForm({
       'week-capacity': fieldInputValue(weekData?.capacity?.toString() ?? ''),
       'week-notes': weekData?.notes ?? ''
     } as SummerCampWeekSettingFormStateProps);
-  const { pending } = useFormStatus();
 
   useEffect(() => {
     setDataWeek({

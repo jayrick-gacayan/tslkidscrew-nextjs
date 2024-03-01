@@ -4,7 +4,7 @@ import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
 import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
 import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import DatePicker from "react-datepicker";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
@@ -25,12 +25,17 @@ export default function ChildrenForm() {
         {
           Array.from({ length: state.numberOfChildren }).map((val, idx) => {
             return (
-              <>
+              <Fragment key={`children-form-${idx}`}>
                 <div className="p-4 relative rounded border border-secondary-light ">
-                  <div className="absolute -top-4 -right-3 cursor-pointer bg-danger hover:bg-danger-light h-8 w-8 text-white rounded-full"
-                    onClick={() => { setNumberOfChild(state.numberOfChildren - 1) }}>
-                    <span className="translate-x-3 translate-y-1 block">x</span>
-                  </div>
+                  {
+                    state.numberOfChildren > 1 &&
+                    (
+                      <div className="absolute -top-4 -right-3 cursor-pointer bg-danger hover:bg-danger-light h-8 w-8 text-white rounded-full"
+                        onClick={() => { setNumberOfChild(state.numberOfChildren - 1) }}>
+                        <span className="translate-x-3 translate-y-1 block">x</span>
+                      </div>
+                    )
+                  }
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <InputCustom
@@ -77,7 +82,7 @@ export default function ChildrenForm() {
                   )
                 }
 
-              </>
+              </Fragment>
             )
           })
         }

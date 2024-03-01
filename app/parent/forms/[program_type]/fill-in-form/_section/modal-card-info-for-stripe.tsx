@@ -5,7 +5,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Fragment, useContext } from "react";
 import StripeCardForm from "./stripe-card-form";
-import { FillInFormContext } from "../_context/fill-in-form-context";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
@@ -41,7 +40,7 @@ export default function ModalCardInfoForStripe() {
             <Dialog.Title as="h1" className='font-medium text-[24px]'>
               Payment
             </Dialog.Title>
-            <Elements stripe={stripePromise}>
+            <Elements stripe={stripePromise} options={{}}>
 
               <StripeCardForm />
             </Elements>

@@ -25,15 +25,12 @@ export default function StripeCardForm() {
     const cardCvcElement = elements.getElement(CardCvcElement);
 
     // Use the createPaymentMethod method to create a payment method from the card elements.
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardNumberElement!,
-    });
+    const { token, error } = await stripe.createToken(cardNumberElement!);
 
     if (error) {
       console.error(error);
     } else {
-      console.log(paymentMethod);
+      console.log(token)
       // Send the payment method ID to your server to complete the payment.
     }
   };

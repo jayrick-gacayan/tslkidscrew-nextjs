@@ -165,34 +165,20 @@ export async function getSummerCampWeekPrices(token: string) {
 }
 
 export async function updateSummerCampWeekSetting(
-  {
-    id,
-    name,
-    start_date,
-    capacity,
-    notes,
-  }: SummerCampWeekSettingInputTypes
-  , token: string
+  formData: FormData,
+  token: string
 ) {
 
-  console.log('id', id)
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/update`,
     {
       method: 'PATCH',
-      body: JSON.stringify({
-        summer_camp_weeks: {
-          id,
-          name,
-          start_date,
-          capacity,
-          notes,
-        }
-      }),
-      ...authHeaders(token)
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token!}`
+      }
     }
   );
-
 
   try {
     let response = await result.json();
