@@ -52,7 +52,8 @@ export default function AdminUserForm({
       await pathRevalidate(pathName);
     }
     let { message, success } = state;
-    if (success !== undefined) {
+
+    if (state?.success !== undefined) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -70,9 +71,9 @@ export default function AdminUserForm({
     }
 
   }, [
+    state,
     formReset,
-    pathname,
-    state
+    pathname
   ]);
 
   console.log('pathname', pathname)
