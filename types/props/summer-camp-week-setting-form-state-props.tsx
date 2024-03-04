@@ -6,4 +6,5 @@ export interface SummerCampWeekSettingFormStateProps extends FormStateProps {
   'week-capacity'?: InputProps<string>;
   'week-start-date'?: string;
   'week-notes'?: string;
+  'week-enabled'?: boolean;
 }
