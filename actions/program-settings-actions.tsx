@@ -29,6 +29,9 @@ export async function updateSummerCampWeekSettingAction(
 ) {
   let admin: Session<Admin> | null = await auth();
 
+  const rawFormData = Object.fromEntries(formData.entries());
+
+  console.log('rawFormData', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
     'week-name': Joi.string()
       .required()
@@ -56,6 +59,7 @@ export async function updateSummerCampWeekSettingAction(
   let weekCapacity = formData.get('week-capacity') as string ?? '';
   let weekStartDate = formData.get('week-start-date') as string ?? '';
   let weekNotes = formData.get('week-notes') as string ?? '';
+  let weekEnabled = !!formData.get('week-enabled') ? true : false;
 
   let validate = updateSummerCampWeekSettingSchema.validate({
     'week-name': weekName,
@@ -76,12 +80,12 @@ export async function updateSummerCampWeekSettingAction(
   }
 
   let tempFormData = new FormData();
-  tempFormData.append(`summer_camp_weeks[0][id]`, id.toString());
-  tempFormData.append(`summer_camp_weeks[0][name]`, weekName);
-  tempFormData.append(`summer_camp_weeks[0][capacity]`, weekCapacity);
-  tempFormData.append(`summer_camp_weeks[0][start_date]`, weekStartDate);
-  tempFormData.append(`summer_camp_weeks[0][start_date]`, weekStartDate);
-  tempFormData.append(`summer_camp_weeks[0][notes]`, weekNotes);
+  tempFormData.append(`summer_camp_weeks[id]`, id.toString());
+  tempFormData.append(`summer_camp_weeks[name]`, weekName);
+  tempFormData.append(`summer_camp_weeks[capacity]`, weekCapacity);
+  tempFormData.append(`summer_camp_weeks[start_date]`, weekStartDate);
+  tempFormData.append(`summer_camp_weeks[notes]`, weekNotes);
+  tempFormData.append(`summer_camp_weeks[enabled]`, weekEnabled ? 'true' : 'false');
 
   let result: Result<any> = await updateSummerCampWeekSetting(tempFormData, admin?.accessToken!);
 
