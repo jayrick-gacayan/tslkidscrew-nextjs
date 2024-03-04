@@ -1,11 +1,7 @@
-export function numInCurrency(
-  loc: string,
-  currency: string,
-  style: string,
-  number: number
+export function currencyFormat(
+  locale: string | string[] | undefined,
+  options: Intl.NumberFormatOptions,
+  number: number | bigint
 ) {
-  return Intl.NumberFormat(loc, {
-    style: style,
-    currency: currency,
-  }).format(number);
+  return Intl.NumberFormat(locale, options).format(number);
 }

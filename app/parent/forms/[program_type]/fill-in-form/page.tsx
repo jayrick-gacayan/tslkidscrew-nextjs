@@ -23,7 +23,8 @@ export default function Page({
     <FillInFormProvider>
       <div className='pb-12 w-full'>
         <div className="rounded drop-shadow bg-white w-full xl:w-8/12 m-auto block p-6 max-h-fit">
-          <FormActionContainer program_type={program_type} step={step} />
+          <FormActionContainer key={`fill-in-form-action-${step ?? '1'}`}
+            program_type={program_type} step={step} />
         </div>
       </div>
     </FillInFormProvider>

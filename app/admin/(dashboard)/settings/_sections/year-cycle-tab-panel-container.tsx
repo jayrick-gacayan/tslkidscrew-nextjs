@@ -1,7 +1,7 @@
 'use client';
 
 import { Tab } from "@headlessui/react";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { addYears, subYears } from "date-fns";
 import YearToYearDatePicker from "../_components/year-to-year-datepicker";
@@ -11,6 +11,7 @@ import { pathRevalidate } from "@/actions/common-actions";
 import { toast, ToastContentProps } from "react-toastify";
 import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import SettingFormSubmit from "../_components/setting-form-submit";
 
 let today = new Date();
 let minDate = subYears(today, 1);
@@ -90,10 +91,7 @@ export default function YearCycleTabPanelContainer({
                   setYearCycle={setNextYearCycle} />
               </div>
             </div>
-            <button className="p-2 bg-primary w-auto ml-auto block rounded text-white disabled:cursor-not-allowed"
-              disabled={pending}>
-              {pending ? '...Checking' : 'Update Year Cycle'}
-            </button>
+            <SettingFormSubmit text='Update Year Cycle' />
           </form>
         </div>
       </div>

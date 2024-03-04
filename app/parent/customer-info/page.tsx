@@ -6,7 +6,6 @@ import { Parent } from "@/models/parent";
 export default async function Page() {
   let parent: Session<Parent> | null = await auth();
 
-  console.log('parent in front-end auth', parent)
   return (
     <div className="pb-8">
       <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">
