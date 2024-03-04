@@ -1,8 +1,8 @@
 import InputCustom from "@/app/_components/input-custom";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import { Dispatch, SetStateAction } from "react";
-import { useFormStatus } from "react-dom";
 import SettingListboxCustom from "../_components/setting-custom-lisbox";
+import SettingFormSubmit from "../_components/setting-form-submit";
 
 export default function SummerCampPromoPricesForm({
   weekStr,
@@ -16,7 +16,6 @@ export default function SummerCampPromoPricesForm({
   weekNumbers: number[];
 }) {
 
-  const { pending } = useFormStatus();
   return (
     <>
       <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center">
@@ -55,6 +54,7 @@ export default function SummerCampPromoPricesForm({
                     </div>
                     <div className="w-full">
                       <InputCustom type="text"
+                        name='summer-camp-promo-prices[]'
                         prefixIcon={<div className="absolute left-3 z-20 top-2 block">&#36;</div>}
                         inputMode="numeric"
                         className="bg-white p-2 pl-10"
@@ -66,14 +66,8 @@ export default function SummerCampPromoPricesForm({
             }
           </div>
         </div>
-        <div className="w-fit ml-auto block">
-          <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
-            disabled={pending}>
-            {pending ? '...Processing' : 'Update Promos'}
-          </button>
-        </div>
+        <SettingFormSubmit text='Update Promos' />
       </form>
-
     </>
   )
 }

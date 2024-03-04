@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-export async function confirmSwalInfo(data: any | ReactNode, text: string) {
+export async function confirmSwalInfo(text: string, data: any | ReactNode) {
   return await withReactContent(Swal).fire({
-    html: (<SwalConfirmInfo text="Are you sure you want to delete" data={data} />),
+    html: (<SwalConfirmInfo text={text} data={data} />),
     confirmButtonText: "Confirm",
     cancelButtonText: "Cancel",
     customClass: {
