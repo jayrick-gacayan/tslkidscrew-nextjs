@@ -6,7 +6,7 @@ import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LoginFormStateProps } from "@/types/props/login-form-state-props";
 import { ParentRegisterFormStateProps } from "@/types/props/parent-register-form-state-props";
-import { registerCustomer, registerParent } from "@/services/parent-info-services";
+import { registerCustomer, registerParent } from "@/services/parent-register-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { Result } from "@/models/result";
 import { fieldInputValue } from "@/types/helpers/field-input-value";

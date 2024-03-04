@@ -53,7 +53,8 @@ export default function PopoverReactDayPicker({
         {...getReferenceProps()}>
         <input type='hidden' name={inputName} value={
           !selected ? '' :
-            !Array.isArray(selected) ? format(selected, 'yyyy-MM-dd') :
+            !Array.isArray(selected) ?
+              format(selected, 'yyyy-MM-dd') :
               selected.length === 0 ? '' :
                 selected.map((value: Date) => {
                   return format(value, 'LLLL-d-yyyy')
@@ -61,7 +62,7 @@ export default function PopoverReactDayPicker({
         } />
         {
           !selected ? placeholder :
-            !Array.isArray(selected) ? format(selected, 'yyyy-MM-dd') :
+            !Array.isArray(selected) ? format(selected, inputName === 'week-start-date' ? 'MM/dd/yyyy' : 'MMMM d, yyyy') :
               selected.length === 0 ? placeholder :
                 selected.map((value: Date) => {
                   return format(value, 'LLL. d, yyyy')
