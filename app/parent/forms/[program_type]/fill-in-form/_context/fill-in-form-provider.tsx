@@ -1,27 +1,27 @@
 'use client'
-import { ReactNode, useReducer } from "react";
+
+import { ReactNode, useMemo, useReducer } from "react";
 import { FillInFormContext } from "./fill-in-form-context";
-import { FillInFormContextTypes } from "./context-types";
+import { fillInFormReducer } from "./fill-in-form-reducer";
+import { ChildrenInfoType } from "@/types/input-types/children-info-input-types";
 
-const initialState: FillInFormContextTypes = {
+let today = new Date();
+let defaultDate = new Date(new Date(today.getFullYear() - 5, today.getMonth(), today.getDate()))
+
+export const initChildren: ChildrenInfoType = {
+  first_name: '',
+  last_name: '',
+  birthdate: defaultDate,
+  school_attending: ''
+}
+
+export const fillInFormInitState = {
   stripeModalOpen: false,
-  numberOfChildren: 1,
-};
-
-const reducer = (state: FillInFormContextTypes, action: { type: any; payload: any; }) => {
-  switch (action.type) {
-    case 'MODAL_TOGGLE':
-      return {
-        ...state,
-        stripeModalOpen: !state.stripeModalOpen
-      };
-    case 'SET_NUMBER_OF_CHILD':
-      return {
-        ...state,
-        numberOfChildren: action.payload
-      }
-    default:
-      return state;
+  fillInForm: {
+    location: undefined,
+    children: [
+      initChildren
+    ]
   }
 };
 
@@ -30,10 +30,11 @@ export default function FillInFormProvider({
 }: {
   children: ReactNode;
 }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(fillInFormReducer, fillInFormInitState);
+  const value = useMemo(() => { return [state, dispatch] }, [state]);
 
   return (
-    <FillInFormContext.Provider value={{ state, dispatch }}>
+    <FillInFormContext.Provider value={value}>
       {children}
     </FillInFormContext.Provider>
   )

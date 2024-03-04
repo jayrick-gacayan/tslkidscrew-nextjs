@@ -1,7 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { Fragment, ReactNode, Ref, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
-import { Fa6SolidCaretDown } from "./svg/fa6-solid-caret-down";
 import { ValidationType } from "@/types/enums/validation-type";
 
 type MyListboxProps = {

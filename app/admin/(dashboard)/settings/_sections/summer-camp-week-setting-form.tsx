@@ -1,19 +1,16 @@
 import { updateSummerCampWeekSettingAction } from "@/actions/program-settings-actions";
 import InputCustom from "@/app/_components/input-custom";
-import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
-import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
-import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
 import TextareaCustom from "@/app/_components/textarea-custom";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useFormStatus, useFormState } from "react-dom";
-import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { toast, ToastContentProps } from "react-toastify";
 import { pathRevalidate } from "@/actions/common-actions";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
+import SettingFormSubmit from "../_components/setting-form-submit";
 
 export default function SummerCampWeekSettingForm({
   weekData,
@@ -30,12 +27,11 @@ export default function SummerCampWeekSettingForm({
   const [state, formAction] = useFormState(
     updateSummerCampWeekSettingAction.bind(null, weekData?.id!),
     {
-      ['week-name']: fieldInputValue(weekData?.name ?? ''),
-      ['week-start-date']: !!startDate ? format(new Date(startDate), `yyyy-MM-dd`) : '',
-      ['week-capacity']: fieldInputValue(weekData?.capacity?.toString() ?? ''),
-      ['week-notes']: weekData?.notes ?? ''
+      'week-name': fieldInputValue(weekData?.name ?? ''),
+      'week-start-date': !!startDate ? format(new Date(startDate), `yyyy-MM-dd`) : '',
+      'week-capacity': fieldInputValue(weekData?.capacity?.toString() ?? ''),
+      'week-notes': weekData?.notes ?? ''
     } as SummerCampWeekSettingFormStateProps);
-  const { pending } = useFormStatus();
 
   useEffect(() => {
     setDataWeek({
@@ -125,12 +121,7 @@ export default function SummerCampWeekSettingForm({
             onChange={handleOnChange} />
         </div>
       </div>
-      <div className="w-fit ml-auto block">
-        <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
-          disabled={pending}>
-          {pending ? '...Processing' : 'Update Week Prices'}
-        </button>
-      </div>
+      <SettingFormSubmit text='Update Week' />
     </form>
   )
 }

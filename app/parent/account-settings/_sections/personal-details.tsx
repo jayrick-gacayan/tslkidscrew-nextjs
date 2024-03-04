@@ -4,8 +4,9 @@ import { Tab } from "@headlessui/react";
 import InputCustom from "@/app/_components/input-custom";
 import Fa6SolidPhone from "@/app/_components/svg/fa6-solid-phone";
 import Fa6SolidLocationDot from "@/app/_components/svg/fa6-solid-location-dot";
+import { Parent } from "@/models/parent";
 
-export default function PersonalDetails() {
+export default function PersonalDetails({ parent }: { parent: Partial<Parent> | undefined }) {
 
   return (
     <Tab.Panel as='div' className="space-y-8">
@@ -15,12 +16,14 @@ export default function PersonalDetails() {
           <InputCustom labelText="Firstname"
             id="firstName"
             name="firstname"
+            defaultValue={parent?.first_name ?? ''}
             className="bg-secondary p-2 border-transparent"
             placeholder="Firstname:"
             type="text" />
           <InputCustom labelText="Lastname"
             id="lastName"
             name="lastname"
+            defaultValue={parent?.last_name ?? ''}
             className="bg-secondary p-2 border-transparent"
             placeholder="Lastname:"
             type="text" />
@@ -31,6 +34,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="Emergency Number"
           id="emergency-number"
           name="emergency-number"
+          defaultValue={parent?.emergency_phone_number ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Emergency Number:"
           type="text"
@@ -39,6 +43,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="Phone Number"
           id="phone-number"
           name="phone-number"
+          defaultValue={parent?.phone_number ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Phone Number:"
           type="text"
@@ -50,6 +55,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="Address Line 1"
           id="address-line-one"
           name="address-line-one"
+          defaultValue={parent?.address_line_one ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Address Line 1:"
           type="text"
@@ -57,6 +63,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="Address Line 2"
           id="address-line-two"
           name="address-line-two"
+          defaultValue={parent?.address_line_two ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Address Line 2:"
           type="text"
@@ -64,6 +71,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="City"
           id="address-city"
           name="address-city"
+          defaultValue={parent?.city ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="City:"
           type="text"
@@ -71,6 +79,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="State"
           id="address-state"
           name="address-state"
+          defaultValue={parent?.state ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="State:"
           type="text"
@@ -78,6 +87,7 @@ export default function PersonalDetails() {
         <InputCustom labelText="Zipcode"
           id="address-zipcode"
           name="address-zipcode"
+          defaultValue={parent?.zip_code ?? ''}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Zipcode:"
           type="text"

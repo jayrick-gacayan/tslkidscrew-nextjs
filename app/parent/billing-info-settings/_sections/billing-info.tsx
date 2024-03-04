@@ -6,8 +6,14 @@ import CardDetails from "./card-details";
 import CustomTabItem from "@/app/_components/custom-tab-item";
 import BankDetails from "./bank-details";
 import NotificationSettings from "./notification-settings";
+import { Parent } from "@/models/parent";
 
-export default function BillingInfo() {
+export default function BillingInfo({
+  parent
+}: {
+  parent: Partial<Parent> | undefined;
+}) {
+
   return (
     <Tab.Panel as='div' className="space-y-8">
       <h1 className="text-[32px] font-medium">Billing Info</h1>
@@ -22,7 +28,10 @@ export default function BillingInfo() {
             </div>
           </div>
           <Tab.Panels as={Fragment}>
-            <CardDetails />
+            <CardDetails cardDetails={!parent ? undefined : {
+              card_last_four: parent?.card_last_four,
+              card_brand: parent?.card_brand
+            }} />
             <BankDetails />
             <NotificationSettings />
           </Tab.Panels>

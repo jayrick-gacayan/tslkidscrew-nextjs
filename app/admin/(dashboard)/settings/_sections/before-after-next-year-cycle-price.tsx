@@ -3,6 +3,7 @@
 import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
 import { useCallback, useMemo, useState } from "react";
 import SettingListboxCustom from "../_components/setting-custom-lisbox";
+import BeforeOrAfterSchoolFormData from "../_components/before-or-after-school-form-data";
 
 export default function BeforeAfterNextYearCyclePrice({
   nextBeforeOrAfterSchoolSettings,
@@ -10,6 +11,7 @@ export default function BeforeAfterNextYearCyclePrice({
   nextBeforeOrAfterSchoolSettings: BeforeOrAfterSchoolSetting[]
 }) {
   const [daySelection, setDaySelection] = useState('everyday');
+  const [currentId, setCurrentId] = useState<number>(-1)
 
   const daysNumber = useMemo(() => {
     return daySelection === 'everyday' ? 1 : daySelection === '3-days-per-week' ? 3 : 4;
@@ -63,39 +65,15 @@ export default function BeforeAfterNextYearCyclePrice({
                   <tr key={`before-after-next-year-cycle-${childValue}`}
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
                     <td className="w-48">Children #{childValue}</td>
-                    <td >
-                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                        onClick={() => { }}>
-                        {
-                          Intl.NumberFormat('en-US', {
-                            style: "currency",
-                            currency: 'USD',
-                          }).format(beforeBOAS?.price ?? 0)
-                        }
-                      </span>
-                    </td>
-                    <td >
-                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                        onClick={() => { }}>
-                        {
-                          Intl.NumberFormat('en-US', {
-                            style: "currency",
-                            currency: 'USD',
-                          }).format(afterBOAS?.price ?? 0)
-                        }
-                      </span>
-                    </td>
-                    <td >
-                      <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                        onClick={() => { }}>
-                        {
-                          Intl.NumberFormat('en-US', {
-                            style: "currency",
-                            currency: 'USD',
-                          }).format(bothBOAS?.price ?? 0)
-                        }
-                      </span>
-                    </td>
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={beforeBOAS!} />
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={afterBOAS!} />
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={bothBOAS!} />
                   </tr>
                 )
               })

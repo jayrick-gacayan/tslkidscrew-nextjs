@@ -1,17 +1,16 @@
 import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
-import { RefObject, useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import SettingListboxCustom from "../_components/setting-custom-lisbox";
-import InputCustom from "@/app/_components/input-custom";
-import { useOnClickOutside } from "usehooks-ts";
+import BeforeOrAfterSchoolFormData from "../_components/before-or-after-school-form-data";
+
 
 export default function BeforeAfterCurrentYearCyclePrice({
   currentBeforeOrAfterSchoolSettings,
 }: {
   currentBeforeOrAfterSchoolSettings: BeforeOrAfterSchoolSetting[];
 }) {
-  const formRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [daySelection, setDaySelection] = useState('everyday');
-  const [currentIdx, setCurrentIdx] = useState<number | undefined>(undefined)
+  const [currentId, setCurrentId] = useState<number>(-1)
 
   const daysNumber = useMemo(() => {
     return daySelection === 'everyday' ? 1 : daySelection === '3-days-per-week' ? 3 : 4;
@@ -29,25 +28,6 @@ export default function BeforeAfterCurrentYearCyclePrice({
       return child_record_count === childCount && program_type === programType
     })
   }, [beforeSettingsToShow]);
-
-  function handleClickRef(e: any, idx: number) {
-    setCurrentIdx(idx);
-    formRefs.current[idx]?.querySelector('span')?.classList.remove('block')
-    formRefs.current[idx]?.querySelector('span')?.classList.add('hidden')
-    formRefs.current[idx]?.querySelector('form')?.classList.add('block')
-    formRefs.current[idx]?.querySelector('form')?.classList.remove('hidden')
-  }
-
-  // useOnClickOutside(formRefs, () => {
-  //   if (currentIdx) {
-
-  //     formRefs.current[currentIdx].current?.querySelector('span')?.classList.remove('hidden')
-  //     formRefs.current[currentIdx].current?.querySelector('span')?.classList.add('block')
-  //     formRefs.current[currentIdx].current?.querySelector('form')?.classList.add('hidden')
-  //     formRefs.current[currentIdx].current?.querySelector('form')?.classList.remove('block');
-  //     setCurrentIdx(undefined);
-  //   }
-  // })
 
   return (
     <div className="space-y-4">
@@ -82,78 +62,17 @@ export default function BeforeAfterCurrentYearCyclePrice({
                 let bothBOAS = getBOASByProgramType(childValue, 'both');
                 return (
                   <tr key={`before-after-current-year-cycle-${childValue}`}
-                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
+                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:bg-secondary">
                     <td className="w-48">Children #{childValue}</td>
-                    <td className="w-auto">
-                      <div ref={(ref) => { formRefs.current[childValue - 1] = ref }}
-                        onClick={() => { setCurrentIdx(childValue - 1) }}>
-                        <form className="hidden w-full">
-                          <input type='hidden' name='master_prices[][id]' value={beforeBOAS?.id ?? 1} />
-                          <InputCustom type="text"
-                            id={`before-or-after-school-setting-before-${beforeBOAS?.id!}`}
-                            inputMode="numeric"
-                            name="master_prices[][price]"
-                            defaultValue={beforeBOAS?.price?.toString() ?? ''}
-                            className="bg-white text-center" />
-                        </form>
-                        <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                          onClick={() => { }}>
-                          {
-                            Intl.NumberFormat('en-US', {
-                              style: "currency",
-                              currency: 'USD',
-                            }).format(beforeBOAS?.price ?? 0)
-                          }
-                        </span>
-                      </div>
-                    </td>
-                    <td className="w-auto">
-                      <div ref={(ref) => { formRefs.current[childValue + 0] = ref }}
-                        onClick={() => { }}>
-                        <form className="hidden w-full">
-                          <input type='hidden' name='master_prices[][id]' value={afterBOAS?.id ?? 1} />
-                          <InputCustom type="text"
-                            id={`before-or-after-school-setting-before-${afterBOAS?.id!}`}
-                            inputMode="numeric"
-                            name="master_prices[][price]"
-                            defaultValue={afterBOAS?.price?.toString() ?? ''}
-                            className="bg-white text-center" />
-                        </form>
-                        <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                          onClick={() => { }}>
-                          {
-                            Intl.NumberFormat('en-US', {
-                              style: "currency",
-                              currency: 'USD',
-                            }).format(afterBOAS?.price ?? 0)
-                          }
-                        </span>
-                      </div>
-                    </td>
-                    <td className="w-auto">
-                      <div ref={(ref) => { formRefs.current[childValue - 1] = ref }}
-                        onClick={() => { }}>
-                        <form className="hidden w-full">
-                          <input type='hidden' name='master_prices[][id]' value={bothBOAS?.id ?? 1} />
-                          <InputCustom type="text"
-                            id={`before-or-after-school-setting-before-${bothBOAS?.id!}`}
-                            inputMode="numeric"
-                            name="master_prices[][price]"
-                            defaultValue={bothBOAS?.price?.toString() ?? ''}
-                            className="bg-white text-center" />
-                        </form>
-                        <span className={`block w-full border border-secondary-light p-3 bg-white rounded text-center`}
-                          onClick={() => { }}>
-                          {
-                            Intl.NumberFormat('en-US', {
-                              style: "currency",
-                              currency: 'USD',
-                            }).format(bothBOAS?.price ?? 0)
-                          }
-                        </span>
-                      </div>
-
-                    </td>
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={beforeBOAS!} />
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={afterBOAS!} />
+                    <BeforeOrAfterSchoolFormData currentId={currentId}
+                      setCurrentId={setCurrentId}
+                      beforeOrAfterSchoolSetting={bothBOAS!} />
                   </tr>
                 )
               })
