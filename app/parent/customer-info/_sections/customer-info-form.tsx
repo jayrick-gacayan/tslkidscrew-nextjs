@@ -20,7 +20,7 @@ function ButtonSubmit() {
     <button className="w-48 m-auto block bg-primary text-white rounded p-2 disabled:cursor-not-allowed"
       disabled={pending}>
       {
-        pending ? (<><Spinners3DotsScale /> Checking</>) : 'Submit'
+        pending ? (<><Spinners3DotsScale className="inline-block" /> <span>Checking</span></>) : 'Submit'
       }
     </button>
   )
