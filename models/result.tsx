@@ -9,7 +9,6 @@ export class Result<T> {
   errors?: T | null = undefined;
   error: string = '';
 
-
   constructor(init?: Partial<Result<T>>) {
     Object.assign(this, init);
   }
