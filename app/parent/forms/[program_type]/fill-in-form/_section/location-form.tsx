@@ -1,62 +1,32 @@
-'use client';
-
-import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
-import { useState } from "react";
+import CustomListbox from "@/app/_components/listbox-custom";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 let locationItems = [
   {
     id: 1,
-    name: 'Albany Daycare',
-    programs: [
-      { id: 1, name: "Day Care Tour", category: "Day Care" },
-      { id: 2, name: "Day Care", category: "Day Care" },
-      { id: 3, name: "Summer Camp Tour", category: "Summer Camp" },
-    ]
+    name: 'Albany Daycare'
   },
   {
     id: 2,
-    name: 'Clifton Park',
-    programs: [
-      { id: 1, name: "Day Care Tour", category: "Day Care" },
-      { id: 2, name: "Day Care", category: "Day Care" },
-      { id: 3, name: "Summer Camp Tour", category: "Summer Camp" },
-    ]
+    name: 'Clifton Park'
   },
   {
     id: 3,
-    name: 'Delmar',
-    programs: [
-      { id: 1, name: "Day Care Tour", category: "Day Care" },
-      { id: 2, name: "Day Care", category: "Day Care" },
-      { id: 3, name: "Summer Camp Tour", category: "Summer Camp" },
-    ]
+    name: 'Delmar'
   },
   {
     id: 4,
     name: 'East Greenbush-FUMC',
-    programs: [
-      { id: 1, name: "Day Care Tour", category: "Day Care" },
-      { id: 2, name: "Day Care", category: "Day Care" },
-      { id: 3, name: "Summer Camp Tour", category: "Summer Camp" },
-    ],
   },
   {
     id: 5,
     name: 'Gardner Dickinson',
-    programs: [
-      { id: 1, name: "Day Care Tour", category: "Day Care" },
-      { id: 2, name: "Day Care", category: "Day Care" },
-      { id: 3, name: "Summer Camp Tour", category: "Summer Camp" },
-    ]
   },
 ]
 
-export default function LocationForm({ loc }: { loc: string | undefined }) {
-  const [location, setLocation] = useState<any>(
-    locationItems.find((value: any) => {
-      return (value.id === parseInt(loc!))
-    }) ?? undefined
-  );
+export default function LocationForm({ locationState }: { locationState: any }) {
+  const { state, setLocation } = useFillInFormHook();
 
   return (
     <div className="space-y-4 w-full">
@@ -64,13 +34,22 @@ export default function LocationForm({ loc }: { loc: string | undefined }) {
         <h1 className="font-medium text-[36px] text-black">Pick A Location</h1>
       </div>
       <div className="w-full relative">
-        <CustomListboxHeadless value={location}
+        <CustomListbox value={state?.fillInForm?.location}
+          name='location-place'
           placeholder='Location'
           onChange={(value: any) => {
-            setLocation(value)
+            setLocation(value);
           }}
           items={locationItems}
-          by="id" />
+          labelText="Location"
+          by="id"
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          keyDescription="registration-form-form-location"
+          errorText={locationState?.errorText}
+          validationStatus={locationState?.validationStatus} />
       </div>
     </div>
   )

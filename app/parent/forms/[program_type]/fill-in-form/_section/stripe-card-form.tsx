@@ -30,6 +30,8 @@ export default function StripeCardForm() {
     if (error) {
       console.error(error);
     } else {
+
+
       console.log(token)
       // Send the payment method ID to your server to complete the payment.
     }

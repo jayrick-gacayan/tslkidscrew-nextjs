@@ -2,12 +2,12 @@
 
 import { Transition, Dialog } from "@headlessui/react";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import StripeCardForm from "./stripe-card-form";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
+import getStripe from "@/types/helpers/get-stripe";
 
-const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+const stripePromise = getStripe();
 
 export default function ModalCardInfoForStripe() {
   const { state, stripeModalToggle } = useFillInFormHook();
@@ -41,7 +41,6 @@ export default function ModalCardInfoForStripe() {
               Payment
             </Dialog.Title>
             <Elements stripe={stripePromise} options={{}}>
-
               <StripeCardForm />
             </Elements>
 

@@ -12,8 +12,6 @@ export default async function Layout({
 }) {
   let parent: Session<Parent> | null = await auth();
 
-  console.log('parent', parent?.user)
-
   return (
     <div className="relative w-screen h-screen">
       <ParentHeader parent={parent?.user!} />
