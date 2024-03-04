@@ -134,8 +134,6 @@ export async function registerCustomerAction(
 ) {
   let parent: Session<Parent> | null = await auth();
 
-  console.log('parent auth', parent)
-
   const rawFormData = Object.fromEntries(formData.entries())
   console.log('rawFormData', rawFormData)
   let customerSchema = Joi.object({
