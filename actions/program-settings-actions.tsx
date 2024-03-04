@@ -6,6 +6,7 @@ import { Session } from "next-auth";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import {
+  updateBeforeOrAfterSchoolSettings,
   updateProgramYearCycleSetting,
   updateSummerCampSwimSetting,
   updateSummerCampWeekSetting,
@@ -28,6 +29,9 @@ export async function updateSummerCampWeekSettingAction(
 ) {
   let admin: Session<Admin> | null = await auth();
 
+  const rawFormData = Object.fromEntries(formData.entries());
+
+  console.log('rawFormData', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
     'week-name': Joi.string()
       .required()
@@ -51,10 +55,16 @@ export async function updateSummerCampWeekSettingAction(
       }),
   })
 
+  let weekName = formData.get('week-name') as string ?? '';
+  let weekCapacity = formData.get('week-capacity') as string ?? '';
+  let weekStartDate = formData.get('week-start-date') as string ?? '';
+  let weekNotes = formData.get('week-notes') as string ?? '';
+  let weekEnabled = !!formData.get('week-enabled') ? true : false;
+
   let validate = updateSummerCampWeekSettingSchema.validate({
-    'week-name': formData.get('week-name') as string ?? '',
-    'week-capacity': formData.get('week-capacity') as string ?? '',
-    'week-start-date': formData.get('week-start-date') as string ?? '',
+    'week-name': weekName,
+    'week-capacity': weekCapacity,
+    'week-start-date': weekStartDate,
   }, { abortEarly: false });
 
   if (validate.error) {
@@ -69,13 +79,15 @@ export async function updateSummerCampWeekSettingAction(
     }, {}) as SummerCampWeekSettingFormStateProps;
   }
 
-  let result: Result<any> = await updateSummerCampWeekSetting({
-    id: id.toString(),
-    name: formData.get('week-name') as string ?? '',
-    capacity: parseInt(formData.get('week-capacity') as string) ?? 1,
-    notes: formData.get('week-notes') as string ?? '',
-    start_date: formData.get('week-start-date') as string ?? '',
-  }, admin?.accessToken!);
+  let tempFormData = new FormData();
+  tempFormData.append(`summer_camp_weeks[id]`, id.toString());
+  tempFormData.append(`summer_camp_weeks[name]`, weekName);
+  tempFormData.append(`summer_camp_weeks[capacity]`, weekCapacity);
+  tempFormData.append(`summer_camp_weeks[start_date]`, weekStartDate);
+  tempFormData.append(`summer_camp_weeks[notes]`, weekNotes);
+  tempFormData.append(`summer_camp_weeks[enabled]`, weekEnabled ? 'true' : 'false');
+
+  let result: Result<any> = await updateSummerCampWeekSetting(tempFormData, admin?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -219,7 +231,7 @@ export async function updateVacationCampSettingAction(
   }
 
   return {
-    message: result.message ?? 'Successfully updated a vacation schedule',
+    message: 'Successfully updated a vacation schedule',
     success: true,
   }
 }
@@ -286,4 +298,25 @@ export async function updateProgramYearCycleSettingAction(
     success: true,
 
   }
+}
+
+export async function updateBeforeOrAfterSchoolSettingAction(
+  prevState: any,
+  formData: FormData,
+) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await updateBeforeOrAfterSchoolSettings(formData, admin?.accessToken!);
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      success: false,
+      message: result.message,
+    }
+  }
+
+  return {
+    success: true,
+    message: 'Successfully update the before or after school setting data.'
+  };
 }

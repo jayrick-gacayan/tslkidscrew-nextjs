@@ -2,12 +2,32 @@ import { updateAdminUserAction, addAdminUserAction } from "@/actions/admin-actio
 import { pathRevalidate } from "@/actions/common-actions";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import InputCustom from "@/app/_components/input-custom";
+import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { AdminUserFormStateProps } from "@/types/props/admin-user-form-state-props";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
+
+function ButtonSubmit({ formReset }: { formReset: () => void; }) {
+  const { pending } = useFormStatus();
+  return (
+    <div className="flex items-center justify-end gap-4">
+      <button type='button'
+        className='bg-white text-primary p-2 disabled:cursor-not-allowed'
+        disabled={pending}
+        onClick={() => {
+          formReset()
+        }}>Cancel</button>
+      <button type="submit"
+        className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
+        disabled={pending}>
+        {pending ? <><Spinners3DotsScale className="text-white text-[24px] inline-block mr-1" /></> : 'Save'}
+      </button>
+    </div>
+  )
+}
 
 export default function AdminUserForm({
   type,
@@ -18,7 +38,6 @@ export default function AdminUserForm({
   data: any;
   formReset: () => void;
 }) {
-  const formRef = useRef<HTMLFormElement>(null);
   const pathname = usePathname();
   const [state, formAction] = useFormState(
     type === 'update' ? updateAdminUserAction.bind(null, data?.email ?? '') : addAdminUserAction,
@@ -27,45 +46,40 @@ export default function AdminUserForm({
       'admin-user-name': fieldInputValue(type === 'update' ? data?.name : '')
     } as AdminUserFormStateProps
   )
-  const { pending } = useFormStatus();
-
 
   useEffect(() => {
     async function pathToRevalidate(pathName: string) {
       await pathRevalidate(pathName);
     }
-
     let { message, success } = state;
 
-    if (success !== undefined) {
-
+    if (state?.success !== undefined) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
         )
       }, {
-        toastId: `${type}-admin-user-form-${Date.now()}`,
+        toastId: `modal-admin-user-form-${Date.now()}`,
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       })
 
       if (success) {
         pathToRevalidate(pathname);
-        formRef.current?.reset();
         formReset();
       }
     }
 
   }, [
-    type,
+    state,
     formReset,
-    pathname,
-    state
+    pathname
   ]);
+
+  console.log('pathname', pathname)
 
   return (
     <form action={formAction}
-      ref={formRef}
       className="space-y-8">
       <div className="space-y-4">
         <InputCustom labelText="Email"
@@ -101,20 +115,7 @@ export default function AdminUserForm({
         id={`${type}-is-super-admin`}
         name="admin-user-is-super-admin"
         defaultChecked={data?.is_super_admin ?? false} />
-      <div className="flex items-center justify-end gap-4">
-        <button type='button'
-          className='bg-white text-primary p-2 disabled:cursor-not-allowed'
-          disabled={pending}
-          onClick={() => {
-            formReset()
-            formRef.current?.reset();
-          }}>Cancel</button>
-        <button type="submit"
-          className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
-          disabled={pending}>
-          {pending ? 'Processing' : 'Save'}
-        </button>
-      </div>
+      <ButtonSubmit formReset={formReset} />
     </form>
   )
 }

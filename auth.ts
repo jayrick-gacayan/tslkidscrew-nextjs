@@ -40,9 +40,12 @@ export const {
             if (response.status === 200) {
 
               if (role === 'parent') {
-                let { customer_user: { access_token, ...rest }, ...others } = response;
+                let { customer_user: { access_token, first_name, last_name, email, customer_id, ...rest }, ...others } = response;
                 return {
-                  ...rest,
+                  first_name,
+                  last_name,
+                  email,
+                  customer_id,
                   role: 'parent',
                   accessToken: access_token
                 }

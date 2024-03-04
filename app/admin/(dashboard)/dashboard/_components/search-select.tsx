@@ -1,4 +1,4 @@
-import { Fa6SolidCaretDown } from "@/app/_components/svg/fa6-solid-caret-down";
+import Fa6SolidCaretDown from "@/app/_components/svg/fa6-solid-caret-down";
 import { Combobox } from "@headlessui/react"
 
 export default function SearchSelect({

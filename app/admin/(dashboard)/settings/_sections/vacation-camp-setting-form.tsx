@@ -1,12 +1,11 @@
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
   useState
 } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { addYears } from "date-fns";
 import InputCustom from "@/app/_components/input-custom";
 import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
@@ -25,6 +24,7 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 import { pathRevalidate } from "@/actions/common-actions";
 import { toast, ToastContentProps } from "react-toastify";
+import SettingFormSubmit from "../_components/setting-form-submit";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
@@ -73,7 +73,7 @@ export default function VacationCampSettingForm({
       'vacation-camp-capacity': fieldInputValue(''),
     } as VacationCampSettingFormStateProps
   )
-  const { pending } = useFormStatus();
+
   const [monthYearDate, setMonthYearDate] = useState<Date | null>(cbParseDate());
 
   useEffect(() => {
@@ -213,12 +213,7 @@ export default function VacationCampSettingForm({
             </div>
           </div>
         </div>
-        <div className="w-fit ml-auto block">
-          <button className="bg-primary text-white p-2 rounded disabled:cursor-not-allowed"
-            disabled={pending}>
-            {pending ? '...Processing' : 'Update Schedule'}
-          </button>
-        </div>
+        <SettingFormSubmit text='Update Schedule' />
       </form>
     </div>
   )

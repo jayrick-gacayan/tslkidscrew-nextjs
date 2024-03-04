@@ -1,7 +1,7 @@
 import { Listbox, Transition } from "@headlessui/react"
 import { Fragment } from "react";
 import { twMerge } from "tailwind-merge";
-import { Fa6SolidCaretDown } from "./svg/fa6-solid-caret-down";
+import Fa6SolidCaretDown from "./svg/fa6-solid-caret-down";
 
 export default function CustomListboxHeadless({
   value,

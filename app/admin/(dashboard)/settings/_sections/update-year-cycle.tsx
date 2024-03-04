@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 let today = new Date();
 let minDate = subYears(today, 1);
 let maxDate = addYears(today, 1);
+
 export default function UpdateYearCycle() {
   const [currentYearCycle, setCurrentYearCycle] = useState<Date | null>(minDate);
   const [nextYearCycle, setNextYearCycle] = useState<Date | null>(today);

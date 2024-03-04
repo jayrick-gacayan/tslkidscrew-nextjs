@@ -5,13 +5,14 @@ import InputCustom from "@/app/_components/input-custom";
 import { LocationPlace } from "@/models/location";
 import { useEffect, useState } from "react";
 import { editLocationPlace } from "@/actions/location-actions";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { Admin } from "@/models/admin";
 import { toast, ToastContentProps } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import LocationSubmitButton from "../../../_components/location-submit-button";
 
 export function EditFormLocation({
   locationPlace,
@@ -29,7 +30,7 @@ export function EditFormLocation({
       ['director[id]']: fieldInputValue(''),
     } as LocationPlaceFormStateProps
   );
-  const { pending } = useFormStatus();
+
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
   useEffect(() => {
@@ -107,10 +108,7 @@ export function EditFormLocation({
           errorText={state?.['location-minimum-age']?.errorText}
           validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
-      <button className="bg-primary p-2 rounded text-white w-32 block m-auto"
-        disabled={pending}>
-        {pending ? '...Checking' : 'Submit'}
-      </button>
+      <LocationSubmitButton />
     </form>
   )
 }

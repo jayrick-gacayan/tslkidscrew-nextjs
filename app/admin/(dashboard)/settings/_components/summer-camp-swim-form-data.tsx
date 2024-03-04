@@ -2,12 +2,28 @@ import { pathRevalidate } from "@/actions/common-actions";
 import { updateSummerCampSwimSettingAction } from "@/actions/program-settings-actions";
 import InputCustom from "@/app/_components/input-custom";
 import Fa6SolidSquareCheck from "@/app/_components/svg/fa6-solid-square-check";
+import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
+import { currencyFormat } from "@/types/helpers/currency-format";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
 import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast, ToastContentProps } from "react-toastify";
+
+function ButtonSubmit() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit"
+      disabled={pending}
+      className="cursor-pointer disabled:cursor-not-allowed">
+      {
+        pending ? <Spinners3DotsScale className="text-success text-[32px]" /> : <Fa6SolidSquareCheck className="text-success text-[32px]" />
+      }
+    </button>
+  )
+}
 
 export default function SummerCampSwimSettingTableFormData({
   summerCampSwimSetting,
@@ -27,15 +43,12 @@ export default function SummerCampSwimSettingTableFormData({
     } as SummerCampSwimSettingFormStateProps
   )
 
-  const { pending } = useFormStatus();
-
   useEffect(() => {
     async function pathToRevalidate() {
       await pathRevalidate('/admin/settings')
     }
     let { message, success } = state;
     if (success !== undefined) {
-      console.log('dfdsaf I am here')
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -62,7 +75,8 @@ export default function SummerCampSwimSettingTableFormData({
           id={`summer-camp-swim-setting-${summerCampSwimSetting.with_swim_trip}-${summerCampSwimSetting.id}`}
           onSubmit={(event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            formAction(new FormData(event.currentTarget))
+            let formData = new FormData(event.currentTarget)
+            formAction(formData)
           }}>
           <input type="hidden"
             value={summerCampSwimSetting.child_record_count}
@@ -79,21 +93,14 @@ export default function SummerCampSwimSettingTableFormData({
             name="summer-camp-swim-price"
             defaultValue={summerCampSwimSetting.price?.toString() ?? ''}
             className="bg-white text-center" />
-          <button type="submit"
-            disabled={pending}
-            className="cursor-pointer disabled:cursor-not-allowed">
-            <Fa6SolidSquareCheck className="text-success text-[32px]" />
-          </button>
+          <ButtonSubmit />
         </form>
       </div>
       <span className={`border border-secondary-light p-3 bg-white rounded text-center 
          ${summerCampSwimSetting.id !== focusId ? 'block' : 'hidden'}`}
         onClick={() => { setFocusId(summerCampSwimSetting.id) }}>
         {
-          Intl.NumberFormat('en-US', {
-            style: "currency",
-            currency: 'USD',
-          }).format(summerCampSwimSetting.price!)
+          currencyFormat('en-US', { style: "currency", currency: 'USD', }, summerCampSwimSetting.price ?? 0)
         }
       </span>
     </div>

@@ -47,7 +47,7 @@ export default function GlobalError({
               <h1 className='text-[48px]'>Something went wrong!</h1>
             </div>
             <button className="w-auto p-2 block m-auto rounded bg-primary text-white"
-              onClick={() => reset()}>Try again</button>
+              onClick={() => { window.location.reload(); }}>Try again</button>
           </div>
         </div>
       </body>
