@@ -7,7 +7,7 @@ import Fa6SolidLock from "@/app/_components/svg/fa6-solid-lock";
 import PasswordIcon from "@/app/_components/password-icon";
 import { useState } from "react";
 
-export default function LoginDetails() {
+export default function LoginDetails({ email }: { email: string }) {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
@@ -18,9 +18,11 @@ export default function LoginDetails() {
         <InputCustom labelText="Email"
           id="email-address"
           name="email-address"
+          defaultValue={email}
           className="bg-secondary p-2 pl-10 border-transparent"
           placeholder="Email Address:"
           type="text"
+          disabled={true}
           prefixIcon={<PrefixEnvelopeIcon />} />
         <InputCustom labelText="Password"
           id="password"

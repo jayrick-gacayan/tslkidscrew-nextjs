@@ -11,9 +11,36 @@ import { useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
 
+function ButtonSubmit() {
+  const { pending } = useFormStatus();
+
+  return (
+    <div className="w-full space-y-2">
+      <button className="bg-primary px-4 py-2 w-48 text-white rounded ml-auto block disabled:cursor-not-allowed"
+        disabled={pending}>
+        {
+          !pending ? 'Register' :
+            (
+              <>
+                <Spinners3DotsScale /> Checking
+              </>
+            )
+        }
+      </button>
+      <div>
+        <span>Already have an account? </span>
+        <Link href='/parent/login'
+          className="text-primary hover:underline font-medium">
+          Login
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 export default function RegisterForm() {
   const formRef = useRef<HTMLFormElement>(null)
-  const { pending } = useFormStatus();
+
   const [state, formAction] = useFormState(registerParentAction, {
     email: fieldInputValue(''),
     password: fieldInputValue(''),
@@ -86,25 +113,7 @@ export default function RegisterForm() {
           errorText={state.confirm_password?.errorText}
           validationStatus={state.confirm_password?.validationStatus} />
       </div>
-      <div className="w-full space-y-2">
-        <button className="bg-primary px-4 py-2 w-fit text-white rounded ml-auto block disabled:cursor-not-allowed"
-          disabled={pending}>
-          {!pending ? 'Register' :
-            (
-              <>
-                <Spinners3DotsScale /> Checking
-              </>
-            )
-          }
-        </button>
-        <div>
-          <span>Already have an account? </span>
-          <Link href='/parent/login'
-            className="text-primary hover:underline font-medium">
-            Login
-          </Link>
-        </div>
-      </div>
+      <ButtonSubmit />
     </form>
   )
 }

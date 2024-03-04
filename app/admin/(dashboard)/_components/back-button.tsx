@@ -1,10 +1,7 @@
-import { Fa6SolidArrowLeft } from "@/app/_components/svg/fa6-solid-arrow-left";
+import Fa6SolidArrowLeft from "@/app/_components/svg/fa6-solid-arrow-left";
 
 export default function BackButton({
-  onClick
-}: {
-  onClick: () => void;
-}) {
+  onClick }: { onClick: () => void; }) {
   return (
     <div className="w-fit mr-auto">
       <div tabIndex={0}

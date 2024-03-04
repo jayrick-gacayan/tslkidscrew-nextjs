@@ -6,13 +6,14 @@ import { Admin } from "@/models/admin";
 import { LocationProgram } from "@/models/location-program";
 import { useEffect, useState } from "react";
 import { editLocationProgramAction } from "@/actions/location-program-actions";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 import { toast, ToastContentProps } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
+import SubmitProgramButton from "../../../_components/submit-program-button";
 
 let programTypes = ['After School', 'Summer Camp', 'Vacation Camp']
 
@@ -23,7 +24,6 @@ export default function EditProgramForm({
   locationProgram: LocationProgram;
   activeAdmins: Partial<Admin>[]
 }) {
-  const { pending } = useFormStatus();
   const [state, formAction] = useFormState(
     editLocationProgramAction.bind(null, locationProgram.id!, locationProgram.location_id!),
     {
@@ -135,12 +135,7 @@ export default function EditProgramForm({
           defaultChecked={locationProgram.active ?? false}
           name="active" />
       </div>
-      <div className="w-1/2 block m-auto">
-        <button className="bg-primary p-2 rounded text-white w-fit block m-auto"
-          disabled={pending}>
-          {pending ? '...Checking' : 'Submit'}
-        </button>
-      </div>
+      <SubmitProgramButton />
     </form>
   )
 }

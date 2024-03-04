@@ -28,7 +28,8 @@ export default function SummerCampPromos({
       let tempArr = current.map((val: SummerCampPromoSetting) => { return val.week_count });
 
       return tempArr.indexOf(val.week_count) === index;
-    }).map((val: SummerCampPromoSetting) => { return val.week_count!; })
+    }).filter((value: SummerCampPromoSetting) => { return value.week_count !== 0; })
+      .map((val: SummerCampPromoSetting) => { return val.week_count!; })
   }, [summerCampPromoSettings])
 
   return (
