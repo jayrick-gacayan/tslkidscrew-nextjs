@@ -75,7 +75,8 @@ export default function SummerCampSwimSettingTableFormData({
           id={`summer-camp-swim-setting-${summerCampSwimSetting.with_swim_trip}-${summerCampSwimSetting.id}`}
           onSubmit={(event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            formAction(new FormData(event.currentTarget))
+            let formData = new FormData(event.currentTarget)
+            formAction(formData)
           }}>
           <input type="hidden"
             value={summerCampSwimSetting.child_record_count}
