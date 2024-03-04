@@ -9,8 +9,9 @@ import { Admin } from "@/models/admin";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { useEffect, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
+import LocationSubmitButton from "../../_components/location-submit-button";
 
 export function NewFormLocation({
   admins
@@ -26,7 +27,6 @@ export function NewFormLocation({
       ['director[id]']: fieldInputValue(''),
     } as LocationPlaceFormStateProps
   );
-  const { pending } = useFormStatus();
   const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 
   useEffect(() => {
@@ -97,10 +97,7 @@ export function NewFormLocation({
           errorText={state?.['location-minimum-age']?.errorText}
           validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
-      <button className="bg-primary p-2 rounded text-white w-32 block m-auto disabled:cursor-not-allowed"
-        disabled={pending}>
-        {pending ? '...Checking' : 'Submit'}
-      </button>
+      <LocationSubmitButton />
     </form>
   )
 }

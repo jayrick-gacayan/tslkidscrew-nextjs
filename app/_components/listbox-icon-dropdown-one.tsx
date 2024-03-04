@@ -1,4 +1,4 @@
-import { Fa6SolidCaretDown } from "./svg/fa6-solid-caret-down";
+import Fa6SolidCaretDown from "./svg/fa6-solid-caret-down";
 
 export default function ListboxIconDropdownOne({ open }: { open: boolean }) {
   return (

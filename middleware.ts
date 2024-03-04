@@ -16,7 +16,7 @@ export default auth((req: NextAuthRequest) => {
   }
 
   if (pathname === '/') {
-    return NextResponse.next();
+    return NextResponse.redirect(`${req.nextUrl.origin}/parent/login`);
   }
   else {
     if (!!auth) {

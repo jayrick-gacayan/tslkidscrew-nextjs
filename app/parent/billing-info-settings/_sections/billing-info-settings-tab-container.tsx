@@ -4,8 +4,13 @@ import CustomTabItem from "@/app/_components/custom-tab-item";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import BillingInfo from "./billing-info";
+import { Parent } from "@/models/parent";
 
-export default function BillingInfoSettingsTabContainer() {
+export default function BillingInfoSettingsTabContainer({
+  parent
+}: {
+  parent: Partial<Parent> | undefined;
+}) {
 
   function classNameTab(selected: boolean) {
     return `p-2 border-b-0 border-b-none`;
@@ -18,7 +23,7 @@ export default function BillingInfoSettingsTabContainer() {
           <CustomTabItem labelText='Billing Info' classNameTab={classNameTab} />
         </div>
         <Tab.Panels as='div' className='flex-1 p-8 bg-white'>
-          <BillingInfo />
+          <BillingInfo parent={parent} />
         </Tab.Panels>
       </div>
     </Tab.Group>
