@@ -6,11 +6,8 @@ import * as Joi from 'joi';
 export async function fillInFormAction(step: number, programType: string, prevState: any, formData: FormData) {
   let { stepOne, stepTwo, stepThree, stepFour, stepFive } = prevState;
 
-  const rawFormData = Object.fromEntries(formData.entries());
-
   switch (step) {
     case 1:
-
       let tempLocationData = formData.get('location-place[id]')
       let location = tempLocationData as string ?? ''
 
@@ -54,7 +51,6 @@ export async function fillInFormAction(step: number, programType: string, prevSt
       }
 
     case 2:
-
       if (!!formData.get('back-button')) {
         return {
           stepOne: false,
@@ -96,7 +92,60 @@ export async function fillInFormAction(step: number, programType: string, prevSt
         stepFour,
         stepFive
       }
+    case 3:
+      if (!!formData.get('back-button')) {
+        return {
+          stepOne,
+          stepTwo: false,
+          stepThree,
+          stepFour,
+          stepFive
+        }
+      }
 
+      return {
+        stepOne,
+        stepTwo: false,
+        stepThree,
+        stepFour,
+        stepFive
+      }
+    case 4:
+      if (!!formData.get('back-button')) {
+        return {
+          stepOne,
+          stepTwo,
+          stepThree: false,
+          stepFour,
+          stepFive
+        }
+      }
+
+      return {
+        stepOne,
+        stepTwo,
+        stepThree,
+        stepFour,
+        stepFive
+      }
+    case 5:
+      if (!!formData.get('back-button') && programType === 'before-or-after-school') {
+        return {
+          stepOne,
+          stepTwo,
+          stepThree,
+          stepFour: false,
+          stepFive
+        }
+      }
+
+      return {
+        stepOne,
+        stepTwo,
+        stepThree,
+        stepFour,
+        stepFive
+      }
     default: return {
       message: undefined,
       stepOne,
