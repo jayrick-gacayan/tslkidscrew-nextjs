@@ -1,6 +1,7 @@
 import { Parent } from "@/models/parent";
 import { Result } from "@/models/result";
 import { authHeaders } from "@/types/helpers/auth-headers";
+import { CustomerInfoInputTypes } from "@/types/input-types/customer-info-input-types";
 
 export async function registerParent({
   email,
@@ -44,31 +45,22 @@ export async function registerParent({
   }
 }
 
-export async function registerCustomer({
-  email,
-  first_name,
-  last_name,
-  phone_number,
-  emergency_phone_number,
-  address_line_one,
-  address_line_two,
-  city,
-  state,
-  zip_code,
-  how_did_you_here_about_us
-}: {
-  email: string;
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  emergency_phone_number: string;
-  address_line_one: string;
-  address_line_two: string;
-  city: string;
-  state: string;
-  zip_code: string;
-  how_did_you_here_about_us: string;
-}, token: string) {
+export async function registerCustomer(
+  {
+    email,
+    first_name,
+    last_name,
+    phone_number,
+    emergency_phone_number,
+    address_line_one,
+    address_line_two,
+    city,
+    state,
+    zip_code,
+    how_did_you_here_about_us
+  }: CustomerInfoInputTypes,
+  token: string
+) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customers`,
     {

@@ -14,8 +14,9 @@ import { ToastContentProps, toast } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 
-function ButtonSubmit() {
+function CustomerInfoFormButton() {
   const { pending } = useFormStatus();
+
   return (
     <button className="w-48 m-auto block bg-primary text-white rounded p-2 disabled:cursor-not-allowed"
       disabled={pending}>
@@ -27,8 +28,8 @@ function ButtonSubmit() {
 }
 
 export default function CustomerInfoForm({ parent }: { parent: Parent }) {
-
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
+
   const [state, formAction] = useFormState(
     registerCustomerAction.bind(null, parent.email!),
     {
@@ -161,7 +162,7 @@ export default function CustomerInfoForm({ parent }: { parent: Parent }) {
           labelText="How did you hear about us"
           keyDescription="how-did-you-hear-about-us-customer-info-form" />
       </div>
-      <ButtonSubmit />
+      <CustomerInfoFormButton />
     </form>
   )
 
