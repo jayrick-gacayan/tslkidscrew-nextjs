@@ -16,13 +16,19 @@ export async function addAdminUserAction(
 ) {
   let admin: Session<Admin> = await auth();
 
-  let errors = adminUserFormValidate(formData);
+  let email = formData.get('admin-user-email') as string ?? '';
+  let name = formData.get('admin-user-name') as string ?? '';
+
+  let errors = adminUserFormValidate({
+    "admin-user-email": email,
+    "admin-user-name": name
+  });
 
   if (errors) { return errors; }
 
   let result = await addAdminUser({
-    email: formData.get('admin-user-email') as string ?? '',
-    name: formData.get('admin-user-name') as string ?? '',
+    email,
+    name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
   }, admin?.accessToken!);
 
@@ -41,20 +47,23 @@ export async function addAdminUserAction(
 
 export async function updateAdminUserAction(
   email: string,
-  prevState: AdminUserFormStateProps,
+  prevState: Partial<AdminUserFormStateProps>,
   formData: FormData,
 ) {
   let admin: Session<Admin> = await auth();
 
   formData.set('admin-user-email', email)
 
-  let errors = adminUserFormValidate(formData);
+  let tempEmail = formData.get('admin-user-email') as string ?? '';
+  let name = formData.get('admin-user-name') as string ?? '';
+
+  let errors = adminUserFormValidate({ "admin-user-name": name });
 
   if (errors) { return errors; }
 
   let result = await updateAdminUser({
-    email: formData.get('admin-user-email') as string ?? '',
-    name: formData.get('admin-user-name') as string ?? '',
+    email: tempEmail,
+    name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
     isActive: formData.get('admin-user-active') ? true : false,
   }, admin?.accessToken!)
@@ -96,11 +105,11 @@ const adminUserSchema = Joi.object({
     })
 })
 
-function adminUserFormValidate(formData: FormData) {
-  const validate = adminUserSchema.validate({
-    'admin-user-email': formData.get('admin-user-email') as string ?? '',
-    'admin-user-name': formData.get('admin-user-name') as string ?? '',
-  }, { abortEarly: false })
+function adminUserFormValidate(validateData: Partial<{
+  'admin-user-email': string;
+  'admin-user-name': string;
+}>) {
+  const validate = adminUserSchema.validate(validateData, { abortEarly: false })
 
   if (validate?.error) {
     return validate.error?.details.reduce((prev, curr) => {
@@ -111,7 +120,7 @@ function adminUserFormValidate(formData: FormData) {
           validationStatus: ValidationType.ERROR,
         }
       }, prev)
-    }, {}) as AdminUserFormStateProps;
+    }, {}) as Partial<AdminUserFormStateProps>;
   }
 
   return validate.error;

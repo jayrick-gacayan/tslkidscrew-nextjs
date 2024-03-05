@@ -8,6 +8,7 @@ import { ValidationType } from "@/types/enums/validation-type";
 import {
   updateBeforeOrAfterSchoolSettings,
   updateProgramYearCycleSetting,
+  updateSummerCampPromoSettings,
   updateSummerCampSwimSetting,
   updateSummerCampWeekSetting,
   updateVacationCampScheduleSetting
@@ -18,8 +19,6 @@ import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-w
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
 import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
 import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
-import { fieldInputValue } from "@/types/helpers/field-input-value";
-import { getMonthNumber } from "@/types/helpers/date-helpers";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 
 export async function updateSummerCampWeekSettingAction(
@@ -29,9 +28,6 @@ export async function updateSummerCampWeekSettingAction(
 ) {
   let admin: Session<Admin> | null = await auth();
 
-  const rawFormData = Object.fromEntries(formData.entries());
-
-  console.log('rawFormData', rawFormData)
   let updateSummerCampWeekSettingSchema = Joi.object({
     'week-name': Joi.string()
       .required()
@@ -155,6 +151,88 @@ export async function updateSummerCampSwimSettingAction(
     success: true,
     message: 'Successfully update summer camp swim setting.'
   };
+}
+
+export async function updateSummerCampPromoSettingsAction(
+  prevState: any,
+  formData: FormData
+) {
+  let admin: Session<Admin> | null = await auth();
+
+  const formDataArray = [];
+  let currentObj: { [key: string]: any } = {};
+
+  for (const pair of formData.entries()) {
+    const [key, value] = pair;
+    if (key.includes('summer-camp-promo')) {
+      if (key.includes('id')) {
+        if (Object.keys(currentObj).length !== 0) {
+          formDataArray.push(currentObj);
+          currentObj = {};
+        }
+      }
+      currentObj[key.replace('summer-camp-promo[][', '').replace(']', '')] = value;
+    }
+  }
+
+  // Push the last object to the array
+  if (Object.keys(currentObj).length !== 0) {
+    formDataArray.push(currentObj);
+  }
+
+  const summerCampPromoSettingSchema = Joi.object({
+    price: Joi.string()
+      .required()
+      .pattern(/^\d*\.?\d+$/)
+      .messages({
+        'string.empty': 'Price is required.',
+        'any.required': 'Price is required.',
+        'string.pattern.base': `Price must be in decimal form.`
+      })
+  })
+
+  let validateError: { errors: Array<{ [key: string]: any }> } = { errors: [] };
+
+  formDataArray.forEach((val: { [key: string]: any }) => {
+    let validate = summerCampPromoSettingSchema.validate({
+      price: val.price!
+    }, { abortEarly: false });
+
+    if (validate.error) {
+      validateError.errors.push(validate.error?.details.reduce((prev, curr) => {
+        return Object.assign({
+          [curr.context?.key ?? '']: {
+            value: curr.context?.value,
+            errorText: curr.message,
+            validationStatus: ValidationType.ERROR,
+          },
+          id: val.id
+        }, prev)
+      }, {}) as any);
+    }
+  })
+
+  if (validateError.errors.length > 0) {
+    return validateError;
+  }
+
+  const arrResult = await Promise.all(
+    formDataArray.map((val: any) => {
+      return updateSummerCampPromoSettings({
+        id: parseInt(val?.id!) ?? 1,
+        name: val?.name ?? '',
+        child_record_count: val?.child_record_count ?? 1,
+        week_count: val?.week_count ?? 6,
+        price: val?.price ?? 1,
+        with_swim_trip: "false"
+      }, admin?.accessToken!)
+    })
+  )
+
+  return {
+    message: 'Successfull updated the summer camp week promo setting',
+    success: true,
+  }
 }
 
 export async function updateVacationCampSettingAction(

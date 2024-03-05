@@ -88,7 +88,6 @@ export async function registerParentAction(
       }),
   })
 
-
   let registerDetails = {
     email: formData.get('email') as string ?? '',
     password: formData.get('password') as string ?? '',
@@ -134,8 +133,9 @@ export async function registerCustomerAction(
 ) {
   let parent: Session<Parent> | null = await auth();
 
-  const rawFormData = Object.fromEntries(formData.entries())
-  console.log('rawFormData', rawFormData)
+  let first_name = formData.get('first_name') as string ?? '';
+  let last_name = formData.get('last_name') as string ?? '';
+
   let customerSchema = Joi.object({
     first_name: Joi.string()
       .required()
@@ -152,10 +152,7 @@ export async function registerCustomerAction(
   })
 
   let validate = customerSchema.validate(
-    {
-      first_name: formData.get('first_name') as string ?? '',
-      last_name: formData.get('last_name') as string ?? '',
-    },
+    { first_name, last_name },
     { abortEarly: false }
   );
 
@@ -173,8 +170,8 @@ export async function registerCustomerAction(
 
   let result = await registerCustomer({
     email: email,
-    first_name: formData.get('first_name') as string ?? '',
-    last_name: formData.get('last_name') as string ?? '',
+    first_name,
+    last_name,
     phone_number: formData.get('phone_number') as string ?? '',
     emergency_phone_number: formData.get('emergency_number') as string ?? '',
     address_line_one: formData.get('address_line_one') as string ?? '',
@@ -192,13 +189,7 @@ export async function registerCustomerAction(
     }
   }
 
-  let updateSession = await unstable_update({
-    customer_id: result.data?.customer_id!,
-    first_name: formData.get('first_name') as string ?? '',
-    last_name: formData.get('last_name') as string ?? '',
-  });
-
-  console.log('update session', updateSession);
+  let updateSession = await unstable_update({ first_name, last_name });
 
   return {
     message: result.message,

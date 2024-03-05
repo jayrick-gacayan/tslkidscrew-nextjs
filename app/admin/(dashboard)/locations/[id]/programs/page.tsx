@@ -26,7 +26,8 @@ export default async function Page({
 
 
   let result = await locationPrograms(searchParams, params.id, admin?.accessToken!);
-  let totalPages = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1
+  let totalPages = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1;
+
   return (
     <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
       <BackButtonClient />

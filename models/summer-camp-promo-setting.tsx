@@ -1,5 +1,6 @@
 export interface SummerCampPromoSetting {
   id?: number;
+  name?: string | null;
   child_record_count?: number | null;
   week_count?: number | null;
   price?: number | null;

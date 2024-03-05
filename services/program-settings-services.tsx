@@ -8,7 +8,6 @@ import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import { authHeaders } from "@/types/helpers/auth-headers";
 import { ProgramYearCycleSettingInputTypes } from "@/types/input-types/program-year-cycle-setting-input-types";
 import { SummerCampSwimSettingInputTypes } from "@/types/input-types/summer-camp-swim-setting-input-types";
-import { SummerCampWeekSettingInputTypes } from "@/types/input-types/summer-camp-week-setting-input-types";
 
 export async function getProgramYearCycleSettings(token: string) {
   let result = await fetch(
@@ -211,7 +210,57 @@ export async function getSummerCampPromoSettings(token: string) {
   })
 }
 
-export async function updateSummerCampPromoSettings(token: string) {
+export async function updateSummerCampPromoSettings(
+  {
+    id,
+    name,
+    child_record_count,
+    week_count,
+    price,
+    with_swim_trip,
+  }: {
+    id: number;
+    name: string;
+    child_record_count: string;
+    week_count: string;
+    price: number;
+    with_swim_trip: string;
+  }, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/update-all`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({
+        summer_camp_promo: {
+          id,
+          name,
+          child_record_count,
+          week_count,
+          price,
+          with_swim_trip
+        }
+      }),
+      ...authHeaders(token)
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    return new Result<SummerCampPromoSetting>({
+      response: response,
+      data: response.summer_camp_promos ?? undefined,
+      message: result.statusText,
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampPromoSetting>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status,
+      error: result.statusText
+    })
+  }
 
 }
 

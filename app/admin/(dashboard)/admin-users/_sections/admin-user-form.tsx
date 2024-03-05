@@ -44,7 +44,7 @@ export default function AdminUserForm({
     {
       'admin-user-email': fieldInputValue(type === 'update' ? data?.email : ''),
       'admin-user-name': fieldInputValue(type === 'update' ? data?.name : '')
-    } as AdminUserFormStateProps
+    } as Partial<AdminUserFormStateProps>
   )
 
   useEffect(() => {

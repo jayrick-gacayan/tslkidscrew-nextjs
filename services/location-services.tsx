@@ -165,3 +165,23 @@ export async function removeLocationPlace(
     response: response
   });
 }
+
+export async function getAllLocationsForRegRecordCreate(
+  program_name: string,
+  token: string
+) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_locations?program_name=${encodeURIComponent(program_name)}`,
+    { ...authHeaders(token) }
+  );
+
+  let response = await result.json();
+
+
+  return new Result<LocationPlace[]>({
+    response: response,
+    data: response.locations ?? [],
+    statusCode: response.status ?? result.status,
+    message: response.message ?? result.statusText
+  })
+}

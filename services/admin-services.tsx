@@ -27,7 +27,6 @@ export async function adminUser(id: string, token?: string) {
       statusCode: result.status,
     });
   }
-
 }
 
 export async function adminUsers(
