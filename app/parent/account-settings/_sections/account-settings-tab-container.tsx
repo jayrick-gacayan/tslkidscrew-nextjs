@@ -9,7 +9,6 @@ import { Parent } from "@/models/parent";
 
 export default function AccountSettingsTabContainer({ parent }: { parent: Partial<Parent> | undefined }) {
 
-
   function classNameTab(selected: boolean) {
     return `p-2 border-b-0 border-b-none`;
   }

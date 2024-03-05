@@ -9,8 +9,6 @@ export default async function Page() {
 
   let result = await getCustomerInfo(parent.user?.customer_id?.toString()!, parent?.accessToken!)
 
-  console.log('parent', result.data);
-
   return (
     <AccountSettingsTabContainer parent={!result.data ? undefined : {
       first_name: result?.data?.first_name,
