@@ -2,10 +2,18 @@ import { Invoice } from "@/models/invoice";
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
-export async function getAllCustomerInvoices(token: string) {
+export async function getAllCustomerInvoices(
+  searchParams: SearchParamsProps,
+  token: string
+) {
+  let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
+
+  let strSP = urlSearchParams.toString();
+
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_invoices`,
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_invoices${strSP === '' ? '' : `?${strSP}`}`,
     { ...authHeaders(token) }
   );
 
@@ -17,8 +25,8 @@ export async function getAllCustomerInvoices(token: string) {
       return new Result<Paginate<Invoice>>({
         ...response,
         data: {
-          data: response.invoice ?? [],
-          total: response.total ?? 1,
+          data: response.invoices ?? [],
+          total: response.total_invoices ?? 1,
         },
         statusCode: response.status ?? result.status
       })
@@ -26,10 +34,7 @@ export async function getAllCustomerInvoices(token: string) {
 
     return new Result<Paginate<Invoice>>({
       ...response,
-      data: {
-        data: [],
-        total: 1,
-      },
+      data: undefined,
       statusCode: response.status ?? result.status
     })
 

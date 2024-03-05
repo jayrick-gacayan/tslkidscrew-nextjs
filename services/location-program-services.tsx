@@ -9,8 +9,6 @@ import { authHeaders } from "@/types/helpers/auth-headers";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import { LocationProgramInputs } from "@/types/input-types/location-program-input-types";
 
-
-
 export async function locationProgram(id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,

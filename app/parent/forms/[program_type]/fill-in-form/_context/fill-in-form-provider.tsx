@@ -21,7 +21,8 @@ export const fillInFormInitState = {
     location: undefined,
     children: [
       initChildren
-    ]
+    ],
+
   }
 };
 

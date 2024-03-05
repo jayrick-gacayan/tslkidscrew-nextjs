@@ -1,31 +1,15 @@
 import CustomListbox from "@/app/_components/listbox-custom";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
+import { LocationPlace } from "@/models/location";
 
-let locationItems = [
-  {
-    id: 1,
-    name: 'Albany Daycare'
-  },
-  {
-    id: 2,
-    name: 'Clifton Park'
-  },
-  {
-    id: 3,
-    name: 'Delmar'
-  },
-  {
-    id: 4,
-    name: 'East Greenbush-FUMC',
-  },
-  {
-    id: 5,
-    name: 'Gardner Dickinson',
-  },
-]
-
-export default function LocationForm({ locationState }: { locationState: any }) {
+export default function LocationForm({
+  locationState,
+  locations,
+}: {
+  locationState: any;
+  locations: Partial<LocationPlace>[]
+}) {
   const { state, setLocation } = useFillInFormHook();
 
   return (
@@ -40,7 +24,7 @@ export default function LocationForm({ locationState }: { locationState: any }) 
           onChange={(value: any) => {
             setLocation(value);
           }}
-          items={locationItems}
+          items={locations}
           labelText="Location"
           by="id"
           valueClassName={(value: string, placeholder: string) => {

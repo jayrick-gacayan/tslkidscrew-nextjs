@@ -54,7 +54,7 @@ export default function ChildrenForm() {
                     <div className="flex items-center gap-4">
                       <InputCustom labelText="Firstname"
                         id='children-firstname'
-                        name='children-firstname[]'
+                        name='children[][firstname]'
                         value={val.first_name}
                         type="text"
                         className="bg-secondary p-4 border-transparent"
@@ -65,7 +65,7 @@ export default function ChildrenForm() {
                       <InputCustom labelText="Lastname"
                         id='children-lastname'
                         value={val.last_name}
-                        name='children-lastname[]'
+                        name='children[][lastname]'
                         type="text"
                         className="bg-secondary p-4 border-transparent"
                         placeholder="Lastname:"
@@ -79,7 +79,7 @@ export default function ChildrenForm() {
                         <div className="relative w-full">
                           <PopoverReactDayPicker selected={val.birthdate}
                             placeholder="Enter date"
-                            inputName='children-birthdate[]'
+                            inputName='children[][birthdate]'
                             options={{
                               mode: "single",
                               selected: val.birthdate,
@@ -94,7 +94,7 @@ export default function ChildrenForm() {
                     <InputCustom labelText="School Attending"
                       id='children-school-attending'
                       value={val.school_attending}
-                      name='children-school-attending[]'
+                      name='children[][school-attending]'
                       type="text"
                       className="bg-secondary p-4 border-transparent"
                       placeholder="School Attending:"

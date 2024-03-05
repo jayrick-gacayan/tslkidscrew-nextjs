@@ -11,22 +11,37 @@ import StepThreeForm from "./step-three-form";
 import { FormEvent, useCallback, useEffect } from "react";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 import { useRouter } from "next/navigation";
+import { LocationPlace } from "@/models/location";
 
 export default function FormActionContainer({
   program_type,
   step,
+  locations,
 }: {
   program_type: string;
   step: string | undefined;
+  locations: Partial<LocationPlace>[]
 }) {
   const router = useRouter();
-  const { state } = useFillInFormHook();
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
   const [formState, formAction] = useFormState(
     fillInFormAction.bind(null, stepInNumber, program_type),
-    {} as any
+    program_type === 'before-or-after-school' ?
+      {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+        stepFive: false,
+      } as any :
+      {
+        stepOne: false,
+        stepTwo: false,
+        stepThree: false,
+        stepFour: false,
+      } as any
   );
 
   const programTypePath = useCallback((numberStep: number) => {
@@ -36,16 +51,22 @@ export default function FormActionContainer({
   useEffect(() => {
     switch (stepInNumber) {
       case 1:
-        if (formState.success !== undefined && formState.success) {
+        if (formState.stepOne !== undefined && formState.stepOne) {
 
           programTypePath(stepInNumber + 1);
         }
         break;
       case 2:
-        if (formState.success !== undefined && formState.success) {
-
-          programTypePath(stepInNumber + 1);
+        if (!formState.stepOne) {
+          programTypePath(stepInNumber - 1);
         }
+        else {
+          if (formState.stepTwo !== undefined && formState.stepTwo) {
+
+            programTypePath(stepInNumber + 1);
+          }
+        }
+
         break;
     }
   }, [
@@ -56,6 +77,23 @@ export default function FormActionContainer({
 
   console.log('here state', formState)
 
+  function StepperPanel() {
+    if (stepInNumber === 1) {
+      return (
+        <LocationForm locationState={formState?.['location-place[id]']}
+          locations={locations} />
+      )
+    }
+    else if (stepInNumber === 2) return (<ChildrenForm />);
+    else if (stepInNumber === 3) return (<StepThreeForm program_type={program_type} />);
+    else if (stepInNumber === 4 && program_type === 'before-or-after-school')
+      return (<RegistrationTypeSelectionBeforeOrAfterSchool />)
+    else if (stepInNumber === highestStep)
+      return (<PaymentFormContainer program_type={program_type} />)
+
+    return null;
+
+  }
   return (
     <form className="space-y-6"
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
@@ -67,17 +105,8 @@ export default function FormActionContainer({
           case 2: formAction(formData); break;
         }
       }}>
-      <>
-        {
-          stepInNumber === 1 ? <LocationForm locationState={formState?.['location-place[id]']} /> :
-            stepInNumber === 2 ? <ChildrenForm /> :
-              stepInNumber === 3 ? <StepThreeForm program_type={program_type} /> :
-                stepInNumber === 4 && program_type === 'before-or-after-school' ? <RegistrationTypeSelectionBeforeOrAfterSchool /> :
-                  stepInNumber === highestStep ? <PaymentFormContainer program_type={program_type} /> : null
-
-        }
-      </>
-      <FillInFormButtons program_type={program_type} step={step} programTypePath={programTypePath} />
+      <StepperPanel />
+      <FillInFormButtons program_type={program_type} step={step} programTypePath={programTypePath} formAction={formAction} />
     </form>
   )
 }
