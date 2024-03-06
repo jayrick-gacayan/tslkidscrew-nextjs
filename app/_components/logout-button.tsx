@@ -1,6 +1,7 @@
 import { authSignOut } from "@/actions/auth-actions";
 import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   redirectTo: string;
 }

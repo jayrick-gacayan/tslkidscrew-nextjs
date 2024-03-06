@@ -1,33 +1,45 @@
 'use client';
 
+import { redirectToPath } from "@/actions/common-actions";
 import { addLocationPlace } from "@/actions/location-actions";
 import InputCustom from "@/app/_components/input-custom";
 import CustomListbox from "@/app/_components/listbox-custom";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 import { Admin } from "@/models/admin";
-import { useRouter } from "next/navigation";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import { useEffect, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
+import LocationSubmitButton from "../../_components/location-submit-button";
 
 export function NewFormLocation({
   admins
 }: {
   admins: Partial<Admin>[]
 }) {
-  const router = useRouter();
-  const [state, formAction] = useFormState(addLocationPlace, {} as any);
-  const { pending } = useFormStatus();
+  const [state, formAction] = useFormState(
+    addLocationPlace,
+    {
+      name: fieldInputValue(''),
+      address: fieldInputValue(''),
+      ['location-minimum-age']: fieldInputValue(''),
+      ['director[id]']: fieldInputValue(''),
+    } as LocationPlaceFormStateProps
+  );
   const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
 
   useEffect(() => {
-    if (state?.success !== undefined) {
-      let { message, success } = state;
+    async function pathToRedirect(id: number) {
+      await redirectToPath(`/admin/locations/${id}`);
+    }
+    let { message, success, data } = state;
+
+    if (success !== undefined) {
 
       toast((props: ToastContentProps<unknown>) => {
         return (
-          <div className="text-black">
-            {message}
-          </div>
+          <div className="text-black">{message}</div>
         )
       }, {
         toastId: `create-location-${Date.now()}`,
@@ -35,13 +47,12 @@ export function NewFormLocation({
         hideProgressBar: true,
       })
 
-      if (success) {
-        router.back();
+      if (success && data) {
+        pathToRedirect(data.id!);
       }
     }
   }, [
-    state?.message,
-    state?.success
+    state,
   ]);
 
   return (
@@ -54,7 +65,7 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Name:"
           errorText={state?.name?.errorText}
-          validationType={state?.name?.validationStatus} />
+          validationStatus={state?.name?.validationStatus} />
         <InputCustom labelText='Address'
           id='location-address'
           type="text"
@@ -62,7 +73,7 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Address:"
           errorText={state?.address?.errorText}
-          validationType={state?.address?.validationStatus} />
+          validationStatus={state?.address?.validationStatus} />
         <CustomListbox value={director}
           name='director'
           placeholder='Director'
@@ -71,7 +82,12 @@ export function NewFormLocation({
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}
-          validationStatus={state?.['director[id]']?.validationStatus} />
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          validationStatus={state?.['director[id]']?.validationStatus}
+          keyDescription="new-form-location" />
         <InputCustom labelText='Minimum Age For Children'
           id='location-minimum-age-for-children'
           type="text"
@@ -79,12 +95,9 @@ export function NewFormLocation({
           className="bg-secondary border-0"
           placeholder="Minimum Age:"
           errorText={state?.['location-minimum-age']?.errorText}
-          validationType={state?.['location-minimum-age']?.validationStatus} />
+          validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
-      <button className="bg-primary p-2 rounded text-white w-32 block m-auto"
-        disabled={pending}>
-        {pending ? '...Checking' : 'Submit'}
-      </button>
+      <LocationSubmitButton />
     </form>
   )
 }

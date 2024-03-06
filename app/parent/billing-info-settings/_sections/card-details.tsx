@@ -1,57 +1,37 @@
-'use client';
-
-import InputCustom from "@/app/_components/input-custom";
-import Fa6SolidCalendar from "@/app/_components/svg/fa6-solid-calendar";
-import Fa6SolidCreditCard from "@/app/_components/svg/fa6-solid-credit-card";
-import Fa6SolidLock from "@/app/_components/svg/fa6-solid-lock";
 import { Tab } from "@headlessui/react";
+import { Elements } from "@stripe/react-stripe-js";
+import getStripe from "@/types/helpers/get-stripe";
+import CardDetailsStripeForm from "./card-details-stripe-form";
+import { Parent } from "@/models/parent";
+import InvoiceInfoData from "../../invoices/_components/invoice-info-data";
 
-export default function CardDetails() {
+const stripePromise = getStripe();
+
+export default function CardDetails({
+  cardDetails
+}: {
+  cardDetails: Partial<Parent> | undefined;
+}) {
+
+  console.log('card details', cardDetails)
   return (
     <Tab.Panel as='div' className="space-y-8">
-      <div className="space-y-4">
-        <InputCustom labelText="Card Number"
-          id="card-details-card-number"
-          name="card-details-card-number"
-          className="bg-secondary p-2 pl-10 border-transparent"
-          placeholder="Card Number:"
-          type="text"
-          prefixIcon={<PrefixCreditCardIcon />} />
-        <div className="flex items-center gap-4">
-          <InputCustom labelText="Date Expiry"
-            id="card-details-expiry"
-            name="card-details-expiry"
-            className="bg-secondary p-2 pl-10 border-transparent"
-            placeholder="Date Expiry:"
-            type="month"
-            prefixIcon={<PrefixCalendarIcon />} />
-          <InputCustom labelText="CVC"
-            id="card-details-cvc"
-            name="card-details-cvc"
-            className="bg-secondary p-2 pl-10 border-transparent"
-            placeholder="CVC:"
-            type="text"
-            prefixIcon={<PrefixLockIcon />} />
-        </div>
-      </div>
-      <div className="w-fit ml-auto block space-x-4">
-        <button className="p-2 text-white border border-primary rounded bg-primary">
-          Add Card
-        </button>
-      </div>
+      {
+        !!cardDetails?.card_brand && !!cardDetails.card_last_four ?
+          (
+            <div className='block'>
+              <InvoiceInfoData labelText='Card Number' data={`************${cardDetails.card_last_four}`} />
+              <InvoiceInfoData labelText='Card Type' data={cardDetails.card_brand ?? ''} />
+            </div>
+
+          ) :
+          (
+            <Elements stripe={stripePromise} options={{}}>
+              <CardDetailsStripeForm />
+            </Elements>
+          )
+      }
+
     </Tab.Panel>
   )
-}
-
-/* Prefix icons */
-const PrefixCreditCardIcon = () => {
-  return (<Fa6SolidCreditCard className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
-}
-
-const PrefixCalendarIcon = () => {
-  return (<Fa6SolidCalendar className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
-}
-
-const PrefixLockIcon = () => {
-  return (<Fa6SolidLock className="text-warning absolute left-3 z-20 top-3 block peer-invalid:text-danger" />);
 }

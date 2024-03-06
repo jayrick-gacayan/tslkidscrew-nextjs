@@ -2,6 +2,7 @@ import { SCHOOL_AGE_CARE_CAMP_PROGRAMS } from "@/types/constants/school-age-care
 import CampCard from "./_components/camp-card";
 
 export default function Page() {
+
   return (
     <div className="gap-6 columns-auto xl:columns-3 h-auto">
       {

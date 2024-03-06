@@ -9,8 +9,10 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import Link from "next/link";
 import LogoutButton from "@/app/_components/logout-button";
 import { PARENT_PUBLIC_ROUTES } from "@/types/constants/page-routes";
+import { Parent } from "@/models/parent";
+import BillingsMenu from "./billings-menu";
 
-export default function ParentHeader() {
+export default function ParentHeader({ parent }: { parent: Parent }) {
   const pathname = usePathname();
 
   return (
@@ -18,7 +20,9 @@ export default function ParentHeader() {
       <div className="px-12 py-4 w-full">
         <div className="flex items-center justify-between gap-4 w-full">
           <div className="flex-1">
-            <CompanyLogo height={164} width={128} href="/parent/dashboard" />
+            <div className="w-fit">
+              <CompanyLogo height={164} width={128} href="/parent/dashboard" />
+            </div>
           </div>
           <div className="flex-none w-[368px]">
             <div className="flex items-center w-full gap-4 justify-end">
@@ -30,7 +34,7 @@ export default function ParentHeader() {
                         className="text-white hover:text-primary-light/70">
                         Login
                       </Link>
-                      <Link href='/parent/dashboard'
+                      <Link href='/parent/register'
                         className="text-white hover:text-primary-light/70">
                         Register
                       </Link>
@@ -39,6 +43,7 @@ export default function ParentHeader() {
                   (
                     <>
                       <FormsMenu pathname={pathname} />
+                      <BillingsMenu pathname={pathname} />
                       <SettingsMenu pathname={pathname} />
                       <div className="w-full">
                         <Menu as='div' className='relative'>
@@ -48,7 +53,7 @@ export default function ParentHeader() {
                                 <Menu.Button as="div"
                                   className="flex items-center gap-2 w-full cursor-pointer text-white">
                                   <div className="size-10 rounded-full bg-white inline-block" />
-                                  <div>Deanver</div>
+                                  <div>{parent?.first_name ?? parent.email}</div>
                                   <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                                 </Menu.Button>
                                 <Transition enter="transition duration-100 ease-out"

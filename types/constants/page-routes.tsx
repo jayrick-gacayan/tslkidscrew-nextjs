@@ -5,6 +5,7 @@ export const ADMIN_PUBLIC_ROUTES = [
 
 export const PARENT_PUBLIC_ROUTES = [
   '/parent/login',
-  '/parent/forgot-password'
+  '/parent/forgot-password',
+  '/parent/register'
 ];
 

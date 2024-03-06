@@ -7,7 +7,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   suffixIcon?: ReactNode;
   prefixIcon?: ReactNode;
   errorText?: string;
-  validationType?: ValidationType;
+  validationStatus?: ValidationType;
 }
 
 function InputCustom(
@@ -17,7 +17,7 @@ function InputCustom(
     suffixIcon,
     prefixIcon,
     errorText = '',
-    validationType = ValidationType.NONE,
+    validationStatus = ValidationType.NONE,
     id,
     ...props
   }: InputProps,
@@ -27,13 +27,17 @@ function InputCustom(
     <div className='block space-y-[2px] w-full'>
       {
         labelText &&
-        (<label htmlFor={id}
-          className={
-            twMerge(
-              "font-medium peer-has-[input:focus]:text-primary",
-              validationType === ValidationType.ERROR ? 'text-danger' : ''
-            )
-          }>{labelText}</label>)
+        (
+          <label htmlFor={id}
+            className={
+              twMerge(
+                "font-medium peer-has-[input:focus]:text-primary",
+                validationStatus === ValidationType.ERROR ? 'text-danger' : ''
+              )
+            }>
+            {labelText}
+          </label>
+        )
       }
       <div className="relative w-full">
         <input ref={ref}
@@ -45,7 +49,7 @@ function InputCustom(
               ' disabled:text-secondary-light disabled:cursor-not-allowed' +
               ' focus:border-primary focus:text-inherit',
               className,
-              validationType === ValidationType.ERROR ? 'border-danger bg-danger-light' : '',
+              validationStatus === ValidationType.ERROR ? 'border-danger bg-danger-light' : '',
             )
           } {...props} />
         {prefixIcon && prefixIcon}

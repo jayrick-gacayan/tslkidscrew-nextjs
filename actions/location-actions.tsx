@@ -2,25 +2,43 @@
 
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { createLocationPlace, updateLocationPlace } from "@/services/location-services";
+import {
+  createLocationPlace,
+  removeLocationPlace,
+  updateLocationPlace
+} from "@/services/location-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
+import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
 import * as Joi from "joi";
 import { Session } from "next-auth";
+import { revalidatePath } from "next/cache";
 
-export async function addLocationPlace(prevState: any, formData: FormData) {
+export async function addLocationPlace(
+  prevState: LocationPlaceFormStateProps,
+  formData: FormData
+) {
   let admin: Session<Admin> | null = await auth();
 
-  let errors = validateErrors(formData);
-  if (errors) {
-    return errors;
-  }
+  let name = formData.get('name') as string ?? "";
+  let address = formData.get('address') as string ?? "";
+  let director_id = formData.get('director[id]') as string ?? "";
+  let minimum_age = formData.get('location-minimum-age') as string ?? "";
+
+  let errors = locationPlaceValidateErrors({
+    name,
+    address,
+    "director[id]": director_id,
+    "location-minimum-age": minimum_age
+  });
+
+  if (errors) { return errors; }
 
   let result = await createLocationPlace({
-    name: formData.get('name') as string ?? "",
-    address: formData.get('address') as string ?? "",
-    director_id: parseInt(formData.get('director[id]') as string ?? ''),
-    minimum_age: parseInt(formData.get('location-minimum-age') as string ?? '')
+    name,
+    address,
+    director_id: parseInt(director_id),
+    minimum_age: parseInt(minimum_age)
   }, admin?.accessToken!)
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -31,25 +49,39 @@ export async function addLocationPlace(prevState: any, formData: FormData) {
   }
 
   return {
+    data: result.data ?? undefined,
     message: 'Successfully created a location.',
     success: true,
   };
 }
 
-export async function editLocationPlace(id: string, prevState: any, formData: FormData) {
+export async function editLocationPlace(
+  id: string,
+  prevState: LocationPlaceFormStateProps,
+  formData: FormData
+) {
   let admin: Session<Admin> | null = await auth();
-  let errors = validateErrors(formData);
 
-  if (errors) {
-    return errors;
-  }
+  let name = formData.get('name') as string ?? "";
+  let address = formData.get('address') as string ?? "";
+  let director_id = formData.get('director[id]') as string ?? "";
+  let minimum_age = formData.get('location-minimum-age') as string ?? "";
+
+  let errors = locationPlaceValidateErrors({
+    name,
+    address,
+    "director[id]": director_id,
+    "location-minimum-age": minimum_age
+  });
+
+  if (errors !== undefined) { return errors; }
 
   let result = await updateLocationPlace(id,
     {
-      name: formData.get('name') as string ?? "",
-      address: formData.get('address') as string ?? "",
-      director_id: parseInt(formData.get('director[id]') as string ?? ''),
-      minimum_age: parseInt(formData.get('location-minimum-age') as string ?? '')
+      name,
+      address,
+      director_id: parseInt(director_id),
+      minimum_age: parseInt(minimum_age)
     },
     admin?.accessToken!
   )
@@ -65,11 +97,17 @@ export async function editLocationPlace(id: string, prevState: any, formData: Fo
     message: 'Successfully updated a location.',
     success: true,
   };
+}
 
+export async function removeLocationPlaceAction(id: string) {
+  let admin: Session<Admin> | null = await auth();
+
+  let result = await removeLocationPlace(id, admin?.accessToken!);
+
+  revalidatePath('/admin/locations');
 }
 
 /* helpers */
-
 const locationSchema = Joi.object({
   name: Joi.string()
     .required()
@@ -91,7 +129,7 @@ const locationSchema = Joi.object({
     }),
   'location-minimum-age': Joi.string()
     .required()
-    .pattern(/^[0-9]$/)
+    .pattern(/^\d+$/)
     .messages({
       'string.empty': 'Minimum age is required.',
       'any.required': 'Minimum age is required.',
@@ -99,46 +137,24 @@ const locationSchema = Joi.object({
     })
 });
 
-
-
-type LocationKeys = 'name' | 'address' | 'location-minimum-age' | 'director[id]';
-
-function validateErrors(formData: FormData) {
-  const validate = locationSchema.validate({
-    name: formData.get('name') ?? "",
-    address: formData.get('address') ?? "",
-    'director[id]': formData.get('director[id]') ?? "",
-    'location-minimum-age': formData.get('location-minimum-age') ?? "",
-  }, {
-    abortEarly: false,
-  });
-
+function locationPlaceValidateErrors(validateData: {
+  name: string;
+  address: string;
+  'director[id]': string;
+  'location-minimum-age': string;
+}): LocationPlaceFormStateProps | undefined {
+  const validate = locationSchema.validate(validateData, { abortEarly: false, });
 
   if (validate?.error) {
-    let errors: any = validate.error?.details.reduce((prev, curr) => {
-      let key = curr.context?.key;
-
-      const locationKeysObj: Record<LocationKeys, boolean> = {
-        'name': true,
-        'address': true,
-        'location-minimum-age': true,
-        'director[id]': true
-      };
-
-      if (key && locationKeysObj[key as LocationKeys]) {
-        return Object.assign({
-          [key]: {
-            value: curr.context?.value,
-            errorText: curr.message,
-            validationStatus: ValidationType.ERROR,
-          }
-        }, prev);
-      }
-      return prev;
-
-    }, {});
-
-    return errors;
+    return validate.error?.details.reduce((prev, curr) => {
+      return Object.assign({
+        [curr.context?.key ?? '']: {
+          value: curr.context?.value,
+          errorText: curr.message,
+          validationStatus: ValidationType.ERROR,
+        }
+      }, prev)
+    }, {}) as LocationPlaceFormStateProps;
   }
 
   return validate.error;

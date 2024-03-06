@@ -1,13 +1,14 @@
 import { ChangeEvent, useState } from "react";
 import InputCustom from "@/app/_components/input-custom";
 import PasswordIcon from "../password-icon";
+import { LoginFormStateProps } from "@/types/props/login-form-state-props";
 
 export default function LoginForm({
   role,
   state,
 }: {
   role: string;
-  state?: any;
+  state?: LoginFormStateProps;
 }) {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
 
@@ -24,10 +25,11 @@ export default function LoginForm({
         name='email'
         type="text"
         placeholder="Email Address:"
+        defaultValue={state?.email?.value}
         onChange={onChange}
         className="bg-secondary border-transparent p-2 px-3"
         errorText={state?.email?.errorText}
-        validationType={state?.email?.errorText} />
+        validationStatus={state?.email?.validationStatus} />
       <InputCustom labelText="Password"
         id='login-password'
         name='password'
@@ -35,9 +37,10 @@ export default function LoginForm({
         type={passwordShow ? 'text' : 'password'}
         suffixIcon={<PasswordIcon passwordShow={passwordShow} onPasswordShown={setPasswordShow} />}
         onChange={onChange}
+        defaultValue={state?.password?.value}
         className="bg-secondary border-transparent p-2 px-3 pr-10"
         errorText={state?.password?.errorText}
-        validationType={state?.password?.errorText} />
+        validationStatus={state?.password?.validationStatus} />
     </div>
   )
 }

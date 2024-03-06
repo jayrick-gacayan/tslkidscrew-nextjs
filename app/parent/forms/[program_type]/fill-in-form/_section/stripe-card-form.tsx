@@ -4,9 +4,10 @@ import { StripeCardNumberElement, StripeCardNumberElementChangeEvent } from "@st
 import { FormEvent, useContext } from "react";
 import { FillInFormContext } from "../_context/fill-in-form-context";
 import { StripeElementType } from "@stripe/stripe-js";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 export default function StripeCardForm() {
-  const { dispatch } = useContext(FillInFormContext);
+  const { state, stripeModalToggle, } = useFillInFormHook();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -24,16 +25,14 @@ export default function StripeCardForm() {
     const cardCvcElement = elements.getElement(CardCvcElement);
 
     // Use the createPaymentMethod method to create a payment method from the card elements.
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardNumberElement!,
-
-    });
+    const { token, error } = await stripe.createToken(cardNumberElement!);
 
     if (error) {
       console.error(error);
     } else {
-      console.log(paymentMethod);
+
+
+      console.log(token)
       // Send the payment method ID to your server to complete the payment.
     }
   };
@@ -108,7 +107,7 @@ export default function StripeCardForm() {
       <div className="flex items-center justify-end gap-4">
         <button type='button'
           className='bg-white text-primary p-2'
-          onClick={() => { dispatch({ type: 'MODAL_TOGGLE' }); }}>Cancel</button>
+          onClick={() => { stripeModalToggle(); }}>Cancel</button>
         <button className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'>
           Submit And Pay
         </button>

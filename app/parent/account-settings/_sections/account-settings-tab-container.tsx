@@ -5,8 +5,9 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import PersonalDetails from "./personal-details";
 import LoginDetails from "./login-details";
+import { Parent } from "@/models/parent";
 
-export default function AccountSettingsTabContainer() {
+export default function AccountSettingsTabContainer({ parent }: { parent: Partial<Parent> | undefined }) {
 
   function classNameTab(selected: boolean) {
     return `p-2 border-b-0 border-b-none`;
@@ -20,8 +21,8 @@ export default function AccountSettingsTabContainer() {
           <CustomTabItem labelText='Login Details' classNameTab={classNameTab} />
         </div>
         <Tab.Panels as='div' className='flex-1 p-8 bg-white'>
-          <PersonalDetails />
-          <LoginDetails />
+          <PersonalDetails parent={parent} />
+          <LoginDetails email={parent?.email ?? ''} />
         </Tab.Panels>
       </div>
     </Tab.Group>

@@ -1,34 +1,38 @@
 'use client';
 
 import Link from "next/link";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
+import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { useCallback, useContext, useMemo } from "react";
-import { FillInFormContext } from "../_context/fill-in-form-context";
 
 export default function FillInFormButtons({
   program_type,
   step,
+  programTypePath,
+  formAction,
 }: {
   program_type: string;
   step: string | undefined;
+  programTypePath: (numberStep: number) => void;
+  formAction: (formData: FormData) => void;
 }) {
-  const { dispatch } = useContext(FillInFormContext);
   const router = useRouter();
+  const { pending } = useFormStatus();
+  const { stripeModalToggle, resetForm } = useFillInFormHook();
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
 
-  const programTypePath = useCallback((numberStep: number) => {
-    router.push(`/parent/forms/${program_type}/fill-in-form${numberStep === 1 ? `` : `?step=${numberStep}`}`);
-  }, [program_type, router])
-
   return (
     <div className="flex items-center justify-center gap-4">
       <div className="flex-1">
-        <Link href={`/parent/forms/${program_type}`}
-          className="transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white">
+        <span className="cursor-pointer transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white"
+          onClick={() => {
+            router.push(`/parent/forms/${program_type}`);
+            resetForm();
+          }}>
           Cancel
-        </Link>
+        </span>
       </div>
       <div className="flex-none w-auto">
         <div className="flex w-fit items-center gap-4">
@@ -36,10 +40,17 @@ export default function FillInFormButtons({
             stepInNumber > 1 &&
             (
               <button type='button'
+                value={'back'}
+                name="back-button"
                 className="px-4 py-2 bg-white text-primary rounded border border-primary"
-                onClick={() => {
+                onClick={async () => {
+
                   if (stepInNumber > 1) {
-                    programTypePath(stepInNumber - 1)
+                    let formData = new FormData();
+                    formData.set('back-button', 'back');
+                    formAction(formData);
+                    programTypePath(stepInNumber - 1);
+                    // redirectToPath(`/parent/forms/${program_type}/fill-in-form${stepInNumber === 1 ? `` : `?step=${stepInNumber - 1}`}`)
                   }
                 }}>
                 Previous
@@ -48,16 +59,10 @@ export default function FillInFormButtons({
           }
 
           <button type="submit"
-            className="px-4 py-2 bg-primary text-white rounded"
-            onClick={() => {
-              if (stepInNumber < highestStep) {
-                programTypePath(stepInNumber + 1)
-              }
-              else {
-                dispatch({ type: 'MODAL_TOGGLE' });
-              }
-
-            }}>
+            value={'proceed'}
+            name="submit-button"
+            className="px-4 py-2 bg-primary text-white rounded disabled:cursor-not-allowed"
+            disabled={pending}>
             {stepInNumber === highestStep ? 'Proceed to Payment' : 'Next'}
           </button>
         </div>

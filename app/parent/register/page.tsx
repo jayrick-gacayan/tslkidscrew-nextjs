@@ -1,5 +1,9 @@
-import RegisterButtons from "./_sections/register-buttons";
 import RegisterForm from "./_sections/register-form";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  description: 'Parent Register Page'
+}
 
 export default function Page() {
   return (
@@ -8,7 +12,6 @@ export default function Page() {
         <h1 className="text-center text-[24px]">Register to TSL Account</h1>
         <div className="space-y-4">
           <RegisterForm />
-          <RegisterButtons />
         </div>
       </div>
     </div>

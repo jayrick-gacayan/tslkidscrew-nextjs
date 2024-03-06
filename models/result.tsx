@@ -15,7 +15,9 @@ export class Result<T> {
 
   get resultStatus(): ResultStatus {
     switch (this.statusCode) {
-      case 200: return ResultStatus.SUCCESS;
+      case 200:
+      case 201:
+        return ResultStatus.SUCCESS;
       case 204: return ResultStatus.NO_CONTENT;
       case 300: return ResultStatus.MULTIPLE_CHOICES;
       case 400: return ResultStatus.INVALID_REQUEST;
@@ -28,5 +30,3 @@ export class Result<T> {
     }
   }
 }
-
-

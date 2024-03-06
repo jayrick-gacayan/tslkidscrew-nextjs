@@ -1,96 +1,141 @@
 'use client';
 
-import CustomCheckbox from "@/app/_components/custom-checkbox";
-import CustomListboxHeadless from "@/app/_components/custom-listbox-headless";
+import { addLocationProgramAction } from "@/actions/location-program-actions";
 import InputCustom from "@/app/_components/input-custom";
-import { useState } from "react";
+import { Admin } from "@/models/admin";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
+import { useEffect, useState } from "react";
+import { useFormState } from "react-dom";
+import CustomListbox from "@/app/_components/listbox-custom";
+import { LocationPlace } from "@/models/location";
+import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
+import { ToastContentProps, toast } from "react-toastify";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import { redirectToPath } from "@/actions/common-actions";
+import SubmitProgramButton from "../../_components/submit-program-button";
 
-let directorItems = [
-  { id: 1, email: "alexisLarose.tsl@gmail.com" },
-  { id: 2, email: "jake.tsl@gmail.com" },
-  { id: 3, email: "missmaria.tsl@gmail.com" },
-  { id: 4, email: "rhay26.tsl@gmail.com" },
-  { id: 5, email: "peter.harding.tsl@gmail.com" },
-];
+let programTypes = ['After School', 'Summer Camp', 'Vacation Camp']
 
-let programTypes = ['Before/After School', 'Summer Camp', 'Vacation Camp']
+export default function NewProgramForm({
+  activeAdmins,
+  locationPlace,
+}: {
+  activeAdmins: Partial<Admin>[]
+  locationPlace: LocationPlace
+}) {
+  const [state, formAction] = useFormState(
+    addLocationProgramAction.bind(null, locationPlace.id!),
+    {
+      name: fieldInputValue(''),
+      ['name-suffix']: fieldInputValue(''),
+      capacity: fieldInputValue(''),
+    } as LocationProgramFormStateProps
+  );
+  const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
+  const [program, setProgram] = useState<string>('');
 
-export default function NewProgramForm() {
-  const [director, setDirector] = useState<any>(undefined);
-  const [programType, setProgramType] = useState<string>('');
+  useEffect(() => {
+    async function pathToBeRedirected(locationPlaceId: number, id: number) {
+      await redirectToPath(`/admin/locations/${locationPlaceId}/programs/${id}`);
+    }
+    if (state?.success !== undefined) {
+      let { message, success, data } = state;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (
+          <div className="text-black">{message}</div>
+        )
+      }, {
+        toastId: `create-location-program-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      })
+
+      if (success && data) {
+        pathToBeRedirected(data.location_id, data.id!);
+      }
+    }
+  }, [
+    state
+  ])
 
   return (
-    <>
+    <form action={formAction} className="space-y-4" id='new-location-program'>
       <div className="space-y-4">
         <InputCustom labelText="Location"
           id='location-name'
-          name='location-name'
           type="text"
           className="bg-secondary border-transparent p-2 px-3"
           placeholder="Location:"
-          value='Sample'
+          defaultValue={locationPlace.name! ?? ''}
           disabled />
-        <InputCustom labelText="Program Name"
-          id='location-program-name'
-          name='program-name'
-          type="text"
-          className="bg-secondary border-transparent p-2 px-3"
-          placeholder="Program Name:" />
-        <InputCustom labelText="Program Suffix"
+        <CustomListbox value={program}
+          name='name'
+          placeholder='Program'
+          onChange={(value: any) => { setProgram(value); }}
+          items={programTypes}
+          labelText="Program"
+          errorText={state?.name?.errorText}
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          validationStatus={state?.name?.validationStatus}
+          keyDescription="new-program-form-name" />
+        <InputCustom labelText="Name"
           id='location-program-name-suffix'
-          name='program-name-suffix'
+          name='name-suffix'
           type="text"
           className="bg-secondary border-transparent p-2 px-3"
-          placeholder="Program Suffix:" />
-        <div className="space-y-[2px] relative">
-          <p className="font-semibold text-black">Program Type</p>
-          <CustomListboxHeadless value={programType}
-            placeholder='Program Type'
-            onChange={(value: any) => {
-              setProgramType(value)
-            }}
-            items={programTypes} />
-        </div>
-        <div className="space-y-[2px] relative">
-          <p className="font-semibold text-black">Director</p>
-          <CustomListboxHeadless value={director}
-            placeholder='Director'
-            onChange={(value: any) => {
-              setDirector(value)
-            }}
-            items={directorItems}
-            by="id" />
-        </div>
+          placeholder="Program Name Suffix:"
+          errorText={state?.["name-suffix"]?.errorText}
+          validationStatus={state?.["name-suffix"]?.validationStatus} />
+        <CustomListbox value={director}
+          name='director'
+          placeholder='Director'
+          onChange={(value: any) => { setDirector(value); }}
+          items={activeAdmins}
+          labelText="Director"
+          by="id"
+          errorText={state?.['director[id]']?.errorText}
+          validationStatus={state?.['director[id]']?.validationStatus}
+          keyDescription="new-program-form-director"
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }} />
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
             <InputCustom labelText="Capacity"
               id='location-program-capacity'
-              name='program-capacity'
+              name='capacity'
               type="text"
               inputMode="numeric"
               className="bg-secondary border-transparent p-2 px-3"
-              placeholder="Capacity:" />
+              placeholder="Capacity:"
+              errorText={state?.capacity?.errorText}
+              validationStatus={state?.capacity?.validationStatus} />
           </div>
           <div className="w-full">
-            <InputCustom labelText="Price"
+            {/* <InputCustom labelText="Price"
               id='location-program-price'
-              name='program-price'
+              name='price'
               type="text"
               inputMode="numeric"
               className="bg-secondary border-transparent p-2 px-3"
-              placeholder="Price:" />
+              placeholder="Price:" /> */}
           </div>
         </div>
-        <CustomCheckbox value={false}
-          onChange={(value: boolean) => { return }}
-          text='Promo Package Enabled' />
-        <CustomCheckbox value={false}
-          onChange={(value: boolean) => { return }}
-          text='Active' />
+        <InputCheckboxCustom labelText="Promo Package Enabled"
+          id={`location-program-new-promo-package`}
+          name="promo-package"
+        />
+        <InputCheckboxCustom labelText="Active"
+          id={`location-program-new-active`}
+          name="active"
+        />
       </div>
-      <div className="w-1/2 block m-auto">
-        <button className="bg-primary p-2 rounded text-white w-fit block m-auto">Submit</button>
-      </div>
-    </>
+      <SubmitProgramButton />
+    </form>
   )
 }

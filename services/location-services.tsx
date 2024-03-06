@@ -1,25 +1,12 @@
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
-
-type LocationPlaceInputs = {
-  name: string;
-  address: string;
-  director_id: number;
-  minimum_age: number;
-}
-
-function headers(token: string) {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token!}`
-    }
-  }
-}
+import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
+import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export async function locationPlaces(
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: SearchParamsProps,
   token?: string | null
 ) {
   let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
@@ -27,7 +14,7 @@ export async function locationPlaces(
   let strSP = urlSearchParams.toString();
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations${strSP === '' ? '' : `?${strSP}`}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
   let response = await result.json();
@@ -36,7 +23,7 @@ export async function locationPlaces(
     ...response,
     data: {
       data: response.locations ?? [],
-      total: response.total ?? 1,
+      total: response.locations_count ?? 1,
     } ?? undefined,
     statusCode: result.status,
     response: response
@@ -46,17 +33,27 @@ export async function locationPlaces(
 export async function locationPlace(id: string, token?: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    { ...headers(token!) }
+    { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<LocationPlace>({
-    ...response,
-    data: response.location ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<LocationPlace>({
+      ...response,
+      data: { ...response.location, director: response.director ?? null },
+      statusCode: result.status,
+      response: response
+    });
+
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
 }
 
 export async function createLocationPlace({
@@ -78,20 +75,27 @@ export async function createLocationPlace({
           minimum_age
         }
       }),
-      ...headers(token!)
+      ...authHeaders(token!)
     }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  console.log('response', response)
-
-  return new Result<LocationPlace>({
-    ...response,
-    data: response.location ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<LocationPlace>({
+      ...response,
+      data: response.location ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
 }
 
 export async function updateLocationPlace(
@@ -116,7 +120,39 @@ export async function updateLocationPlace(
           minimum_age
         }
       }),
-      ...headers(token)
+      ...authHeaders(token)
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    return new Result<LocationPlace>({
+      ...response,
+      data: response.location ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<LocationPlace>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    });
+  }
+
+}
+
+export async function removeLocationPlace(
+  id: string,
+  token: string
+) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
+    {
+      ...authHeaders(token),
+      method: "DELETE"
     }
   );
 
@@ -130,24 +166,22 @@ export async function updateLocationPlace(
   });
 }
 
-export async function removeLocationPlace(
-  id: string,
+export async function getAllLocationsForRegRecordCreate(
+  program_name: string,
   token: string
 ) {
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    {
-      method: "DELETE",
-      ...headers(token)
-    }
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_locations?program_name=${encodeURIComponent(program_name)}`,
+    { ...authHeaders(token) }
   );
 
   let response = await result.json();
 
-  return new Result<LocationPlace>({
-    ...response,
-    data: response.location ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+
+  return new Result<LocationPlace[]>({
+    response: response,
+    data: response.locations ?? [],
+    statusCode: response.status ?? result.status,
+    message: response.message ?? result.statusText
+  })
 }

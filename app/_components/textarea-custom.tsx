@@ -18,9 +18,12 @@ function TextareaCustom(
     <div className='block space-y-[2px] w-full'>
       {
         labelText &&
-        (<label htmlFor={id}
-          className="font-medium 
-          peer-has-[input:invalid]:text-danger peer-has-[input:focus]:text-primary">{labelText}</label>)
+        (
+          <label htmlFor={id}
+            className="font-medium peer-has-[input:invalid]:text-danger peer-has-[input:focus]:text-primary">
+            {labelText}
+          </label>
+        )
       }
       <div className="relative w-full">
         <textarea ref={ref}
@@ -34,7 +37,6 @@ function TextareaCustom(
               className
             )
           } {...props} />
-
       </div>
     </div>
   )

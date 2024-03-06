@@ -5,10 +5,14 @@ import InputCustom from "@/app/_components/input-custom";
 import { LocationPlace } from "@/models/location";
 import { useEffect, useState } from "react";
 import { editLocationPlace } from "@/actions/location-actions";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { Admin } from "@/models/admin";
 import { toast, ToastContentProps } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { redirectToPath } from "@/actions/common-actions";
+import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import LocationSubmitButton from "../../../_components/location-submit-button";
 
 export function EditFormLocation({
   locationPlace,
@@ -17,13 +21,25 @@ export function EditFormLocation({
   locationPlace: LocationPlace
   admins: Partial<Admin>[]
 }) {
-  const router = useRouter();
-  const [state, formAction] = useFormState(editLocationPlace.bind(null, locationPlace.id?.toString()!), {} as any);
-  const { pending } = useFormStatus();
+  const [state, formAction] = useFormState(
+    editLocationPlace.bind(null, locationPlace.id?.toString()!),
+    {
+      name: fieldInputValue(''),
+      address: fieldInputValue(''),
+      ['location-minimum-age']: fieldInputValue(''),
+      ['director[id]']: fieldInputValue(''),
+    } as LocationPlaceFormStateProps
+  );
+
   const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
 
   useEffect(() => {
+    async function pathToBeRedirected() {
+      await redirectToPath(`/admin/locations/${locationPlace.id!}`,)
+    }
+
     if (state?.success !== undefined) {
+
       let { message, success } = state;
 
       toast((props: ToastContentProps<unknown>) => {
@@ -39,15 +55,13 @@ export function EditFormLocation({
       })
 
       if (success) {
-        router.back();
+        pathToBeRedirected();
       }
     }
   }, [
-    state?.message,
-    state?.success
+    state,
+    locationPlace?.id
   ]);
-
-  console.log('state', state?.message, state?.success);
 
   return (
     <form action={formAction} className="block space-y-4">
@@ -59,8 +73,8 @@ export function EditFormLocation({
           className="bg-secondary border-0"
           placeholder="Name:"
           defaultValue={locationPlace.name!}
-          errorText={state?.name?.errorText}
-          validationType={state?.name?.validationStatus} />
+          errorText={state.name?.errorText}
+          validationStatus={state.name?.validationStatus} />
         <InputCustom labelText='Address'
           id='location-address'
           type="text"
@@ -69,7 +83,7 @@ export function EditFormLocation({
           placeholder="Address:"
           defaultValue={locationPlace.address!}
           errorText={state?.address?.errorText}
-          validationType={state?.address?.validationStatus} />
+          validationStatus={state?.address?.validationStatus} />
         <CustomListbox value={director}
           name='director'
           placeholder='Director'
@@ -78,7 +92,12 @@ export function EditFormLocation({
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}
-          validationStatus={state?.['director[id]']?.validationStatus} />
+          valueClassName={(value: string, placeholder: string) => {
+            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
+          }}
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          validationStatus={state?.['director[id]']?.validationStatus}
+          keyDescription="edit-form-location" />
         <InputCustom labelText='Minimum Age For Children'
           id='location-minimum-age-for-children'
           type="text"
@@ -87,12 +106,9 @@ export function EditFormLocation({
           className="bg-secondary border-0"
           placeholder="Minimum Age:"
           errorText={state?.['location-minimum-age']?.errorText}
-          validationType={state?.['location-minimum-age']?.validationStatus} />
+          validationStatus={state?.['location-minimum-age']?.validationStatus} />
       </div>
-      <button className="bg-primary p-2 rounded text-white w-32 block m-auto"
-        disabled={pending}>
-        {pending ? '...Checking' : 'Submit'}
-      </button>
+      <LocationSubmitButton />
     </form>
   )
 }

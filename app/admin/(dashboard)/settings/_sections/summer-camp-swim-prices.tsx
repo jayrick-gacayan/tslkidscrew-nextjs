@@ -1,13 +1,27 @@
 'use client';
 
-import InputCustom from "@/app/_components/input-custom";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
+import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { Listbox, Transition } from "@headlessui/react";
 import { capitalCase, noCase } from "change-case";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import SummerCampSwimSettingTableFormData from "../_components/summer-camp-swim-form-data";
 
-export default function SummerCampSwimPrices() {
-  const [withSwim, setWithSwim] = useState<string>('with-swimming-rates');
+export default function SummerCampSwimPrices({
+  summerCampSwimSettings
+}: {
+  summerCampSwimSettings: SummerCampSwimSetting[];
+}) {
+  const [focusId, setFocusId] = useState<number | undefined>(undefined);
+  const [withSwim, setWithSwim] = useState<string>('without-swimming-rates');
+
+  const summerCampSwimSettingsMemo = useMemo(() => {
+    return summerCampSwimSettings.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
+      return summerCampSwimSetting.with_swim_trip === (withSwim === 'with-swimming-rates')
+    })
+  }, [
+    withSwim, summerCampSwimSettings
+  ])
 
   const cbTableHeader = useCallback(() => {
     let length = withSwim.length;
@@ -69,11 +83,11 @@ export default function SummerCampSwimPrices() {
         <table className="min-w-[1024px] w-full">
           <thead>
             <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
-              <th className="w-56">Name</th>
+              <th className="w-48">Name</th>
               {
                 weeksSwimArray.map((value) => {
                   return (
-                    <th key={`prices-${withSwim}-${value}`} className="capitalize">
+                    <th key={`prices-${withSwim}-${value}`} className="w-auto">
                       {value} Weeks or More {cbTableHeader()} Trip
                     </th>
                   );
@@ -87,14 +101,18 @@ export default function SummerCampSwimPrices() {
                 return (
                   <tr key={`prices-${withSwim}-${childValue}`}
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
-                    <td className="w-56">Children #{childValue}</td>
+                    <td className="w-48">Children #{childValue}</td>
                     {
-                      weeksSwimArray.map((value) => {
+                      summerCampSwimSettingsMemo.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
+                        return summerCampSwimSetting.child_record_count === childValue
+                      }).sort((b: SummerCampSwimSetting, a: SummerCampSwimSetting) => {
+                        return a.week_count! - b.week_count!;
+                      }).map((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return (
-                          <td key={`prices-${withSwim}-${childValue}-${value}`} className="capitalize">
-                            <InputCustom type="text"
-                              inputMode="numeric"
-                              className="bg-white text-center border-transparent" />
+                          <td key={`prices-${withSwim}-${childValue}-${summerCampSwimSetting.id}`}>
+                            <SummerCampSwimSettingTableFormData summerCampSwimSetting={summerCampSwimSetting}
+                              setFocusId={setFocusId}
+                              focusId={focusId} />
                           </td>
                         );
                       })

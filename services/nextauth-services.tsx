@@ -2,7 +2,10 @@ import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth";
 
 export async function nextauthSignOut(redirectTo: string) {
-  return await signOut({ redirect: false, redirectTo: redirectTo });
+  return await signOut({
+    redirect: false,
+    redirectTo: redirectTo
+  });
 }
 
 export async function nextauthSignIn(
@@ -10,7 +13,8 @@ export async function nextauthSignIn(
   redirectTo: string,
 ) {
   try {
-    let result = await signIn('credentials',
+    let result = await signIn(
+      'credentials',
       {
         email: formData.get('email'),
         password: formData.get('password'),
@@ -25,5 +29,7 @@ export async function nextauthSignIn(
     if (error instanceof AuthError) {
       return { error: error.cause?.err?.message }
     }
+
+    return { error: 'Something went wrong. Please try again.' }
   }
 }
