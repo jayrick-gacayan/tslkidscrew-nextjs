@@ -50,6 +50,7 @@ export default function RegistrationTypeSummerCamp() {
       <div className="space-y-2">
         <div className="space-y-2">
           <FormsRadioButton labelText='The Kids Crew Summer Specials: Pay for summer upfront SAVE 10%, and no registration fee.'
+            name="reg-type-summer-camp"
             value='special'
             current={registerType}
             renderRadio={renderRegTypeRadio}
@@ -57,6 +58,7 @@ export default function RegistrationTypeSummerCamp() {
             labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer' />
           <FormsRadioButton labelText='Regular Registration'
             value='regular'
+            name="reg-type-summer-camp"
             current={registerType}
             renderRadio={renderRegTypeRadio}
             labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
@@ -86,7 +88,7 @@ export default function RegistrationTypeSummerCamp() {
                     <div className="flex items-center gap-4">
                       <div className="font-medium">Week Promos</div>
                       <div className="flex-1 space-x-2">
-                        <FormsRadioButton labelText='6 weeks $1404'
+                        {/* <FormsRadioButton labelText='6 weeks $1404'
                           value={`6-weeks`}
                           current={promoWeek}
                           renderRadio={renderWeekPromoRadio}
@@ -109,7 +111,7 @@ export default function RegistrationTypeSummerCamp() {
                           current={promoWeek}
                           renderRadio={renderWeekPromoRadio}
                           labelClassName="inline-block space-x-2 cursor-pointer"
-                          onChange={(value: string) => { setPromoWeek(value); }} />
+                          onChange={(value: string) => { setPromoWeek(value); }} /> */}
                       </div>
                     </div>
                     {
