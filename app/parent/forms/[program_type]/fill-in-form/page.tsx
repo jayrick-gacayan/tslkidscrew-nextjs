@@ -1,11 +1,12 @@
 import { getAllLocationsForRegRecordCreate } from "@/services/location-services";
-import FillInFormProvider from "./_context/fill-in-form-provider";
 import FormActionContainer from "./_section/form-action-container";
 import { Session } from "next-auth";
 import { Parent } from "@/models/parent";
 import { auth } from "@/auth";
 import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location";
+import { capitalCase } from "change-case";
+import { getCustomerInfo } from "@/services/parent-info-services";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
   return [
@@ -27,9 +28,7 @@ export default async function Page({
   const step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
 
   let locationDataByProgramType: Result<LocationPlace[]> = await getAllLocationsForRegRecordCreate(
-    program_type === 'summer-camp' ? 'Summer Camp' :
-      program_type === 'vacation-camp' ? 'Vacation Camp' :
-        'After School'
+    program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
     , parent?.accessToken!);
 
   let locationData: Partial<LocationPlace>[] = locationDataByProgramType.data?.map((val: LocationPlace) => {
@@ -40,16 +39,17 @@ export default async function Page({
     }
   }) ?? [];
 
-  return (
-    <FillInFormProvider>
-      <div className='pb-12 w-full'>
-        <div className="rounded drop-shadow bg-white w-full xl:w-8/12 m-auto block p-6 max-h-fit">
-          <FormActionContainer step={step}
-            program_type={program_type}
-            locations={locationData} />
-        </div>
-      </div>
-    </FillInFormProvider>
+  let customerData = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.accessToken!)
 
+  let { card_last_four, card_brand, ...rest } = customerData.data!
+  return (
+    <div className='pb-12 w-full'>
+      <div className="rounded drop-shadow bg-white w-full xl:w-8/12 m-auto block p-6 max-h-fit">
+        <FormActionContainer step={step}
+          program_type={program_type}
+          cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
+          locations={locationData} />
+      </div>
+    </div>
   )
 }

@@ -1,13 +1,21 @@
 import Fa6SolidCreditCard from "@/app/_components/svg/fa6-solid-credit-card";
-import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
-import { StripeCardNumberElement, StripeCardNumberElementChangeEvent } from "@stripe/stripe-js/types/stripe-js/elements/card-number";
-import { FormEvent, useContext } from "react";
-import { FillInFormContext } from "../_context/fill-in-form-context";
+import {
+  useStripe,
+  useElements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement
+} from "@stripe/react-stripe-js";
+import {
+  StripeCardNumberElement,
+  StripeCardNumberElementChangeEvent
+} from "@stripe/stripe-js/types/stripe-js/elements/card-number";
+import { FormEvent } from "react";
 import { StripeElementType } from "@stripe/stripe-js";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
+import { reduxStore } from "@/react-redux/redux-store";
+import { modalStripeToggled } from "../_redux/fill-in-form-slice";
 
 export default function StripeCardForm() {
-  const { state, stripeModalToggle, } = useFillInFormHook();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -107,7 +115,7 @@ export default function StripeCardForm() {
       <div className="flex items-center justify-end gap-4">
         <button type='button'
           className='bg-white text-primary p-2'
-          onClick={() => { stripeModalToggle(); }}>Cancel</button>
+          onClick={() => { reduxStore.dispatch(modalStripeToggled(false)) }}>Cancel</button>
         <button className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'>
           Submit And Pay
         </button>

@@ -1,35 +1,52 @@
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { PhInfoLight } from "@/app/_components/svg/ph-info-light";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
-import { ValidationType } from "@/types/enums/validation-type";
 import { getProgramSettingYearCycleForRegRecordAction } from "@/actions/registration-create-action";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { yearCycleChanged } from "../_redux/fill-in-form-slice";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 let todayYear = new Date().getFullYear();
 
 export default function ScheduleSelectionBeforeAndAfterSchool() {
-  const { state, setYearCycle } = useFillInFormHook();
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm;
+  })
+
+  const { value, errorText } = useMemo(() => {
+    let { value, errorText, validationStatus } = fillInFormState.fillInForm.yearCycle
+    return {
+      value,
+      errorText,
+      validationStatus
+    }
+  }, [fillInFormState.fillInForm.yearCycle])
+
+  const location = useMemo(() => {
+    return fillInFormState.fillInForm.location;
+  }, [fillInFormState.fillInForm.location])
   const [programYearCycle, setProgramYearCycle] = useState<ProgramYearCycleSetting & any | undefined>(undefined)
 
   useEffect(() => {
-    if (state?.fillInForm?.location) {
+    if (location) {
       async function getProgamSettingYearCycle() {
-        let data = await getProgramSettingYearCycleForRegRecordAction(state?.fillInForm?.location?.id?.toString() ?? 1);
-
+        let data = await getProgramSettingYearCycleForRegRecordAction(location.value?.id?.toString() ?? '1');
         setProgramYearCycle(data);
       }
 
       getProgamSettingYearCycle();
     }
-  }, [state?.fillInForm.location])
+  }, [location])
 
 
-  function renderRadio(value: string, current: string) {
+  function renderRadio(val: string, current: string) {
     return (
       <span className="rounded-full border border-warning h-5 w-5 p-1">
-        <span className={`transition-all duration-100 ${value === current ? 'bg-warning' : 'bg-transparent'} h-full w-full block rounded-full`} />
+        <span className={`transition-all duration-100 ${val === current ? 'bg-warning' : 'bg-transparent'} h-full w-full block rounded-full`} />
       </span>
     )
   }
@@ -46,6 +63,10 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
     }, [programYearCycle]
   );
 
+  function handleChange(val: string) {
+    reduxStore.dispatch(yearCycleChanged(fieldInputValue(val)));
+  }
+
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
@@ -61,32 +82,19 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
         <FormsRadioButton labelText={yearCycleCB(todayYear, programYearCycle?.current_year_cycle ?? undefined)}
           value={programYearCycle?.year_cycle?.current_year_cycle!}
           name="year-cycle"
-          current={state?.fillInForm?.yearCycle?.value ?? ''}
+          current={value}
           labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-          onChange={(value: string) => {
-            setYearCycle({
-              value: value,
-              errorText: '',
-              validationStatus: ValidationType.NONE,
-            });
-          }}
+          onChange={handleChange}
           renderRadio={renderRadio} />
-        <FormsRadioButton labelText={yearCycleCB(todayYear + 1, programYearCycle?.next_year_cycle ?? undefined)}
+        <FormsRadioButton current={value}
+          labelText={yearCycleCB(todayYear + 1, programYearCycle?.next_year_cycle ?? undefined)}
           value={programYearCycle?.year_cycle?.next_year_cycle!}
-          current={state?.fillInForm?.yearCycle?.value ?? ''}
           renderRadio={renderRadio}
           name="year-cycle"
           labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-          onChange={(value: string) => {
-            setYearCycle({
-              value: value,
-              errorText: '',
-              validationStatus: ValidationType.NONE,
-            });
-          }} />
+          onChange={handleChange} />
         {
-          state?.fillInForm?.yearCycle?.errorText !== '' &&
-          (<div className="text-danger">{state?.fillInForm?.yearCycle?.errorText}</div>)
+          errorText !== '' && (<div className="text-danger">{errorText}</div>)
         }
       </div>
     </div>

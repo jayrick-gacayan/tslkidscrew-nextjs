@@ -30,8 +30,7 @@ export async function fillInFormAction(
     stepFive,
   };
 
-  console.log('parent', customerInfo.data)
-
+  console.log('objectStep', objectStep)
   switch (step) {
     case 1:
       let tempLocationData = formData.get('location-place[id]')
@@ -138,39 +137,49 @@ export async function fillInFormAction(
         return { ...objectStep, stepThree: false, }
       }
 
-      if (programType === 'before-or-after-school') {
-        let startDate = formData.get('before-or-after-registration-start-date') as string ?? '';
-        let beforeSchool = formData.getAll('before-school[]') as any[];
-        let afterSchool = formData.getAll('after-school[]');
-        let errors: { [key: string]: any } = {};
+      switch (programType) {
+        case 'before-or-after-school':
+          {
+            console.log('I am here')
+            let startDate = formData.get('before-or-after-registration-start-date') as string ?? '';
+            let beforeSchool = formData.getAll('before-school[]') as any[] ?? [];
+            let afterSchool = formData.getAll('after-school[]') as any[] ?? [];
 
-        if (startDate === '') {
-          errors[`start-date`] = {
-            value: startDate,
-            errorText: 'Start date is required',
-            validationStatus: ValidationType.ERROR
+            let errors: { [key: string]: any } = {};
+
+            if (startDate === '') {
+              errors[`start-date`] = {
+                value: startDate,
+                errorText: 'Start date is required',
+                validationStatus: ValidationType.ERROR
+              }
+            }
+
+            if ((beforeSchool.length + afterSchool.length) < 3) {
+              errors[`before-or-after-week-days`] = {
+                value: { beforeSchool, afterSchool },
+                errorText: "Must choose at least one week day.",
+                validationStatus: ValidationType.ERROR,
+              }
+            }
+
+            if (Object.keys(errors).length > 0) {
+              return {
+                ...errors,
+                ...objectStep
+              }
+            }
+
+            return {
+              ...objectStep,
+              stepFour: true
+            };
           }
-        }
 
-        if ((beforeSchool.length + afterSchool.length) === 0) {
-          errors[`before-or-after-week-days`] = {
-            value: { beforeSchool, afterSchool },
-            errorText: "Must choose at least one week day.",
-            validationStatus: ValidationType.ERROR,
-          }
-        }
 
-        if (Object.keys(errors).length > 0) {
-          return {
-            ...errors,
-            objectStep
-          }
-        }
-
-        return { ...objectStep, stepFour: true }
+        default: return objectStep;
       }
 
-      return objectStep;
     case 5:
 
       if (!!formData.get('back-button') && programType === 'before-or-after-school') {
@@ -183,7 +192,11 @@ export async function fillInFormAction(
 
       if (getAllCheckboxes.length < 10) {
         return {
-          'payment-tos-terms-error': 'Please check all the TOS.',
+          'payment-tos-terms-error': {
+            value: getAllCheckboxes,
+            errorText: "Must choose at least one week day.",
+            validationStatus: ValidationType.ERROR,
+          },
           ...objectStep
         }
       }

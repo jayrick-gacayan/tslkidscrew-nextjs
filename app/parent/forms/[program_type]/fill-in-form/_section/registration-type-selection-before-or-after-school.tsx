@@ -1,13 +1,49 @@
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
-import { ValidationType } from "@/types/enums/validation-type";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { ChangeEvent, useMemo } from "react";
+import {
+  beforeOrAfterSchoolStartDateChanged,
+  beforeOrAfterWeekDaysSet
+} from "../_redux/fill-in-form-slice";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 let today = new Date();
 
-export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
-  const { state, setWeekDayBOAS, setStartDate } = useFillInFormHook();
+const WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
+export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm
+  })
+
+  const startDate = useMemo(() => {
+    return fillInFormState.fillInForm.startDate;
+  }, [fillInFormState.fillInForm.startDate]);
+
+  const { beforeSchool, afterSchool, errorText } = useMemo(() => {
+    let { errorText, value } = fillInFormState.fillInForm.beforeOrAfterWeekDays
+    let { beforeSchool, afterSchool } = value;
+
+    return { beforeSchool, afterSchool, errorText }
+  }, [fillInFormState.fillInForm.beforeOrAfterWeekDays]);
+
+  function handleCheckboxChange(key: 'beforeSchool' | 'afterSchool', arrSchool: any[]) {
+    return function (e: ChangeEvent<HTMLInputElement>) {
+      let val = e.target.value;
+      reduxStore.dispatch(
+        beforeOrAfterWeekDaysSet({
+          key: key,
+          value: !arrSchool.includes(val) ? [...arrSchool, val] :
+            arrSchool.filter((value: string) => { return value !== val })
+        })
+      )
+    }
+  }
+
+  console.log('errorText', errorText)
   return (
     <div className="space-y-8">
       <h1 className="font-medium text-[36px]">Registration Type Selection</h1>
@@ -15,151 +51,59 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
         <div className="relative space-y-1">
           <div className="font-medium">Start Date</div>
           <div className="relative w-full">
-            <PopoverReactDayPicker selected={state?.fillInForm?.startDate?.value ?? undefined}
+            <PopoverReactDayPicker selected={startDate.value ? new Date(startDate.value) : undefined}
               placeholder="Enter date"
               inputName='before-or-after-registration-start-date'
               options={{
                 mode: "single",
-                selected: state?.fillInForm?.startDate?.value ?? undefined,
+                selected: startDate.value ? new Date(startDate.value) : undefined,
                 onSelect: (date: any) => {
-                  setStartDate({ value: date, errorText: '', validationStatus: ValidationType.NONE });
+                  reduxStore.dispatch(beforeOrAfterSchoolStartDateChanged(fieldInputValue(date.toISOString())))
                 },
                 today: today,
               }} />
           </div>
         </div>
         <div className="space-y-6">
+          <div className="italic text-danger font-medium">&#42; Select at least 3 Week Days to continue with your registration.</div>
           <div className='block space-y-2'>
             <h4 className="font-medium">Before School:</h4>
             <div className="flex lg:flex-row flex-col items-start lg:items-center gap-4">
-              <InputCheckboxCustom labelText="Monday"
-                id='before-school-monday'
-                name='before-school[]'
-                checked={state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool?.includes('Monday') ?? false}
-                value='Monday'
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'beforeSchool',
-                    value: e.target.value
-                  })
-                }}
-              />
-              <InputCheckboxCustom labelText="Tuesday"
-                id='before-school-tuesday'
-                name='before-school[]'
-                value='Tuesday'
-                checked={state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool?.includes('Tuesday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'beforeSchool',
-                    value: e.target.value
-                  })
-                }}
-              />
-              <InputCheckboxCustom labelText="Wednesday"
-                id='before-school-wednesday'
-                name='before-school[]'
-                value='Wednesday'
-                checked={state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool?.includes('Wednesday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'beforeSchool',
-                    value: e.target.value
-                  })
-                }} />
-              <InputCheckboxCustom labelText="Thursday"
-                id='before-school-thursday'
-                name='before-school[]'
-                value='Thursday'
-                checked={state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool?.includes('Thursday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'beforeSchool',
-                    value: e.target.value
-                  })
-                }} />
-              <InputCheckboxCustom labelText="Friday"
-                id='before-school-friday'
-                name='before-school[]'
-                value='Friday'
-                checked={state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool?.includes('Friday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'beforeSchool',
-                    value: e.target.value
-                  })
-                }} />
+              {
+                WEEK_DAYS.map((val: string, idx: number) => {
+                  return (
+                    <InputCheckboxCustom key={`before-school-${val}-${idx}`}
+                      labelText={val}
+                      id={`before-school-${val.toLowerCase()}`}
+                      name='before-school[]'
+                      checked={beforeSchool.includes(val)}
+                      value={val}
+                      onChange={handleCheckboxChange('beforeSchool', beforeSchool)} />
+                  )
+                })
+              }
             </div>
-
           </div>
           <div className='block space-y-2'>
             <h4 className="font-medium">After School:</h4>
             <div className="flex lg:flex-row flex-col items-start lg:items-center gap-4">
-              <InputCheckboxCustom labelText="Monday"
-                id='after-school-monday'
-                name='after-school[]'
-                checked={state?.fillInForm?.afterSchool?.includes('Monday') ?? false}
-                value='Monday'
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'afterSchool',
-                    value: e.target.value
-                  })
-                }}
-              />
-              <InputCheckboxCustom labelText="Tuesday"
-                id='after-school-tuesday'
-                name='after-school[]'
-                value='Tuesday'
-                checked={state?.fillInForm?.afterSchool?.includes('Tuesday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'afterSchool',
-                    value: e.target.value
-                  })
-                }}
-              />
-              <InputCheckboxCustom labelText="Wednesday"
-                id='after-school-wednesday'
-                name='after-school[]'
-                value='Wednesday'
-                checked={state?.fillInForm?.afterSchool?.includes('Wednesday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'afterSchool',
-                    value: e.target.value
-                  })
-                }} />
-              <InputCheckboxCustom labelText="Thursday"
-                id='after-school-thursday'
-                name='after-school[]'
-                value='Thursday'
-                checked={state?.fillInForm?.afterSchool?.includes('Thursday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'afterSchool',
-                    value: e.target.value
-                  })
-                }} />
-              <InputCheckboxCustom labelText="Friday"
-                id='after-school-friday'
-                name='after-school[]'
-                value='Friday'
-                checked={state?.fillInForm?.afterSchool?.includes('Friday') ?? false}
-                onChange={(e) => {
-                  setWeekDayBOAS({
-                    type: 'afterSchool',
-                    value: e.target.value
-                  })
-                }} />
+              {
+                WEEK_DAYS.map((val: string, idx: number) => {
+                  return (
+                    <InputCheckboxCustom key={`after-school-${val}-${idx}`}
+                      labelText={val}
+                      id={`after-school-${val.toLowerCase()}`}
+                      name='after-school[]'
+                      checked={afterSchool.includes(val)}
+                      value={val}
+                      onChange={handleCheckboxChange('afterSchool', afterSchool)} />
+                  )
+                })
+              }
             </div>
           </div>
-
           {
-            state?.fillInForm?.beforeOrAfterWeekDays?.errorText !== '' &&
-            (<div className="text-danger">
-              {state?.fillInForm?.beforeOrAfterWeekDays?.errorText}
-            </div>)
+            errorText !== '' && (<div className="text-danger">{errorText}</div>)
           }
         </div>
       </div>

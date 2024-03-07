@@ -7,7 +7,7 @@ export const BEFORE_OR_AFTER_SCHOOL_TOS: TOSInfos[] = [
   },
   {
     num: 'two',
-    text: 'I understand that my payment is due on the 1st of each month and that services may lapse if I do not pay on time'
+    text: 'I understand that my payment is due on the 1st of each month and that services may lapse if I do not pay on time.'
   },
   {
     num: 'three',

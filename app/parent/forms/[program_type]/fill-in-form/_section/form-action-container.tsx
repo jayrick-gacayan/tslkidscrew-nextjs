@@ -9,29 +9,23 @@ import PaymentFormContainer from "./payment-form-container";
 import RegistrationTypeSelectionBeforeOrAfterSchool from "./registration-type-selection-before-or-after-school";
 import StepThreeForm from "./step-three-form";
 import { FormEvent, useEffect } from "react";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 import { LocationPlace } from "@/models/location";
 import { redirectToPath } from "@/actions/common-actions";
-import { format } from 'date-fns';
+import { Parent } from "@/models/parent";
+import { reduxStore } from "@/react-redux/redux-store";
+import { beforeOrAfterSchoolStartDateChanged, beforeOrAfterWeekDaysSetError, locationChanged, modalStripeToggled, tosConditionChanged, yearCycleChanged } from "../_redux/fill-in-form-slice";
 
 export default function FormActionContainer({
   program_type,
   step,
   locations,
+  cardDetails,
 }: {
   program_type: string;
   step: string | undefined;
-  locations: Partial<LocationPlace>[]
+  locations: Partial<LocationPlace>[];
+  cardDetails: Partial<Parent> | undefined;
 }) {
-  const {
-    state,
-    setLocation,
-    setYearCycle,
-    setStartDate,
-    setWeekDayBOASError,
-    setTOSError,
-    stripeModalToggle
-  } = useFillInFormHook();
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
@@ -60,11 +54,8 @@ export default function FormActionContainer({
         if (stepOne) { pathToRedirectURL(stepInNumber + 1) }
         else {
           if (formState?.['location-place[id]']) {
-            setLocation({
-              value: undefined,
-              errorText: formState?.['location-place[id]']?.errorText,
-              validationStatus: formState?.['location-place[id]']?.validationStatus
-            })
+            let { errorText, validationStatus } = formState?.['location-place[id]']
+            reduxStore.dispatch(locationChanged({ value: undefined, errorText, validationStatus }))
           }
         }
         break;
@@ -83,11 +74,8 @@ export default function FormActionContainer({
             switch (program_type) {
               case 'before-or-after-school':
                 if (formState?.['year-cycle']) {
-                  setYearCycle({
-                    value: '',
-                    errorText: formState?.['year-cycle']?.errorText,
-                    validationStatus: formState?.['year-cycle']?.validationStatus
-                  })
+                  let { errorText, validationStatus } = formState?.['year-cycle'];
+                  reduxStore.dispatch(yearCycleChanged({ value: '', errorText, validationStatus }))
                 }
                 break;
             }
@@ -103,18 +91,13 @@ export default function FormActionContainer({
             case 'before-or-after-school':
               if (!stepFour) {
                 if (formState?.['start-date']) {
-                  setStartDate({
-                    value: undefined,
-                    errorText: formState?.['start-date']?.errorText,
-                    validationStatus: formState?.['start-date']?.errorText
-                  })
+                  let { errorText, validationStatus } = formState?.['start-date'];
+                  reduxStore.dispatch(beforeOrAfterSchoolStartDateChanged({ value: undefined, errorText, validationStatus }))
                 }
 
                 if (formState?.['before-or-after-week-days']) {
-                  setWeekDayBOASError({
-                    errorText: formState?.['before-or-after-week-days']?.errorText,
-                    validationStatus: formState?.['before-or-after-week-days']?.validationStatus
-                  })
+                  let { errorText, validationStatus } = formState?.['before-or-after-week-days'];
+                  reduxStore.dispatch(beforeOrAfterWeekDaysSetError({ errorText, validationStatus }))
                 }
               }
               else {
@@ -130,51 +113,24 @@ export default function FormActionContainer({
             pathToRedirectURL(stepInNumber - 1)
           }
           else {
-            setTOSError(formState?.['payment-tos-terms-error'] ?? '')
-
-            if (formState?.hasStripeCard !== undefined) {
-              if (!formState.hasStripeCard) {
-                stripeModalToggle()
-              }
-              else {
-
-                let formData = new FormData();
-
-                formData.set('location_id', encodeURIComponent(state?.fillInForm?.location?.value?.id!))
-                formData.set('start_date', format(state?.fillInForm?.startDate, 'd LLL yyyy'))
-
-                let beforeSchool = state?.fillInForm?.beforeOrAfterWeekDays?.value?.beforeSchool;
-                let afterSchool = state?.fillInForm?.beforeOrAfterWeekDays?.value?.afterSchool;
-
-                if (beforeSchool.length > 0) {
-
-                  formData.set('before_school_monday', encodeURIComponent(beforeSchool.includes('Monday')));
-                  formData.set('before_school_tuesday', encodeURIComponent(beforeSchool.includes('Tuesday')));
-                  formData.set('before_school_wednesday', encodeURIComponent(beforeSchool.includes('Wednesday')));
-                  formData.set('before_school_thursday', encodeURIComponent(beforeSchool.includes('Thursday')));
-                  formData.set('before_school_friday', encodeURIComponent(beforeSchool.includes('Friday')));
-                }
-
-                if (afterSchool.length > 0) {
-
-                  formData.set('after_school_monday', encodeURIComponent(afterSchool.includes('Monday')));
-                  formData.set('after_school_tuesday', encodeURIComponent(afterSchool.includes('Tuesday')));
-                  formData.set('after_school_wednesday', encodeURIComponent(afterSchool.includes('Wednesday')));
-                  formData.set('after_school_thursday', encodeURIComponent(afterSchool.includes('Thursday')));
-                  formData.set('after_school_friday', encodeURIComponent(afterSchool.includes('Friday')));
-                }
-
-                formAction(formData);
-
-                // state?.fillInForm?.children?.forEach((val: any) => {
-                //   formData.set('children[][firstname]', encodeURIComponent(val.first_name))
-                //   formData.set('children[][lastname]', encodeURIComponent(val.first_name))
-                //   formData.set('children[][firstname]', encodeURIComponent(val.first_name))
-                //   formData.set('children[][firstname]', encodeURIComponent(val.first_name))
-
-                // })
-              }
+            if (formState?.['payment-tos-terms-error']) {
+              let { value, errorText, validationStatus } = formState?.['payment-tos-terms-error']
+              reduxStore.dispatch(tosConditionChanged({
+                value,
+                errorText,
+                validationStatus,
+              }))
             }
+            else {
+              if (formState?.hasStripeCard !== undefined) {
+                if (!formState.hasStripeCard) {
+                  reduxStore.dispatch(modalStripeToggled(true));
+                }
+              }
+
+            }
+
+
           }
         }
         break;
@@ -183,9 +139,8 @@ export default function FormActionContainer({
     stepInNumber,
     formState,
     program_type,
+    cardDetails,
   ]);
-
-  console.log('state', state, stepInNumber)
 
   function StepperPanel() {
     if (stepInNumber === 1) return (<LocationForm locations={locations} />)
@@ -199,7 +154,7 @@ export default function FormActionContainer({
     return null;
   }
 
-
+  console.log('sdfsadfds', formState)
   return (
     <form className="space-y-6"
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
@@ -223,7 +178,10 @@ export default function FormActionContainer({
         }
       }}>
       <StepperPanel />
-      <FillInFormButtons program_type={program_type} step={step} formAction={formAction} />
+      <FillInFormButtons program_type={program_type}
+        step={step}
+        formAction={formAction}
+        cardDetails={cardDetails} />
     </form>
   )
 }

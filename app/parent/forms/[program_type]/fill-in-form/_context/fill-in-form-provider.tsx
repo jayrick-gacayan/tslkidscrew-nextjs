@@ -19,6 +19,7 @@ export const initChildren: ChildrenInfoType = {
 
 export const fillInFormInitState = {
   stripeModalOpen: false,
+  withCard: false,
   fillInForm: {
     location: fieldInputValue<LocationPlace | undefined>(undefined),
     children: [
