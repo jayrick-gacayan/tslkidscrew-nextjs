@@ -4,12 +4,14 @@ import PaymentFormVacationCamp from "./payment-form-vacation-camp";
 import StripeFormContainer from "./credit-card-info-container";
 import { PhShoppingCartBold } from "@/app/_components/svg/ph-shopping-cart-bold";
 import ModalCardInfoForStripe from "./modal-card-info-for-stripe";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 
 export default function PaymentFormContainer({
   program_type
 }: {
   program_type: string;
 }) {
+  const { state } = useFillInFormHook();
 
   return (
     <div className="relative">
@@ -17,6 +19,12 @@ export default function PaymentFormContainer({
         <div className="space-y-2 text-black">
           <h1 className="font-medium text-[36px]">Payment</h1>
           <p className="italic font-medium text-[18px]">The TOS is your binding CONTRACT with TSL. Please take time to read it before proceeding.</p>
+          {
+            state?.fillInForm?.TOSCheckError !== '' &&
+            <div className="rounded bg-danger-light text-white p-2 text-[24px]">
+              {state?.fillInForm?.TOSCheckError}
+            </div>
+          }
         </div>
 
         {

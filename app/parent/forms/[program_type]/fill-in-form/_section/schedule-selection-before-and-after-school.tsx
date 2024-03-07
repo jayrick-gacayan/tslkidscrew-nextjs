@@ -1,11 +1,30 @@
-'use client';
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { PhInfoLight } from "@/app/_components/svg/ph-info-light";
+import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
+import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
+import { ValidationType } from "@/types/enums/validation-type";
+import { getProgramSettingYearCycleForRegRecordAction } from "@/actions/registration-create-action";
+
+let todayYear = new Date().getFullYear();
 
 export default function ScheduleSelectionBeforeAndAfterSchool() {
-  const [yearCycle, setYearCycle] = useState('');
+  const { state, setYearCycle } = useFillInFormHook();
+  const [programYearCycle, setProgramYearCycle] = useState<ProgramYearCycleSetting & any | undefined>(undefined)
+
+  useEffect(() => {
+    if (state?.fillInForm?.location) {
+      async function getProgamSettingYearCycle() {
+        let data = await getProgramSettingYearCycleForRegRecordAction(state?.fillInForm?.location?.id?.toString() ?? 1);
+
+        setProgramYearCycle(data);
+      }
+
+      getProgamSettingYearCycle();
+    }
+  }, [state?.fillInForm.location])
+
 
   function renderRadio(value: string, current: string) {
     return (
@@ -14,6 +33,19 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
       </span>
     )
   }
+
+  const yearCycleCB = useCallback(
+    (todayYear: number, yearCycle?: string) => {
+      if (yearCycle) {
+        let splitData = yearCycle.split('-');
+
+        return `${splitData[0]} September - ${splitData[1]} June`;
+      }
+
+      return `${todayYear - 1} September - ${todayYear} June`;
+    }, [programYearCycle]
+  );
+
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
@@ -26,18 +58,36 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
         </div>
       </div>
       <div className="space-y-2">
-        <FormsRadioButton labelText='2022 September - 2023 June'
-          value='2022-2023'
-          current={yearCycle}
+        <FormsRadioButton labelText={yearCycleCB(todayYear, programYearCycle?.current_year_cycle ?? undefined)}
+          value={programYearCycle?.year_cycle?.current_year_cycle!}
+          name="year-cycle"
+          current={state?.fillInForm?.yearCycle?.value ?? ''}
           labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-          onChange={(value: string) => { setYearCycle(value); }}
+          onChange={(value: string) => {
+            setYearCycle({
+              value: value,
+              errorText: '',
+              validationStatus: ValidationType.NONE,
+            });
+          }}
           renderRadio={renderRadio} />
-        <FormsRadioButton labelText='2023 September - 2024 June'
-          value='2024-2024'
-          current={yearCycle}
+        <FormsRadioButton labelText={yearCycleCB(todayYear + 1, programYearCycle?.next_year_cycle ?? undefined)}
+          value={programYearCycle?.year_cycle?.next_year_cycle!}
+          current={state?.fillInForm?.yearCycle?.value ?? ''}
           renderRadio={renderRadio}
+          name="year-cycle"
           labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-          onChange={(value: string) => { setYearCycle(value); }} />
+          onChange={(value: string) => {
+            setYearCycle({
+              value: value,
+              errorText: '',
+              validationStatus: ValidationType.NONE,
+            });
+          }} />
+        {
+          state?.fillInForm?.yearCycle?.errorText !== '' &&
+          (<div className="text-danger">{state?.fillInForm?.yearCycle?.errorText}</div>)
+        }
       </div>
     </div>
   )

@@ -2,12 +2,11 @@ import CustomListbox from "@/app/_components/listbox-custom";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 import { LocationPlace } from "@/models/location";
+import { ValidationType } from "@/types/enums/validation-type";
 
 export default function LocationForm({
-  locationState,
   locations,
 }: {
-  locationState: any;
   locations: Partial<LocationPlace>[]
 }) {
   const { state, setLocation } = useFillInFormHook();
@@ -18,11 +17,11 @@ export default function LocationForm({
         <h1 className="font-medium text-[36px] text-black">Pick A Location</h1>
       </div>
       <div className="w-full relative">
-        <CustomListbox value={state?.fillInForm?.location}
+        <CustomListbox value={state?.fillInForm?.location?.value}
           name='location-place'
           placeholder='Location'
           onChange={(value: any) => {
-            setLocation(value);
+            setLocation({ value: value, errorText: '', validationStatus: ValidationType.NONE });
           }}
           items={locations}
           labelText="Location"
@@ -32,8 +31,8 @@ export default function LocationForm({
           }}
           listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
           keyDescription="registration-form-form-location"
-          errorText={locationState?.errorText}
-          validationStatus={locationState?.validationStatus} />
+          errorText={state?.fillInForm?.location?.errorText}
+          validationStatus={state?.fillInForm?.location?.validationStatus} />
       </div>
     </div>
   )

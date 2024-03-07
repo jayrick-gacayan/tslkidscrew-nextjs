@@ -1,10 +1,36 @@
 'use server';
 
+import { auth } from '@/auth';
+import { Parent } from '@/models/parent';
+import { Result } from '@/models/result';
+import { getCustomerInfo } from '@/services/parent-info-services';
+import { getProgramSettingYearCycleForRegRecord } from '@/services/program-settings-services';
+import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import * as Joi from 'joi';
+import { Session } from 'next-auth';
 
-export async function fillInFormAction(step: number, programType: string, prevState: any, formData: FormData) {
+export async function fillInFormAction(
+  step: number,
+  programType: string,
+  prevState: { [key: string]: any },
+  formData: FormData
+) {
+  let parent: Session<Parent> | null = await auth();
+
+  let customerInfo: Result<Parent> = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.accessToken!);
+
   let { stepOne, stepTwo, stepThree, stepFour, stepFive } = prevState;
+
+  let objectStep: { [key: string]: any } = {
+    stepOne,
+    stepTwo,
+    stepThree,
+    stepFour,
+    stepFive,
+  };
+
+  console.log('parent', customerInfo.data)
 
   switch (step) {
     case 1:
@@ -20,7 +46,10 @@ export async function fillInFormAction(step: number, programType: string, prevSt
           }),
       })
 
-      let validate = locationSchema.validate({ 'location-place[id]': location }, { abortEarly: false });
+      let validate = locationSchema.validate(
+        { 'location-place[id]': location },
+        { abortEarly: false }
+      );
 
       if (validate.error) {
         return {
@@ -33,32 +62,19 @@ export async function fillInFormAction(step: number, programType: string, prevSt
               }
             }, prev)
           }, {}) as any,
-          stepOne,
-          stepTwo,
-          stepThree,
-          stepFour,
-          stepFive,
+          ...objectStep
         };
       }
 
       return {
         message: undefined,
+        ...objectStep,
         stepOne: true,
-        stepTwo,
-        stepThree,
-        stepFour,
-        stepFive
       }
 
     case 2:
       if (!!formData.get('back-button')) {
-        return {
-          stepOne: false,
-          stepTwo,
-          stepThree,
-          stepFour,
-          stepFive
-        }
+        return { ...objectStep, stepOne: false, }
       }
 
       const formDataArray = [];
@@ -86,74 +102,120 @@ export async function fillInFormAction(step: number, programType: string, prevSt
 
       return {
         message: undefined,
-        stepOne,
-        stepTwo,
-        stepThree,
-        stepFour,
-        stepFive
+        ...objectStep,
+        stepTwo: true,
       }
     case 3:
       if (!!formData.get('back-button')) {
-        return {
-          stepOne,
-          stepTwo: false,
-          stepThree,
-          stepFour,
-          stepFive
-        }
+        return { ...objectStep, stepTwo: false, }
       }
 
-      return {
-        stepOne,
-        stepTwo: false,
-        stepThree,
-        stepFour,
-        stepFive
+      switch (programType) {
+        case 'before-or-after-school':
+          {
+            let getRadioButtonData = formData.get('year-cycle') as string ?? ''
+
+            if (getRadioButtonData === '') {
+              return {
+                ...objectStep,
+                'year-cycle': {
+                  value: getRadioButtonData,
+                  errorText: 'Please Select the Year Cycle',
+                  validatationStatus: ValidationType.ERROR
+                }
+              }
+            }
+            return {
+              ...objectStep,
+              stepThree: true,
+            }
+          }
+        default: return objectStep;
       }
+
     case 4:
       if (!!formData.get('back-button')) {
-        return {
-          stepOne,
-          stepTwo,
-          stepThree: false,
-          stepFour,
-          stepFive
-        }
+        return { ...objectStep, stepThree: false, }
       }
 
-      return {
-        stepOne,
-        stepTwo,
-        stepThree,
-        stepFour,
-        stepFive
+      if (programType === 'before-or-after-school') {
+        let startDate = formData.get('before-or-after-registration-start-date') as string ?? '';
+        let beforeSchool = formData.getAll('before-school[]') as any[];
+        let afterSchool = formData.getAll('after-school[]');
+        let errors: { [key: string]: any } = {};
+
+        if (startDate === '') {
+          errors[`start-date`] = {
+            value: startDate,
+            errorText: 'Start date is required',
+            validationStatus: ValidationType.ERROR
+          }
+        }
+
+        if ((beforeSchool.length + afterSchool.length) === 0) {
+          errors[`before-or-after-week-days`] = {
+            value: { beforeSchool, afterSchool },
+            errorText: "Must choose at least one week day.",
+            validationStatus: ValidationType.ERROR,
+          }
+        }
+
+        if (Object.keys(errors).length > 0) {
+          return {
+            ...errors,
+            objectStep
+          }
+        }
+
+        return { ...objectStep, stepFour: true }
       }
+
+      return objectStep;
     case 5:
+
       if (!!formData.get('back-button') && programType === 'before-or-after-school') {
-        return {
-          stepOne,
-          stepTwo,
-          stepThree,
-          stepFour: false,
-          stepFive
+        if (!!formData.get('back-button')) {
+          return { ...objectStep, stepFour: false, }
         }
       }
 
-      return {
-        stepOne,
-        stepTwo,
-        stepThree,
-        stepFour,
-        stepFive
+      let getAllCheckboxes = formData.getAll('before-after-school-tos[]');
+
+      if (getAllCheckboxes.length < 10) {
+        return {
+          'payment-tos-terms-error': 'Please check all the TOS.',
+          ...objectStep
+        }
       }
+      else {
+
+
+        if (!!customerInfo.data && !!customerInfo.data.card_last_four && customerInfo.resultStatus === ResultStatus.SUCCESS) {
+          return {
+            ...objectStep,
+            hasStripeCard: true,
+          }
+        }
+        else {
+          return {
+            ...objectStep,
+            hasStripeCard: false,
+          }
+        }
+      }
+
     default: return {
       message: undefined,
-      stepOne,
-      stepTwo,
-      stepThree,
-      stepFour,
-      stepFive,
+      ...objectStep
     }
   }
 
+}
+
+export async function getProgramSettingYearCycleForRegRecordAction(location_id: string) {
+  let parent: Session<Parent> | null = await auth();
+
+  let result: Result<any> = await getProgramSettingYearCycleForRegRecord(location_id, parent?.accessToken!);
+
+  return result.data ?? undefined;
 }

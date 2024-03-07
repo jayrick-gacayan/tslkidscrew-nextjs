@@ -35,7 +35,8 @@ export default async function Page({
   let locationData: Partial<LocationPlace>[] = locationDataByProgramType.data?.map((val: LocationPlace) => {
     return {
       id: val.id,
-      name: val.name
+      name: val.name,
+      minimum_age: val.minimum_age
     }
   }) ?? [];
 

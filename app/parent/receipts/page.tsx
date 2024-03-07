@@ -8,19 +8,33 @@ import ReceiptHeader from "./_sections/receipt-header";
 import { getAllCustomerReceipts } from "@/services/receipt-services";
 import { Receipt } from "@/models/receipt";
 import ReceiptInfoTable from "./_sections/receipt-info-table";
+import Pagination from "@/app/_components/pagination";
+import { redirectToPath } from "@/actions/common-actions";
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
   let parent: Session<Parent> | null = await auth();
-  let result: Result<Paginate<Receipt>> = await getAllCustomerReceipts(parent?.accessToken!);
+  let result: Result<Paginate<Receipt>> = await getAllCustomerReceipts(searchParams, parent?.accessToken!);
 
   let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
-  let totalPages = Math.ceil(result.data?.total ?? 1 / showEntry) ?? 1
+  let totalPages = Math.ceil((result.data?.total ?? 1) / showEntry) ?? 1
   let data = result.data?.data ?? [];
 
   return (
     <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">
-      <ReceiptHeader showEntry={showEntry} />
+      <ReceiptHeader showEntry={showEntry} searchParams={searchParams} redirectURL={redirectToPath} />
       <ReceiptInfoTable receipts={data} />
+      {
+        totalPages < 2 ? null :
+          (
+            <div className="w-fit m-auto block">
+              <Pagination baseURL="/parent/receipts"
+                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                searchParams={searchParams}
+                totalPages={totalPages}
+              />
+            </div>
+          )
+      }
     </div>
   )
 }

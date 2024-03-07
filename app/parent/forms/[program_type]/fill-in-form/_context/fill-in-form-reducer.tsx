@@ -1,4 +1,5 @@
 import { fillInFormInitState, initChildren } from "./fill-in-form-provider";
+import { ValidationType } from "@/types/enums/validation-type";
 
 export const fillInFormReducer = (state: any, action: { type: any; payload: any; }) => {
   switch (action.type) {
@@ -94,17 +95,77 @@ export const fillInFormReducer = (state: any, action: { type: any; payload: any;
           birthdate: action.payload.value,
         }
 
-        return {
-          ...state,
-          fillInForm: {
-            ...state.fillInForm,
-            children: children
-          }
-        }
+        return
       }
     case 'RESET_FORM': {
       return { ...state, ...fillInFormInitState }
     }
+    case 'SET_TOS_ERROR': {
+      return {
+        ...state, fillInForm: {
+          ...state.fillInForm,
+          TOSCheckError: action.payload
+        }
+      }
+    }
+
+    // for program type before-or-after-school
+    case 'SET_YEAR_CYCLE': {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          yearCycle: action.payload
+        }
+      }
+    }
+    case 'SET_WEEK_DAY_BOAS': {
+      let { type, value } = action.payload
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          beforeOrAfterWeekDays: {
+            value: {
+              ...state.fillInForm.beforeOrAfterWeekDays.value,
+              [`${type}`]:
+                state.fillInForm.beforeOrAfterWeekDays.value[`${type}`].includes(value) ?
+                  state.fillInForm.beforeOrAfterWeekDays.value[`${type}`].filter((val: any) => {
+                    return val !== value
+                  }) :
+                  [...state.fillInForm.beforeOrAfterWeekDays.value[`${type}`], value]
+            },
+            errorText: '',
+            validationStatus: ValidationType.NONE
+          },
+
+        }
+      }
+    }
+    case 'SET_WEEK_DAY_BOAS_ERROR': {
+      let { errorText, validationStatus } = action.payload
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          beforeOrAfterWeekDays: {
+            ...state.fillInForm.beforeOrAfterWeekDays,
+            errorText,
+            validationStatus
+          },
+        }
+      }
+    }
+    case 'SET_START_DATE': {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          startDate: action.payload
+        }
+      }
+    }
+
     default:
       return state;
   }

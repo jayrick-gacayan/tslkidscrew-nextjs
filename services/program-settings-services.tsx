@@ -357,3 +357,32 @@ export async function updateBeforeOrAfterSchoolSettings(formData: FormData, toke
     })
   }
 }
+
+export async function getProgramSettingYearCycleForRegRecord(location_id: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/before_and_after_school_availability?location_id=${encodeURIComponent(location_id)}`,
+    {
+      ...authHeaders(token)
+    });
+
+  try {
+    let response = await result.json();
+
+    let { year_cycle, ...rest } = response;
+
+    return new Result<ProgramYearCycleSetting & any>({
+      response: response,
+      data: { year_cycle, ...rest } ?? undefined,
+      statusCode: result.status,
+      message: result.statusText
+    })
+
+  } catch (error) {
+    return new Result<ProgramYearCycleSetting & any>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}

@@ -24,17 +24,15 @@ export default function ChildrenForm() {
 
   const children = useMemo(() => { return state.fillInForm.children ?? [{ ...initChildren }] }, [state?.fillInForm.children])
 
-
-  console.log('dsfsdfsd', children)
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
         <h1 className="font-medium text-[36px]">Child&#47;ren&#39;s Information</h1>
-        <p>Accepting children 5 years old and up at this location.</p>
+        <p>Accepting children {state?.fillInForm?.location?.minimum_age} years old and up at this location.</p>
       </div>
       <div className="w-full space-y-6 h-auto">
         {
-          children.map((val: any, idx: number) => {
+          state?.fillInForm?.children.map((val: any, idx: number) => {
             return (
               <Fragment key={`children-form-${idx}`}>
                 <div className="p-4 relative rounded border border-secondary-light ">
@@ -43,7 +41,6 @@ export default function ChildrenForm() {
                     (
                       <div className="absolute -top-4 -right-3 cursor-pointer bg-danger hover:bg-danger-light h-8 w-8 text-white rounded-full"
                         onClick={() => {
-
                           removeChildren(idx)
                         }}>
                         <span className="translate-x-3 translate-y-1 block">x</span>
@@ -93,7 +90,7 @@ export default function ChildrenForm() {
                     </div>
                     <InputCustom labelText="School Attending"
                       id='children-school-attending'
-                      value={val.school_attending}
+                      defaultValue={val.school_attending}
                       name='children[][school-attending]'
                       type="text"
                       className="bg-secondary p-4 border-transparent"
