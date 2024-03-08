@@ -141,14 +141,11 @@ export default function VacationCampSettingForm({
                 <p className="font-semibold text-black">Name</p>
               </div>
               <div className="w-full sm:flex-1">
-                <InputCustom id='schedule-name'
-                  name='vacation-camp-name'
-                  type="text"
-                  className="bg-white p-2 px-3"
-                  placeholder="Name:"
-                  defaultValue={dataVacationCamp["vacation-camp-name"]}
-                  errorText={state["vacation-camp-name"]?.errorText}
-                  validationStatus={state["vacation-camp-name"]?.validationStatus} />
+                <input type='hidden' value={dataVacationCamp["vacation-camp-name"]} name='vacation-camp-name' />
+                <span className="block py-2 bg-white px-3 rounded border border-secondary-light">
+                  {dataVacationCamp["vacation-camp-name"]}
+                </span>
+
               </div>
             </div>
             <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">
@@ -156,6 +153,7 @@ export default function VacationCampSettingForm({
                 <p className="font-semibold text-black">Capacity</p>
               </div>
               <div className="w-full sm:flex-1">
+
                 <InputCustom id='schedule-capacity'
                   name='vacation-camp-capacity'
                   type="text"
@@ -213,7 +211,7 @@ export default function VacationCampSettingForm({
             </div>
           </div>
         </div>
-        <SettingFormSubmit text='Update Schedule' />
+        <SettingFormSubmit text='Save Info' />
       </form>
     </div>
   )
