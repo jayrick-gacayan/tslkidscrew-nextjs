@@ -11,7 +11,7 @@ export default function LocationsTable({ locationPlaces }: { locationPlaces: Loc
             <th className="w-56">NAME</th>
             <th className="w-auto">ADDRESS</th>
             <th className="w-56">PRIMARY DIRECTOR</th>
-            <th className="w-24">PROGRAMS</th>
+            <th className="w-24">PROGRAMS COUNT</th>
             <th className="w-40">MINIMUM AGE</th>
             <th className="w-24">ACTION</th>
           </tr>

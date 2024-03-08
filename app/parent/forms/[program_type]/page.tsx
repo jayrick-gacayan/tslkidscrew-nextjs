@@ -33,7 +33,7 @@ export default async function Page({
 
   let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.accessToken!);
 
-  console.log('parent', customerInfoData)
+
   return (
     <div className="pb-12 w-full">
       <div className="rounded drop-shadow bg-white w-full lg:w-8/12 mx-auto block p-6 space-y-6">

@@ -28,6 +28,7 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
 
   const location = useMemo(() => {
     return fillInFormState.fillInForm.location;
+
   }, [fillInFormState.fillInForm.location])
   const [programYearCycle, setProgramYearCycle] = useState<ProgramYearCycleSetting & any | undefined>(undefined)
 
@@ -60,7 +61,7 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
       }
 
       return `${todayYear - 1} September - ${todayYear} June`;
-    }, [programYearCycle]
+    }, []
   );
 
   function handleChange(val: string) {

@@ -81,7 +81,9 @@ export default function VacationCampSettingForm({
       'vacation-camp-name': vacationCampData?.name ?? '',
       'vacation-camp-capacity': vacationCampData?.capacity?.toString() ?? ''
     })
+  }, [vacationCampData])
 
+  useEffect(() => {
     setMonthYearDate(cbParseDate());
 
     setDaysSelection(
@@ -91,14 +93,14 @@ export default function VacationCampSettingForm({
         })
     )
 
-  }, [vacationCampData, arrDays, cbParseDate]);
+  }, [arrDays, cbParseDate]);
 
   useEffect(() => {
     async function pathToRevalidate() {
       await pathRevalidate('/admin/settings')
     }
 
-    if (state.success !== undefined) {
+    if (state?.success !== undefined) {
       let { message, success } = state;
       toast((props: ToastContentProps<unknown>) => {
         return (
@@ -145,7 +147,6 @@ export default function VacationCampSettingForm({
                 <span className="block py-2 bg-white px-3 rounded border border-secondary-light">
                   {dataVacationCamp["vacation-camp-name"]}
                 </span>
-
               </div>
             </div>
             <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">

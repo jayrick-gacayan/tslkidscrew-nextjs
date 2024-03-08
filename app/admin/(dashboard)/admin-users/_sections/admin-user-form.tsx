@@ -76,8 +76,6 @@ export default function AdminUserForm({
     pathname
   ]);
 
-  console.log('pathname', pathname)
-
   return (
     <form action={formAction}
       className="space-y-8">

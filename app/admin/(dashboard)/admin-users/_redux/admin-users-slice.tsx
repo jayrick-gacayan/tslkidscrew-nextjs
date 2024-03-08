@@ -25,41 +25,33 @@ const adminUsersSlice = createSlice({
   name: 'adminUsers',
   initialState,
   reducers: {
-    adminUserEmailChanged: (state: AdminUsersState, action: PayloadAction<string>) => {
+    adminInputFieldChanged: (
+      state: AdminUsersState,
+      action: PayloadAction<{ key: 'email' | 'name'; value: string; }>) => {
+      let { key, value } = action.payload;
+
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          email: fieldInputValue(action.payload)
+          [key]: value
         }
       }
     },
-    adminUserNameChanged: (state: AdminUsersState, action: PayloadAction<string>) => {
+    adminInputCheckboxFieldChanged: (
+      state: AdminUsersState,
+      action: PayloadAction<{ key: 'isActive' | 'isSuperAdmin'; value: string; }>) => {
+
+      let { key, value } = action.payload;
+
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          name: fieldInputValue(action.payload)
+          [key]: value
         }
       }
-    },
-    adminUserIsActiveChanged: (state: AdminUsersState, action: PayloadAction<boolean>) => {
-      return {
-        ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          isActive: action.payload
-        }
-      }
-    },
-    adminUserIsSuperAdminChanged: (state: AdminUsersState, action: PayloadAction<boolean>) => {
-      return {
-        ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          isSuperAdmin: action.payload
-        }
-      }
+
     },
     adminUserFormSubmitted: (state: AdminUsersState) => {
       let { email, name } = state.adminUserForm;
@@ -151,10 +143,8 @@ const adminUsersSlice = createSlice({
 
 export const {
   adminUserFormReset,
-  adminUserEmailChanged,
-  adminUserNameChanged,
-  adminUserIsActiveChanged,
-  adminUserIsSuperAdminChanged,
+  adminInputFieldChanged,
+  adminInputCheckboxFieldChanged,
   adminUserRequestStatusSet,
   editAdminUserFields,
   adminUserFormSubmitted,

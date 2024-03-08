@@ -24,15 +24,15 @@ export default function FillInFormButtons({
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
 
-  let { card_brand, card_last_four } = cardDetails!;
+
   return (
     <>
       {
         cardDetails &&
         (<div>Card on File: {<span>{
-          card_brand !== 'Visa' ? card_brand :
+          cardDetails?.card_brand !== 'Visa' ? cardDetails?.card_brand :
             <Fa6BrandVisa className="align-middle inline-block text-primary text-[32px]" />
-        }</span>} ending ************{card_last_four}</div>)
+        }</span>} ending ************{cardDetails?.card_last_four}</div>)
       }
       <div className="flex items-center justify-center gap-4">
         <div className="flex-1">

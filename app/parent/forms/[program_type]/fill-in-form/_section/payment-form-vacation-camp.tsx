@@ -1,22 +1,52 @@
-'use client';
-
-import CustomCheckbox from "@/app/_components/custom-checkbox";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { ChangeEvent, useMemo } from "react";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { VACATION_CAMP_TOS } from "@/types/constants/vacation-camp-tos";
+import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { TOSInfos } from "@/types/props/tos-infos";
+import { tosConditionChanged } from "../_redux/fill-in-form-slice";
 
 export default function PaymentFormVacationCamp() {
+
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm
+  });
+
+  const tosCondition = useMemo(() => {
+    let { value } = fillInFormState.fillInForm.TOSCondition;
+
+    return value
+  }, [fillInFormState.fillInForm.TOSCondition]);
+
+
   return (
     <div className="space-y-2">
-      <CustomCheckbox value={false}
-        onChange={(value: boolean) => { return; }}
-        text='I understand that payment will be made in full at the time of registration.' />
-      <CustomCheckbox value={false}
-        onChange={(value: boolean) => { return; }}
-        text=' I understand that if I cancel with less than 14 days notice of the program start date, that I will not receive a refund or credit.' />
-      <CustomCheckbox value={false}
-        onChange={(value: boolean) => { return; }}
-        text='I waive all TSL liability for any accidental injury that occurs on site while during program hours.' />
-      <CustomCheckbox value={false}
-        onChange={(value: boolean) => { return; }}
-        text='I agree that my child can attend an off-site park if enrolled at Sacred Heart, Clifton Park, Delmar, or Rotterdam.' />
+      {
+        VACATION_CAMP_TOS.map(({ num, text }: TOSInfos, idx: number) => {
+          return (
+            <InputCheckboxCustom key={`summer-camp-TOS-${num}`}
+              id={`summer-camp-TOS-${num}`}
+              labelText={text}
+              name='summer-camp-school-tos[]'
+              value={`summer-camp-TOS-${num}`}
+              checked={tosCondition.includes(`summer-camp-TOS-${num}`)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                let { value } = e.target;
+                reduxStore.dispatch(
+                  tosConditionChanged(
+                    fieldInputValue(
+                      !tosCondition.includes(value) ? [...tosCondition, value] :
+                        tosCondition.filter((val: any) => { return val !== value; })
+                    )
+                  )
+                )
+              }}
+            />
+          )
+        })
+      }
     </div>
   );
 }
