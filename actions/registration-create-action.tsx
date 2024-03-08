@@ -16,9 +16,10 @@ export async function fillInFormAction(
   prevState: { [key: string]: any },
   formData: FormData
 ) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
-  let customerInfo: Result<Parent> = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.accessToken!);
+  let customerInfo: Result<Parent> = await getCustomerInfo(
+    parent?.user.customer_id?.toString()!, parent?.user?.accessToken!);
 
   let { stepOne, stepTwo, stepThree, stepFour, stepFive } = prevState;
 
@@ -226,9 +227,12 @@ export async function fillInFormAction(
 }
 
 export async function getProgramSettingYearCycleForRegRecordAction(location_id: string) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
-  let result: Result<any> = await getProgramSettingYearCycleForRegRecord(location_id, parent?.accessToken!);
+  let result: Result<any> = await getProgramSettingYearCycleForRegRecord(
+    location_id,
+    parent?.user?.accessToken!
+  );
 
   return result.data ?? undefined;
 }

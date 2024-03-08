@@ -22,7 +22,7 @@ export default async function Page({
 }) {
   let program_type = params.program_type;
 
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
   if (program_type !== 'vacation-camp' &&
     program_type !== 'summer-camp' &&
@@ -31,7 +31,7 @@ export default async function Page({
     return notFound();
   }
 
-  let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.accessToken!);
+  let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.user?.accessToken!);
 
 
   return (

@@ -1,6 +1,8 @@
 import Credentials from "@auth/core/providers/credentials"
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import { authConfig } from "./auth.config";
+import { Parent } from "./models/parent";
+import { Admin } from "./models/admin";
 
 export const {
   handlers: {
@@ -48,16 +50,17 @@ export const {
                   customer_id,
                   role: 'parent',
                   accessToken: access_token
-                }
+                } as User<Partial<Parent>>
               }
               else if (role === 'admin') {
-                let { user: { access_token, ...rest } } = response;
+                let { user: { access_token, name, email, ...rest } } = response;
 
                 return {
-                  ...rest,
+                  name,
+                  email,
                   role: 'admin',
                   accessToken: response.token
-                }
+                } as User<Partial<Admin>>
               }
 
             }

@@ -12,7 +12,6 @@ import { Result } from "@/models/result";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { CustomerInfoFormStateProps } from "@/types/props/customer-info-form-state-props";
 import { Session } from "next-auth";
-import { Parent } from "@/models/parent";
 import { auth, unstable_update } from "@/auth";
 
 export async function authSignOut(redirectTo: string) {
@@ -131,7 +130,7 @@ export async function registerCustomerAction(
   prevState: CustomerInfoFormStateProps,
   formData: FormData
 ) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
   let first_name = formData.get('first_name') as string ?? '';
   let last_name = formData.get('last_name') as string ?? '';
@@ -180,7 +179,7 @@ export async function registerCustomerAction(
     state: formData.get('address-state') as string ?? '',
     zip_code: formData.get('address-zip_code') as string ?? '',
     how_did_you_here_about_us: formData.get('how_did_you_hear_about_us') as string ?? ''
-  }, parent?.accessToken!);
+  }, parent?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -189,7 +188,7 @@ export async function registerCustomerAction(
     }
   }
 
-  let updateSession = await unstable_update({ first_name, last_name });
+  // let updateSession = await unstable_update({ first_name, last_name });
 
   return {
     message: result.message,

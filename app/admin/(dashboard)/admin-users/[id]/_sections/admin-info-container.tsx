@@ -7,8 +7,8 @@ import AdminInfoData from "./admin-info-data";
 import EditInfoButton from "./edit-info-button";
 
 export default async function AdminInfoContainer({ id }: { id: string }) {
-  let currentAdmin: Session<Admin> | null = await auth();
-  let result = await adminUser(id, currentAdmin?.accessToken);
+  let currentAdmin: Session | null = await auth();
+  let result = await adminUser(id, currentAdmin?.user?.accessToken);
 
   if (!result.data) { notFound(); }
 

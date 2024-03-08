@@ -1,8 +1,11 @@
 'use server';
 
 import { auth } from '@/auth';
-import { Admin } from '@/models/admin';
-import { addAdminUser, changeAdminUserActiveStatus, updateAdminUser } from '@/services/admin-services';
+import {
+  addAdminUser,
+  changeAdminUserActiveStatus,
+  updateAdminUser
+} from '@/services/admin-services';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
 import { Session } from 'next-auth';
 import * as Joi from 'joi';
@@ -14,7 +17,7 @@ export async function addAdminUserAction(
   prevState: AdminUserFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> = await auth();
+  let admin: Session | null = await auth();
 
   let email = formData.get('admin-user-email') as string ?? '';
   let name = formData.get('admin-user-name') as string ?? '';
@@ -30,7 +33,7 @@ export async function addAdminUserAction(
     email,
     name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
-  }, admin?.accessToken!);
+  }, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -50,7 +53,7 @@ export async function updateAdminUserAction(
   prevState: Partial<AdminUserFormStateProps>,
   formData: FormData,
 ) {
-  let admin: Session<Admin> = await auth();
+  let admin: Session | null = await auth();
 
   formData.set('admin-user-email', email)
 
@@ -66,7 +69,7 @@ export async function updateAdminUserAction(
     name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
     isActive: formData.get('admin-user-active') ? true : false,
-  }, admin?.accessToken!)
+  }, admin?.user?.accessToken!)
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -82,9 +85,9 @@ export async function updateAdminUserAction(
 }
 
 export async function changeAdminUserActiveStatusAction(id: number) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
-  let result = await changeAdminUserActiveStatus(id, admin?.accessToken!);
+  let result = await changeAdminUserActiveStatus(id, admin?.user?.accessToken!);
   revalidatePath('/admin/admin-users');
 }
 

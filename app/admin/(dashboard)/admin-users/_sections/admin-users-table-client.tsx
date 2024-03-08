@@ -81,7 +81,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   }
 
   return (
-    <tbody>
+    <tbody className="text-[15px]">
       {
         dataAdmins.map((admin: Admin, idx: number) => {
           let { id, name, active, created_at, email, is_super_admin, updated_at, } = admin;
@@ -95,9 +95,9 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
               <td className="w-56">{email}</td>
               <td className="w-auto">{name}</td>
               <td className="w-12">{adminActive}</td>
-              <td className="w-48"> {(is_super_admin === undefined || !is_super_admin) ? 'No' : 'Yes'}</td>
+              <td className="w-12"> {(is_super_admin === undefined || !is_super_admin) ? 'No' : 'Yes'}</td>
               <td className="w-48">{dateString(updated_at!, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-              <td className="w-48 space-y-1">
+              <td className="w-40 space-y-1">
                 <div>{dateString(updated_at!, { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
                 <div>{dateTimeString(updated_at!, { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
               </td>

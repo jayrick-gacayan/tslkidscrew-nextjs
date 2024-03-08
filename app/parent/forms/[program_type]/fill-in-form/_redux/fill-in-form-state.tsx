@@ -13,5 +13,13 @@ export interface FillInFormState {
     startDate: InputProps<string | undefined>;
     beforeOrAfterWeekDays: InputProps<{ beforeSchool: any[], afterSchool: any[] }>;
     TOSCondition: InputProps<any[]>;
+
+    //for program type summer-camp
+    summerCampPackageReg: InputProps<string>;
+    promoPackage: {
+      week_count: string;
+      price: string;
+      weeks: []
+    } | undefined;
   }
 }

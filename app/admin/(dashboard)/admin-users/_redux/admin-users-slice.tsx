@@ -4,6 +4,7 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
 import * as  Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
+import { Admin } from "@/models/admin";
 
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
@@ -14,10 +15,7 @@ const adminFormInitValues = {
 }
 
 const initialState: AdminUsersState = {
-  modalForm: {
-    open: false,
-    type: ''
-  },
+  modalForm: { open: false, type: '' },
   adminUserForm: adminFormInitValues
 }
 
@@ -72,7 +70,6 @@ const adminUsersSlice = createSlice({
           })
       });
 
-
       let validate = adminUserSchema.validate({
         email: email.value,
         name: name.value
@@ -103,28 +100,22 @@ const adminUsersSlice = createSlice({
           requestStatus: errors ? RequestStatus.FAILURE : RequestStatus.IN_PROGRESS
         }
       }
-
-
     },
     adminUserRequestStatusSet: (state: AdminUsersState, action: PayloadAction<RequestStatus>) => {
       return {
         ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          requestStatus: action.payload
-        }
+        adminUserForm: { ...state.adminUserForm, requestStatus: action.payload }
       }
     },
-    editAdminUserFields: (state, action: PayloadAction<any>) => {
-
+    editAdminUserFields: (state, action: PayloadAction<Partial<Admin>>) => {
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          email: fieldInputValue<string>(action.payload.email),
-          name: fieldInputValue<string>(action.payload.name),
-          isActive: action.payload.isActive,
-          isSuperAdmin: action.payload.isSuperAdmin,
+          email: fieldInputValue<string>(action.payload.email ?? ''),
+          name: fieldInputValue<string>(action.payload.name ?? ''),
+          isActive: action.payload.active ?? false,
+          isSuperAdmin: action.payload.is_super_admin ?? false,
           id: action.payload.id
         }
       }

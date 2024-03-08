@@ -10,7 +10,7 @@ export default async function Layout({
 }: {
   children: ReactNode;
 }) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
   return (
     <div className="relative w-screen h-screen">

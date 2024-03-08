@@ -42,17 +42,27 @@ export async function adminUsers(
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Paginate<Admin>>({
-    ...response,
-    data: {
-      data: response.admins ?? [],
-      total: response.total_admins ?? 1,
-    } ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<Paginate<Admin>>({
+      ...response,
+      data: {
+        data: response.admins ?? [],
+        total: response.total_admins ?? 1,
+      } ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  }
+  catch (error) {
+    return new Result<Paginate<Admin>>({
+      response: undefined,
+      message: result.statusText,
+      statusCode: result.status
+    })
+  }
+
 }
 
 export async function addAdminUser(

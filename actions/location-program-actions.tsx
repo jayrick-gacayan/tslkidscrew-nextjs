@@ -1,8 +1,11 @@
 'use server'
 
 import { auth } from "@/auth";
-import { Admin } from "@/models/admin";
-import { addLocationProgram, removeLocationProgram, updateLocationProgram } from "@/services/location-program-services";
+import {
+  addLocationProgram,
+  removeLocationProgram,
+  updateLocationProgram
+} from "@/services/location-program-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
@@ -16,7 +19,7 @@ export async function editLocationProgramAction(
   prevState: LocationProgramFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let errors = locationProgramValidateErrors(formData);
 
@@ -27,7 +30,7 @@ export async function editLocationProgramAction(
   let result = await updateLocationProgram(
     getProgramInputs(location_id.toString(), formData),
     id,
-    admin?.accessToken!
+    admin?.user?.accessToken!
   );
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -50,7 +53,7 @@ export async function addLocationProgramAction(
   prevState: LocationProgramFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let errors = locationProgramValidateErrors(formData);
 
@@ -60,7 +63,7 @@ export async function addLocationProgramAction(
 
   let result = await addLocationProgram(
     getProgramInputs(id.toString(), formData),
-    admin?.accessToken!
+    admin?.user?.accessToken!
   );
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -79,9 +82,9 @@ export async function addLocationProgramAction(
 }
 
 export async function removeProgramAction(location_id: string, id: number) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
-  let result = await removeLocationProgram(id, admin?.accessToken!);
+  let result = await removeLocationProgram(id, admin?.user?.accessToken!);
   revalidatePath(`/admins/locations/${location_id}/programs`);
 }
 

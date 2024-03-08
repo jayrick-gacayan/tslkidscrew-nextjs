@@ -23,13 +23,13 @@ export default async function Page({
   params: { program_type: string }
   searchParams: { [key: string]: string | string[] | undefined; }
 }) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
   const { program_type } = params;
   const step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
 
   let locationDataByProgramType: Result<LocationPlace[]> = await getAllLocationsForRegRecordCreate(
     program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
-    , parent?.accessToken!);
+    , parent?.user?.accessToken!);
 
   let locationData: Partial<LocationPlace>[] = locationDataByProgramType.data?.map((val: LocationPlace) => {
     return {
@@ -39,7 +39,7 @@ export default async function Page({
     }
   }) ?? [];
 
-  let customerData = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.accessToken!)
+  let customerData = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.user?.accessToken!)
 
   let { card_last_four, card_brand, ...rest } = customerData.data!
   return (

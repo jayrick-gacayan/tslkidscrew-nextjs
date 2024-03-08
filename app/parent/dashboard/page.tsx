@@ -12,10 +12,9 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps; }) {
-  let data: Session<Parent> | null = await auth();
-
-  let showEntry = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
-  let totalPages = Math.ceil(1 / showEntry) ?? 1
+  let data: Session | null = await auth();
+  let showEntry: number = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
+  let totalPages: number = Math.ceil(1 / showEntry) ?? 1
 
   return (
     <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">

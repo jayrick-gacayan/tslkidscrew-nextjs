@@ -1,12 +1,22 @@
-'use client';
-
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import Link from "next/link";
 import CustomCheckbox from "@/app/_components/custom-checkbox";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { summerCampPackageRegChanged } from "../_redux/fill-in-form-slice";
 
 export default function RegistrationTypeSummerCamp() {
-  const [registerType, setRegisterType] = useState('');
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm;
+  });
+
+  const summerCampPackageReg = useMemo(() => {
+    return fillInFormState.fillInForm.summerCampPackageReg;
+  }, [fillInFormState.fillInForm.summerCampPackageReg])
+
   const [promoWeek, setPromoWeek] = useState('');
   const [weekEvents, setWeekEvents] = useState([
     false,
@@ -42,6 +52,10 @@ export default function RegistrationTypeSummerCamp() {
     }))
   }
 
+  function summerCampRegHandleChanged(value: string) {
+    reduxStore.dispatch(summerCampPackageRegChanged(fieldInputValue(value)))
+  }
+
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
@@ -49,28 +63,28 @@ export default function RegistrationTypeSummerCamp() {
       </div>
       <div className="space-y-2">
         <div className="space-y-2">
-          <FormsRadioButton labelText='The Kids Crew Summer Specials: Pay for summer upfront SAVE 10%, and no registration fee.'
-            name="reg-type-summer-camp"
+          <FormsRadioButton name="reg-type-summer-camp"
+            labelText='The Kids Crew Summer Specials: Pay for summer upfront SAVE 10%, and no registration fee.'
             value='special'
-            current={registerType}
+            current={summerCampPackageReg.value}
             renderRadio={renderRegTypeRadio}
-            onChange={(value: string) => { setRegisterType(value); }}
-            labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer' />
+            labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
+            onChange={summerCampRegHandleChanged} />
           <FormsRadioButton labelText='Regular Registration'
             value='regular'
             name="reg-type-summer-camp"
-            current={registerType}
+            current={summerCampPackageReg.value}
             renderRadio={renderRegTypeRadio}
             labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-            onChange={(value: string) => { setRegisterType(value); }} />
+            onChange={summerCampRegHandleChanged} />
         </div>
       </div>
       {
-        registerType !== '' &&
+        summerCampPackageReg.value !== '' &&
         (
           <div className="block">
             {
-              registerType === 'regular' ?
+              summerCampPackageReg.value === 'regular' ?
                 (
                   <div className="font-medium text-[18px]">
                     If a week is not shown, it means that it is at the capacity. Contact

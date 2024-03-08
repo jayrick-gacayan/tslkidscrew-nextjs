@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from "@/auth";
-import { Admin } from "@/models/admin";
 import {
   createLocationPlace,
   removeLocationPlace,
@@ -18,7 +17,7 @@ export async function addLocationPlace(
   prevState: LocationPlaceFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let name = formData.get('name') as string ?? "";
   let address = formData.get('address') as string ?? "";
@@ -39,7 +38,7 @@ export async function addLocationPlace(
     address,
     director_id: parseInt(director_id),
     minimum_age: parseInt(minimum_age)
-  }, admin?.accessToken!)
+  }, admin?.user?.accessToken!)
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -60,7 +59,7 @@ export async function editLocationPlace(
   prevState: LocationPlaceFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let name = formData.get('name') as string ?? "";
   let address = formData.get('address') as string ?? "";
@@ -83,7 +82,7 @@ export async function editLocationPlace(
       director_id: parseInt(director_id),
       minimum_age: parseInt(minimum_age)
     },
-    admin?.accessToken!
+    admin?.user?.accessToken!
   )
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -100,9 +99,9 @@ export async function editLocationPlace(
 }
 
 export async function removeLocationPlaceAction(id: string) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
-  let result = await removeLocationPlace(id, admin?.accessToken!);
+  let result = await removeLocationPlace(id, admin?.user?.accessToken!);
 
   revalidatePath('/admin/locations');
 }

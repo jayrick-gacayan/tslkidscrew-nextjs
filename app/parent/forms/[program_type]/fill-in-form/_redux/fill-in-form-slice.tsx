@@ -21,19 +21,19 @@ const initialState: FillInFormState = {
       beforeSchool: [],
       afterSchool: []
     }),
-  }
 
+    // for program type summer-camp
+    summerCampPackageReg: fieldInputValue(''),
+    promoPackage: undefined
+  }
 }
 
 const fillInFormSlice = createSlice({
   name: 'fillInForm',
   initialState,
   reducers: {
-    modalStripeToggled: (state: FillInFormState, action: PayloadAction<any>) => {
-      return {
-        ...state,
-        stripeModalOpen: action.payload,
-      }
+    modalStripeToggled: (state: FillInFormState, action: PayloadAction<boolean>) => {
+      return { ...state, stripeModalOpen: action.payload }
     },
     locationChanged: (
       state: FillInFormState,
@@ -41,19 +41,13 @@ const fillInFormSlice = createSlice({
     ) => {
       return {
         ...state,
-        fillInForm: {
-          ...state.fillInForm,
-          location: action.payload,
-        }
+        fillInForm: { ...state.fillInForm, location: action.payload }
       }
     },
     childrenAdded: (state: FillInFormState) => {
       return {
         ...state,
-        fillInForm: {
-          ...state.fillInForm,
-          children: [...state.fillInForm.children, initChild]
-        }
+        fillInForm: { ...state.fillInForm, children: [...state.fillInForm.children, initChild] }
       }
     },
     childrenRemoved: (state: FillInFormState, action: PayloadAction<number>) => {
@@ -75,7 +69,8 @@ const fillInFormSlice = createSlice({
         key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending';
       }>
     ) => {
-      let { index, key, value } = action.payload
+      let { index, key, value } = action.payload;
+
       return {
         ...state,
         fillInForm: {
@@ -86,35 +81,43 @@ const fillInFormSlice = createSlice({
         }
       }
     },
-    fillInFormReset: (state: FillInFormState) => {
-      return initialState;
-    },
-
-
-    // for program-type === 'before-or-after-school'
-    yearCycleChanged: (state: FillInFormState, action: PayloadAction<InputProps<string>>) => {
+    tosConditionChanged: (
+      state: FillInFormState,
+      action: PayloadAction<InputProps<any[]>>
+    ) => {
       return {
         ...state,
-        fillInForm: {
-          ...state.fillInForm,
-          yearCycle: action.payload
-        }
+        fillInForm: { ...state.fillInForm, TOSCondition: action.payload }
       }
     },
-    beforeOrAfterSchoolStartDateChanged: (state: FillInFormState,
-      action: PayloadAction<InputProps<string | undefined>>) => {
+    fillInFormReset: (state: FillInFormState) => { return initialState; },
+
+    // for program-type 'before-or-after-school'
+    yearCycleChanged: (
+      state: FillInFormState,
+      action: PayloadAction<InputProps<string>>
+    ) => {
       return {
         ...state,
-        fillInForm: {
-          ...state.fillInForm,
-          startDate: action.payload
-        }
+        fillInForm: { ...state.fillInForm, yearCycle: action.payload }
       }
     },
-    beforeOrAfterWeekDaysSet: (state: FillInFormState, action: PayloadAction<{
-      key: 'beforeSchool' | 'afterSchool',
-      value: any[]
-    }>) => {
+    beforeOrAfterSchoolStartDateChanged: (
+      state: FillInFormState,
+      action: PayloadAction<InputProps<string | undefined>>
+    ) => {
+      return {
+        ...state,
+        fillInForm: { ...state.fillInForm, startDate: action.payload }
+      }
+    },
+    beforeOrAfterWeekDaysSet: (
+      state: FillInFormState,
+      action: PayloadAction<{
+        key: 'beforeSchool' | 'afterSchool',
+        value: any[]
+      }>
+    ) => {
       let { key, value } = action.payload;
       return {
         ...state,
@@ -127,11 +130,15 @@ const fillInFormSlice = createSlice({
         }
       }
     },
-    beforeOrAfterWeekDaysSetError: (state: FillInFormState, action: PayloadAction<{
-      errorText: string;
-      validationStatus: ValidationType
-    }>) => {
+    beforeOrAfterWeekDaysSetError: (
+      state: FillInFormState,
+      action: PayloadAction<{
+        errorText: string;
+        validationStatus: ValidationType
+      }>
+    ) => {
       let { errorText, validationStatus } = action.payload;
+
       return {
         ...state,
         fillInForm: {
@@ -144,17 +151,17 @@ const fillInFormSlice = createSlice({
         }
       }
     },
-    tosConditionChanged: (state: FillInFormState, action: PayloadAction<InputProps<any[]>>) => {
+
+    // for program-type 'summer-camp'
+    summerCampPackageRegChanged: (
+      state: FillInFormState,
+      action: PayloadAction<InputProps<string>>
+    ) => {
       return {
         ...state,
-        fillInForm: {
-          ...state.fillInForm,
-          TOSCondition: action.payload,
-        }
+        fillInForm: { ...state.fillInForm, summerCampPackageReg: action.payload }
       }
     }
-
-
   }
 })
 
@@ -167,11 +174,14 @@ export const {
   fillInFormReset,
   tosConditionChanged,
 
-  //for program type === 'before-or-after-school'
+  //for program type 'before-or-after-school'
   beforeOrAfterSchoolStartDateChanged,
   yearCycleChanged,
   beforeOrAfterWeekDaysSet,
-  beforeOrAfterWeekDaysSetError
+  beforeOrAfterWeekDaysSetError,
+
+  //for program type 'summer-camp'
+  summerCampPackageRegChanged,
 
 } = fillInFormSlice.actions;
 

@@ -18,7 +18,7 @@ export interface AdminSettingsState {
     enabled: boolean
   },
   summerCampSwimSetting: {
-    switRate: string;
+    swimRate: string;
     summerCampSwimSettings: SummerCampSwimSettingInput[];
   }
 }

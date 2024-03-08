@@ -5,11 +5,9 @@ import { Session } from "next-auth";
 import BillingInfoSettingsTabContainer from "./_sections/billing-info-settings-tab-container";
 
 export default async function Page() {
-  let parent: Session<Partial<Parent>> = await auth();
+  let parent: Session | null = await auth();
 
-  let result = await getCustomerInfo(parent.user?.customer_id?.toString()!, parent?.accessToken!)
+  let result = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.user?.accessToken!)
 
-  return (
-    <BillingInfoSettingsTabContainer parent={result.data ?? undefined} />
-  )
+  return (<BillingInfoSettingsTabContainer parent={result.data ?? undefined} />)
 }
