@@ -10,16 +10,14 @@ import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
 
-function ButtonSubmit({ formReset }: { formReset: () => void; }) {
+function AdminUserFormSubmit({ formReset }: { formReset: () => void; }) {
   const { pending } = useFormStatus();
   return (
     <div className="flex items-center justify-end gap-4">
       <button type='button'
         className='bg-white text-primary p-2 disabled:cursor-not-allowed'
         disabled={pending}
-        onClick={() => {
-          formReset()
-        }}>Cancel</button>
+        onClick={() => { formReset() }}>Cancel</button>
       <button type="submit"
         className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
         disabled={pending}>
@@ -76,8 +74,6 @@ export default function AdminUserForm({
     pathname
   ]);
 
-  console.log('pathname', pathname)
-
   return (
     <form action={formAction}
       className="space-y-8">
@@ -115,7 +111,7 @@ export default function AdminUserForm({
         id={`${type}-is-super-admin`}
         name="admin-user-is-super-admin"
         defaultChecked={data?.is_super_admin ?? false} />
-      <ButtonSubmit formReset={formReset} />
+      <AdminUserFormSubmit formReset={formReset} />
     </form>
   )
 }

@@ -17,9 +17,8 @@ export async function getAllCustomerInvoices(
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
-
   try {
+    let response = await result.json();
     if (response.status === 200) {
 
       return new Result<Paginate<Invoice>>({
@@ -40,10 +39,9 @@ export async function getAllCustomerInvoices(
 
   } catch (error) {
     return new Result<Paginate<Invoice>>({
-      ...response,
-      response: response,
-      message: response.message ?? result.statusText,
-      error: response.message ?? result.statusText,
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
       statusCode: result.status,
     })
   }

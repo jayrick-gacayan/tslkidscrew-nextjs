@@ -17,7 +17,7 @@ const summerCampWeekSettingInitValues = {
 }
 
 const summerCampSwimSettingInitValues = {
-  switRate: 'without-swimming-rates',
+  swimRate: 'without-swimming-rates',
   summerCampSwimSettings: []
 }
 

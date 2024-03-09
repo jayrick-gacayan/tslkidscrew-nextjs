@@ -14,8 +14,7 @@ import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one"
 import { toast, ToastContentProps } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
 import SubmitProgramButton from "../../../_components/submit-program-button";
-
-let programTypes = ['After School', 'Summer Camp', 'Vacation Camp']
+import { PROGRAM_TYPES } from "@/types/constants/program-type";
 
 export default function EditProgramForm({
   locationProgram,
@@ -77,7 +76,7 @@ export default function EditProgramForm({
           name='name'
           placeholder='Program'
           onChange={(value: any) => { setProgram(value); }}
-          items={programTypes}
+          items={PROGRAM_TYPES}
           labelText="Program"
           errorText={state?.name?.errorText}
           valueClassName={(value: string, placeholder: string) => {
@@ -121,9 +120,6 @@ export default function EditProgramForm({
               defaultValue={locationProgram.capacity ?? 1}
               errorText={state.capacity?.errorText}
               validationStatus={state.capacity?.validationStatus} />
-          </div>
-          <div className="w-full">
-
           </div>
         </div>
         <InputCheckboxCustom labelText="Promo Package Enabled"

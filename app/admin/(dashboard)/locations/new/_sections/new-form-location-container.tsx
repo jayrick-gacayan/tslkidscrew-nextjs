@@ -6,8 +6,8 @@ import { NewFormLocation } from "./new-form-location";
 import { Result } from "@/models/result";
 
 export default async function NewFormLocationContainer() {
-  let currentAdmin: Session<Admin> | null = await auth();
-  let result: Result<Admin[]> = await activeAdminUsers(currentAdmin?.accessToken!);
+  let admin: Session | null = await auth();
+  let result: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
 
   let data = result.data?.map((admin: Admin) => { return { id: admin.id!, email: admin.email! } }) ?? []
 

@@ -1,14 +1,14 @@
-import type { JWT, NextAuthConfig } from "next-auth";
-import { Admin } from "./models/admin";
-import { Parent } from "./models/parent";
+import type { NextAuthConfig } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 export const authConfig = {
   callbacks: {
+
     async session({ session, user, token, newSession, trigger }) {
       // console.log('token', token.user);
-      let { accessToken, ...rest } = token.user as JWT<Admin | Parent>;
+      // let { accessToken, ...rest } = token.user ;
       session.user = token.user;
-      session.accessToken = accessToken as any;
+      // session.accessToken = accessToken as any;
       // console.log('token on session', token.user);
       // console.log('user', user);
       // console.log('session', session);
@@ -19,7 +19,7 @@ export const authConfig = {
 
     async jwt({ token, user, account, profile, session, trigger, }) {
       // console.log('user on jwt', user);
-      user && (token.user = user as any);
+      user && (token.user = user);
       // console.log('token on jwt', token);
       // console.log('user on jwt', user);
       // console.log('account', account);
@@ -27,7 +27,10 @@ export const authConfig = {
       // console.log('session', session);
 
       if (trigger === 'update') {
-        token.user = { ...(token.user as any), ...session }
+        token = {
+          ...token,
+          user: { ...token.user as JWT, ...session }
+        }
       }
       return token;
     },

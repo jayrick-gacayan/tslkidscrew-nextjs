@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from "react";
 import SettingListboxCustom from "../_components/setting-custom-lisbox";
 import BeforeOrAfterSchoolFormData from "../_components/before-or-after-school-form-data";
 
-
 export default function BeforeAfterCurrentYearCyclePrice({
   currentBeforeOrAfterSchoolSettings,
 }: {

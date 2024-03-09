@@ -2,6 +2,10 @@ import { capitalCase } from "change-case";
 import { notFound } from "next/navigation";
 import ProgramTypeTabContainer from "./_section/program-type-tab-container";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { Session } from "next-auth";
+import { Parent } from "@/models/parent";
+import { getCustomerInfo } from "@/services/parent-info-services";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
   return [
@@ -11,12 +15,14 @@ export async function generateStaticParams(): Promise<{ program_type: string; }[
   ]
 }
 
-export default function Page({
+export default async function Page({
   params
 }: {
   params: { program_type: string }
 }) {
   let program_type = params.program_type;
+
+  let parent: Session | null = await auth();
 
   if (program_type !== 'vacation-camp' &&
     program_type !== 'summer-camp' &&
@@ -24,6 +30,9 @@ export default function Page({
   ) {
     return notFound();
   }
+
+  let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.user?.accessToken!);
+
 
   return (
     <div className="pb-12 w-full">

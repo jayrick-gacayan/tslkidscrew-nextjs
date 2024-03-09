@@ -4,6 +4,7 @@ export default function FormsRadioButton({
   labelText,
   current,
   value,
+  name,
   onChange,
   labelClassName,
   renderRadio,
@@ -11,6 +12,7 @@ export default function FormsRadioButton({
   labelText: ReactNode | string;
   value: string;
   current: string;
+  name: string;
   onChange: (value: string) => void;
   labelClassName: string;
   renderRadio: (value: string, current: string) => ReactNode
@@ -20,6 +22,7 @@ export default function FormsRadioButton({
       <input type="radio"
         checked={value === current}
         className="hidden peer"
+        name={name}
         onChange={() => { onChange(current === value ? '' : value) }} />
       {renderRadio(value, current)}
       <span className="inline-block align-middle">{labelText}</span>

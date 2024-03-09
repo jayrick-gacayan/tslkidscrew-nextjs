@@ -14,17 +14,17 @@ export default async function Page({
 }: {
   params: { id: string; program_id: string };
 }) {
-  let currentAdmin: Session<Admin> | null = await auth();
+  let currentAdmin: Session | null = await auth();
 
-  let result: Result<LocationProgram> = await locationProgram(params.program_id, currentAdmin?.accessToken!);
+  let result: Result<LocationProgram> = await locationProgram(params.program_id, currentAdmin?.user?.accessToken!);
 
   if (!result.data) { notFound(); }
 
-  let adminResult: Result<Admin[]> = await activeAdminUsers(currentAdmin?.accessToken!);
+  let adminResult: Result<Admin[]> = await activeAdminUsers(currentAdmin?.user?.accessToken!);
 
   let adminData = adminResult.data?.map((admin: Admin) => { return { id: admin.id!, email: admin.email! } }) ?? []
 
-  let locationProgramData = result.data;
+  let locationProgramData: LocationProgram = result.data;
   return (
     <div className="rounded bg-white drop-shadow-lg p-4">
       <div className="w-full lg:w-6/12 m-auto block space-y-8">

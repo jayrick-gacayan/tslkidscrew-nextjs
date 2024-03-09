@@ -26,7 +26,7 @@ export async function updateSummerCampWeekSettingAction(
   prevState: SummerCampWeekSettingFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let updateSummerCampWeekSettingSchema = Joi.object({
     'week-name': Joi.string()
@@ -83,7 +83,7 @@ export async function updateSummerCampWeekSettingAction(
   tempFormData.append(`summer_camp_weeks[notes]`, weekNotes);
   tempFormData.append(`summer_camp_weeks[enabled]`, weekEnabled ? 'true' : 'false');
 
-  let result: Result<any> = await updateSummerCampWeekSetting(tempFormData, admin?.accessToken!);
+  let result: Result<any> = await updateSummerCampWeekSetting(tempFormData, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -103,7 +103,7 @@ export async function updateSummerCampSwimSettingAction(
   prevState: SummerCampSwimSettingFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   let updateSummerCampSwimSettingSchema = Joi.object({
     'summer-camp-swim-price': Joi.string()
@@ -138,7 +138,7 @@ export async function updateSummerCampSwimSettingAction(
     child_record_count: formData.get('summer-camp-swim-chlld-record-count') as string ?? '1',
     week_count: formData.get('summer-camp-swim-week-count') as string ?? '1',
     with_swim_trip: formData.get('summer-camp-swim-with-swim-trip') as string ?? 'false',
-  }, admin?.accessToken!);
+  }, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -157,7 +157,7 @@ export async function updateSummerCampPromoSettingsAction(
   prevState: any,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   const formDataArray = [];
   let currentObj: { [key: string]: any } = {};
@@ -225,7 +225,7 @@ export async function updateSummerCampPromoSettingsAction(
         week_count: val?.week_count ?? 6,
         price: val?.price ?? 1,
         with_swim_trip: "false"
-      }, admin?.accessToken!)
+      }, admin?.user?.accessToken!)
     })
   )
 
@@ -240,7 +240,7 @@ export async function updateVacationCampSettingAction(
   prevState: VacationCampSettingFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
   const rawFormData = Object.fromEntries(formData.entries())
 
   let name = formData.get('vacation-camp-name') as string ?? '';
@@ -299,7 +299,7 @@ export async function updateVacationCampSettingAction(
   formDataToSend.append(`vacation_camp_schedules[${id}]month`, monthStr);
   formDataToSend.append(`vacation_camp_schedules[${id}]dates`, dates);
 
-  let result = await updateVacationCampScheduleSetting(formDataToSend, admin?.accessToken!);
+  let result = await updateVacationCampScheduleSetting(formDataToSend, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -319,7 +319,7 @@ export async function updateProgramYearCycleSettingAction(
   prevState: ProgramYearCycleSettingFormStateProps,
   formData: FormData
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   const programSettingSchema = Joi.object({
     'current-year': Joi.string()
@@ -360,7 +360,7 @@ export async function updateProgramYearCycleSettingAction(
     id: id.toString(),
     current_year_cycle: `${currentYear}-${parseInt(currentYear) + 1}`,
     next_year_cycle: `${nextYear}-${parseInt(nextYear) + 1}`,
-  }, admin?.accessToken!);
+  }, admin?.user?.accessToken!);
 
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
@@ -382,9 +382,9 @@ export async function updateBeforeOrAfterSchoolSettingAction(
   prevState: any,
   formData: FormData,
 ) {
-  let admin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
-  let result = await updateBeforeOrAfterSchoolSettings(formData, admin?.accessToken!);
+  let result = await updateBeforeOrAfterSchoolSettings(formData, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {

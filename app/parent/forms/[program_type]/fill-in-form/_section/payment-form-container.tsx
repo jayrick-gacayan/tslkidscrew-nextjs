@@ -3,13 +3,24 @@ import PaymentFormBeforeOrAfterSchool from "./payment-form-before-or-after-schoo
 import PaymentFormVacationCamp from "./payment-form-vacation-camp";
 import StripeFormContainer from "./credit-card-info-container";
 import { PhShoppingCartBold } from "@/app/_components/svg/ph-shopping-cart-bold";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState } from "@/react-redux/redux-store";
+import { useMemo } from "react";
 import ModalCardInfoForStripe from "./modal-card-info-for-stripe";
 
 export default function PaymentFormContainer({
-  program_type
+  program_type,
 }: {
   program_type: string;
 }) {
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm;
+  });
+
+  const errorText = useMemo(() => {
+    return fillInFormState.fillInForm.TOSCondition.errorText;
+  }, [fillInFormState.fillInForm.TOSCondition.errorText])
 
   return (
     <div className="relative">
@@ -17,6 +28,10 @@ export default function PaymentFormContainer({
         <div className="space-y-2 text-black">
           <h1 className="font-medium text-[36px]">Payment</h1>
           <p className="italic font-medium text-[18px]">The TOS is your binding CONTRACT with TSL. Please take time to read it before proceeding.</p>
+          {
+            errorText !== '' &&
+            <div className="rounded bg-danger-light text-white p-2 text-[24px]">{errorText} </div>
+          }
         </div>
 
         {

@@ -14,8 +14,7 @@ import { ToastContentProps, toast } from "react-toastify";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
 import { redirectToPath } from "@/actions/common-actions";
 import SubmitProgramButton from "../../_components/submit-program-button";
-
-let programTypes = ['After School', 'Summer Camp', 'Vacation Camp']
+import { PROGRAM_TYPES } from "@/types/constants/program-type";
 
 export default function NewProgramForm({
   activeAdmins,
@@ -74,7 +73,7 @@ export default function NewProgramForm({
           name='name'
           placeholder='Program'
           onChange={(value: any) => { setProgram(value); }}
-          items={programTypes}
+          items={PROGRAM_TYPES}
           labelText="Program"
           errorText={state?.name?.errorText}
           valueClassName={(value: string, placeholder: string) => {

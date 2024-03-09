@@ -1,1 +1,1 @@
-export const PROGRAM_TYPE = ['Vacation Camp', ' Summer Camp', 'Before or After School'];
+export const PROGRAM_TYPES = ['After School', 'Summer Camp', 'Vacation Camp'];

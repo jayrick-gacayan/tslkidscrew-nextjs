@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 import CustomerInfoForm from "./_sections/customer-info-form";
 import { Session } from "next-auth";
-import { Parent } from "@/models/parent";
 
 export default async function Page() {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
+
 
   return (
     <div className="pb-8">
@@ -14,6 +14,5 @@ export default async function Page() {
         <CustomerInfoForm parent={parent?.user!} />
       </div>
     </div>
-
   )
 }

@@ -4,20 +4,25 @@ import { Transition, Dialog } from "@headlessui/react";
 import { Elements } from "@stripe/react-stripe-js";
 import { Fragment } from "react";
 import StripeCardForm from "./stripe-card-form";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
 import getStripe from "@/types/helpers/get-stripe";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { modalStripeToggled } from "../_redux/fill-in-form-slice";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { FillInFormState } from "../_redux/fill-in-form-state";
 
 const stripePromise = getStripe();
 
 export default function ModalCardInfoForStripe() {
-  const { state, stripeModalToggle } = useFillInFormHook();
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm;
+  })
 
   return (
-    <Transition appear show={state.stripeModalOpen} as={Fragment}>
+    <Transition appear show={fillInFormState.stripeModalOpen} as={Fragment}>
       <Dialog as="div"
         className='fixed h-screen w-screen top-0 left-0 z-[500] flex items-center justify-center'
         onClose={() => {
-          stripeModalToggle();
+          reduxStore.dispatch(modalStripeToggled(false));
         }}>
         <Transition.Child as={Fragment}
           enter="ease-out duration-300"

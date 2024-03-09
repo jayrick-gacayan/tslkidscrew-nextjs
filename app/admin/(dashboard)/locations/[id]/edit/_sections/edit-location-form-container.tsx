@@ -9,15 +9,15 @@ import { notFound } from "next/navigation";
 import { EditFormLocation } from "./edit-form-location";
 
 export default async function EditFormLocationContainer({ id }: { id: string }) {
-  let currentAdmin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
-  let result: Result<LocationPlace> = await locationPlace(id, currentAdmin?.accessToken)
+  let result: Result<LocationPlace> = await locationPlace(id, admin?.user?.accessToken)
 
   if (!result.data) { notFound(); }
 
-  let locationPlaceData = result.data;
+  let locationPlaceData: LocationPlace = result.data;
 
-  let resultData: Result<Admin[]> = await activeAdminUsers(currentAdmin?.accessToken!);
+  let resultData: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
 
   let data = resultData.data?.map((admin: Admin) => { return { id: admin.id!, email: admin.email! } }) ?? []
 

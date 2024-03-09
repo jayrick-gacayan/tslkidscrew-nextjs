@@ -22,7 +22,8 @@ function ButtonSubmit() {
           !pending ? 'Register' :
             (
               <>
-                <Spinners3DotsScale /> Checking
+                <Spinners3DotsScale className="inline-block mr-1" />
+                <span className="inline-block">Checking</span>
               </>
             )
         }

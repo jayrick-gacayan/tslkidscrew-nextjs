@@ -36,7 +36,9 @@ export default function InvoicesHeader({
       </div>
       <div className="flex-none sm:w-auto w-full">
         <ShowEntriesSelect value={showEntry} items={[10, 20, 30]}
-          onChange={(value) => { redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value)); }} />
+          onChange={(value) => {
+            redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
+          }} />
       </div>
     </div>
   )

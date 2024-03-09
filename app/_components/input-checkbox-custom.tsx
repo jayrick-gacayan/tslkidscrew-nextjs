@@ -23,6 +23,7 @@ function InputCustomCheckbox(
       <label htmlFor={id}
         className="flex items-center gap-3 w-fit">
         <input ref={ref}
+          id={id}
           type="checkbox"
           className={
             twMerge(

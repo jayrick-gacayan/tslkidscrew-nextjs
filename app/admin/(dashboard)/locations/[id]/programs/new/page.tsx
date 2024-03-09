@@ -20,15 +20,15 @@ export default async function Page({
 }: {
   params: { id: string; }
 }) {
-  let currentAdmin: Session<Admin> | null = await auth();
-  let adminResult: Result<Admin[]> = await activeAdminUsers(currentAdmin?.accessToken!);
+  let admin: Session | null = await auth();
+  let adminResult: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
 
-  let adminData = adminResult.data?.map((admin: Admin) => { return { id: admin.id!, email: admin.email! } }) ?? []
-  let result: Result<LocationPlace> = await locationPlace(params.id, currentAdmin?.accessToken)
+  let adminData = adminResult.data?.map((admin: Admin) => { return { id: admin.id, email: admin.email } }) ?? []
+  let result: Result<LocationPlace> = await locationPlace(params.id, admin?.user?.accessToken)
 
   if (!result.data) { notFound(); }
 
-  let locationPlaceData = result.data;
+  let locationPlaceData: LocationPlace = result.data;
 
   return (
     <div className="pb-8">

@@ -1,51 +1,38 @@
 import InputCustom from "@/app/_components/input-custom";
-import calendarContainer from "@/app/_components/react-datepicker/calendar-container";
-import CustomInputDefault from "@/app/_components/react-datepicker/custom-input-default";
-import renderCustomHeaderDefault from "@/app/_components/react-datepicker/render-custom-header-default";
-import { ChangeEvent, Fragment, useMemo } from "react";
-import { useFillInFormHook } from "../_context/use-fill-in-form-hook";
-import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
-import { initChildren } from "../_context/fill-in-form-provider";
+import { ChangeEvent, useMemo } from "react";
 
-let today = new Date();
-let defaultDate = new Date(new Date(today.getFullYear() - 5, today.getMonth(), today.getDate()))
+import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { ChildInfoType } from "@/types/input-types/child-info-type";
+import { childrenAdded, childrenFieldUpdated, childrenRemoved } from "../_redux/fill-in-form-slice";
 
 export default function ChildrenForm() {
-  const {
-    state,
-    changeFirstname,
-    changeLastname,
-    changeSchoolAttending,
-    addChildren,
-    removeChildren,
-    changeBirthdate
-  } = useFillInFormHook();
+  const fillInFormState = useAppSelector((state: RootState) => { return state.fillInForm; });
 
+  const children = useMemo(() => {
+    return fillInFormState.fillInForm.children
+  }, [fillInFormState.fillInForm.children])
 
-  const children = useMemo(() => { return state.fillInForm.children ?? [{ ...initChildren }] }, [state?.fillInForm.children])
-
-
-  console.log('dsfsdfsd', children)
+  console.log('children', children)
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
         <h1 className="font-medium text-[36px]">Child&#47;ren&#39;s Information</h1>
-        <p>Accepting children 5 years old and up at this location.</p>
+        <p>Accepting children {fillInFormState.fillInForm.location.value?.minimum_age} years old and up at this location.</p>
       </div>
-      <div className="w-full space-y-6 h-auto">
+      <div className="w-full h-auto space-y-6">
+
         {
-          children.map((val: any, idx: number) => {
+          children.map((value: ChildInfoType, idx: number) => {
             return (
-              <Fragment key={`children-form-${idx}`}>
+              <div key={`children-form-${idx}`} className="space-y-6 w-full h-auto">
                 <div className="p-4 relative rounded border border-secondary-light ">
                   {
                     children.length > 1 &&
                     (
                       <div className="absolute -top-4 -right-3 cursor-pointer bg-danger hover:bg-danger-light h-8 w-8 text-white rounded-full"
-                        onClick={() => {
-
-                          removeChildren(idx)
-                        }}>
+                        onClick={() => { reduxStore.dispatch(childrenRemoved(idx)) }}>
                         <span className="translate-x-3 translate-y-1 block">x</span>
                       </div>
                     )
@@ -53,72 +40,84 @@ export default function ChildrenForm() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <InputCustom labelText="Firstname"
-                        id='children-firstname'
-                        name='children[][firstname]'
-                        value={val.first_name}
+                        id={`children-firstname-${idx}`}
+                        name={`children[][firstname]`}
                         type="text"
                         className="bg-secondary p-4 border-transparent"
                         placeholder="Firstname:"
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                          changeFirstname(idx, event.target.value);
+                        value={value.first_name}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          reduxStore.dispatch(childrenFieldUpdated({
+                            index: idx,
+                            key: "first_name",
+                            value: e.target.value
+                          }))
                         }} />
                       <InputCustom labelText="Lastname"
-                        id='children-lastname'
-                        value={val.last_name}
                         name='children[][lastname]'
                         type="text"
                         className="bg-secondary p-4 border-transparent"
                         placeholder="Lastname:"
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                          changeLastname(idx, event.target.value);
+                        value={value.last_name}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          reduxStore.dispatch(childrenFieldUpdated({
+                            index: idx,
+                            key: "last_name",
+                            value: e.target.value
+                          }))
                         }} />
                     </div>
                     <div className="relative w-full">
                       <div className="relative space-y-1">
                         <div className="font-medium">Start Date</div>
                         <div className="relative w-full">
-                          <PopoverReactDayPicker selected={val.birthdate}
-                            placeholder="Enter date"
+                          <PopoverReactDayPicker placeholder="Enter date"
+                            selected={value.birthdate ? new Date(value.birthdate) : undefined}
                             inputName='children[][birthdate]'
                             options={{
                               mode: "single",
-                              selected: val.birthdate,
+                              selected: value.birthdate ? new Date(value.birthdate) : undefined,
                               onSelect: (value: any) => {
-                                changeBirthdate(idx, value);
+                                reduxStore.dispatch(childrenFieldUpdated({
+                                  index: idx,
+                                  key: "birthdate",
+                                  value: value.toISOString()
+                                }))
                               },
-                              today: val.birthdate,
+                              today: value.birthdate ? new Date(value.birthdate) : undefined,
                             }} />
                         </div>
                       </div>
                     </div>
                     <InputCustom labelText="School Attending"
-                      id='children-school-attending'
-                      value={val.school_attending}
+                      id={`children-school-attending-${idx}`}
                       name='children[][school-attending]'
                       type="text"
                       className="bg-secondary p-4 border-transparent"
                       placeholder="School Attending:"
-                      onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                        changeSchoolAttending(idx, event.target.value);
+                      value={value.school_attending}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        reduxStore.dispatch(childrenFieldUpdated({
+                          index: idx,
+                          key: "school_attending",
+                          value: e.target.value
+                        }))
                       }} />
                   </div>
                 </div>
                 {
                   idx + 1 === children.length &&
                   (
-                    <div onClick={() => {
-                      addChildren();
-                    }}>
+                    <div onClick={() => { reduxStore.dispatch(childrenAdded()) }}>
                       <button type='button'
                         className="p-3 text-white w-full rounded bg-primary">Add Child</button>
                     </div>
                   )
                 }
-              </Fragment>
+              </div>
             )
           })
         }
-
       </div>
     </div>
   )

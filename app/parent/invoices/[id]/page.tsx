@@ -9,14 +9,14 @@ import { notFound } from "next/navigation";
 import InvoiceInfoData from "../_components/invoice-info-data";
 
 export default async function Page({ params }: { params: { id: string; } }) {
-  let parent: Session<Parent> | null = await auth();
-  let result: Result<Invoice> = await getCustomerInvoice(params.id, parent?.accessToken!);
+  let parent: Session | null = await auth();
+  let result: Result<Invoice> = await getCustomerInvoice(params.id, parent?.user?.accessToken!);
 
   if (!result.data) {
     notFound();
   }
 
-  let invoice = result.data;
+  let invoice: Invoice = result.data;
 
   return (
     <div className="pb-12">

@@ -4,6 +4,7 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { RequestStatus } from "@/types/enums/request-status";
 import * as  Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
+import { Admin } from "@/models/admin";
 
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
@@ -14,10 +15,7 @@ const adminFormInitValues = {
 }
 
 const initialState: AdminUsersState = {
-  modalForm: {
-    open: false,
-    type: ''
-  },
+  modalForm: { open: false, type: '' },
   adminUserForm: adminFormInitValues
 }
 
@@ -25,41 +23,33 @@ const adminUsersSlice = createSlice({
   name: 'adminUsers',
   initialState,
   reducers: {
-    adminUserEmailChanged: (state: AdminUsersState, action: PayloadAction<string>) => {
+    adminInputFieldChanged: (
+      state: AdminUsersState,
+      action: PayloadAction<{ key: 'email' | 'name'; value: string; }>) => {
+      let { key, value } = action.payload;
+
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          email: fieldInputValue(action.payload)
+          [key]: value
         }
       }
     },
-    adminUserNameChanged: (state: AdminUsersState, action: PayloadAction<string>) => {
+    adminInputCheckboxFieldChanged: (
+      state: AdminUsersState,
+      action: PayloadAction<{ key: 'isActive' | 'isSuperAdmin'; value: string; }>) => {
+
+      let { key, value } = action.payload;
+
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          name: fieldInputValue(action.payload)
+          [key]: value
         }
       }
-    },
-    adminUserIsActiveChanged: (state: AdminUsersState, action: PayloadAction<boolean>) => {
-      return {
-        ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          isActive: action.payload
-        }
-      }
-    },
-    adminUserIsSuperAdminChanged: (state: AdminUsersState, action: PayloadAction<boolean>) => {
-      return {
-        ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          isSuperAdmin: action.payload
-        }
-      }
+
     },
     adminUserFormSubmitted: (state: AdminUsersState) => {
       let { email, name } = state.adminUserForm;
@@ -79,7 +69,6 @@ const adminUsersSlice = createSlice({
             "any.required": "Name is required",
           })
       });
-
 
       let validate = adminUserSchema.validate({
         email: email.value,
@@ -111,28 +100,22 @@ const adminUsersSlice = createSlice({
           requestStatus: errors ? RequestStatus.FAILURE : RequestStatus.IN_PROGRESS
         }
       }
-
-
     },
     adminUserRequestStatusSet: (state: AdminUsersState, action: PayloadAction<RequestStatus>) => {
       return {
         ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          requestStatus: action.payload
-        }
+        adminUserForm: { ...state.adminUserForm, requestStatus: action.payload }
       }
     },
-    editAdminUserFields: (state, action: PayloadAction<any>) => {
-
+    editAdminUserFields: (state, action: PayloadAction<Partial<Admin>>) => {
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          email: fieldInputValue<string>(action.payload.email),
-          name: fieldInputValue<string>(action.payload.name),
-          isActive: action.payload.isActive,
-          isSuperAdmin: action.payload.isSuperAdmin,
+          email: fieldInputValue<string>(action.payload.email ?? ''),
+          name: fieldInputValue<string>(action.payload.name ?? ''),
+          isActive: action.payload.active ?? false,
+          isSuperAdmin: action.payload.is_super_admin ?? false,
           id: action.payload.id
         }
       }
@@ -151,10 +134,8 @@ const adminUsersSlice = createSlice({
 
 export const {
   adminUserFormReset,
-  adminUserEmailChanged,
-  adminUserNameChanged,
-  adminUserIsActiveChanged,
-  adminUserIsSuperAdminChanged,
+  adminInputFieldChanged,
+  adminInputCheckboxFieldChanged,
   adminUserRequestStatusSet,
   editAdminUserFields,
   adminUserFormSubmitted,

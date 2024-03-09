@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import AdminHeaderWithEntries from "../_components/admin-header-with-entries";
 import TabsContainer from "./_sections/tabs-container";
-import { Admin } from "@/models/admin";
 import { Session } from "next-auth";
 import {
   getBeforeOrAfterSchoolSettings,
@@ -20,7 +19,7 @@ import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
 
 export default async function Page() {
-  let currentAdmin: Session<Admin> | null = await auth();
+  let admin: Session | null = await auth();
 
   const [
     summerCampWeekSettings,
@@ -37,12 +36,12 @@ export default async function Page() {
       Result<ProgramYearCycleSetting>,
       Result<BeforeOrAfterSchoolSetting[]>
     ] = await Promise.all([
-      getSummerCampWeekPrices(currentAdmin?.accessToken!),
-      getSummerCampSwimPrices(currentAdmin?.accessToken!),
-      getSummerCampPromoSettings(currentAdmin?.accessToken!),
-      getVacationCampSchedulesSettings(currentAdmin?.accessToken!),
-      getProgramYearCycleSettings(currentAdmin?.accessToken!),
-      getBeforeOrAfterSchoolSettings(currentAdmin?.accessToken!, '2024-2025')
+      getSummerCampWeekPrices(admin?.user?.accessToken!),
+      getSummerCampSwimPrices(admin?.user?.accessToken!),
+      getSummerCampPromoSettings(admin?.user?.accessToken!),
+      getVacationCampSchedulesSettings(admin?.user?.accessToken!),
+      getProgramYearCycleSettings(admin?.user?.accessToken!),
+      getBeforeOrAfterSchoolSettings(admin?.user?.accessToken!, '2024-2025')
     ]);
 
   return (

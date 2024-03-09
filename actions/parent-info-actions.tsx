@@ -1,7 +1,6 @@
 'use server';
 
 import { auth, unstable_update } from '@/auth';
-import { Parent } from '@/models/parent';
 import { updateCustomerInfo } from '@/services/parent-info-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
@@ -13,7 +12,7 @@ export async function updateCustomerInfoAction(
   prevState: Partial<CustomerInfoFormStateProps>,
   formData: FormData,
 ) {
-  let parent: Session<Parent> | null = await auth();
+  let parent: Session | null = await auth();
 
   const rawFormData = Object.fromEntries(formData.entries());
 
@@ -65,7 +64,7 @@ export async function updateCustomerInfoAction(
     city: formData.get('address-city') as string ?? '',
     state: formData.get('address-state') as string ?? '',
     zip_code: formData.get('address-zip_code') as string ?? '',
-  }, parent?.accessToken!);
+  }, parent?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -74,10 +73,10 @@ export async function updateCustomerInfoAction(
     }
   }
 
-  let updateSession = await unstable_update({
-    first_name,
-    last_name,
-  });
+  // let updateSession = await unstable_update({
+  //   first_name,
+  //   last_name,
+  // });
 
   return {
     message: 'Successfully updated your personal details.',
