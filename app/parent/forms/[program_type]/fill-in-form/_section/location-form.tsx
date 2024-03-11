@@ -1,6 +1,6 @@
 import CustomListbox from "@/app/_components/listbox-custom";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { FillInFormState } from "../_redux/fill-in-form-state";

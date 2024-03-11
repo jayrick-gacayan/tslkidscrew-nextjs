@@ -2,7 +2,7 @@
 
 import CustomListbox from "@/app/_components/listbox-custom";
 import InputCustom from "@/app/_components/input-custom";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { useEffect, useState } from "react";
 import { editLocationPlace } from "@/actions/location-actions";
 import { useFormState } from "react-dom";

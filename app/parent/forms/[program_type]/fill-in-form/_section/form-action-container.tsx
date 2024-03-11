@@ -9,7 +9,7 @@ import PaymentFormContainer from "./payment-form-container";
 import RegistrationTypeSelectionBeforeOrAfterSchool from "./registration-type-selection-before-or-after-school";
 import StepThreeForm from "./step-three-form";
 import { FormEvent, useEffect } from "react";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { redirectToPath } from "@/actions/common-actions";
 import { Parent } from "@/models/parent";
 import { reduxStore } from "@/react-redux/redux-store";

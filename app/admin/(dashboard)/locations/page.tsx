@@ -6,7 +6,7 @@ import Pagination from '@/app/_components/pagination';
 import { redirectToPath } from '@/actions/common-actions';
 import { Result } from '@/models/result';
 import { auth } from '@/auth';
-import { LocationPlace } from '@/models/location';
+import { LocationPlace } from '@/models/location-place';
 import { Paginate } from '@/models/paginate';
 import { locationPlaces } from '@/services/location-services';
 import { Session } from 'next-auth';

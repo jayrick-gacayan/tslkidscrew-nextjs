@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { Result } from "@/models/result";
 import { activeAdminUsers } from "@/services/admin-services";
 import { locationPlace } from "@/services/location-services";

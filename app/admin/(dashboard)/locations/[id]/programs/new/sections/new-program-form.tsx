@@ -8,7 +8,7 @@ import { LocationProgramFormStateProps } from "@/types/props/location-program-fo
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import CustomListbox from "@/app/_components/listbox-custom";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";

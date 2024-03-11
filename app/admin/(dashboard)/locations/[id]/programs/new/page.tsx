@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
 import { activeAdminUsers } from "@/services/admin-services";
 import { Session } from "next-auth";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { locationPlace } from "@/services/location-services";
 import { notFound } from "next/navigation";
 

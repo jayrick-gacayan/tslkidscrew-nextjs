@@ -10,5 +10,5 @@ export interface LocationPlace {
   minimum_age?: number | null;
   director?: Admin | null;
   director_id?: number | null;
-  program_count?: number | null;
+  programs_count?: number | null;
 }

@@ -1,6 +1,6 @@
 import { Paginate } from "@/models/paginate";
 import { Result } from "@/models/result";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
 import { authHeaders } from "@/types/helpers/auth-headers";
 import { SearchParamsProps } from "@/types/props/search-params-props";
@@ -17,17 +17,29 @@ export async function locationPlaces(
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Paginate<LocationPlace>>({
-    ...response,
-    data: {
-      data: response.locations ?? [],
-      total: response.locations_count ?? 1,
-    } ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    console.log('resposne', response)
+
+    return new Result<Paginate<LocationPlace>>({
+      ...response,
+      data: {
+        data: response.locations ?? [],
+        total: response.locations_count ?? 1,
+      } ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<Paginate<LocationPlace>>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText
+    });
+  }
+
+
 }
 
 export async function locationPlace(id: string, token?: string) {

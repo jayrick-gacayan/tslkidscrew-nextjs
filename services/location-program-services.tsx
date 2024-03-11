@@ -1,5 +1,5 @@
 import { Admin } from "@/models/admin";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { LocationProgram } from "@/models/location-program";
 import { Result } from "@/models/result";
 import { adminUser } from "./admin-services";
