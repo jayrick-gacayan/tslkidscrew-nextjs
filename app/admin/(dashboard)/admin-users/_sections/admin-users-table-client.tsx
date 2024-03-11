@@ -41,10 +41,11 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   }, [admins]);
 
   const showSwal = async (admin: Admin, activeAdmin: string) => {
+    console.log('admin', activeAdmin)
     let { id, name, email, active } = admin
 
     let result: SweetAlertResult<any> = await confirmSwalInfo(
-      `Are you sure you want to ${activeAdmin === 'No' ? 'in' : ''}activate`,
+      `Are you sure you want to ${activeAdmin === 'Yes' ? 'in' : ''}activate`,
       name! ?? email!
     );
 
