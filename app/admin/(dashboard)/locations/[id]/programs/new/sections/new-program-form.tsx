@@ -97,6 +97,7 @@ export default function NewProgramForm({
           items={activeAdmins}
           labelText="Director"
           by="id"
+          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
           errorText={state?.['director[id]']?.errorText}
           validationStatus={state?.['director[id]']?.validationStatus}
           keyDescription="new-program-form-director"
