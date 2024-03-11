@@ -5,6 +5,7 @@ import { RequestStatus } from "@/types/enums/request-status";
 import * as  Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import { Admin } from "@/models/admin";
+import { InputProps } from "@/types/props/input-props";
 
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
@@ -25,14 +26,14 @@ const adminUsersSlice = createSlice({
   reducers: {
     adminInputFieldChanged: (
       state: AdminUsersState,
-      action: PayloadAction<{ key: 'email' | 'name'; value: string; }>) => {
-      let { key, value } = action.payload;
+      action: PayloadAction<{ key: 'email' | 'name'; data: InputProps<string>; }>) => {
+      let { key, data } = action.payload;
 
       return {
         ...state,
         adminUserForm: {
           ...state.adminUserForm,
-          [key]: value
+          [key]: data
         }
       }
     },
@@ -123,7 +124,7 @@ const adminUsersSlice = createSlice({
     adminUserFormReset: (state: AdminUsersState) => {
       return { ...state, adminUserForm: adminFormInitValues };
     },
-    modalFormOpenStateSet: (state: AdminUsersState, action: PayloadAction<boolean>) => {
+    modalFormOpened: (state: AdminUsersState, action: PayloadAction<boolean>) => {
       return { ...state, modalForm: { ...state.modalForm, open: action.payload } }
     },
     modalFormTypeSet: (state: AdminUsersState, action: PayloadAction<string>) => {
@@ -139,7 +140,7 @@ export const {
   adminUserRequestStatusSet,
   editAdminUserFields,
   adminUserFormSubmitted,
-  modalFormOpenStateSet,
+  modalFormOpened,
   modalFormTypeSet
 } = adminUsersSlice.actions;
 

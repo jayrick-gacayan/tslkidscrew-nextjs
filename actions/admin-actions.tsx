@@ -60,7 +60,10 @@ export async function updateAdminUserAction(
   let tempEmail = formData.get('admin-user-email') as string ?? '';
   let name = formData.get('admin-user-name') as string ?? '';
 
-  let errors = adminUserFormValidate({ "admin-user-name": name });
+  let errors = adminUserFormValidate({
+    'admin-user-email': tempEmail,
+    'admin-user-name': name
+  });
 
   if (errors) { return errors; }
 
@@ -108,10 +111,10 @@ const adminUserSchema = Joi.object({
     })
 })
 
-function adminUserFormValidate(validateData: Partial<{
+function adminUserFormValidate(validateData: {
   'admin-user-email': string;
   'admin-user-name': string;
-}>) {
+}) {
   const validate = adminUserSchema.validate(validateData, { abortEarly: false })
 
   if (validate?.error) {

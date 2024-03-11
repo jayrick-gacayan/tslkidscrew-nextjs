@@ -6,9 +6,13 @@ import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { AdminUserFormStateProps } from "@/types/props/admin-user-form-state-props";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
+import { AdminUsersState } from "../_redux/admin-users-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { adminInputFieldChanged } from "../_redux/admin-users-slice";
 
 function AdminUserFormSubmit({ formReset }: { formReset: () => void; }) {
   const { pending } = useFormStatus();
@@ -29,19 +33,34 @@ function AdminUserFormSubmit({ formReset }: { formReset: () => void; }) {
 
 export default function AdminUserForm({
   type,
-  data,
   formReset
 }: {
   type: string;
-  data: any;
   formReset: () => void;
 }) {
+  const adminsUserState: AdminUsersState = useAppSelector((state: RootState) => {
+    return state.adminUsers;
+  });
+
+  const data = useMemo(() => {
+    let { email, name, isActive, isSuperAdmin } = adminsUserState.adminUserForm
+    return {
+      email: email,
+      name: name,
+      active: isActive,
+      is_super_admin: isSuperAdmin
+    }
+  }, [
+    adminsUserState.adminUserForm
+  ]);
+
   const pathname = usePathname();
+
   const [state, formAction] = useFormState(
-    type === 'update' ? updateAdminUserAction.bind(null, data?.email ?? '') : addAdminUserAction,
+    type === 'update' ? updateAdminUserAction.bind(null, data.email.value) : addAdminUserAction,
     {
-      'admin-user-email': fieldInputValue(type === 'update' ? data?.email : ''),
-      'admin-user-name': fieldInputValue(type === 'update' ? data?.name : '')
+      'admin-user-email': fieldInputValue(data.email.value),
+      'admin-user-name': fieldInputValue(data.name.value)
     } as Partial<AdminUserFormStateProps>
   )
 
@@ -51,7 +70,7 @@ export default function AdminUserForm({
     }
     let { message, success } = state;
 
-    if (state?.success !== undefined) {
+    if (state?.success !== undefined && state?.message !== undefined) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -67,6 +86,21 @@ export default function AdminUserForm({
         formReset();
       }
     }
+    else {
+      if (state?.['admin-user-email'] && state?.['admin-user-email']?.errorText !== '') {
+        reduxStore.dispatch(adminInputFieldChanged({
+          key: 'email',
+          data: state?.['admin-user-email']
+        }))
+      }
+
+      if (state?.['admin-user-name'] && state?.['admin-user-name']?.errorText !== '') {
+        reduxStore.dispatch(adminInputFieldChanged({
+          key: 'name',
+          data: state?.['admin-user-name']
+        }))
+      }
+    }
 
   }, [
     state,
@@ -74,6 +108,14 @@ export default function AdminUserForm({
     pathname
   ]);
 
+  function handleInputChange(key: 'email' | 'name') {
+    return function (event: ChangeEvent<HTMLInputElement>) {
+      reduxStore.dispatch(adminInputFieldChanged({
+        key: key,
+        data: fieldInputValue(event.target.value)
+      }))
+    }
+  }
   return (
     <form action={formAction}
       className="space-y-8">
@@ -83,20 +125,22 @@ export default function AdminUserForm({
           name="admin-user-email"
           type="text"
           placeholder='Email Address:'
-          defaultValue={data?.email ?? ''}
+          value={data.email.value}
           className="bg-secondary border-0"
-          errorText={state?.["admin-user-email"]?.errorText}
-          validationStatus={state?.["admin-user-email"]?.validationStatus}
-          disabled={type === 'update'} />
+          errorText={data.email.errorText}
+          validationStatus={data.email.validationStatus}
+          disabled={type === 'update'}
+          onChange={handleInputChange("email")} />
         <InputCustom labelText="Name"
           id="admin-user-name"
           name='admin-user-name'
           type="text"
           placeholder="Name: "
-          defaultValue={data?.name ?? ''}
+          value={data.name.value}
           className="bg-secondary border-0"
-          errorText={state?.["admin-user-name"]?.errorText}
-          validationStatus={state?.["admin-user-name"]?.validationStatus} />
+          errorText={data.name.errorText}
+          validationStatus={data.name.validationStatus}
+          onChange={handleInputChange("name")} />
       </div>
       {
         type === 'update' &&

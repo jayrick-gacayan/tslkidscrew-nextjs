@@ -9,13 +9,13 @@ import { ToastContentProps, toast } from "react-toastify";
 import Fa6UserXmark from "@/app/_components/svg/fa6-solid-user-xmark";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidUserCheck from "@/app/_components/svg/fa6-solid-user-check";
-import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 import { dateString, dateTimeString } from "@/types/helpers/date-helpers";
 import { changeAdminUserActiveStatusAction } from "@/actions/admin-actions";
 import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
+import { reduxStore } from "@/react-redux/redux-store";
+import { editAdminUserFields, modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
-  const { modalOpen, modalType, setDumpData } = useAdminUserHook();
   const [dataAdmins, setDataAdmins] = useState(admins);
   const [adminId, setAdminId] = useState<any>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
@@ -119,9 +119,10 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     (
                       <button className="text-warning block cursor-pointer"
                         onClick={() => {
-                          modalOpen(true);
-                          modalType('update');
-                          setDumpData(admin);
+                          let { name, email, id, is_super_admin, active } = admin;
+                          reduxStore.dispatch(modalFormOpened(true));
+                          reduxStore.dispatch(modalFormTypeSet('update'));
+                          reduxStore.dispatch(editAdminUserFields({ email, name, id, is_super_admin, active }))
                         }}>
                         <Fa6SolidPen />
                       </button>

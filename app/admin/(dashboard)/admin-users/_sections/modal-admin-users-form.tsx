@@ -2,28 +2,28 @@
 
 import { Fragment, useCallback, useMemo } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 import AdminUserForm from "./admin-user-form";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
+import { adminUserFormReset, modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
+import { AdminUsersState } from "../_redux/admin-users-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
 
 export default function ModalAdminUsersForm() {
-  const { state, modalOpen, modalType, setDumpData } = useAdminUserHook();
+  const adminsUserState: AdminUsersState = useAppSelector((state: RootState) => {
+    return state.adminUsers;
+  });
 
   const { type, open } = useMemo(() => {
-    return {
-      type: state ? state?.modal?.type : '',
-      open: state ? state?.modal?.open : false
-    }
-  }, [state]);
-
-  const data = useMemo(() => {
-    return state?.data ?? undefined
-  }, [state]);
+    return adminsUserState.modalForm;
+  }, [adminsUserState.modalForm]);
 
   const formReset = useCallback(() => {
-    modalOpen(false);
+
+    reduxStore.dispatch(modalFormOpened(false));
+
     let timeout = setTimeout(() => {
-      modalType('')
-      setDumpData(undefined);
+      reduxStore.dispatch(modalFormTypeSet(''));
+      reduxStore.dispatch(adminUserFormReset());
 
     }, 500);
 
@@ -56,7 +56,7 @@ export default function ModalAdminUsersForm() {
           leaveTo="opacity-0 scale-95">
           <Dialog.Panel as="div" className='bg-white relative z-[50] space-y-8 p-8 w-[448px] rounded drop-shadow'>
             <h1 className='font-medium text-[24px]'>{type === 'add' ? 'Add' : 'Edit'} Admin Account</h1>
-            <AdminUserForm type={type} data={data} formReset={formReset} />
+            <AdminUserForm type={type} formReset={formReset} />
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>
