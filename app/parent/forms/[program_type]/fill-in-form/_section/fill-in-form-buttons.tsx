@@ -6,6 +6,8 @@ import { reduxStore } from "@/react-redux/redux-store";
 import { fillInFormReset } from "../_redux/fill-in-form-slice";
 import Fa6BrandVisa from "@/app/_components/svg/fa6-brand-visa";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import ButtonForPlaid from "./button-for-plaid";
+
 
 export default function FillInFormButtons({
   program_type,
@@ -25,10 +27,14 @@ export default function FillInFormButtons({
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
 
 
+
+
+
+
   return (
     <>
       {
-        cardDetails &&
+        cardDetails && (stepInNumber === highestStep) &&
         (<div>Card on File: {<span>{
           cardDetails?.card_brand !== 'Visa' ? cardDetails?.card_brand :
             <Fa6BrandVisa className="align-middle inline-block text-primary text-[32px]" />
@@ -83,10 +89,10 @@ export default function FillInFormButtons({
                   </button>
                 ) :
                 (
-                  <div>
-
+                  <div className="space-x-2">
+                    <ButtonForPlaid />
                     <button type="submit"
-                      className={`px-4 py-2 w-48 bg-primary text-white rounded disabled:cursor-not-allowed`}
+                      className={`px-4 py-2 w-44 bg-primary text-white rounded disabled:cursor-not-allowed`}
                       disabled={pending}>
                       {
                         !cardDetails ? 'Submit and Pay' : 'Submit and Pay with Card on File'

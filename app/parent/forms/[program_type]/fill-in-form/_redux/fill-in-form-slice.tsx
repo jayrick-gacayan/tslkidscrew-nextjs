@@ -1,4 +1,4 @@
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { FillInFormState } from "./fill-in-form-state";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";

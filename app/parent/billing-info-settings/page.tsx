@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { Parent } from "@/models/parent";
 import { getCustomerInfo } from "@/services/parent-info-services";
 import { Session } from "next-auth";
 import BillingInfoSettingsTabContainer from "./_sections/billing-info-settings-tab-container";

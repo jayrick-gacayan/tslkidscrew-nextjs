@@ -73,10 +73,12 @@ export async function updateCustomerInfoAction(
     }
   }
 
-  // let updateSession = await unstable_update({
-  //   first_name,
-  //   last_name,
-  // });
+  let updateSession = await unstable_update({
+    user: {
+      first_name,
+      last_name,
+    }
+  });
 
   return {
     message: 'Successfully updated your personal details.',

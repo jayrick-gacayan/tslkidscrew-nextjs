@@ -1,4 +1,4 @@
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { ChildInfoType } from "@/types/input-types/child-info-type";
 import { InputProps } from "@/types/props/input-props";
 

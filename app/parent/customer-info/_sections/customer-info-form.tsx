@@ -28,6 +28,7 @@ function CustomerInfoFormButton() {
 }
 
 export default function CustomerInfoForm({ parent }: { parent: Parent }) {
+  console.log('parent', parent)
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
 
   const [state, formAction] = useFormState(

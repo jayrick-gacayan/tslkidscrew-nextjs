@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { Parent } from "@/models/parent";
 import { auth } from "@/auth";
 import { Result } from "@/models/result";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { capitalCase } from "change-case";
 import { getCustomerInfo } from "@/services/parent-info-services";
 
