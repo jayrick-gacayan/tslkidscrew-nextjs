@@ -20,8 +20,6 @@ export async function locationPlaces(
   try {
     let response = await result.json();
 
-    console.log('resposne', response)
-
     return new Result<Paginate<LocationPlace>>({
       ...response,
       data: {
@@ -38,8 +36,6 @@ export async function locationPlaces(
       message: result.statusText
     });
   }
-
-
 }
 
 export async function locationPlace(id: string, token?: string) {

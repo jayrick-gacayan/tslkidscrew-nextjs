@@ -3,15 +3,30 @@
 import { auth } from "@/auth";
 import {
   createLocationPlace,
+  locationPlace,
+  locationPlaces,
   removeLocationPlace,
   updateLocationPlace
 } from "@/services/location-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 import * as Joi from "joi";
 import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
+
+export async function locationPlacesAction(searchParams: SearchParamsProps) {
+  let admin: Session | null = await auth();
+
+  return await locationPlaces(searchParams, admin?.user?.accessToken)
+}
+
+export async function locationPlaceAction(id: string) {
+  let admin: Session | null = await auth();
+
+  return await locationPlace(id, admin?.user?.accessToken)
+}
 
 export async function addLocationPlace(
   prevState: LocationPlaceFormStateProps,

@@ -21,7 +21,7 @@ export default function EditProgramForm({
   activeAdmins,
 }: {
   locationProgram: LocationProgram;
-  activeAdmins: Partial<Admin>[]
+  activeAdmins: Pick<Admin, 'id' | 'email'>[]
 }) {
   const [state, formAction] = useFormState(
     editLocationProgramAction.bind(null, locationProgram.id!, locationProgram.location_id!),

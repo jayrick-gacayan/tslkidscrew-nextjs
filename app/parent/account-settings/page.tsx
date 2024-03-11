@@ -1,12 +1,9 @@
-import { Session } from "next-auth";
 import AccountSettingsTabContainer from "./_sections/account-settings-tab-container";
-import { auth } from "@/auth";
-import { getCustomerInfo } from "@/services/parent-info-services";
+import { getCustomerInfoAction } from "@/actions/parent-info-actions";
 
 export default async function Page() {
-  let parent: Session | null = await auth();
 
-  let result = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.user?.accessToken!)
+  let result = await getCustomerInfoAction();
 
   return (
     <AccountSettingsTabContainer parent={!result.data ? undefined : {

@@ -16,7 +16,7 @@ import LocationSubmitButton from "../../_components/location-submit-button";
 export function NewFormLocation({
   admins
 }: {
-  admins: Partial<Admin>[]
+  admins: Pick<Admin, 'id' | 'email'>[]
 }) {
   const [state, formAction] = useFormState(
     addLocationPlace,

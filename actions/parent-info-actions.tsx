@@ -1,7 +1,7 @@
 'use server';
 
 import { auth, unstable_update } from '@/auth';
-import { updateCustomerInfo } from '@/services/parent-info-services';
+import { getCustomerInfo, updateCustomerInfo } from '@/services/parent-info-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-state-props';
@@ -84,4 +84,19 @@ export async function updateCustomerInfoAction(
     message: 'Successfully updated your personal details.',
     success: true,
   }
+}
+
+export async function getParentInfo() {
+  let parent: Session | null = await auth();
+
+  let parentData: Omit<Session, 'accessToken'> | null = parent;
+
+  return parentData;
+}
+
+export async function getCustomerInfoAction() {
+  let parent: Session | null = await auth();
+
+  let { customer_id, accessToken } = parent?.user!;
+  return await getCustomerInfo(customer_id?.toString()!, accessToken!);
 }

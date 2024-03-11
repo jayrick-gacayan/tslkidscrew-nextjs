@@ -1,15 +1,11 @@
 import { LocationPlace } from "@/models/location-place";
 import InfoContainer from "../../../_components/info-container";
-import { auth } from "@/auth";
-import { locationPlace } from "@/services/location-services";
-import { Session } from "next-auth";
 import { notFound } from "next/navigation";
 import { Result } from "@/models/result";
+import { locationPlaceAction } from "@/actions/location-actions";
 
 export default async function LocationInfoData({ id }: { id: string }) {
-  let admin: Session | null = await auth();
-
-  let result: Result<LocationPlace> = await locationPlace(id, admin?.user?.accessToken)
+  let result: Result<LocationPlace> = await locationPlaceAction(id);
 
   if (!result.data) { notFound(); }
 

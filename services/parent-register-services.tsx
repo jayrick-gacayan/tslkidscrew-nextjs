@@ -83,12 +83,22 @@ export async function registerCustomer(
       ...authHeaders(token)
     });
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Parent>({
-    ...response,
-    data: response.customer ?? undefined,
-    message: response.message ?? result.statusText,
-    statusCode: result.status
-  });
+    return new Result<Parent>({
+      ...response,
+      data: response.customer ?? undefined,
+      message: response.message ?? result.statusText,
+      statusCode: result.status
+    });
+  } catch (error) {
+    return new Result<Parent>({
+      response: undefined,
+      error: result.statusText,
+      message: result.statusText,
+      statusCode: result.status
+    });
+  }
+
 }

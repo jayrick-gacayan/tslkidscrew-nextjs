@@ -1,11 +1,16 @@
 'use server';
 
 import { auth } from "@/auth";
-import { Admin } from "@/models/admin";
 import { Session } from "next-auth";
 import * as Joi from "joi";
 import { ValidationType } from "@/types/enums/validation-type";
 import {
+  getBeforeOrAfterSchoolSettings,
+  getProgramYearCycleSettings,
+  getSummerCampPromoSettings,
+  getSummerCampSwimPrices,
+  getSummerCampWeekPrices,
+  getVacationCampSchedulesSettings,
   updateBeforeOrAfterSchoolSettings,
   updateProgramYearCycleSetting,
   updateSummerCampPromoSettings,
@@ -20,6 +25,11 @@ import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-s
 import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
 import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
+import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
+import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { VacationCampSetting } from "@/models/vacation-camp-setting";
 
 export async function updateSummerCampWeekSettingAction(
   id: number,
@@ -397,4 +407,17 @@ export async function updateBeforeOrAfterSchoolSettingAction(
     success: true,
     message: 'Successfully update the before or after school setting data.'
   };
+}
+
+export async function getAllSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await Promise.all([
+    getSummerCampWeekPrices(admin?.user?.accessToken!),
+    getSummerCampSwimPrices(admin?.user?.accessToken!),
+    getSummerCampPromoSettings(admin?.user?.accessToken!),
+    getVacationCampSchedulesSettings(admin?.user?.accessToken!),
+    getProgramYearCycleSettings(admin?.user?.accessToken!),
+    getBeforeOrAfterSchoolSettings(admin?.user?.accessToken!, '2024-2025')
+  ]);
 }

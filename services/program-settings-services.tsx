@@ -154,13 +154,21 @@ export async function getSummerCampWeekPrices(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<SummerCampWeekSetting[]>({
-    ...response,
-    data: response.week_settings ?? [],
-    statusCode: result.status,
-  })
+    return new Result<SummerCampWeekSetting[]>({
+      ...response,
+      data: response.week_settings ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampWeekSetting[]>({
+      response: undefined,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function updateSummerCampWeekSetting(
@@ -201,13 +209,23 @@ export async function getSummerCampPromoSettings(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<SummerCampPromoSetting[]>({
-    ...response,
-    data: response.promos ?? [],
-    statusCode: result.status,
-  })
+    return new Result<SummerCampPromoSetting[]>({
+      ...response,
+      data: response.promos ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampPromoSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
+
 }
 
 export async function updateSummerCampPromoSettings(
@@ -270,13 +288,22 @@ export async function getVacationCampSchedulesSettings(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<VacationCampSetting[]>({
-    ...response,
-    data: response.vacation_camp ?? [],
-    statusCode: result.status,
-  })
+    return new Result<VacationCampSetting[]>({
+      ...response,
+      data: response.vacation_camp ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<VacationCampSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
 }
 
 export async function updateVacationCampScheduleSetting(formData: FormData, token: string) {
@@ -317,13 +344,22 @@ export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: s
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      response: response,
+      data: response.master_prices ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
 
-  return new Result<BeforeOrAfterSchoolSetting[]>({
-    response: response,
-    data: response.master_prices ?? [],
-    statusCode: result.status,
-  })
 }
 
 export async function updateBeforeOrAfterSchoolSettings(formData: FormData, token: string) {

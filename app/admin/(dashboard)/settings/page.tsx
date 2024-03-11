@@ -1,15 +1,5 @@
-import { auth } from "@/auth";
 import AdminHeaderWithEntries from "../_components/admin-header-with-entries";
 import TabsContainer from "./_sections/tabs-container";
-import { Session } from "next-auth";
-import {
-  getBeforeOrAfterSchoolSettings,
-  getProgramYearCycleSettings,
-  getSummerCampPromoSettings,
-  getSummerCampSwimPrices,
-  getSummerCampWeekPrices,
-  getVacationCampSchedulesSettings
-} from "@/services/program-settings-services";
 import { Result } from "@/models/result";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
@@ -17,11 +7,9 @@ import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
+import { getAllSettingsAction } from "@/actions/program-settings-actions";
 
 export default async function Page() {
-  let admin: Session | null = await auth();
-
-
   const [
     summerCampWeekSettings,
     summerCampSwimSettings,
@@ -36,14 +24,7 @@ export default async function Page() {
       Result<VacationCampSetting[]>,
       Result<ProgramYearCycleSetting>,
       Result<BeforeOrAfterSchoolSetting[]>
-    ] = await Promise.all([
-      getSummerCampWeekPrices(admin?.user?.accessToken!),
-      getSummerCampSwimPrices(admin?.user?.accessToken!),
-      getSummerCampPromoSettings(admin?.user?.accessToken!),
-      getVacationCampSchedulesSettings(admin?.user?.accessToken!),
-      getProgramYearCycleSettings(admin?.user?.accessToken!),
-      getBeforeOrAfterSchoolSettings(admin?.user?.accessToken!, '2024-2025')
-    ]);
+    ] = await getAllSettingsAction();
 
   return (
     <div className="pb-4">

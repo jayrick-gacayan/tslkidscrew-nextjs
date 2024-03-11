@@ -19,7 +19,7 @@ export function EditFormLocation({
   admins,
 }: {
   locationPlace: LocationPlace
-  admins: Partial<Admin>[]
+  admins: Pick<Admin, "id" | "email">[]
 }) {
   const [state, formAction] = useFormState(
     editLocationPlace.bind(null, locationPlace.id?.toString()!),

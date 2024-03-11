@@ -2,13 +2,11 @@ import BackButtonClient from "@/app/_components/back-button-client"
 import NewProgramForm from "./sections/new-program-form"
 import type { Metadata } from "next";
 import { Result } from "@/models/result";
-import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { activeAdminUsers } from "@/services/admin-services";
-import { Session } from "next-auth";
 import { LocationPlace } from "@/models/location-place";
-import { locationPlace } from "@/services/location-services";
 import { notFound } from "next/navigation";
+import { activeAdminUsersAction } from "@/actions/admin-actions";
+import { locationPlaceAction } from "@/actions/location-actions";
 
 export const metadata: Metadata = {
   title: 'Create Location Program',
@@ -20,15 +18,9 @@ export default async function Page({
 }: {
   params: { id: string; }
 }) {
-  let admin: Session | null = await auth();
-  let adminResult: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
-
-  let adminData = adminResult.data?.map((admin: Admin) => { return { id: admin.id, email: admin.email } }) ?? []
-  let result: Result<LocationPlace> = await locationPlace(params.id, admin?.user?.accessToken)
-
+  let activeAdmins: Pick<Admin, "id" | "email">[] = await activeAdminUsersAction();
+  let result: Result<LocationPlace> = await locationPlaceAction(params.id);
   if (!result.data) { notFound(); }
-
-  let locationPlaceData: LocationPlace = result.data;
 
   return (
     <div className="pb-8">
@@ -36,8 +28,7 @@ export default async function Page({
         <div className="w-full lg:w-6/12 m-auto block space-y-8">
           <BackButtonClient />
           <h1 className="text-[32px] font-medium text-black">New Program</h1>
-          <NewProgramForm activeAdmins={adminData}
-            locationPlace={locationPlaceData} />
+          <NewProgramForm activeAdmins={activeAdmins} locationPlace={result.data} />
         </div>
       </div>
     </div>

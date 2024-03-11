@@ -27,7 +27,7 @@ function CustomerInfoFormButton() {
   )
 }
 
-export default function CustomerInfoForm({ parent }: { parent: Parent }) {
+export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }) {
   console.log('parent', parent)
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
 

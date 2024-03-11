@@ -1,25 +1,17 @@
-import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
 import { LocationPlace } from "@/models/location-place";
 import { Result } from "@/models/result";
-import { activeAdminUsers } from "@/services/admin-services";
-import { locationPlace } from "@/services/location-services";
-import { Session } from "next-auth";
 import { notFound } from "next/navigation";
 import { EditFormLocation } from "./edit-form-location";
+import { locationPlaceAction } from "@/actions/location-actions";
+import { activeAdminUsersAction } from "@/actions/admin-actions";
 
 export default async function EditFormLocationContainer({ id }: { id: string }) {
-  let admin: Session | null = await auth();
-
-  let result: Result<LocationPlace> = await locationPlace(id, admin?.user?.accessToken)
+  let result: Result<LocationPlace> = await locationPlaceAction(id);
 
   if (!result.data) { notFound(); }
 
-  let locationPlaceData: LocationPlace = result.data;
+  let activeUsers: Pick<Admin, "id" | "email">[] = await activeAdminUsersAction();
 
-  let resultData: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
-
-  let data = resultData.data?.map((admin: Admin) => { return { id: admin.id!, email: admin.email! } }) ?? []
-
-  return (<EditFormLocation locationPlace={locationPlaceData} admins={data} />)
+  return (<EditFormLocation locationPlace={result.data} admins={activeUsers} />)
 }

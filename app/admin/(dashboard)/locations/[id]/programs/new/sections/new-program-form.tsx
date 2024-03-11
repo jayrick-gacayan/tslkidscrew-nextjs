@@ -20,7 +20,7 @@ export default function NewProgramForm({
   activeAdmins,
   locationPlace,
 }: {
-  activeAdmins: Partial<Admin>[]
+  activeAdmins: Pick<Admin, 'id' | 'email'>[]
   locationPlace: LocationPlace
 }) {
   const [state, formAction] = useFormState(

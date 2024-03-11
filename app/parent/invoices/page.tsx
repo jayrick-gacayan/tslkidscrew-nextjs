@@ -1,19 +1,15 @@
-import { auth } from "@/auth"
 import { Invoice } from "@/models/invoice";
 import { Paginate } from "@/models/paginate";
-import { Parent } from "@/models/parent";
 import { Result } from "@/models/result";
-import { getAllCustomerInvoices } from "@/services/invoice-services";
-import { Session } from "next-auth";
 import InvoicesHeader from "./_sections/invoices-header";
 import { SearchParamsProps } from "@/types/props/search-params-props";
 import InvoicesInfoTable from "./_sections/invoices-info-table";
 import { redirectToPath } from "@/actions/common-actions";
 import Pagination from "@/app/_components/pagination";
+import { getAllCustomerInvoicesAction } from "@/actions/invoices-actions";
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
-  let parent: Session | null = await auth();
-  let result: Result<Paginate<Invoice>> = await getAllCustomerInvoices(searchParams, parent?.user?.accessToken!)
+  let result: Result<Paginate<Invoice>> = await getAllCustomerInvoicesAction(searchParams)
   let showEntry: number = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
   let totalPages: number = Math.ceil((result.data?.total ?? 1) / showEntry) ?? 1
   let data: Invoice[] | undefined = result.data?.data;

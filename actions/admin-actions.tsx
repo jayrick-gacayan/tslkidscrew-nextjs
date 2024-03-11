@@ -2,7 +2,10 @@
 
 import { auth } from '@/auth';
 import {
+  activeAdminUsers,
   addAdminUser,
+  adminUser,
+  adminUsers,
   changeAdminUserActiveStatus,
   updateAdminUser
 } from '@/services/admin-services';
@@ -12,6 +15,31 @@ import * as Joi from 'joi';
 import { ValidationType } from '@/types/enums/validation-type';
 import { ResultStatus } from '@/types/enums/result-status';
 import { revalidatePath } from 'next/cache';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { Result } from '@/models/result';
+import { Admin } from '@/models/admin';
+
+export async function adminUsersAction(searchParams: SearchParamsProps) {
+  let admin: Session | null = await auth();
+
+  return await adminUsers(searchParams, admin?.user?.accessToken!);
+}
+
+export async function adminUserAction(id: string) {
+  let admin: Session | null = await auth();
+
+  return await adminUser(id, admin?.user?.accessToken!);
+}
+
+export async function activeAdminUsersAction() {
+  let admin: Session | null = await auth();
+  let result: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
+
+  return result.data?.map((admin: Admin) => {
+    let { id, email } = admin;
+    return { id, email }
+  }) ?? [] as Pick<Admin, 'id' | 'email'>[];
+}
 
 export async function addAdminUserAction(
   prevState: AdminUserFormStateProps,

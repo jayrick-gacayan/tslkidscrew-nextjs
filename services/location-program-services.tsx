@@ -1,4 +1,3 @@
-import { Admin } from "@/models/admin";
 import { LocationPlace } from "@/models/location-place";
 import { LocationProgram } from "@/models/location-program";
 import { Result } from "@/models/result";
@@ -15,31 +14,40 @@ export async function locationProgram(id: string, token: string) {
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  if (result.status === 200) {
-    let director = await adminUser(response.program.director_id, token);
-    let locationPlaceData = await locationPlace(response.program.location_id, token);
+    if (result.status === 200) {
+      let director = await adminUser(response.program.director_id, token);
+      let locationPlaceData = await locationPlace(response.program.location_id, token);
+
+      return new Result<LocationProgram>({
+        ...response,
+        data: {
+          ...response.program,
+          director: director.data,
+          locationPlace: locationPlaceData.data
+        },
+        statusCode: result.status,
+        response: response
+      });
+
+    }
 
     return new Result<LocationProgram>({
       ...response,
-      data: {
-        ...response.program,
-        director: director.data,
-        locationPlace: locationPlaceData.data
-      },
+      data: response.program ?? undefined,
       statusCode: result.status,
       response: response
     });
-
+  } catch (error) {
+    return new Result<LocationProgram>({
+      response: undefined,
+      statusCode: result.status,
+      error: result.statusText,
+      message: result.statusText
+    });
   }
-
-  return new Result<LocationProgram>({
-    ...response,
-    data: response.program ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
 }
 
 export async function locationPrograms(
@@ -56,16 +64,25 @@ export async function locationPrograms(
     { ...authHeaders(token!) }
   )
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Paginate<LocationProgram>>({
-    ...response,
-    data: {
-      data: response.programs ?? [],
-      total: response.total_programs ?? 1,
-    },
-    statusCode: result.status
-  })
+    return new Result<Paginate<LocationProgram>>({
+      ...response,
+      data: {
+        data: response.programs ?? [],
+        total: response.total_programs ?? 1,
+      },
+      statusCode: result.status
+    })
+  } catch (error) {
+    return new Result<Paginate<LocationProgram>>({
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status
+    })
+  }
 }
 
 export async function addLocationProgram(
