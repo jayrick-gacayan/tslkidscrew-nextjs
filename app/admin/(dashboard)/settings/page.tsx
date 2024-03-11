@@ -21,6 +21,7 @@ import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-sett
 export default async function Page() {
   let admin: Session | null = await auth();
 
+
   const [
     summerCampWeekSettings,
     summerCampSwimSettings,
@@ -45,14 +46,16 @@ export default async function Page() {
     ]);
 
   return (
-    <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-4">
-      <AdminHeaderWithEntries headerText='Settings' />
-      <TabsContainer summerCampWeekSettings={summerCampWeekSettings.data ?? []}
-        summerCampSwimSettings={summerCampSwimSettings.data ?? []}
-        summerCampPromoSettings={summerCampPromoSettings.data ?? []}
-        programYearCycleSetting={programYearCycleSetting.data!}
-        vacationCampSettings={vacationCampSettings.data ?? []}
-        beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings.data ?? []} />
+    <div className="pb-4">
+      <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-4">
+        <AdminHeaderWithEntries headerText='Settings' />
+        <TabsContainer summerCampWeekSettings={summerCampWeekSettings.data ?? []}
+          summerCampSwimSettings={summerCampSwimSettings.data ?? []}
+          summerCampPromoSettings={summerCampPromoSettings.data ?? []}
+          programYearCycleSetting={programYearCycleSetting.data!}
+          vacationCampSettings={vacationCampSettings.data ?? []}
+          beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings.data ?? []} />
+      </div>
     </div>
   )
 }

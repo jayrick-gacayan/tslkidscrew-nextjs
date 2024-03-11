@@ -57,7 +57,15 @@ export default function NewProgramForm({
     }
   }, [
     state
-  ])
+  ]);
+
+  function listboxClassName(value: string, placeholder: string) {
+    return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`;
+  }
+
+  function listboxDDIcon(open: boolean) {
+    return (<ListboxIconDropdownOne open={open} />);
+  }
 
   return (
     <form action={formAction} className="space-y-4" id='new-location-program'>
@@ -76,10 +84,8 @@ export default function NewProgramForm({
           items={PROGRAM_TYPES}
           labelText="Program"
           errorText={state?.name?.errorText}
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }}
-          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          valueClassName={listboxClassName}
+          listboxDropdownIcon={listboxDDIcon}
           validationStatus={state?.name?.validationStatus}
           keyDescription="new-program-form-name" />
         <InputCustom labelText="Name"
@@ -97,13 +103,11 @@ export default function NewProgramForm({
           items={activeAdmins}
           labelText="Director"
           by="id"
-          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          listboxDropdownIcon={listboxDDIcon}
           errorText={state?.['director[id]']?.errorText}
           validationStatus={state?.['director[id]']?.validationStatus}
           keyDescription="new-program-form-director"
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }} />
+          valueClassName={listboxClassName} />
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
             <InputCustom labelText="Capacity"

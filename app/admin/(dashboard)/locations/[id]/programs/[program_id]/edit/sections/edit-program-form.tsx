@@ -62,6 +62,14 @@ export default function EditProgramForm({
     state
   ]);
 
+  function listboxClassName(value: string, placeholder: string) {
+    return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`;
+  }
+
+  function listboxDDIcon(open: boolean) {
+    return (<ListboxIconDropdownOne open={open} />);
+  }
+
   return (
     <form action={formAction} className="space-y-4" id='edit-location-program'>
       <div className="space-y-4">
@@ -79,10 +87,8 @@ export default function EditProgramForm({
           items={PROGRAM_TYPES}
           labelText="Program"
           errorText={state?.name?.errorText}
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }}
-          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          valueClassName={listboxClassName}
+          listboxDropdownIcon={listboxDDIcon}
           validationStatus={state?.name?.validationStatus}
           keyDescription="edit-program-form-name" />
         <InputCustom labelText="Program Suffix"
@@ -102,10 +108,8 @@ export default function EditProgramForm({
           labelText="Director"
           by="id"
           errorText={state?.['director[id]']?.errorText}
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }}
-          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          valueClassName={listboxClassName}
+          listboxDropdownIcon={listboxDDIcon}
           validationStatus={state?.['director[id]']?.validationStatus}
           keyDescription="edit-program-form-director" />
         <div className="flex items-center gap-2 w-full">

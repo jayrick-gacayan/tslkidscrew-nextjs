@@ -12,6 +12,7 @@ const initialState: FillInFormState = {
   fillInForm: {
     location: fieldInputValue<Partial<LocationPlace> | undefined>(undefined),
     children: [initChild],
+    defDateForChildForm: undefined,
     TOSCondition: fieldInputValue<any[]>([]),
 
     //for program type before-or-after-school

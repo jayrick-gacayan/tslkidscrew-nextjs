@@ -13,7 +13,11 @@ import { dateString, dateTimeString } from "@/types/helpers/date-helpers";
 import { changeAdminUserActiveStatusAction } from "@/actions/admin-actions";
 import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
 import { reduxStore } from "@/react-redux/redux-store";
-import { editAdminUserFields, modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
+import {
+  editAdminUserFields,
+  modalFormOpened,
+  modalFormTypeSet
+} from "../_redux/admin-users-slice";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [dataAdmins, setDataAdmins] = useState(admins);
@@ -85,7 +89,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     <tbody className="text-[15px]">
       {
         dataAdmins.map((admin: Admin, idx: number) => {
-          let { id, name, active, created_at, email, is_super_admin, updated_at, } = admin;
+          let { id, name, active, email, is_super_admin, updated_at, } = admin;
           let adminActive = (active === undefined || !active) ? 'No' : 'Yes'
 
           let ActiveIcon = adminActive === 'Yes' ? Fa6UserXmark : Fa6SolidUserCheck;

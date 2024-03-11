@@ -6,6 +6,7 @@ export interface FillInFormState {
   stripeModalOpen: boolean;
   fillInForm: {
     location: InputProps<Partial<LocationPlace> | undefined>;
+    defDateForChildForm: string | undefined;
     children: ChildInfoType[];
 
     //for program type before-or-after-school

@@ -2,34 +2,22 @@ import { updateAdminUserAction, addAdminUserAction } from "@/actions/admin-actio
 import { pathRevalidate } from "@/actions/common-actions";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import InputCustom from "@/app/_components/input-custom";
-import Spinners3DotsScale from "@/app/_components/svg/spinners3-dots-scale";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { AdminUserFormStateProps } from "@/types/props/admin-user-form-state-props";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useEffect, useMemo } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
 import { AdminUsersState } from "../_redux/admin-users-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
-import { adminInputFieldChanged } from "../_redux/admin-users-slice";
+import {
+  adminInputCheckboxFieldChanged,
+  adminInputFieldChanged
+} from "../_redux/admin-users-slice";
+import AdminUserFormButtonSubmit from "./admin-user-form-button-submit";
 
-function AdminUserFormSubmit({ formReset }: { formReset: () => void; }) {
-  const { pending } = useFormStatus();
-  return (
-    <div className="flex items-center justify-end gap-4">
-      <button type='button'
-        className='bg-white text-primary p-2 disabled:cursor-not-allowed'
-        disabled={pending}
-        onClick={() => { formReset() }}>Cancel</button>
-      <button type="submit"
-        className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
-        disabled={pending}>
-        {pending ? <><Spinners3DotsScale className="text-white text-[24px] inline-block mr-1" /></> : 'Save'}
-      </button>
-    </div>
-  )
-}
+
 
 export default function AdminUserForm({
   type,
@@ -108,7 +96,7 @@ export default function AdminUserForm({
     pathname
   ]);
 
-  function handleInputChange(key: 'email' | 'name') {
+  function handleInputTextChanged(key: 'email' | 'name') {
     return function (event: ChangeEvent<HTMLInputElement>) {
       reduxStore.dispatch(adminInputFieldChanged({
         key: key,
@@ -116,6 +104,16 @@ export default function AdminUserForm({
       }))
     }
   }
+
+  function handleInputCheckboxChanged(key: 'isActive' | 'isSuperAdmin') {
+    return function (event: ChangeEvent<HTMLInputElement>) {
+      reduxStore.dispatch(adminInputCheckboxFieldChanged({
+        key: key,
+        data: !event.target.checked
+      }))
+    }
+  }
+
   return (
     <form action={formAction}
       className="space-y-8">
@@ -130,7 +128,7 @@ export default function AdminUserForm({
           errorText={data.email.errorText}
           validationStatus={data.email.validationStatus}
           disabled={type === 'update'}
-          onChange={handleInputChange("email")} />
+          onChange={handleInputTextChanged("email")} />
         <InputCustom labelText="Name"
           id="admin-user-name"
           name='admin-user-name'
@@ -140,7 +138,7 @@ export default function AdminUserForm({
           className="bg-secondary border-0"
           errorText={data.name.errorText}
           validationStatus={data.name.validationStatus}
-          onChange={handleInputChange("name")} />
+          onChange={handleInputTextChanged("name")} />
       </div>
       {
         type === 'update' &&
@@ -148,14 +146,16 @@ export default function AdminUserForm({
           <InputCheckboxCustom labelText="Active"
             id={`${type}-is-active`}
             name="admin-user-active"
-            defaultChecked={data?.active ?? false} />
+            checked={data.active}
+            onChange={handleInputCheckboxChanged("isActive")} />
         )
       }
       <InputCheckboxCustom labelText="Super Admin"
         id={`${type}-is-super-admin`}
         name="admin-user-is-super-admin"
-        defaultChecked={data?.is_super_admin ?? false} />
-      <AdminUserFormSubmit formReset={formReset} />
+        checked={data.is_super_admin}
+        onChange={handleInputCheckboxChanged("isSuperAdmin")} />
+      <AdminUserFormButtonSubmit formReset={formReset} />
     </form>
   )
 }

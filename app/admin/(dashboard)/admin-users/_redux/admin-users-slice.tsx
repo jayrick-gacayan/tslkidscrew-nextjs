@@ -1,9 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AdminUsersState } from "./admin-users-state";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
-import { RequestStatus } from "@/types/enums/request-status";
-import * as  Joi from "joi";
-import { ValidationType } from "@/types/enums/validation-type";
 import { Admin } from "@/models/admin";
 import { InputProps } from "@/types/props/input-props";
 
@@ -12,7 +9,6 @@ const adminFormInitValues = {
   name: fieldInputValue<string>(''),
   isActive: false,
   isSuperAdmin: false,
-  requestStatus: RequestStatus.NONE
 }
 
 const initialState: AdminUsersState = {
@@ -31,82 +27,20 @@ const adminUsersSlice = createSlice({
 
       return {
         ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          [key]: data
-        }
+        adminUserForm: { ...state.adminUserForm, [key]: data }
       }
     },
     adminInputCheckboxFieldChanged: (
       state: AdminUsersState,
-      action: PayloadAction<{ key: 'isActive' | 'isSuperAdmin'; value: string; }>) => {
+      action: PayloadAction<{ key: 'isActive' | 'isSuperAdmin'; data: boolean; }>) => {
 
-      let { key, value } = action.payload;
-
-      return {
-        ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          [key]: value
-        }
-      }
-
-    },
-    adminUserFormSubmitted: (state: AdminUsersState) => {
-      let { email, name } = state.adminUserForm;
-      const adminUserSchema = Joi.object({
-        email: Joi.string()
-          .email({ tlds: { allow: false } })
-          .required()
-          .messages({
-            "string.empty": "Email is required.",
-            "string.email": "Email is in invalid format.",
-            "any.required": "Email is required",
-          }),
-        name: Joi.string()
-          .required()
-          .messages({
-            "string.empty": "Name is required.",
-            "any.required": "Name is required",
-          })
-      });
-
-      let validate = adminUserSchema.validate({
-        email: email.value,
-        name: name.value
-      }, { abortEarly: false });
-
-      let errors: any = validate.error?.details.reduce((prev, curr) => {
-        return Object.assign({
-          [curr.context?.key ?? '']: {
-            value: curr.context?.value,
-            errorText: curr.message,
-            validationStatus: ValidationType.ERROR,
-          }
-        }, prev)
-      }, {});
+      let { key, data } = action.payload;
 
       return {
         ...state,
-        adminUserForm: {
-          ...state.adminUserForm,
-          email: errors ? errors?.email : {
-            ...state.adminUserForm.email,
-            validationStatus: ValidationType.VALID
-          },
-          name: errors ? errors?.name : {
-            ...state.adminUserForm.name,
-            validationStatus: ValidationType.VALID
-          },
-          requestStatus: errors ? RequestStatus.FAILURE : RequestStatus.IN_PROGRESS
-        }
+        adminUserForm: { ...state.adminUserForm, [key]: data }
       }
-    },
-    adminUserRequestStatusSet: (state: AdminUsersState, action: PayloadAction<RequestStatus>) => {
-      return {
-        ...state,
-        adminUserForm: { ...state.adminUserForm, requestStatus: action.payload }
-      }
+
     },
     editAdminUserFields: (state, action: PayloadAction<Partial<Admin>>) => {
       return {
@@ -137,9 +71,7 @@ export const {
   adminUserFormReset,
   adminInputFieldChanged,
   adminInputCheckboxFieldChanged,
-  adminUserRequestStatusSet,
   editAdminUserFields,
-  adminUserFormSubmitted,
   modalFormOpened,
   modalFormTypeSet
 } = adminUsersSlice.actions;

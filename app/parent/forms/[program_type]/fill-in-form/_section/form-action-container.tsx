@@ -127,10 +127,7 @@ export default function FormActionContainer({
                   reduxStore.dispatch(modalStripeToggled(true));
                 }
               }
-
             }
-
-
           }
         }
         break;
