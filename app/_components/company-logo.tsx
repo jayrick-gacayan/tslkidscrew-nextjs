@@ -31,10 +31,13 @@ export default function CompanyLogo({
     <Link href={href}
       className={twMerge('block', className!)}
       aria-label="Brand">
-      <picture>
-        <img alt='tsl-kids-crew-logo' {...rest} />
-      </picture>
-
+      <Image src='/static/tsl-kids-crew-logo-white.png'
+        alt='tsl-kids-crew-logo'
+        width={width}
+        height={height}
+        sizes="100vw"
+        quality={100}
+        priority />
     </Link>
   )
 }
