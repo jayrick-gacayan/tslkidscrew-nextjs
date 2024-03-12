@@ -4,12 +4,13 @@ import { ReactNode, useState } from "react";
 import AdminHeader from "./admin-header";
 import Sidebar from "./sidebar";
 import { Admin } from "@/models/admin";
+import { User } from "next-auth";
 
 export default function DrawerRoot({
   admin,
   children
 }: {
-  admin: Admin;
+  admin: Partial<User<Partial<Admin>>>;
   children: ReactNode;
 }) {
   const [drawerOpen, setDrawerOpen] = useState(true);

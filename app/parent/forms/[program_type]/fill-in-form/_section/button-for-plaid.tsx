@@ -1,16 +1,36 @@
-import { useCallback } from "react";
-import { usePlaidLink } from "react-plaid-link";
+import { useEffect, useState } from "react";
+import { usePlaidLink, } from "react-plaid-link";
+
 
 export default function ButtonForPlaid() {
+  const [linkToken, setLinkToken] = useState<string>('');
 
-  const onSuccess = useCallback((public_token: any, metadata: any) => {
-    // send public_token to server
+  useEffect(() => {
+    async function getLinkToken() {
+      const result = await fetch(`/api/create_plaid_link_token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
 
+      let response = await result.json();
+
+      console.log('response', response)
+      setLinkToken(response.link_token)
+
+    }
+
+    getLinkToken();
   }, []);
 
   const { open, ready } = usePlaidLink({
-    token: '<GENERATED_LINK_TOKEN>',
-    onSuccess: onSuccess,
+
+    token: linkToken,
+    onSuccess: (public_token: any, metadata: any) => {
+      // send public_token to server
+      console.log('public token', public_token)
+      console.log('metadata', metadata)
+
+    },
   });
 
   return (

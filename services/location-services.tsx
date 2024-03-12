@@ -174,7 +174,7 @@ export async function removeLocationPlace(
   });
 }
 
-export async function getAllLocationsForRegRecordCreate(
+export async function getAllLocationsForCreateRegRecord(
   program_name: string,
   token: string
 ) {

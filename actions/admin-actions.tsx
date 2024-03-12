@@ -10,7 +10,7 @@ import {
   updateAdminUser
 } from '@/services/admin-services';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
-import { Session } from 'next-auth';
+import { Session, User } from 'next-auth';
 import * as Joi from 'joi';
 import { ValidationType } from '@/types/enums/validation-type';
 import { ResultStatus } from '@/types/enums/result-status';
@@ -158,4 +158,16 @@ function adminUserFormValidate(validateData: {
   }
 
   return validate.error;
+}
+
+export async function currentAdminAction() {
+  let admin: Session | null = await auth();
+
+  if (!!admin) {
+    let { accessToken, ...rest } = admin.user as User<Partial<Admin>>;
+
+    return { user: rest };
+  }
+
+  return undefined;
 }

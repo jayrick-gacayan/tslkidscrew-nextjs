@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 import DrawerRoot from "./_sections/drawer-root";
-import { auth } from "@/auth";
+import { User } from "next-auth";
+import { currentAdminAction } from "@/actions/admin-actions";
 import { Admin } from "@/models/admin";
-import { Session } from "next-auth";
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  let admin: Session | null = await auth();
+  let admin: { user: Partial<User<Partial<Admin>>> } | undefined = await currentAdminAction();
 
   return (<DrawerRoot admin={admin?.user!}>{children}</DrawerRoot>);
 }

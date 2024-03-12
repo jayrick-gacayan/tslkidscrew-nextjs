@@ -6,6 +6,7 @@ import { ChildInfoType } from "@/types/input-types/child-info-type";
 import { initChild } from "../_helpers/init-child";
 import { InputProps } from "@/types/props/input-props";
 import { ValidationType } from "@/types/enums/validation-type";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 
 const initialState: FillInFormState = {
   stripeModalOpen: false,
@@ -25,6 +26,7 @@ const initialState: FillInFormState = {
 
     // for program type summer-camp
     summerCampPackageReg: fieldInputValue(''),
+    summerCampRegWeeks: [],
     promoPackage: undefined
   }
 }
@@ -162,6 +164,15 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: { ...state.fillInForm, summerCampPackageReg: action.payload }
       }
+    },
+    summerCampRegWeeksSet: (state: FillInFormState, action: PayloadAction<Partial<SummerCampWeekSetting>[]>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          summerCampRegWeeks: action.payload
+        }
+      }
     }
   }
 })
@@ -183,6 +194,7 @@ export const {
 
   //for program type 'summer-camp'
   summerCampPackageRegChanged,
+  summerCampRegWeeksSet
 
 } = fillInFormSlice.actions;
 

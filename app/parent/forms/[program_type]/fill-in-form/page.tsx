@@ -1,4 +1,4 @@
-import { getAllLocationsForRegRecordCreate } from "@/services/location-services";
+import { getAllLocationsForCreateRegRecord } from "@/services/location-services";
 import FormActionContainer from "./_section/form-action-container";
 import { Session } from "next-auth";
 import { Parent } from "@/models/parent";
@@ -7,6 +7,8 @@ import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location-place";
 import { capitalCase } from "change-case";
 import { getCustomerInfo } from "@/services/parent-info-services";
+import { getSummerCampRegPromosForPromoAction } from "@/actions/registration-create-action";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
   return [
@@ -27,7 +29,9 @@ export default async function Page({
   const { program_type } = params;
   const step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
 
-  let locationDataByProgramType: Result<LocationPlace[]> = await getAllLocationsForRegRecordCreate(
+  const summerCampPromos: SummerCampPromoSetting[] | undefined = await getSummerCampRegPromosForPromoAction();
+
+  let locationDataByProgramType: Result<LocationPlace[]> = await getAllLocationsForCreateRegRecord(
     program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
     , parent?.user?.accessToken!);
 
@@ -48,7 +52,8 @@ export default async function Page({
         <FormActionContainer step={step}
           program_type={program_type}
           cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
-          locations={locationData} />
+          locations={locationData}
+          summerCampPromos={summerCampPromos!} />
       </div>
     </div>
   )

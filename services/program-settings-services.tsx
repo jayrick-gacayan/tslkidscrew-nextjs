@@ -422,3 +422,75 @@ export async function getProgramSettingYearCycleForRegRecord(location_id: string
     })
   }
 }
+
+export async function getSummerCampWeeksForRegular(location_id: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_summer_camp_weeks?location_id=${encodeURIComponent(location_id)}`,
+    {
+      ...authHeaders(token)
+    });
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<Partial<SummerCampWeekSetting>[]>({
+        response: response,
+        data: response.summer_camp_weeks,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}
+
+export async function getSummerCampPromosForCreateRegRecord(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_all_summer_camp_promo`,
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-promo-create-reg-record'] }
+    });
+
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<SummerCampPromoSetting[]>({
+        response: response,
+        data: response.promos,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<SummerCampPromoSetting[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<SummerCampPromoSetting[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}

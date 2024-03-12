@@ -3,8 +3,14 @@
 import { auth } from '@/auth';
 import { Parent } from '@/models/parent';
 import { Result } from '@/models/result';
+import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
+import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
 import { getCustomerInfo } from '@/services/parent-info-services';
-import { getProgramSettingYearCycleForRegRecord } from '@/services/program-settings-services';
+import {
+  getProgramSettingYearCycleForRegRecord,
+  getSummerCampPromosForCreateRegRecord,
+  getSummerCampWeeksForRegular
+} from '@/services/program-settings-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import * as Joi from 'joi';
@@ -203,6 +209,26 @@ export async function getProgramSettingYearCycleForRegRecordAction(location_id: 
     location_id,
     parent?.user?.accessToken!
   );
+
+  return result.data ?? undefined;
+}
+
+export async function getSummerCampRegWeeksForRecordAction(location_id: string) {
+  let parent: Session | null = await auth();
+
+  let result: Result<Partial<SummerCampWeekSetting>[]> = await getSummerCampWeeksForRegular(
+    location_id,
+    parent?.user?.accessToken!
+  );
+
+  return result.data ?? undefined;
+}
+// getSummerCampRegPromosForPromo
+
+export async function getSummerCampRegPromosForPromoAction() {
+  let parent: Session | null = await auth();
+
+  let result: Result<SummerCampPromoSetting[]> = await getSummerCampPromosForCreateRegRecord(parent?.user?.accessToken!);
 
   return result.data ?? undefined;
 }

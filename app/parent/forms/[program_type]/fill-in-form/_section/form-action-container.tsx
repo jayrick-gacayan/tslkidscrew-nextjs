@@ -7,25 +7,40 @@ import ChildrenForm from "./children-form";
 import LocationForm from "./location-form";
 import PaymentFormContainer from "./payment-form-container";
 import RegistrationTypeSelectionBeforeOrAfterSchool from "./registration-type-selection-before-or-after-school";
-import StepThreeForm from "./step-three-form";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useMemo } from "react";
 import { LocationPlace } from "@/models/location-place";
 import { redirectToPath } from "@/actions/common-actions";
 import { Parent } from "@/models/parent";
-import { reduxStore } from "@/react-redux/redux-store";
+import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { beforeOrAfterSchoolStartDateChanged, beforeOrAfterWeekDaysSetError, locationChanged, modalStripeToggled, tosConditionChanged, yearCycleChanged } from "../_redux/fill-in-form-slice";
+import { FillInFormState } from "../_redux/fill-in-form-state";
+import { useAppSelector } from "@/hooks/redux-hooks";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
+import AttendanceScheduleVacationCamp from "./attendance-schedule-vacation-camp";
+import RegistrationTypeSummerCamp from "./registration-type-summer-camp";
+import ScheduleSelectionBeforeAndAfterSchool from "./schedule-selection-before-and-after-school";
 
 export default function FormActionContainer({
   program_type,
   step,
   locations,
   cardDetails,
+  summerCampPromos,
 }: {
   program_type: string;
   step: string | undefined;
   locations: Partial<LocationPlace>[];
   cardDetails: Partial<Parent> | undefined;
+  summerCampPromos: SummerCampPromoSetting[];
 }) {
+  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
+    return state.fillInForm;
+  });
+
+
+  const location: Partial<LocationPlace> | undefined = useMemo(() => {
+    return fillInFormState.fillInForm.location.value
+  }, [fillInFormState.fillInForm.location]);
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
@@ -42,16 +57,29 @@ export default function FormActionContainer({
   );
 
   useEffect(() => {
-    async function pathToRedirectURL(numberStep: number) {
-      let url = `/parent/forms/${program_type}/fill-in-form${numberStep === 1 ? `` : `?step=${numberStep}`}`
+    async function pathToRedirectURL(
+      numberStep: number,
+      location_id?: number,
+    ) {
+      let urlSearchParams = new URLSearchParams();
+
+      if (numberStep > 1) { urlSearchParams.set(encodeURIComponent('step'), encodeURIComponent(numberStep)) }
+      if (location_id) { urlSearchParams.set(encodeURIComponent('location_id'), encodeURIComponent(location_id)) }
+
+      let strSP = urlSearchParams.toString();
+      let url = `/parent/forms/${program_type}/fill-in-form${strSP === '' ? `` : `?${strSP}`}`
       await redirectToPath(url);
     }
 
     let { stepOne, stepTwo, stepThree, stepFour, stepFive, ...rest } = formState;
 
+    function pathToURL(numberToStep: number) {
+      pathToRedirectURL(stepInNumber + numberToStep, location?.id ?? undefined)
+    }
+
     switch (stepInNumber) {
       case 1:
-        if (stepOne) { pathToRedirectURL(stepInNumber + 1) }
+        if (stepOne) { pathToURL(1); }
         else {
           if (formState?.['location-place[id]']) {
             let { errorText, validationStatus } = formState?.['location-place[id]']
@@ -60,16 +88,15 @@ export default function FormActionContainer({
         }
         break;
       case 2:
-        if (!stepOne) { pathToRedirectURL(stepInNumber - 1) }
+        if (!stepOne) { pathToURL(-1); }
         else {
-          if (stepTwo) { pathToRedirectURL(stepInNumber + 1) }
-
+          if (stepTwo) { pathToURL(1); }
         }
         break;
       case 3:
-        if (!stepTwo) { pathToRedirectURL(stepInNumber - 1) }
+        if (!stepTwo) { pathToURL(-1); }
         else {
-          if (stepThree) { pathToRedirectURL(stepInNumber + 1) }
+          if (stepThree) { pathToURL(1); }
           else {
             switch (program_type) {
               case 'before-or-after-school':
@@ -83,9 +110,7 @@ export default function FormActionContainer({
         }
         break;
       case 4:
-        if (!stepThree) {
-          pathToRedirectURL(stepInNumber - 1)
-        }
+        if (!stepThree) { pathToURL(-1); }
         else {
           switch (program_type) {
             case 'before-or-after-school':
@@ -100,18 +125,14 @@ export default function FormActionContainer({
                   reduxStore.dispatch(beforeOrAfterWeekDaysSetError({ errorText, validationStatus }))
                 }
               }
-              else {
-                pathToRedirectURL(stepInNumber + 1)
-              }
+              else { pathToURL(1); }
               break;
           }
         }
         break;
       case 5:
         if (program_type === 'before-or-after-school') {
-          if (!stepFour) {
-            pathToRedirectURL(stepInNumber - 1)
-          }
+          if (!stepFour) { pathToURL(-1); }
           else {
             if (formState?.['payment-tos-terms-error']) {
               let { value, errorText, validationStatus } = formState?.['payment-tos-terms-error']
@@ -142,7 +163,15 @@ export default function FormActionContainer({
   function StepperPanel() {
     if (stepInNumber === 1) return (<LocationForm locations={locations} />)
     else if (stepInNumber === 2) return (<ChildrenForm />);
-    else if (stepInNumber === 3) return (<StepThreeForm program_type={program_type} />);
+    else if (stepInNumber === 3) {
+      switch (program_type) {
+        case 'before-or-after-school': return (<ScheduleSelectionBeforeAndAfterSchool />);
+        case 'summer-camp':
+          return (<RegistrationTypeSummerCamp summerCampPromos={summerCampPromos} />)
+        case 'vacation-camp': return <AttendanceScheduleVacationCamp />;
+      }
+      return null;
+    }
     else if (stepInNumber === 4 && program_type === 'before-or-after-school')
       return (<RegistrationTypeSelectionBeforeOrAfterSchool />)
     else if (stepInNumber === highestStep)

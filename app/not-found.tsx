@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { PhSmileyXEyesBold } from './_components/svg/ph-smiley-x-eyes-bold';
-import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Page Not Found',
   description: 'Page not found',
-}
+};
 
 export default function NotFound() {
   const router = useRouter();
@@ -29,12 +29,12 @@ export default function NotFound() {
               Go back to previous page
             </button>
             <button className='rounded p-2 bg-primary text-white'
-              onClick={() => { router.push('/') }}>
+              onClick={() => { router.push('/'); }}>
               Go home
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

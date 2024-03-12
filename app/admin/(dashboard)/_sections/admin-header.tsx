@@ -4,12 +4,13 @@ import LogoutButton from "@/app/_components/logout-button";
 import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
 import { Admin } from "@/models/admin";
 import { Menu, Transition } from "@headlessui/react";
+import { User } from "next-auth";
 
 export default function AdminHeader({
   admin,
   onDrawerOpen
 }: {
-  admin: Admin;
+  admin: Partial<User<Partial<Admin>>>;
   onDrawerOpen: () => void;
 }) {
 

@@ -7,8 +7,14 @@ import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { summerCampPackageRegChanged } from "../_redux/fill-in-form-slice";
+import SummerCampPackageRegularContainer from "./summer-camp-package-regular-container";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 
-export default function RegistrationTypeSummerCamp() {
+export default function RegistrationTypeSummerCamp({
+  summerCampPromos
+}: {
+  summerCampPromos: SummerCampPromoSetting[];
+}) {
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
@@ -56,6 +62,10 @@ export default function RegistrationTypeSummerCamp() {
     reduxStore.dispatch(summerCampPackageRegChanged(fieldInputValue(value)))
   }
 
+  console.log('dfds', summerCampPromos.filter((val: SummerCampPromoSetting) => {
+    return val.with_swim_trip === false && val.child_record_count === 1;
+  }))
+
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
@@ -86,14 +96,7 @@ export default function RegistrationTypeSummerCamp() {
             {
               summerCampPackageReg.value === 'regular' ?
                 (
-                  <div className="font-medium text-[18px]">
-                    If a week is not shown, it means that it is at the capacity. Contact
-                    <Link href='mailto:tsladventures@gmail.com'
-                      className="text-primary hover:underline mx-1">
-                      tsladventures@gmail.com
-                    </Link>
-                    to request being added to any closed week. Your request may or may not be accommodated.
-                  </div>
+                  <SummerCampPackageRegularContainer />
                 ) :
                 (
                   <div className="space-y-4 bg-secondary rounded p-4">
