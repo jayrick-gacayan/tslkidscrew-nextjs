@@ -7,18 +7,28 @@ import ChildrenForm from "./children-form";
 import LocationForm from "./location-form";
 import PaymentFormContainer from "./payment-form-container";
 import RegistrationTypeSelectionBeforeOrAfterSchool from "./registration-type-selection-before-or-after-school";
-import { FormEvent, useEffect, useMemo } from "react";
+import { FormEvent, useEffect, useMemo, useRef } from "react";
 import { LocationPlace } from "@/models/location-place";
 import { redirectToPath } from "@/actions/common-actions";
 import { Parent } from "@/models/parent";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
-import { beforeOrAfterSchoolStartDateChanged, beforeOrAfterWeekDaysSetError, locationChanged, modalStripeToggled, tosConditionChanged, yearCycleChanged } from "../_redux/fill-in-form-slice";
+import {
+  beforeOrAfterSchoolStartDateChanged,
+  beforeOrAfterWeekDaysSetError,
+  locationChanged,
+  modalStripeToggled,
+  tosConditionChanged,
+  yearCycleChanged
+} from "../_redux/fill-in-form-slice";
 import { FillInFormState } from "../_redux/fill-in-form-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import AttendanceScheduleVacationCamp from "./attendance-schedule-vacation-camp";
 import RegistrationTypeSummerCamp from "./registration-type-summer-camp";
 import ScheduleSelectionBeforeAndAfterSchool from "./schedule-selection-before-and-after-school";
+import { ChildInfoType } from "@/types/input-types/child-info-type";
+import { format } from 'date-fns';
+import { WEEK_DAYS } from "@/types/constants/week-days";
 
 export default function FormActionContainer({
   program_type,
@@ -33,6 +43,7 @@ export default function FormActionContainer({
   cardDetails: Partial<Parent> | undefined;
   summerCampPromos: SummerCampPromoSetting[];
 }) {
+  const formRef = useRef<HTMLFormElement>(null)
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
@@ -41,6 +52,26 @@ export default function FormActionContainer({
   const location: Partial<LocationPlace> | undefined = useMemo(() => {
     return fillInFormState.fillInForm.location.value
   }, [fillInFormState.fillInForm.location]);
+
+  const children = useMemo(() => {
+    return fillInFormState.fillInForm.children
+  }, [fillInFormState.fillInForm.children]);
+
+  const { startDate, beforeSchool, afterSchool } = useMemo(() => {
+    return {
+      startDate: fillInFormState.fillInForm.startDate.value,
+      beforeSchool: fillInFormState.fillInForm.beforeOrAfterWeekDays.value.beforeSchool,
+      afterSchool: fillInFormState.fillInForm.beforeOrAfterWeekDays.value.afterSchool,
+    }
+  }, [
+    fillInFormState.fillInForm.startDate,
+    fillInFormState.fillInForm.beforeOrAfterWeekDays.value.beforeSchool,
+    fillInFormState.fillInForm.beforeOrAfterWeekDays.value.afterSchool,
+  ]);
+
+  const yearCycle = useMemo(() => {
+    return fillInFormState.fillInForm.yearCycle.value
+  }, [fillInFormState.fillInForm.yearCycle])
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
@@ -147,6 +178,37 @@ export default function FormActionContainer({
                 if (!formState.hasStripeCard) {
                   reduxStore.dispatch(modalStripeToggled(true));
                 }
+                else {
+                  if (formRef.current) {
+                    let formData = new FormData(formRef.current);
+
+                    formData.append('location', encodeURIComponent(location?.name!))
+                    formData.append('agree_to_tos', encodeURIComponent(true));
+                    formData.append('referrer', encodeURIComponent('after_school'));
+
+                    children.forEach((val: ChildInfoType) => {
+                      formData.append('child-info[][first_name]', encodeURIComponent(val.first_name));
+                      formData.append('child-info[][last_name]', encodeURIComponent(val.last_name));
+                      formData.append('child-info[][school_attending]', encodeURIComponent(val.school_attending));
+                      formData.append('child-info[][child_classification]', encodeURIComponent('pre-schooler'));
+                      formData.append('child-info[][dob]', encodeURIComponent(format(new Date(val.birthdate!), 'yyyy-M-d')));
+                    });
+                    formData.append('year_cycle', encodeURIComponent(yearCycle))
+
+                    formData.append('start_date', encodeURIComponent(format(new Date(startDate!), 'yyyy-M-d')));
+
+                    WEEK_DAYS.forEach((val: string) => {
+                      formData.append(`before_school_${val.toLowerCase()}`, encodeURIComponent(beforeSchool.includes(val)))
+                    })
+
+                    WEEK_DAYS.forEach((val: string) => {
+                      formData.append(`after_school_${val.toLowerCase()}`, encodeURIComponent(afterSchool.includes(val)))
+                    });
+
+                    formAction(formData);
+                  }
+
+                }
               }
             }
           }
@@ -158,6 +220,8 @@ export default function FormActionContainer({
     formState,
     program_type,
     cardDetails,
+    children,
+    location?.id
   ]);
 
   function StepperPanel() {
@@ -182,6 +246,7 @@ export default function FormActionContainer({
 
   return (
     <form className="space-y-6"
+      ref={formRef}
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);

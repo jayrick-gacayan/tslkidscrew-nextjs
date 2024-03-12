@@ -5,6 +5,7 @@ import { Parent } from '@/models/parent';
 import { Result } from '@/models/result';
 import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
 import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
+import { createRegistrationRecord } from '@/services/create-registration-record-services';
 import { getCustomerInfo } from '@/services/parent-info-services';
 import {
   getProgramSettingYearCycleForRegRecord,
@@ -176,26 +177,118 @@ export async function fillInFormAction(
 
       let getAllCheckboxes = formData.getAll('before-after-school-tos[]');
 
+      console.log('sdfsdfds', getAllCheckboxes.length)
       if (getAllCheckboxes.length < 10) {
         return {
           'payment-tos-terms-error': {
             value: getAllCheckboxes,
-            errorText: "Must choose at least one week day.",
+            errorText: "Must check all the checkboxes.",
             validationStatus: ValidationType.ERROR,
           },
           ...objectStep
         };
       }
       else {
-        if (!!customerInfo.data &&
-          !!customerInfo.data.card_last_four &&
-          customerInfo.resultStatus === ResultStatus.SUCCESS) {
+        if (!!formData.get('location')) {
+          if (!!customerInfo.data) {
+            let {
+              first_name,
+              last_name,
+              customer_id,
+              phone_number,
+              emergency_phone_number,
+              address_line_one,
+              address_line_two,
+              city,
+              state,
+              zip_code,
+              email,
+            }: Parent = customerInfo.data;
 
-          return { ...objectStep, hasStripeCard: true };
+            const childrenArray = [];
+            let currentObj: { [key: string]: any } = {};
+
+            for (const pair of formData.entries()) {
+              const [key, value] = pair;
+              if (key.includes('child-info')) {
+                if (key.includes('firstname')) {
+                  if (Object.keys(currentObj).length !== 0) {
+                    childrenArray.push(currentObj);
+                    currentObj = {};
+                  }
+                }
+                currentObj[key.replace('child-info[][', '').replace(']', '')] = value;
+
+
+              }
+              console.log('key and value', key, value)
+            }
+
+            // Push the last object to the array
+            if (Object.keys(currentObj).length !== 0) {
+              childrenArray.push(currentObj);
+            }
+
+            // console.log('children ARRYA', childrenArray)
+            let result = await createRegistrationRecord(
+              JSON.stringify({
+                registration_record: {
+                  email: email,
+                  location: decodeURIComponent(formData.get('location') as string ?? ''),
+                  customer_id: customer_id?.toString(),
+                  parent_first_name: first_name,
+                  parent_last_name: last_name,
+                  phone_number,
+                  emergency_phone_number,
+                  address_line_one,
+                  address_line_two,
+                  agree_to_tos: formData.get('agree_to_tos') as string === "true",
+                  referrer: formData.get('referrer') as string ?? '',
+                  child_records_attributes: childrenArray,
+                  before_and_afterschool_record_attributes: {
+                    start_date: formData.get('start_date') as string ?? '',
+                    before_school_monday: formData.get('before_school_monday') as string === "true",
+                    before_school_tuesday: formData.get('before_school_tuesday') as string === "true",
+                    before_school_wednesday: formData.get('before_school_wednesday') as string === "true",
+                    before_school_thursday: formData.get('before_school_thursday') as string === "true",
+                    before_school_friday: formData.get('before_school_friday') as string === "true",
+                    after_school_monday: formData.get('after_school_monday') as string === "true",
+                    after_school_tuesday: formData.get('after_school_tuesday') as string === "true",
+                    after_school_wednesday: formData.get('after_school_wednesday') as string === "true",
+                    after_school_thursday: formData.get('after_school_thursday') as string === "true",
+                    after_school_friday: formData.get('after_school_friday') as string === "true",
+                    registration_type: true,
+                    year_cycle: formData.get('year_cycle') as string ?? '',
+                    no_deposit_required: true
+                  }
+                }
+              }),
+              parent?.user?.accessToken!
+            );
+
+            if (result.resultStatus !== ResultStatus.SUCCESS) {
+              return {
+                ...objectStep,
+                message: result.message,
+                success: false,
+              }
+            }
+          }
+
+
         }
         else {
-          return { ...objectStep, hasStripeCard: false };
+          if (!!customerInfo.data &&
+            !!customerInfo.data.card_last_four &&
+            customerInfo.resultStatus === ResultStatus.SUCCESS) {
+
+            return { ...objectStep, hasStripeCard: true };
+          }
+          else {
+            return { ...objectStep, hasStripeCard: false };
+          }
         }
+
       }
 
     default: return { message: undefined, ...objectStep };

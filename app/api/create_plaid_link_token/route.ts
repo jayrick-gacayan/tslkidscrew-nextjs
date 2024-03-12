@@ -11,7 +11,7 @@ import { Configuration, CountryCode, PlaidApi, PlaidEnvironments, Products } fro
 export const POST = auth(async (req: NextAuthRequest) => {
   // req.auth
   let parent = req.auth?.user;
-  console.log('sdafsdfsd', req.auth);
+  // console.log('sdafsdfsd', req.auth);
 
   const configuration = new Configuration({
     basePath: PlaidEnvironments.sandbox,
@@ -38,7 +38,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
 
     const createTokenResponse = await client.linkTokenCreate(request);
 
-    console.log('createToken Resposne', createTokenResponse)
+    // console.log('createToken Resposne', createTokenResponse)
     return NextResponse.json(createTokenResponse.data, { status: 200 });
   } catch (err) {
     const errorMessage: string = err instanceof Error ? err.message : 'Internal server error';

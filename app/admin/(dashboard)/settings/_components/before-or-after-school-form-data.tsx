@@ -10,7 +10,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { toast, ToastContentProps } from "react-toastify";
 import { useOnClickOutside } from "usehooks-ts";
 
-function ButtonSubmit() {
+function BeforeOrAfterSchoolFormDataSubmit() {
   const { pending } = useFormStatus();
 
   return (
@@ -24,6 +24,7 @@ function ButtonSubmit() {
     </button>
   )
 }
+
 export default function BeforeOrAfterSchoolFormData({
   setCurrentId,
   currentId,
@@ -69,7 +70,6 @@ export default function BeforeOrAfterSchoolFormData({
           <span className={`${currentId !== beforeOrAfterSchoolSetting?.id ? 'block' : 'hidden'} w-full border border-secondary-light p-3 bg-white rounded text-center`}
             onClick={() => { setCurrentId(beforeOrAfterSchoolSetting?.id ?? 1); }}>
             {currencyFormat('en-US', { style: "currency", currency: 'USD', }, beforeOrAfterSchoolSetting?.price ?? 0)}
-
           </span>
           <form ref={ref}
             action={formAction}
@@ -86,7 +86,7 @@ export default function BeforeOrAfterSchoolFormData({
                 defaultValue={beforeOrAfterSchoolSetting?.price?.toString() ?? ''}
                 className=" bg-white text-center" />
             </div>
-            <ButtonSubmit />
+            <BeforeOrAfterSchoolFormDataSubmit />
 
           </form>
         </div>

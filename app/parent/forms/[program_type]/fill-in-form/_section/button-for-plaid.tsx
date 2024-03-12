@@ -14,7 +14,7 @@ export default function ButtonForPlaid() {
 
       let response = await result.json();
 
-      console.log('response', response)
+      // console.log('response', response)
       setLinkToken(response.link_token)
 
     }

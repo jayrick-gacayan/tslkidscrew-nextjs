@@ -9,10 +9,9 @@ import {
   beforeOrAfterWeekDaysSet
 } from "../_redux/fill-in-form-slice";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { WEEK_DAYS } from "@/types/constants/week-days";
 
 let today = new Date();
-
-const WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
