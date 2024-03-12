@@ -1,4 +1,4 @@
-import { TOSInfos } from "../props/tos-infos";
+import { TOSInfos } from '../props/tos-infos';
 
 export const SUMMER_CAMP_SCHOOL_TOS: TOSInfos[] = [
   {
@@ -45,4 +45,4 @@ export const SUMMER_CAMP_SCHOOL_TOS: TOSInfos[] = [
     num: 'ten',
     text: 'I agree that my child can attend an off-site park at Clifton Park, Sacred Heart, and Rotterdam.'
   },
-]
+];

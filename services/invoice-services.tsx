@@ -1,8 +1,8 @@
-import { Invoice } from "@/models/invoice";
-import { Paginate } from "@/models/paginate";
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import { Invoice } from '@/models/invoice';
+import { Paginate } from '@/models/paginate';
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 
 export async function getAllCustomerInvoices(
   searchParams: SearchParamsProps,

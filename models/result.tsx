@@ -1,4 +1,4 @@
-import { ResultStatus } from "@/types/enums/result-status";
+import { ResultStatus } from '@/types/enums/result-status';
 
 export class Result<T> {
   data?: T | null = undefined;

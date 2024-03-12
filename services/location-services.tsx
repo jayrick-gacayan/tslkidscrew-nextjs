@@ -1,9 +1,9 @@
-import { Paginate } from "@/models/paginate";
-import { Result } from "@/models/result";
-import { LocationPlace } from "@/models/location-place";
-import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import { Paginate } from '@/models/paginate';
+import { Result } from '@/models/result';
+import { LocationPlace } from '@/models/location-place';
+import { LocationPlaceInputs } from '@/types/input-types/location-place-input-types';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 
 export async function locationPlaces(
   searchParams: SearchParamsProps,
@@ -74,9 +74,9 @@ export async function createLocationPlace({
 ) {
   let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        ["location"]: {
+        ['location']: {
           name,
           address,
           director_id,
@@ -119,7 +119,7 @@ export async function updateLocationPlace(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({
         ['location']: {
           name,
@@ -160,7 +160,7 @@ export async function removeLocationPlace(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
       ...authHeaders(token),
-      method: "DELETE"
+      method: 'DELETE'
     }
   );
 

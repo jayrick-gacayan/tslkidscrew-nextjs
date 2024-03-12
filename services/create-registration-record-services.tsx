@@ -1,5 +1,5 @@
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
 
 export async function createRegistrationRecord(
   body: string,

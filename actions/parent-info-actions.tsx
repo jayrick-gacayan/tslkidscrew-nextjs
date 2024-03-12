@@ -14,10 +14,6 @@ export async function updateCustomerInfoAction(
 ) {
   let parent: Session | null = await auth();
 
-  const rawFormData = Object.fromEntries(formData.entries());
-
-  console.log('sdfsdkf', rawFormData)
-
   let first_name = formData.get('first_name') as string ?? '';
   let last_name = formData.get('last_name') as string ?? '';
 
@@ -25,14 +21,14 @@ export async function updateCustomerInfoAction(
     first_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Firstname is required.",
-        "any.required": "Firstname is required",
+        'string.empty': 'Firstname is required.',
+        'any.required': 'Firstname is required',
       }),
     last_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Lastname is required.",
-        "any.required": "Lastname is required",
+        'string.empty': 'Lastname is required.',
+        'any.required': 'Lastname is required',
       }),
   });
 
@@ -41,7 +37,6 @@ export async function updateCustomerInfoAction(
     { abortEarly: false }
   );
 
-  console.log('validate.errors', validate.error)
   if (validate.error) {
     return validate.error?.details.reduce((prev, curr) => {
       return Object.assign({
@@ -70,7 +65,7 @@ export async function updateCustomerInfoAction(
     return {
       message: result.message,
       success: false,
-    }
+    };
   }
 
   let updateSession = await unstable_update({
@@ -83,7 +78,7 @@ export async function updateCustomerInfoAction(
   return {
     message: 'Successfully updated your personal details.',
     success: true,
-  }
+  };
 }
 
 export async function getParentInfo() {

@@ -1,5 +1,5 @@
-import { Admin } from "./admin";
-import { LocationPlace } from "./location-place";
+import { Admin } from './admin';
+import { LocationPlace } from './location-place';
 
 export interface LocationProgram {
   id?: number;

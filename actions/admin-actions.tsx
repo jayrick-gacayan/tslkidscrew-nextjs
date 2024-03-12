@@ -67,7 +67,7 @@ export async function addAdminUserAction(
     return {
       message: 'Something went wrong. Please try again',
       success: false,
-    }
+    };
   }
 
   return {
@@ -83,7 +83,7 @@ export async function updateAdminUserAction(
 ) {
   let admin: Session | null = await auth();
 
-  formData.set('admin-user-email', email)
+  formData.set('admin-user-email', email);
 
   let tempEmail = formData.get('admin-user-email') as string ?? '';
   let name = formData.get('admin-user-name') as string ?? '';
@@ -100,19 +100,19 @@ export async function updateAdminUserAction(
     name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
     isActive: formData.get('admin-user-active') ? true : false,
-  }, admin?.user?.accessToken!)
+  }, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: 'Something went wrong. Please try again',
       success: false,
-    }
+    };
   }
 
   return {
     message: 'Successfully updated an admin user',
     success: true,
-  }
+  };
 }
 
 export async function changeAdminUserActiveStatusAction(id: number) {
@@ -137,13 +137,13 @@ const adminUserSchema = Joi.object({
       'string.empty': 'Admin user name is required.',
       'any.required': 'Admin user name is required.',
     })
-})
+});
 
 function adminUserFormValidate(validateData: {
   'admin-user-email': string;
   'admin-user-name': string;
 }) {
-  const validate = adminUserSchema.validate(validateData, { abortEarly: false })
+  const validate = adminUserSchema.validate(validateData, { abortEarly: false });
 
   if (validate?.error) {
     return validate.error?.details.reduce((prev, curr) => {

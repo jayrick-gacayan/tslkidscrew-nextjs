@@ -4,5 +4,5 @@ export function authHeaders(token: string, isImage: boolean = false) {
   return {
     headers: isImage ? authHeaders :
       { ...authHeaders, 'Content-Type': 'application/json' }
-  }
+  };
 }

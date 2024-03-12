@@ -1,12 +1,12 @@
-import { LocationPlace } from "@/models/location-place";
-import { LocationProgram } from "@/models/location-program";
-import { Result } from "@/models/result";
-import { adminUser } from "./admin-services";
-import { locationPlace } from "./location-services";
-import { Paginate } from "@/models/paginate";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { LocationProgramInputs } from "@/types/input-types/location-program-input-types";
+import { LocationPlace } from '@/models/location-place';
+import { LocationProgram } from '@/models/location-program';
+import { Result } from '@/models/result';
+import { adminUser } from './admin-services';
+import { locationPlace } from './location-services';
+import { Paginate } from '@/models/paginate';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { LocationProgramInputs } from '@/types/input-types/location-program-input-types';
 
 export async function locationProgram(id: string, token: string) {
   let result = await fetch(
@@ -100,7 +100,7 @@ export async function addLocationProgram(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
         program: {
           location_id,
@@ -145,7 +145,7 @@ export async function removeLocationProgram(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
     {
       ...authHeaders(token!),
-      method: "DELETE"
+      method: 'DELETE'
     }
   );
 

@@ -31,7 +31,6 @@ export async function fillInFormAction(
     stepFive,
   };
 
-  console.log('objectStep', objectStep)
   switch (step) {
     case 1:
       let tempLocationData = formData.get('location-place[id]')
@@ -44,7 +43,7 @@ export async function fillInFormAction(
             'any.required': 'Location is required.',
             'string.empty': 'Location is required',
           }),
-      })
+      });
 
       let validate = locationSchema.validate(
         { 'location-place[id]': location },
@@ -66,15 +65,11 @@ export async function fillInFormAction(
         };
       }
 
-      return {
-        message: undefined,
-        ...objectStep,
-        stepOne: true,
-      }
+      return { message: undefined, ...objectStep, stepOne: true, };
 
     case 2:
       if (!!formData.get('back-button')) {
-        return { ...objectStep, stepOne: false, }
+        return { ...objectStep, stepOne: false, };
       }
 
       const formDataArray = [];
@@ -98,16 +93,10 @@ export async function fillInFormAction(
         formDataArray.push(currentObj);
       }
 
-      console.log('data', formDataArray)
-
-      return {
-        message: undefined,
-        ...objectStep,
-        stepTwo: true,
-      }
+      return { message: undefined, ...objectStep, stepTwo: true, };
     case 3:
       if (!!formData.get('back-button')) {
-        return { ...objectStep, stepTwo: false, }
+        return { ...objectStep, stepTwo: false, };
       }
 
       switch (programType) {
@@ -123,25 +112,21 @@ export async function fillInFormAction(
                   errorText: 'Please Select the Year Cycle',
                   validatationStatus: ValidationType.ERROR
                 }
-              }
+              };
             }
-            return {
-              ...objectStep,
-              stepThree: true,
-            }
+            return { ...objectStep, stepThree: true, };
           }
         default: return objectStep;
       }
 
     case 4:
       if (!!formData.get('back-button')) {
-        return { ...objectStep, stepThree: false, }
+        return { ...objectStep, stepThree: false, };
       }
 
       switch (programType) {
         case 'before-or-after-school':
           {
-            console.log('I am here')
             let startDate = formData.get('before-or-after-registration-start-date') as string ?? '';
             let beforeSchool = formData.getAll('before-school[]') as any[] ?? [];
             let afterSchool = formData.getAll('after-school[]') as any[] ?? [];
@@ -153,7 +138,7 @@ export async function fillInFormAction(
                 value: startDate,
                 errorText: 'Start date is required',
                 validationStatus: ValidationType.ERROR
-              }
+              };
             }
 
             if ((beforeSchool.length + afterSchool.length) < 3) {
@@ -161,20 +146,14 @@ export async function fillInFormAction(
                 value: { beforeSchool, afterSchool },
                 errorText: "Must choose at least one week day.",
                 validationStatus: ValidationType.ERROR,
-              }
+              };
             }
 
             if (Object.keys(errors).length > 0) {
-              return {
-                ...errors,
-                ...objectStep
-              }
+              return { ...errors, ...objectStep };
             }
 
-            return {
-              ...objectStep,
-              stepFour: true
-            };
+            return { ...objectStep, stepFour: true };
           }
 
 
@@ -185,7 +164,7 @@ export async function fillInFormAction(
 
       if (!!formData.get('back-button') && programType === 'before-or-after-school') {
         if (!!formData.get('back-button')) {
-          return { ...objectStep, stepFour: false, }
+          return { ...objectStep, stepFour: false, };
         }
       }
 
@@ -199,31 +178,22 @@ export async function fillInFormAction(
             validationStatus: ValidationType.ERROR,
           },
           ...objectStep
-        }
+        };
       }
       else {
+        if (!!customerInfo.data &&
+          !!customerInfo.data.card_last_four &&
+          customerInfo.resultStatus === ResultStatus.SUCCESS) {
 
-
-        if (!!customerInfo.data && !!customerInfo.data.card_last_four && customerInfo.resultStatus === ResultStatus.SUCCESS) {
-          return {
-            ...objectStep,
-            hasStripeCard: true,
-          }
+          return { ...objectStep, hasStripeCard: true };
         }
         else {
-          return {
-            ...objectStep,
-            hasStripeCard: false,
-          }
+          return { ...objectStep, hasStripeCard: false };
         }
       }
 
-    default: return {
-      message: undefined,
-      ...objectStep
-    }
+    default: return { message: undefined, ...objectStep };
   }
-
 }
 
 export async function getProgramSettingYearCycleForRegRecordAction(location_id: string) {

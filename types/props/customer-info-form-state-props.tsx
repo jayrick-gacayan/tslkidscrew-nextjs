@@ -1,5 +1,5 @@
-import { FormStateProps } from "./form-state-props";
-import { InputProps } from "./input-props";
+import { FormStateProps } from './form-state-props';
+import { InputProps } from './input-props';
 
 export interface CustomerInfoFormStateProps extends FormStateProps {
   first_name?: InputProps<string>;

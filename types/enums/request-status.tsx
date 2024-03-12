@@ -4,4 +4,4 @@ export enum RequestStatus {
   IN_PROGRESS,
   FAILURE,
   SUCCESS,
-}
+};

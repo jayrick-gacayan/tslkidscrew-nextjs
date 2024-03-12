@@ -1,9 +1,9 @@
-import { Admin } from "@/models/admin";
-import { Paginate } from "@/models/paginate";
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { AdminUserInputs } from "@/types/input-types/admin-input-types";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import { Admin } from '@/models/admin';
+import { Paginate } from '@/models/paginate';
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { AdminUserInputs } from '@/types/input-types/admin-input-types';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 
 export async function adminUser(id: string, token?: string) {
   let result = await fetch(
@@ -77,14 +77,14 @@ export async function addAdminUser(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/create_admin`,
     {
-      method: "POST",
+      method: 'POST',
       ...authHeaders(token),
       body: JSON.stringify({
         admin: {
           email: email,
           name: name,
-          is_super_admin: isSuperAdmin ? "true" : "false",
-          active: "true",
+          is_super_admin: isSuperAdmin ? 'true' : 'false',
+          active: 'true',
         }
       }),
     });
@@ -121,7 +121,7 @@ export async function updateAdminUser(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
-      method: "POST",
+      method: 'POST',
       ...authHeaders(token!),
       body: JSON.stringify({
         admin: {
@@ -158,7 +158,7 @@ export async function changeAdminUserActiveStatus(id: number, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
     {
-      method: "DELETE",
+      method: 'DELETE',
       ...authHeaders(token!)
     }
   );
@@ -172,8 +172,6 @@ export async function changeAdminUserActiveStatus(id: number, token: string) {
     response: response
   })
 }
-
-
 
 export async function activeAdminUsers(token?: string | null) {
   let result = await fetch(

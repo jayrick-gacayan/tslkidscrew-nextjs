@@ -1,20 +1,20 @@
 'use server';
 
-import { auth } from "@/auth";
+import { auth } from '@/auth';
 import {
   createLocationPlace,
   locationPlace,
   locationPlaces,
   removeLocationPlace,
   updateLocationPlace
-} from "@/services/location-services";
-import { ResultStatus } from "@/types/enums/result-status";
-import { ValidationType } from "@/types/enums/validation-type";
-import { LocationPlaceFormStateProps } from "@/types/props/location-place-from-state-props";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import * as Joi from "joi";
-import { Session } from "next-auth";
-import { revalidatePath } from "next/cache";
+} from '@/services/location-services';
+import { ResultStatus } from '@/types/enums/result-status';
+import { ValidationType } from '@/types/enums/validation-type';
+import { LocationPlaceFormStateProps } from '@/types/props/location-place-from-state-props';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import * as Joi from 'joi';
+import { Session } from 'next-auth';
+import { revalidatePath } from 'next/cache';
 
 export async function locationPlacesAction(searchParams: SearchParamsProps) {
   let admin: Session | null = await auth();
@@ -34,16 +34,16 @@ export async function addLocationPlace(
 ) {
   let admin: Session | null = await auth();
 
-  let name = formData.get('name') as string ?? "";
-  let address = formData.get('address') as string ?? "";
-  let director_id = formData.get('director[id]') as string ?? "";
-  let minimum_age = formData.get('location-minimum-age') as string ?? "";
+  let name = formData.get('name') as string ?? '';
+  let address = formData.get('address') as string ?? '';
+  let director_id = formData.get('director[id]') as string ?? '';
+  let minimum_age = formData.get('location-minimum-age') as string ?? '';
 
   let errors = locationPlaceValidateErrors({
     name,
     address,
-    "director[id]": director_id,
-    "location-minimum-age": minimum_age
+    'director[id]': director_id,
+    'location-minimum-age': minimum_age
   });
 
   if (errors) { return errors; }
@@ -53,13 +53,13 @@ export async function addLocationPlace(
     address,
     director_id: parseInt(director_id),
     minimum_age: parseInt(minimum_age)
-  }, admin?.user?.accessToken!)
+  }, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: 'Something went wrong please try again.',
       success: false,
-    }
+    };
   }
 
   return {
@@ -76,16 +76,16 @@ export async function editLocationPlace(
 ) {
   let admin: Session | null = await auth();
 
-  let name = formData.get('name') as string ?? "";
-  let address = formData.get('address') as string ?? "";
-  let director_id = formData.get('director[id]') as string ?? "";
-  let minimum_age = formData.get('location-minimum-age') as string ?? "";
+  let name = formData.get('name') as string ?? '';
+  let address = formData.get('address') as string ?? '';
+  let director_id = formData.get('director[id]') as string ?? '';
+  let minimum_age = formData.get('location-minimum-age') as string ?? '';
 
   let errors = locationPlaceValidateErrors({
     name,
     address,
-    "director[id]": director_id,
-    "location-minimum-age": minimum_age
+    'director[id]': director_id,
+    'location-minimum-age': minimum_age
   });
 
   if (errors !== undefined) { return errors; }
@@ -98,13 +98,13 @@ export async function editLocationPlace(
       minimum_age: parseInt(minimum_age)
     },
     admin?.user?.accessToken!
-  )
+  );
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: 'Something went wrong please try again.',
       success: false,
-    }
+    };
   }
 
   return {

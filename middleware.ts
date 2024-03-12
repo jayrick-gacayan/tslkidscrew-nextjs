@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import { authConfig } from "./auth.config";
-import { NextAuthRequest } from "next-auth/lib";
-import { NextResponse } from "next/server";
-import { ADMIN_PUBLIC_ROUTES, PARENT_PUBLIC_ROUTES } from "./types/constants/page-routes";
+import NextAuth from 'next-auth';
+import { authConfig } from './auth.config';
+import { NextAuthRequest } from 'next-auth/lib';
+import { NextResponse } from 'next/server';
+import { ADMIN_PUBLIC_ROUTES, PARENT_PUBLIC_ROUTES } from './types/constants/page-routes';
 
 const { auth } = NextAuth(authConfig);
 
@@ -24,7 +24,7 @@ export default auth((req: NextAuthRequest) => {
 
       if (role === 'admin') {
         if (ADMIN_PUBLIC_ROUTES.includes(pathname) || pathname.includes('parent')) {
-          return NextResponse.redirect(`${req.nextUrl.origin}/admin/dashboard`)
+          return NextResponse.redirect(`${req.nextUrl.origin}/admin/dashboard`);
         }
 
         return NextResponse.next();
@@ -36,7 +36,7 @@ export default auth((req: NextAuthRequest) => {
             return NextResponse.redirect(`${req.nextUrl.origin}/parent/customer-info`);
           }
 
-          return NextResponse.redirect(`${req.nextUrl.origin}/parent/dashboard`)
+          return NextResponse.redirect(`${req.nextUrl.origin}/parent/dashboard`);
         }
         else {
           if (!rest.first_name && !req.nextUrl.pathname.includes('customer-info')) {
@@ -49,7 +49,7 @@ export default auth((req: NextAuthRequest) => {
     }
     else {
       if (!PARENT_PUBLIC_ROUTES.includes(pathname) && !ADMIN_PUBLIC_ROUTES.includes(pathname)) {
-        return NextResponse.redirect(`${req.nextUrl.origin}/`)
+        return NextResponse.redirect(`${req.nextUrl.origin}/`);
       }
     }
   }
@@ -57,5 +57,5 @@ export default auth((req: NextAuthRequest) => {
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }

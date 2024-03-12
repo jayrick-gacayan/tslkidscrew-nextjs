@@ -1,7 +1,7 @@
-import { Parent } from "@/models/parent";
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { CustomerInfoInputTypes } from "@/types/input-types/customer-info-input-types";
+import { Parent } from '@/models/parent';
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { CustomerInfoInputTypes } from '@/types/input-types/customer-info-input-types';
 
 export async function getCustomerInfo(customer_id: string, token: string) {
   let result = await fetch(

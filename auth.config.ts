@@ -1,6 +1,6 @@
-import type { NextAuthConfig, User } from "next-auth";
-import { Admin } from "./models/admin";
-import { Parent } from "./models/parent";
+import type { NextAuthConfig, User } from 'next-auth';
+import { Admin } from './models/admin';
+import { Parent } from './models/parent';
 
 export const authConfig = {
   callbacks: {
@@ -13,7 +13,7 @@ export const authConfig = {
       // console.log('session', session);
       // console.log('newSession', newSession);
 
-      return session
+      return session;
     },
 
     async jwt({ token, user, account, profile, session, trigger, }) {
@@ -29,7 +29,7 @@ export const authConfig = {
         token = {
           ...token,
           user: { ...token.user as User<Partial<Admin | Parent>>, ...session.user }
-        }
+        };
       }
       return token;
     },

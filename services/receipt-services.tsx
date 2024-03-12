@@ -1,8 +1,8 @@
-import { Paginate } from "@/models/paginate";
-import { Receipt } from "@/models/receipt";
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import { Paginate } from '@/models/paginate';
+import { Receipt } from '@/models/receipt';
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 
 export async function getAllCustomerReceipts(
   searchParams: SearchParamsProps,

@@ -1,9 +1,9 @@
 'use server';
 
-import { auth } from "@/auth";
-import { getAllCustomerInvoices, getCustomerInvoice } from "@/services/invoice-services";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { Session } from "next-auth";
+import { auth } from '@/auth';
+import { getAllCustomerInvoices, getCustomerInvoice } from '@/services/invoice-services';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { Session } from 'next-auth';
 
 export async function getAllCustomerInvoicesAction(searchParams: SearchParamsProps) {
   let parent: Session | null = await auth();
