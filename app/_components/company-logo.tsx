@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image, { getImageProps } from "next/image";
 import { twMerge } from "tailwind-merge";
+import TSLLogo from '@/public/static/tsl-kids-crew-logo-white.png';
 
 export default function CompanyLogo({
   href,
@@ -31,7 +32,7 @@ export default function CompanyLogo({
     <Link href={href}
       className={twMerge('block', className!)}
       aria-label="Brand">
-      <Image src='/static/tsl-kids-crew-logo-white.png'
+      <Image src={TSLLogo}
         alt='tsl-kids-crew-logo'
         width={width}
         height={height}
