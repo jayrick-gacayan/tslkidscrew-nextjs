@@ -28,7 +28,7 @@ export default async function Page({
   let totalPages: number = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1;
 
   return (
-    <div className="pb-4">
+    <div className="pb-6">
       <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
         <BackButtonClient />
         <ProgramsHeader location_id={params.id}

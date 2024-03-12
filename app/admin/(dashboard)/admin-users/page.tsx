@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let data: Admin[] | undefined = result.data?.data;
 
   return (
-    <div className='pb-4'>
+    <div className='pb-6'>
       <div className='rounded bg-white drop-shadow-lg p-4 space-y-6 relative'>
         <AdminUsersHeader searchParams={searchParams}
           showEntry={showEntry}

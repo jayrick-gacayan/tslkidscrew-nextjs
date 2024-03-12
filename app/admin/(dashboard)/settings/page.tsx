@@ -27,7 +27,7 @@ export default async function Page() {
     ] = await getAllSettingsAction();
 
   return (
-    <div className="pb-4">
+    <div className="pb-6">
       <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-4">
         <AdminHeaderWithEntries headerText='Settings' />
         <TabsContainer summerCampWeekSettings={summerCampWeekSettings.data ?? []}
