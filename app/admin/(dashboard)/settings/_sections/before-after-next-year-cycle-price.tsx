@@ -10,11 +10,11 @@ export default function BeforeAfterNextYearCyclePrice({
 }: {
   nextBeforeOrAfterSchoolSettings: BeforeOrAfterSchoolSetting[]
 }) {
-  const [daySelection, setDaySelection] = useState('everyday');
+  const [daySelection, setDaySelection] = useState('3-days-per-week');
   const [currentId, setCurrentId] = useState<number>(-1)
 
   const daysNumber = useMemo(() => {
-    return daySelection === 'everyday' ? 1 : daySelection === '3-days-per-week' ? 3 : 4;
+    return daySelection === '3-days-per-week' ? 3 : 4;
   }, [daySelection])
 
   const afterSettingsToShow = useMemo(() => {
