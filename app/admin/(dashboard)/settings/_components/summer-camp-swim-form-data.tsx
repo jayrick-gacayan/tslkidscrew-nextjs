@@ -7,9 +7,10 @@ import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
 import { currencyFormat } from "@/types/helpers/currency-format";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
-import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast, ToastContentProps } from "react-toastify";
+import { useOnClickOutside } from "usehooks-ts";
 
 function ButtonSubmit() {
   const { pending } = useFormStatus();
@@ -34,6 +35,7 @@ export default function SummerCampSwimSettingTableFormData({
   setFocusId: Dispatch<SetStateAction<number | undefined>>
   focusId?: number;
 }) {
+  const [price, setPrice] = useState(summerCampSwimSetting?.price?.toString() ?? '')
   const formContainerRef = useRef<HTMLDivElement>(null);
 
   const [state, formAction] = useFormState(
@@ -59,25 +61,36 @@ export default function SummerCampSwimSettingTableFormData({
         hideProgressBar: true,
       })
       pathToRevalidate();
-      setFocusId(undefined)
+      setFocusId(-1)
     }
   }, [
     state,
     setFocusId,
   ])
 
+  function handlePriceInputChange(event: ChangeEvent<HTMLInputElement>) {
+    setPrice(event.target.value);
+  }
+
+  function priceSubmitForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    formAction(new FormData(event.currentTarget));
+
+  }
+
+  useOnClickOutside(formContainerRef, () => {
+    if (focusId === summerCampSwimSetting?.id) {
+      setFocusId(-1);
+      setPrice(summerCampSwimSetting?.price?.toString() ?? '')
+    }
+  })
+
   return (
-    <div ref={formContainerRef}
-      id={`summer-camp-swim-prices-${summerCampSwimSetting.id!}`}
-      className="relative">
-      <div className={(focusId && summerCampSwimSetting.id === focusId) ? 'block' : 'hidden'}>
-        <form className='relative z-0 flex items-center justify-between gap-[4px]'
+    <div ref={formContainerRef}>
+      <div className={(summerCampSwimSetting.id === focusId) ? 'block' : 'hidden'}>
+        <form className='z-0 flex items-center justify-between gap-[4px]'
           id={`summer-camp-swim-setting-${summerCampSwimSetting.with_swim_trip}-${summerCampSwimSetting.id}`}
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            let formData = new FormData(event.currentTarget)
-            formAction(formData)
-          }}>
+          onSubmit={priceSubmitForm}>
           <input type="hidden"
             value={summerCampSwimSetting.child_record_count}
             name='summer-camp-swim-chlld-record-count' />
@@ -91,8 +104,9 @@ export default function SummerCampSwimSettingTableFormData({
             id={`summer-camp-swim-prices-input-${summerCampSwimSetting.id!}`}
             inputMode="numeric"
             name="summer-camp-swim-price"
-            defaultValue={summerCampSwimSetting.price?.toString() ?? ''}
-            className="bg-white text-center" />
+            value={price}
+            className="bg-white text-center"
+            onChange={handlePriceInputChange} />
           <ButtonSubmit />
         </form>
       </div>

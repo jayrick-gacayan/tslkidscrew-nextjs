@@ -12,7 +12,7 @@ export default function SummerCampSwimPrices({
 }: {
   summerCampSwimSettings: SummerCampSwimSetting[];
 }) {
-  const [focusId, setFocusId] = useState<number | undefined>(undefined);
+  const [focusId, setFocusId] = useState<number | undefined>(-1);
   const [withSwim, setWithSwim] = useState<string>('without-swimming-rates');
 
   const summerCampSwimSettingsMemo = useMemo(() => {

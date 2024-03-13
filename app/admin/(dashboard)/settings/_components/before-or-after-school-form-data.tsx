@@ -3,7 +3,15 @@ import { updateBeforeOrAfterSchoolSettingAction } from '@/actions/program-settin
 import InputCustom from '@/app/_components/input-custom';
 import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
 import { currencyFormat } from '@/types/helpers/currency-format';
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { useFormState } from 'react-dom';
 import { toast, ToastContentProps } from 'react-toastify';
 import BeforeOrAfterSchoolButtonSubmit from './before-or-after-school-button-submit';
@@ -69,6 +77,7 @@ export default function BeforeOrAfterSchoolFormData({
   useOnClickOutside(divRef, () => {
     if (currentId === beforeOrAfterSchoolSetting.id) {
       setCurrentId(-1);
+      setPrice(beforeOrAfterSchoolSetting?.price?.toString() ?? '')
     }
   })
 
