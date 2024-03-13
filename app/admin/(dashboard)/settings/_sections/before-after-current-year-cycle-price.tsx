@@ -1,7 +1,7 @@
-import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
-import { useCallback, useMemo, useState } from "react";
-import SettingListboxCustom from "../_components/setting-custom-lisbox";
-import BeforeOrAfterSchoolFormData from "../_components/before-or-after-school-form-data";
+import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
+import { useCallback, useMemo, useState } from 'react';
+import SettingListboxCustom from '../_components/setting-custom-lisbox';
+import BeforeOrAfterSchoolFormData from '../_components/before-or-after-school-form-data';
 
 export default function BeforeAfterCurrentYearCyclePrice({
   currentBeforeOrAfterSchoolSettings,
@@ -29,13 +29,13 @@ export default function BeforeAfterCurrentYearCyclePrice({
   }, [beforeSettingsToShow]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex md:flex-row flex-col items-start md:items-center gap-2">
-        <div className="flex-1">
-          <h1 className="font-medium text-[24px] text-black">Update Price for Current Year Cycle</h1>
+    <div className='space-y-4'>
+      <div className='flex md:flex-row flex-col items-start md:items-center gap-2'>
+        <div className='flex-1'>
+          <h1 className='font-medium text-[24px] text-black'>Update Price for Current Year Cycle</h1>
         </div>
-        <div className="flex-none">
-          <div className="relative">
+        <div className='flex-none'>
+          <div className='relative'>
             <SettingListboxCustom listboxData={daySelection}
               onChangeListbox={(value: any) => { setDaySelection(value); }}
               items={['up-to-3-days-a-week', '4-to-5-days-a-week', 'everyday']}
@@ -43,14 +43,14 @@ export default function BeforeAfterCurrentYearCyclePrice({
           </div>
         </div>
       </div>
-      <div className="block overflow-auto">
-        <table className="min-w-[1024px] w-full">
+      <div className='block overflow-auto'>
+        <table className='min-w-[1024px] w-full'>
           <thead>
-            <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
-              <th className="w-48">Name</th>
-              <th className="w-auto">Before Care</th>
-              <th className="w-auto">After Care</th>
-              <th className="w-auto">Both</th>
+            <tr className='[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light'>
+              <th className='w-48'>Name</th>
+              <th className='w-auto'>Before Care</th>
+              <th className='w-auto'>After Care</th>
+              <th className='w-auto'>Both</th>
             </tr>
           </thead>
           <tbody>
@@ -61,8 +61,8 @@ export default function BeforeAfterCurrentYearCyclePrice({
                 let bothBOAS = getBOASByProgramType(childValue, 'both');
                 return (
                   <tr key={`before-after-current-year-cycle-${childValue}`}
-                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:bg-secondary">
-                    <td className="w-48">Children #{childValue}</td>
+                    className='[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:bg-secondary'>
+                    <td className='w-48'>Children #{childValue}</td>
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
                       beforeOrAfterSchoolSetting={beforeBOAS!} />

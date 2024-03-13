@@ -25,9 +25,7 @@ export default function FormContainer() {
 
     if (message) {
       toast((props: ToastContentProps<unknown>) => {
-        return (
-          <div className="text-black">{message}</div>
-        )
+        return (<div className='text-black'>{message}</div>)
       }, {
         toastId: `admin-login-success-${Date.now()}`,
         type: 'error',

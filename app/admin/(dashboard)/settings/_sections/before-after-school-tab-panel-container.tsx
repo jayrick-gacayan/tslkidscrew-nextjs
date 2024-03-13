@@ -1,8 +1,8 @@
-import { Tab } from "@headlessui/react";
-import { Fragment, useMemo } from "react";
-import BeforeAfterCurrentYearCyclePrice from "./before-after-current-year-cycle-price";
-import BeforeAfterNextYearCyclePrice from "./before-after-next-year-cycle-price";
-import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
+import { Tab } from '@headlessui/react';
+import { Fragment, useMemo } from 'react';
+import BeforeAfterCurrentYearCyclePrice from './before-after-current-year-cycle-price';
+import BeforeAfterNextYearCyclePrice from './before-after-next-year-cycle-price';
+import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
 
 export default function BeforeAfterSchoolTabPanelContainer({
   beforeOrAfterSchoolSettings
@@ -23,7 +23,7 @@ export default function BeforeAfterSchoolTabPanelContainer({
 
   return (
     <Tab.Panel as={Fragment}>
-      <div className="space-y-8 divide-y-2 divide-secondary-light">
+      <div className='space-y-8 divide-y-2 divide-secondary-light'>
         <BeforeAfterCurrentYearCyclePrice currentBeforeOrAfterSchoolSettings={currentBeforeOrAfterSchoolSettings} />
         <BeforeAfterNextYearCyclePrice nextBeforeOrAfterSchoolSettings={nextBeforeOrAfterSchoolSettings} />
       </div>

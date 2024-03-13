@@ -40,7 +40,7 @@ export default function BeforeAfterNextYearCyclePrice({
           <div className="relative">
             <SettingListboxCustom listboxData={daySelection}
               onChangeListbox={(value: any) => { setDaySelection(value); }}
-              items={['up-to-3-days-a-week', '4-to-5-days-a-week', 'everyday']}
+              items={['up-to-3-days-a-week', '4-to-5-days-a-week']}
               keyDescription='show-current-before-or-after-setting' />
           </div>
         </div>
