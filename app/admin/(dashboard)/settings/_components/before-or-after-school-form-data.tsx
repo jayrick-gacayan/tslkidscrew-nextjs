@@ -27,10 +27,12 @@ export default function BeforeOrAfterSchoolFormData({
   beforeOrAfterSchoolSetting: BeforeOrAfterSchoolSetting;
 }) {
   const [price, setPrice] = useState(beforeOrAfterSchoolSetting?.price?.toString() ?? '')
-  const formRef = useRef<HTMLFormElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
-
   const [state, formAction] = useFormState(updateBeforeOrAfterSchoolSettingAction, {} as any);
+
+  useEffect(() => {
+    setPrice(beforeOrAfterSchoolSetting?.price?.toString() ?? '');
+  }, [beforeOrAfterSchoolSetting])
 
   useEffect(() => {
     async function pathToRevalidate() {
@@ -55,23 +57,8 @@ export default function BeforeOrAfterSchoolFormData({
     setCurrentId,
   ]);
 
-  useEffect(() => {
-    setPrice(beforeOrAfterSchoolSetting?.price?.toString() ?? '');
-  }, [beforeOrAfterSchoolSetting])
-
-
   function handlePriceInputChange(event: ChangeEvent<HTMLInputElement>) {
     setPrice(event.target.value);
-  }
-
-  function priceSubmitForm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (formRef.current) {
-
-      let formData = new FormData(formRef.current);
-
-      formAction(formData);
-    }
   }
 
   useOnClickOutside(divRef, () => {
@@ -89,10 +76,8 @@ export default function BeforeOrAfterSchoolFormData({
             onClick={() => { setCurrentId(beforeOrAfterSchoolSetting?.id ?? 1); }}>
             {currencyFormat('en-US', { style: 'currency', currency: 'USD', }, beforeOrAfterSchoolSetting?.price ?? 0)}
           </span>
-          <form ref={formRef}
-
-            className={`flex min-w-fit w-full gap-1 ${currentId !== beforeOrAfterSchoolSetting?.id ? 'hidden' : ''}`}
-            onSubmit={priceSubmitForm}>
+          <form action={formAction}
+            className={`flex min-w-fit w-full gap-1 ${currentId !== beforeOrAfterSchoolSetting?.id ? 'hidden' : ''}`}>
             <input type='hidden' className='hidden'
               name={`master_prices[${beforeOrAfterSchoolSetting?.id}][id]`}
               value={beforeOrAfterSchoolSetting?.id ?? 1} />

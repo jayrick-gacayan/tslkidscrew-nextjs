@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { usePlaidLink, } from 'react-plaid-link';
-
+import { usePlaidLink } from 'react-plaid-link';
 
 export default function ButtonForPlaid() {
   const [linkToken, setLinkToken] = useState<string>('');

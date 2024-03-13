@@ -55,12 +55,6 @@ export default function SummerCampSwimSettingTableFormData({
     setPrice(event.target.value);
   }
 
-  function priceSubmitForm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    formAction(new FormData(event.currentTarget));
-
-  }
-
   useOnClickOutside(formContainerRef, () => {
     if (focusId === summerCampSwimSetting?.id) {
       setFocusId(-1);
@@ -71,9 +65,9 @@ export default function SummerCampSwimSettingTableFormData({
   return (
     <div ref={formContainerRef}>
       <div className={(summerCampSwimSetting.id === focusId) ? 'block' : 'hidden'}>
-        <form className='z-0 flex items-center justify-between gap-[4px]'
+        <form action={formAction}
           id={`summer-camp-swim-setting-${summerCampSwimSetting.with_swim_trip}-${summerCampSwimSetting.id}`}
-          onSubmit={priceSubmitForm}>
+          className='z-0 flex items-center justify-between gap-[4px]'>
           <input type='hidden'
             value={summerCampSwimSetting.child_record_count}
             name='summer-camp-swim-chlld-record-count' />

@@ -287,11 +287,7 @@ export default function FormActionContainer({
   return (
     <form className='space-y-6'
       ref={formRef}
-      onSubmit={(event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        let formData = new FormData(event.currentTarget);
-        formAction(formData);
-      }}>
+      action={formAction}>
       <StepperPanel />
       <FillInFormButtons program_type={program_type}
         step={step}
