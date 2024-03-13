@@ -27,7 +27,7 @@ export default function PaymentFormSummerCamp() {
             <InputCheckboxCustom key={`summer-camp-TOS-${num}`}
               id={`summer-camp-TOS-${num}`}
               labelText={text}
-              name='summer-camp-school-tos[]'
+              name='summer-camp-tos[]'
               value={`summer-camp-TOS-${num}`}
               checked={tosCondition.includes(`summer-camp-TOS-${num}`)}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {

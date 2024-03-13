@@ -62,10 +62,6 @@ export default function RegistrationTypeSummerCamp({
     reduxStore.dispatch(summerCampPackageRegChanged(fieldInputValue(value)))
   }
 
-  console.log('dfds', summerCampPromos.filter((val: SummerCampPromoSetting) => {
-    return val.with_swim_trip === false && val.child_record_count === 1;
-  }))
-
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">

@@ -27,7 +27,7 @@ export default function PaymentFormBeforeOrAfterSchool() {
             <InputCheckboxCustom key={`before-or-after-school-TOS-${num}`}
               id={`before-or-after-school-TOS-${num}`}
               labelText={text}
-              name='before-after-school-tos[]'
+              name='before-or-after-school-tos[]'
               value={`before-or-after-school-TOS-${num}`}
               checked={tosCondition.includes(`before-or-after-school-TOS-${num}`)}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {

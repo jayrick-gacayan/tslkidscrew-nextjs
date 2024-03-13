@@ -1,6 +1,6 @@
-import { authSignOut } from "@/actions/auth-actions";
-import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
+import { authSignOut } from '@/actions/auth-actions';
+import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   redirectTo: string;
@@ -17,12 +17,7 @@ function LogoutButton(
   return (
     <form action={async () => { await authSignOut(redirectTo); }}>
       <button ref={ref}
-        className={
-          twMerge(
-            'px-3 py-2 block w-full text-left cursor-pointer',
-            className!
-          )
-        }
+        className={twMerge('px-3 py-2 block w-full text-left cursor-pointer', className!)}
         {...props} />
     </form>
   )

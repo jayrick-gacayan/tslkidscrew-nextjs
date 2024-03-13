@@ -4,7 +4,6 @@ import ProgramTypeTabContainer from "./_section/program-type-tab-container";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-import { Parent } from "@/models/parent";
 import { getCustomerInfo } from "@/services/parent-info-services";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
@@ -32,7 +31,6 @@ export default async function Page({
   }
 
   let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.user?.accessToken!);
-
 
   return (
     <div className="pb-12 w-full">

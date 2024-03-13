@@ -1,10 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from "react";
-import AdminHeader from "./admin-header";
-import Sidebar from "./sidebar";
-import { Admin } from "@/models/admin";
-import { User } from "next-auth";
+import { ReactNode, useState } from 'react';
+import AdminHeader from './admin-header';
+import Sidebar from './sidebar';
+import { Admin } from '@/models/admin';
+import { User } from 'next-auth';
 
 export default function DrawerRoot({
   admin,
@@ -13,17 +13,17 @@ export default function DrawerRoot({
   admin: Partial<User<Partial<Admin>>>;
   children: ReactNode;
 }) {
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
 
   return (
-    <div className="relative h-screen overflow-auto">
+    <div className='relative h-screen overflow-auto'>
       <AdminHeader admin={admin} onDrawerOpen={() => { setDrawerOpen(true); }} />
       <Sidebar drawerOpen={drawerOpen} onDrawerOpen={(open: boolean) => { setDrawerOpen(open) }} />
-      <div className="w-full lg:ps-64 pt-12 overflow-auto h-full relative">
-        <div className="p-12 relative h-full">
+      <div className='w-full lg:ps-64 pt-12 overflow-auto h-full relative'>
+        <div className='p-12 relative h-full'>
           {children}
         </div>
       </div>
     </div>
-  )
+  );
 }

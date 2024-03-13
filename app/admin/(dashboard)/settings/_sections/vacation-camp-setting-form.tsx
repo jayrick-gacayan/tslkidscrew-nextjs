@@ -198,9 +198,6 @@ export default function VacationCampSettingForm({
                     defaultMonth: monthYearDate ?? undefined,
                     selected: daysSelection,
                     onSelect: (dates: Date[]) => {
-                      console.log('date', dates.sort((a, b) => {
-                        return a.getTime() - b.getTime();
-                      }))
                       setDaysSelection(dates)
                     }
                   }} />
