@@ -73,8 +73,11 @@ export default function PaymentFormContainer({
       default: return [];
     }
   }, [
-    program_type
-  ])
+    program_type,
+    BEFORE_OR_AFTER_SCHOOL_TOS,
+  ]);
+
+  console.log('tosARray', tosArray())
 
   return (
     <div className="relative">
@@ -89,7 +92,7 @@ export default function PaymentFormContainer({
         </div>
         <div className="space-y-2">
           {
-            tosArray.length === 0 ? null :
+            tosArray().length === 0 ? null :
               (
                 <>
                   {
