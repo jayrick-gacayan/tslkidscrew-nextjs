@@ -77,7 +77,19 @@ export default function PaymentFormContainer({
     BEFORE_OR_AFTER_SCHOOL_TOS,
   ]);
 
-  console.log('tosARray', tosArray())
+  const totalPrice = useCallback(() => {
+    switch (program_type) {
+      case 'before-or-after-school': return 25;
+      case 'summer-camp': return 200 + 25;
+      case 'vacation-camp':
+        return vacationCampPrice(vacationCamps.length, childrenArr.length) + 25;
+      default: return 0;
+    }
+  }, [
+    program_type,
+    vacationCamps,
+    childrenArr
+  ])
 
   return (
     <div className="relative">
@@ -165,7 +177,7 @@ export default function PaymentFormContainer({
                 Intl.NumberFormat('en-US', {
                   style: "currency",
                   currency: 'USD',
-                }).format(125.00)
+                }).format(totalPrice())
               }</div>
             </div>
           </div>
