@@ -13,6 +13,7 @@ import { TOSInfos } from "@/types/props/tos-infos";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { tosConditionChanged } from "../_redux/fill-in-form-slice";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
+import { currencyFormat } from "@/types/helpers/currency-format";
 
 function vacationCampPrice(numOfVacCamps: number, numOfChildren: number) {
   switch (numOfChildren) {
@@ -143,10 +144,8 @@ export default function PaymentFormContainer({
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Deposit Fee:</div>
               <div>{
-                Intl.NumberFormat('en-US', {
-                  style: "currency",
-                  currency: 'USD',
-                }).format(
+                currencyFormat('en-US',
+                  { style: "currency", currency: 'USD' },
                   program_type === 'summer-camp' ? 200 :
                     program_type === 'before-or-after-school' ? 0 :
                       vacationCampPrice(vacationCamps.length, childrenArr.length)
@@ -155,12 +154,7 @@ export default function PaymentFormContainer({
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Registration Fee:</div>
-              <div>{
-                Intl.NumberFormat('en-US', {
-                  style: "currency",
-                  currency: 'USD',
-                }).format(25.00)
-              }</div>
+              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, 25)}</div>
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Annual Package Fee:</div>
@@ -173,12 +167,7 @@ export default function PaymentFormContainer({
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Total Amount Due:</div>
-              <div>{
-                Intl.NumberFormat('en-US', {
-                  style: "currency",
-                  currency: 'USD',
-                }).format(totalPrice())
-              }</div>
+              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, totalPrice())}</div>
             </div>
           </div>
         </div>
