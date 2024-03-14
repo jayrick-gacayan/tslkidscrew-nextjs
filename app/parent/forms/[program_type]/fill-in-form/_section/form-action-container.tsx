@@ -210,6 +210,15 @@ export default function FormActionContainer({
   ])
 
   useEffect(() => {
+    function pathToURL(numberToStep: number) {
+      pathToRedirectURL(stepInNumber + numberToStep, location?.id ?? undefined)
+    }
+
+    function pathToStep(stepToDec: boolean, stepToInc: boolean) {
+      if (!stepToDec) { pathToURL(-1); }
+      else { if (stepToInc) { pathToURL(1); } }
+    }
+
     async function pathToRedirectURL(
       numberStep: number,
       location_id?: number,
@@ -223,33 +232,13 @@ export default function FormActionContainer({
       let url = `/parent/forms/${program_type}/fill-in-form${strSP === '' ? `` : `?${strSP}`}`
       await redirectToPath(url);
     }
-    function pathToURL(numberToStep: number) {
-      pathToRedirectURL(stepInNumber + numberToStep, location?.id ?? undefined)
-    }
 
     let { stepOne, stepTwo, stepThree, stepFour, stepFive, ...rest } = formState;
 
-    if (stepInNumber === 1) {
-      if (stepOne) { pathToURL(1); }
-    }
-    else if (stepInNumber === 2) {
-      if (!stepOne) { pathToURL(-1); }
-      else {
-        if (stepTwo) { pathToURL(1); }
-      }
-    }
-    else if (stepInNumber === 3) {
-      if (!stepTwo) { pathToURL(-1); }
-      else {
-        if (stepThree) { pathToURL(1); }
-      }
-    }
-    else if (stepInNumber === 4 && program_type === 'before-or-after-school') {
-      if (!stepThree) { pathToURL(-1); }
-      else {
-        if (stepFour) { pathToURL(1); }
-      }
-    }
+    if (stepInNumber === 1) { if (stepOne) { pathToURL(1); } }
+    else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
+    else if (stepInNumber === 3) { pathToStep(stepTwo, stepThree); }
+    else if (stepInNumber === 4 && program_type === 'before-or-after-school') { pathToStep(stepThree, stepFour); }
     else if (stepInNumber === highestStep) {
       let stepError = program_type === 'before-or-after-school' ? stepFour : stepThree;
 
@@ -273,7 +262,6 @@ export default function FormActionContainer({
                 reduxStore.dispatch(modalStripeToggled(true));
               }
               else {
-
                 let formData = new FormData(formRef.current);
 
                 formData.append('location', encodeURIComponent(location?.name!))
@@ -315,15 +303,14 @@ export default function FormActionContainer({
                     formData.append('month[]', val.month!);
                   })
                 }
-                formAction(formData);
 
+                formAction(formData);
               }
             }
           }
         }
       }
     }
-
   }, [
     stepInNumber,
     formState,
@@ -338,12 +325,17 @@ export default function FormActionContainer({
     beforeSchool,
     afterSchool,
     startDate,
+
+    // for program type summer-camp
+    promoPackage,
+    summerCampRegOpt,
+
+    // for program type vacation-camp
+    campsVacation
   ]);
 
   function StepperPanel() {
-    if (stepInNumber === 1) {
-      return (<LocationForm locations={locations} />);
-    }
+    if (stepInNumber === 1) return (<LocationForm locations={locations} />);
     else if (stepInNumber === 2) return (<ChildrenForm />);
     else if (stepInNumber === 3) {
       switch (program_type) {

@@ -16,7 +16,10 @@ import {
 } from '@/services/program-settings-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
-import { beforeOrAfterSchoolAttribObject, summerCampRecordAttribObj } from '@/types/helpers/create-reg-record-helpers';
+import {
+  beforeOrAfterSchoolAttribObject,
+  summerCampRecordAttribObj
+} from '@/types/helpers/create-reg-record-helpers';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 
@@ -133,6 +136,8 @@ export async function fillInFormAction(
             }
           };
         }
+
+        return { ...objectStep, stepThree: true }
       }
       case 'vacation-camp': {
         let getVacationCamps = formData.getAll('vacation-camp[]') as any[] ?? []
@@ -147,8 +152,9 @@ export async function fillInFormAction(
             }
           }
         }
+
+        return { ...objectStep, stepThree: true }
       }
-      default: return { ...objectStep, stepThree: true };
     }
   } else if (step === 4 && programType === 'before-or-after-school') {
     if (!!formData.get('back-button')) { return { ...objectStep, stepThree: false, }; }
@@ -183,9 +189,7 @@ export async function fillInFormAction(
   } else if (step === highestStep) {
     let stepKey = programType === 'before-or-after-school' ? 'stepFour' : 'stepThree';
 
-    if (!!formData.get('back-button')) {
-      return { ...objectStep, [stepKey]: false };
-    }
+    if (!!formData.get('back-button')) { return { ...objectStep, [stepKey]: false }; }
 
     let getAllCheckboxes: string[] = formData.getAll(`${programType}-tos[]`) as string[];
 
@@ -304,7 +308,6 @@ export async function fillInFormAction(
                   'friday': true,
                 }
               })
-
             }
             break;
         }
@@ -347,7 +350,6 @@ export async function fillInFormAction(
   }
 
   return objectStep;
-
 }
 
 export async function getProgramSettingYearCycleForRegRecordAction(location_id: string) {
