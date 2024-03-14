@@ -494,3 +494,38 @@ export async function getSummerCampPromosForCreateRegRecord(token: string) {
     })
   }
 }
+
+export async function getVacationCampsForCreateRegRecord(location_id: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_vacation_camp_schedules?location_id=${encodeURIComponent(location_id)}`,
+    {
+      ...authHeaders(token)
+    });
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<Partial<VacationCampSetting>[]>({
+        response: response,
+        data: response.vacation_camp_schedules,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<Partial<VacationCampSetting>[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}

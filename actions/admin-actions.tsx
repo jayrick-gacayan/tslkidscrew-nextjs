@@ -146,7 +146,7 @@ function adminUserFormValidate(validateData: {
   const validate = adminUserSchema.validate(validateData, { abortEarly: false });
 
   if (validate?.error) {
-    return validate.error?.details.reduce((prev, curr) => {
+    return validate.error?.details.reduce((prev, curr, index) => {
       return Object.assign({
         [curr.context?.key ?? '']: {
           value: curr.context?.value,

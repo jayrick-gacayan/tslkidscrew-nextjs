@@ -5,15 +5,18 @@ import { Parent } from '@/models/parent';
 import { Result } from '@/models/result';
 import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
 import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
+import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import { createRegistrationRecord } from '@/services/create-registration-record-services';
 import { getCustomerInfo } from '@/services/parent-info-services';
 import {
   getProgramSettingYearCycleForRegRecord,
   getSummerCampPromosForCreateRegRecord,
-  getSummerCampWeeksForRegular
+  getSummerCampWeeksForRegular,
+  getVacationCampsForCreateRegRecord
 } from '@/services/program-settings-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
+import { beforeOrAfterSchoolAttribObject, summerCampRecordAttribObj } from '@/types/helpers/create-reg-record-helpers';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 
@@ -43,8 +46,7 @@ export async function fillInFormAction(
   let objectStep: { [key: string]: any } = tempObject;
 
   if (step === 1) {
-    let tempLocationData = formData.get('location-place[id]')
-    let location = tempLocationData as string ?? ''
+    let tempLocationData = formData.get('location-place[id]') as string ?? '';
 
     let locationSchema = Joi.object({
       'location-place[id]': Joi.string()
@@ -55,10 +57,7 @@ export async function fillInFormAction(
         }),
     });
 
-    let validate = locationSchema.validate(
-      { 'location-place[id]': location },
-      { abortEarly: false }
-    );
+    let validate = locationSchema.validate({ 'location-place[id]': tempLocationData }, { abortEarly: false });
 
     if (validate.error) {
       return {
@@ -75,7 +74,7 @@ export async function fillInFormAction(
       };
     }
 
-    return { message: undefined, ...objectStep, stepOne: true, };
+    return { ...objectStep, stepOne: true, };
   } else if (step === 2) {
     if (!!formData.get('back-button')) { return { ...objectStep, stepOne: false, }; }
 
@@ -100,10 +99,9 @@ export async function fillInFormAction(
       childrenArray.push(curChild);
     }
 
-    return { message: undefined, ...objectStep, stepTwo: true, };
+    return { ...objectStep, stepTwo: true, };
   } else if (step === 3) {
     if (!!formData.get('back-button')) { return { ...objectStep, stepTwo: false, }; }
-
 
     switch (programType) {
       case 'before-or-after-school':
@@ -122,6 +120,34 @@ export async function fillInFormAction(
           }
           return { ...objectStep, stepThree: true, };
         }
+      case 'summer-camp': {
+        let getRadioButtonData = formData.get('reg-type-summer-camp') as string ?? '';
+
+        if (getRadioButtonData === '') {
+          return {
+            ...objectStep,
+            'reg-type-summer-camp': {
+              value: getRadioButtonData,
+              errorText: 'Please Select Summer Camp Registration Type',
+              validatationStatus: ValidationType.ERROR
+            }
+          };
+        }
+      }
+      case 'vacation-camp': {
+        let getVacationCamps = formData.getAll('vacation-camp[]') as any[] ?? []
+
+        if (getVacationCamps.length === 0) {
+          return {
+            ...objectStep,
+            'vacation-camps': {
+              value: getVacationCamps,
+              errorText: 'Must select at least one vacation camp',
+              validationStatus: ValidationType.ERROR,
+            }
+          }
+        }
+      }
       default: return { ...objectStep, stepThree: true };
     }
   } else if (step === 4 && programType === 'before-or-after-school') {
@@ -141,10 +167,10 @@ export async function fillInFormAction(
       };
     }
 
-    if ((beforeSchool.length + afterSchool.length) < 3) {
+    if (beforeSchool.length < 3 || afterSchool.length < 3) {
       errors[`before-or-after-week-days`] = {
         value: { beforeSchool, afterSchool },
-        errorText: "Must choose at least one week day.",
+        errorText: "Must choose at least 3 week days in before school and after school",
         validationStatus: ValidationType.ERROR,
       };
     }
@@ -155,15 +181,15 @@ export async function fillInFormAction(
 
     return { ...objectStep, stepFour: true };
   } else if (step === highestStep) {
-    let stepKey = programType === 'before_or_after_school' ? 'stepFour' : 'stepThree';
+    let stepKey = programType === 'before-or-after-school' ? 'stepFour' : 'stepThree';
 
     if (!!formData.get('back-button')) {
-      return { ...objectStep, [stepKey]: false, };
+      return { ...objectStep, [stepKey]: false };
     }
 
     let getAllCheckboxes: string[] = formData.getAll(`${programType}-tos[]`) as string[];
 
-    let checkItems = programType === 'before-or-after-school' ? 10 : 11
+    let checkItems = programType === 'before-or-after-school' ? 10 : programType === 'summer-camp' ? 11 : 4
 
     if (getAllCheckboxes.length < checkItems) {
       return {
@@ -234,33 +260,51 @@ export async function fillInFormAction(
           case 'before-or-after-school':
             regRecord['before_and_afterschool_record_attributes'] = {
               start_date: formData.get('start_date') as string ?? '',
-              before_school_monday: formData.get('before_school_monday') as string === "true",
-              before_school_tuesday: formData.get('before_school_tuesday') as string === "true",
-              before_school_wednesday: formData.get('before_school_wednesday') as string === "true",
-              before_school_thursday: formData.get('before_school_thursday') as string === "true",
-              before_school_friday: formData.get('before_school_friday') as string === "true",
-              after_school_monday: formData.get('after_school_monday') as string === "true",
-              after_school_tuesday: formData.get('after_school_tuesday') as string === "true",
-              after_school_wednesday: formData.get('after_school_wednesday') as string === "true",
-              after_school_thursday: formData.get('after_school_thursday') as string === "true",
-              after_school_friday: formData.get('after_school_friday') as string === "true",
+              ...beforeOrAfterSchoolAttribObject(formData, 'before'),
+              ...beforeOrAfterSchoolAttribObject(formData, 'after'),
               registration_type: true,
               year_cycle: formData.get('year_cycle') as string ?? '',
               no_deposit_required: true
             }
             break;
           case 'summer-camp':
-            regRecord['summer_camp_record_attributes'] = {
-              "week_one": true,
-              "week_two": true,
-              "week_three": true,
-              "week_four": true,
-              "week_five": true,
-              "week_six": true,
-              "week_seven": true,
-              "week_eight": true,
-              "week_nine": true,
-              "week_ten": true
+            let summerCampOpt = formData.get('reg-summer-camp-option') as string ?? ''
+            regRecord['summer_camp_registration_option'] = summerCampOpt;
+
+            console.log('summerCamp', summerCampOpt)
+            let weekNum = 10;
+
+            if (summerCampOpt.includes('promo')) {
+              let promoName = formData.get('promo_name') as string ?? '';
+              regRecord['promo_name'] = formData.get('promo_name') as string ?? '';
+
+              switch (promoName) {
+                case 'six_weeks': weekNum = 6; break;
+                case 'seven_weeks': weekNum = 7; break;
+                case 'eight_weeks': weekNum = 8; break;
+                case 'nine_weeks': weekNum = 9; break;
+                default: weekNum = 1; break;
+              }
+            }
+
+            regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(weekNum);
+
+            break;
+          case 'vacation-camp':
+            let vacationCampsMonths = formData.getAll('month[]') as any[] ?? [];
+
+            if (vacationCampsMonths.length > 0) {
+              regRecord['vacation_camp_record_attributes'] = vacationCampsMonths.map((val: string) => {
+                return {
+                  month: val,
+                  'monday': true,
+                  'tuesday': true,
+                  'wednesday': true,
+                  'thursday': true,
+                  'friday': true,
+                }
+              })
+
             }
             break;
         }
@@ -284,7 +328,7 @@ export async function fillInFormAction(
         return {
           ...objectStep,
           [stepKey]: true,
-          message: 'Successfully registered a record',
+          message: 'Successfully created a record',
           success: true,
         }
       }
@@ -333,6 +377,17 @@ export async function getSummerCampRegPromosForPromoAction() {
   let parent: Session | null = await auth();
 
   let result: Result<SummerCampPromoSetting[]> = await getSummerCampPromosForCreateRegRecord(parent?.user?.accessToken!);
+
+  return result.data ?? undefined;
+}
+
+export async function getVacationCampsForCreateRegRecordAction(location_id: string) {
+  let parent: Session | null = await auth();
+
+  let result: Result<Partial<VacationCampSetting>[]> = await getVacationCampsForCreateRegRecord(
+    location_id,
+    parent?.user?.accessToken!
+  );
 
   return result.data ?? undefined;
 }

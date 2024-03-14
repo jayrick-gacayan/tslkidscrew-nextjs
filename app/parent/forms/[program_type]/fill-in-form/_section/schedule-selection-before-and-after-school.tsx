@@ -1,9 +1,7 @@
-
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { PhInfoLight } from "@/app/_components/svg/ph-info-light";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
-import { getProgramSettingYearCycleForRegRecordAction } from "@/actions/registration-create-action";
 import { FillInFormState } from "../_redux/fill-in-form-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
@@ -12,7 +10,11 @@ import { fieldInputValue } from "@/types/helpers/field-input-value";
 
 let todayYear = new Date().getFullYear();
 
-export default function ScheduleSelectionBeforeAndAfterSchool() {
+export default function ScheduleSelectionBeforeAndAfterSchool({
+  programYearCycle,
+}: {
+  programYearCycle: ProgramYearCycleSetting & any | undefined
+}) {
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   })
@@ -25,24 +27,6 @@ export default function ScheduleSelectionBeforeAndAfterSchool() {
       validationStatus
     }
   }, [fillInFormState.fillInForm.yearCycle])
-
-  const location = useMemo(() => {
-    return fillInFormState.fillInForm.location;
-
-  }, [fillInFormState.fillInForm.location])
-  const [programYearCycle, setProgramYearCycle] = useState<ProgramYearCycleSetting & any | undefined>(undefined)
-
-  useEffect(() => {
-    if (location) {
-      async function getProgamSettingYearCycle() {
-        let data = await getProgramSettingYearCycleForRegRecordAction(location.value?.id?.toString() ?? '1');
-        setProgramYearCycle(data);
-      }
-
-      getProgamSettingYearCycle();
-    }
-  }, [location])
-
 
   function renderRadio(val: string, current: string) {
     return (

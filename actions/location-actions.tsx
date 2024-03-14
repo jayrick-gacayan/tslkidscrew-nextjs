@@ -1,8 +1,11 @@
 'use server';
 
 import { auth } from '@/auth';
+import { LocationPlace } from '@/models/location-place';
+import { Result } from '@/models/result';
 import {
   createLocationPlace,
+  getAllLocationsForCreateRegRecord,
   locationPlace,
   locationPlaces,
   removeLocationPlace,
@@ -12,6 +15,7 @@ import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import { LocationPlaceFormStateProps } from '@/types/props/location-place-from-state-props';
 import { SearchParamsProps } from '@/types/props/search-params-props';
+import { capitalCase } from 'change-case';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 import { revalidatePath } from 'next/cache';
@@ -172,4 +176,14 @@ function locationPlaceValidateErrors(validateData: {
   }
 
   return validate.error;
+}
+
+export async function getAllLocationOnProgramTypeAction(program_type: string) {
+  let parent: Session | null = await auth();
+
+  let result: Result<LocationPlace[]> = await getAllLocationsForCreateRegRecord(
+    program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
+    , parent?.user?.accessToken!);
+
+  return result.data ?? []
 }

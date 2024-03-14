@@ -74,7 +74,7 @@ export default function BeforeOrAfterSchoolFormData({
         <div className='w-full'>
           <span className={`${currentId !== beforeOrAfterSchoolSetting?.id ? 'block' : 'hidden'} w-full border border-secondary-light p-3 bg-white rounded text-center`}
             onClick={() => { setCurrentId(beforeOrAfterSchoolSetting?.id ?? 1); }}>
-            {currencyFormat('en-US', { style: 'currency', currency: 'USD', }, beforeOrAfterSchoolSetting?.price ?? 0)}
+            {currencyFormat('en-US', { style: 'currency', currency: 'USD' }, beforeOrAfterSchoolSetting?.price ?? 0)}
           </span>
           <form action={formAction}
             className={`flex min-w-fit w-full gap-1 ${currentId !== beforeOrAfterSchoolSetting?.id ? 'hidden' : ''}`}>

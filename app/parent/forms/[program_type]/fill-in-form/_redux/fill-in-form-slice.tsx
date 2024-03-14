@@ -7,6 +7,8 @@ import { initChild } from "../_helpers/init-child";
 import { InputProps } from "@/types/props/input-props";
 import { ValidationType } from "@/types/enums/validation-type";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
+import { VacationCampSetting } from "@/models/vacation-camp-setting";
 
 const initialState: FillInFormState = {
   stripeModalOpen: false,
@@ -27,7 +29,10 @@ const initialState: FillInFormState = {
     // for program type summer-camp
     summerCampPackageReg: fieldInputValue(''),
     summerCampRegWeeks: [],
-    promoPackage: undefined
+    promoPackage: fieldInputValue(undefined),
+
+    // for program type vacation-camp
+    vacationCamps: fieldInputValue([]),
   }
 }
 
@@ -165,12 +170,32 @@ const fillInFormSlice = createSlice({
         fillInForm: { ...state.fillInForm, summerCampPackageReg: action.payload }
       }
     },
+    summerCampPromoSet: (state: FillInFormState, action: PayloadAction<InputProps<SummerCampPromoSetting | undefined>>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          promoPackage: action.payload,
+        }
+      }
+    },
     summerCampRegWeeksSet: (state: FillInFormState, action: PayloadAction<Partial<SummerCampWeekSetting>[]>) => {
       return {
         ...state,
         fillInForm: {
           ...state.fillInForm,
           summerCampRegWeeks: action.payload
+        }
+      }
+    },
+
+    // for program-type 'vacation-camp'
+    vacationCampsSet: (state: FillInFormState, action: PayloadAction<InputProps<Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[]>>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          vacationCamps: action.payload
         }
       }
     }
@@ -194,7 +219,11 @@ export const {
 
   //for program type 'summer-camp'
   summerCampPackageRegChanged,
-  summerCampRegWeeksSet
+  summerCampRegWeeksSet,
+  summerCampPromoSet,
+
+  // for program-type 'vacation-camp'
+  vacationCampsSet,
 
 } = fillInFormSlice.actions;
 

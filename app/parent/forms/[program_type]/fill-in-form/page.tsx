@@ -1,14 +1,17 @@
-import { getAllLocationsForCreateRegRecord } from "@/services/location-services";
 import FormActionContainer from "./_section/form-action-container";
-import { Session } from "next-auth";
-import { Parent } from "@/models/parent";
-import { auth } from "@/auth";
-import { Result } from "@/models/result";
 import { LocationPlace } from "@/models/location-place";
-import { capitalCase } from "change-case";
-import { getCustomerInfo } from "@/services/parent-info-services";
-import { getSummerCampRegPromosForPromoAction } from "@/actions/registration-create-action";
+import {
+  getProgramSettingYearCycleForRegRecordAction,
+  getSummerCampRegPromosForPromoAction,
+  getSummerCampRegWeeksForRecordAction,
+  getVacationCampsForCreateRegRecordAction
+} from "@/actions/registration-create-action";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
+import { getCustomerInfoAction } from "@/actions/parent-info-actions";
+import { getAllLocationOnProgramTypeAction } from "@/actions/location-actions";
+import { VacationCampSetting } from "@/models/vacation-camp-setting";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
   return [
@@ -25,35 +28,40 @@ export default async function Page({
   params: { program_type: string }
   searchParams: { [key: string]: string | string[] | undefined; }
 }) {
-  let parent: Session | null = await auth();
+  let summerCampWeeks: Partial<SummerCampWeekSetting>[] | undefined = [];
+  let programYearCycle: ProgramYearCycleSetting & any | undefined = undefined;
+  let vacationCamps: Partial<VacationCampSetting>[] | undefined = [];
+
   const { program_type } = params;
-  const step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
+
+  let step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
+  let location_id = typeof searchParams.location_id === 'string' ? searchParams.location_id : undefined;
 
   const summerCampPromos: SummerCampPromoSetting[] | undefined = await getSummerCampRegPromosForPromoAction();
 
-  let locationDataByProgramType: Result<LocationPlace[]> = await getAllLocationsForCreateRegRecord(
-    program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
-    , parent?.user?.accessToken!);
+  let locationsByProgramType: LocationPlace[] = await getAllLocationOnProgramTypeAction(program_type);
+  let customerData = await getCustomerInfoAction()
 
-  let locationData: Partial<LocationPlace>[] = locationDataByProgramType.data?.map((val: LocationPlace) => {
-    return {
-      id: val.id,
-      name: val.name,
-      minimum_age: val.minimum_age
-    }
-  }) ?? [];
+  let { card_last_four, card_brand } = customerData.data!;
 
-  let customerData = await getCustomerInfo(parent?.user?.customer_id?.toString()!, parent?.user?.accessToken!)
+  if (location_id) {
+    summerCampWeeks = (await getSummerCampRegWeeksForRecordAction(location_id)) ?? [];
+    programYearCycle = await getProgramSettingYearCycleForRegRecordAction(location_id);
+    vacationCamps = (await getVacationCampsForCreateRegRecordAction(location_id)) ?? []
+  }
 
-  let { card_last_four, card_brand, ...rest } = customerData.data!
   return (
     <div className='pb-12 w-full'>
       <div className="rounded drop-shadow bg-white w-full xl:w-8/12 m-auto block p-6 max-h-fit">
         <FormActionContainer step={step}
           program_type={program_type}
           cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
-          locations={locationData}
-          summerCampPromos={summerCampPromos!} />
+          locations={locationsByProgramType}
+
+          summerCampPromos={summerCampPromos!}
+          summerCampWeeks={summerCampWeeks}
+          programYearCycle={programYearCycle}
+          vacationCamps={vacationCamps} />
       </div>
     </div>
   )

@@ -4,6 +4,8 @@ import Spinners3DotsScale from '@/app/_components/svg/spinners3-dots-scale';
 import Fa6BrandVisa from '@/app/_components/svg/fa6-brand-visa';
 import ButtonForPlaid from './button-for-plaid';
 import Link from 'next/link';
+import { reduxStore } from '@/react-redux/redux-store';
+import { fillInFormReset } from '../_redux/fill-in-form-slice';
 
 export default function FillInFormButtons({
   program_type,
@@ -40,7 +42,11 @@ export default function FillInFormButtons({
       }
       <div className='flex items-center justify-center gap-4'>
         <div className='flex-1'>
-          <Link href={`/parent/forms/${program_type}`} className='cursor-pointer transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white'>
+          <Link href={`/parent/forms/${program_type}`}
+            className='cursor-pointer transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white'
+            onClick={() => {
+              reduxStore.dispatch(fillInFormReset())
+            }}>
             Cancel
           </Link>
         </div>

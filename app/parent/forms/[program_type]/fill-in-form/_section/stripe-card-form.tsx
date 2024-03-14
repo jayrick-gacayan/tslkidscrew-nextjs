@@ -6,36 +6,29 @@ import {
   CardExpiryElement,
   CardCvcElement
 } from "@stripe/react-stripe-js";
-import {
-  StripeCardNumberElement,
-  StripeCardNumberElementChangeEvent
-} from "@stripe/stripe-js/types/stripe-js/elements/card-number";
-import { FormEvent } from "react";
-import { StripeElementType } from "@stripe/stripe-js";
+import { FormEvent, useState } from "react";
+import { StripeError } from "@stripe/stripe-js";
 import { reduxStore } from "@/react-redux/redux-store";
 import { modalStripeToggled } from "../_redux/fill-in-form-slice";
 
 export default function StripeCardForm() {
+  const [error, setError] = useState<StripeError | undefined>(undefined);
   const stripe = useStripe();
   const elements = useElements();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) { return; }
 
-
-    // Use elements.getElement to get references to the CardNumber, CardExpiry, and CardCvc elements.
+    // Use elements.getElement to get references to the CardNumber
     const cardNumberElement = elements.getElement(CardNumberElement);
-    const cardExpiryElement = elements.getElement(CardExpiryElement);
-    const cardCvcElement = elements.getElement(CardCvcElement);
 
     // Use the createPaymentMethod method to create a payment method from the card elements.
     const { token, error } = await stripe.createToken(cardNumberElement!);
 
     if (error) {
+      setError(error);
       console.error(error);
     } else {
 
@@ -44,7 +37,6 @@ export default function StripeCardForm() {
       // Send the payment method ID to your server to complete the payment.
     }
   };
-
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -56,27 +48,13 @@ export default function StripeCardForm() {
               <Fa6SolidCreditCard />
             </div>
             <div className="flex-1">
-              <CardNumberElement className="py-3"
-                options={{ showIcon: true, }}
-                onReady={(element: StripeCardNumberElement) => {
-                  console.log("CardNumberElement [ready]", element);
-                }}
-
-                onBlur={(event: {
-                  elementType: StripeElementType;
-                }) => {
-                  console.log("CardNumberElement [blur]", event.elementType);
-                }}
-                onFocus={(event: {
-                  elementType: StripeElementType;
-                }) => {
-                  console.log("CardNumberElement [focus]", event.elementType);
-                }}
-                onChange={(event: StripeCardNumberElementChangeEvent) => {
-                  console.log("CardNumberElement [change]", event.error);
-                }} />
+              <CardNumberElement className="py-3" options={{ showIcon: true, }} />
             </div>
           </div>
+          {
+            (error && (error?.code === 'incomplete_number' || error?.code === 'invalid_number')) &&
+            <div className="text-danger">{error.message}</div>
+          }
         </label>
 
         <div className="flex items-center gap-4">
@@ -87,11 +65,7 @@ export default function StripeCardForm() {
                 <Fa6SolidCreditCard />
               </div>
               <div className="flex-1">
-                <CardExpiryElement className="py-3"
-
-                  onChange={event => {
-                    console.log("CardNumberElement [change]", event);
-                  }} />
+                <CardExpiryElement className="py-3" />
               </div>
             </div>
           </label>
@@ -102,15 +76,19 @@ export default function StripeCardForm() {
                 <Fa6SolidCreditCard />
               </div>
               <div className="flex-1">
-                <CardCvcElement className="py-3"
-                  onChange={event => {
-                    console.log("CardNumberElement [change]", event);
-                  }} />
+                <CardCvcElement className="py-3" />
               </div>
             </div>
           </label>
         </div>
-
+        {
+          (error && error?.code === 'incomplete_expiry') &&
+          <div className="text-danger">{error.message}</div>
+        }
+        {
+          (error && error?.code === 'incomplete_cvc') &&
+          <div className="text-danger">{error.message}</div>
+        }
       </div>
       <div className="flex items-center justify-end gap-4">
         <button type='button'

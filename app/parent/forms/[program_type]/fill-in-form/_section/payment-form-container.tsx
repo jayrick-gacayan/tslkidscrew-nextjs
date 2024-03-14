@@ -8,11 +8,40 @@ import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState } from "@/react-redux/redux-store";
 import { useMemo } from "react";
 import ModalCardInfoForStripe from "./modal-card-info-for-stripe";
+import { ChildInfoType } from "@/types/input-types/child-info-type";
+
+function vacationCampPrice(numOfVacCamps: number, numOfChildren: number) {
+  switch (numOfChildren) {
+    case 1:
+      switch (numOfVacCamps) {
+        case 0: return 0;
+        case 1: return 190;
+        case 2: return 315;
+        default: return 400;
+      }
+    case 2:
+      switch (numOfVacCamps) {
+        case 0: return 0;
+        case 1: return 380;
+        case 2: return 630;
+        default: return 800;
+      }
+    default:
+      switch (numOfVacCamps) {
+        case 0: return 0;
+        case 1: return 570;
+        case 2: return 945;
+        default: return 1200;
+      }
+  }
+}
 
 export default function PaymentFormContainer({
   program_type,
+  children,
 }: {
   program_type: string;
+  children: ChildInfoType[]
 }) {
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
@@ -20,7 +49,11 @@ export default function PaymentFormContainer({
 
   const errorText = useMemo(() => {
     return fillInFormState.fillInForm.TOSCondition.errorText;
-  }, [fillInFormState.fillInForm.TOSCondition.errorText])
+  }, [fillInFormState.fillInForm.TOSCondition.errorText]);
+
+  const vacationCamps = useMemo(() => {
+    return fillInFormState.fillInForm.vacationCamps.value;
+  }, [fillInFormState.fillInForm.vacationCamps.value])
 
   return (
     <div className="relative">
@@ -55,7 +88,11 @@ export default function PaymentFormContainer({
                 Intl.NumberFormat('en-US', {
                   style: "currency",
                   currency: 'USD',
-                }).format(100.00)
+                }).format(
+                  program_type === 'summer-camp' ? 200 :
+                    program_type === 'before-or-after-school' ? 0 :
+                      vacationCampPrice(vacationCamps.length, children.length)
+                )
               }</div>
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>

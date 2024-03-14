@@ -11,7 +11,7 @@ export const BEFORE_OR_AFTER_SCHOOL_TOS: TOSInfos[] = [
   },
   {
     num: 'three',
-    text: 'I understand that my payment will be deducted on the 2 nd of each month if I am on auto pay.'
+    text: 'I understand that my payment will be deducted on the 2nd of each month if I am on auto pay.'
   },
   {
     num: 'four',

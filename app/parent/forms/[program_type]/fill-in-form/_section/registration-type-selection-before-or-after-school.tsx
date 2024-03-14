@@ -42,7 +42,6 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
     }
   }
 
-  console.log('errorText', errorText)
   return (
     <div className="space-y-8">
       <h1 className="font-medium text-[36px]">Registration Type Selection</h1>

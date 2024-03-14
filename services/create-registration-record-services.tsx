@@ -14,6 +14,7 @@ export async function createRegistrationRecord(
     }
   );
   console.log('respons on create reg record', body)
+
   try {
     let response = await result.json();
 
