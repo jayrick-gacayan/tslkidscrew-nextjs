@@ -10,7 +10,7 @@ export interface FillInFormState {
   fillInForm: {
     location: InputProps<Partial<LocationPlace> | undefined>;
     defDateForChildForm: string | undefined;
-    children: ChildInfoType[];
+    childrenArr: ChildInfoType[];
 
     //for program type before-or-after-school
     yearCycle: InputProps<string>;

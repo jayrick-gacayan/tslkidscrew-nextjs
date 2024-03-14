@@ -28,7 +28,7 @@ export default function RegistrationTypeSummerCamp({
     return fillInFormState.fillInForm.summerCampPackageReg;
   }, [fillInFormState.fillInForm.summerCampPackageReg]);
 
-  const children = useMemo(() => { return fillInFormState.fillInForm.children; }, [fillInFormState.fillInForm.children])
+  const children = useMemo(() => { return fillInFormState.fillInForm.childrenArr; }, [fillInFormState.fillInForm.childrenArr])
 
   const promoPackage = useMemo(() => {
     return fillInFormState.fillInForm.promoPackage

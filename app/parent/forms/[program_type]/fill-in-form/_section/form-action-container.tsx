@@ -71,9 +71,9 @@ export default function FormActionContainer({
     return fillInFormState.fillInForm.location.value
   }, [fillInFormState.fillInForm.location]);
 
-  const children = useMemo(() => {
-    return fillInFormState.fillInForm.children
-  }, [fillInFormState.fillInForm.children]);
+  const childrenObj = useMemo(() => {
+    return fillInFormState.fillInForm.childrenArr
+  }, [fillInFormState.fillInForm.childrenArr]);
 
   /* For Program Type before-or-after-school */
   const { startDate, beforeSchool, afterSchool } = useMemo(() => {
@@ -141,18 +141,14 @@ export default function FormActionContainer({
 
       swalMessage(formState['message'], formState['success'] ? 'success' : 'error');
     }
-  }, [
-    formState?.['message'],
-    formState?.['success'],
-    program_type
-  ]);
+  }, [formState]);
 
   useEffect(() => {
     if (formState?.['location-place[id]']) {
       let { errorText, validationStatus } = formState?.['location-place[id]']
       reduxStore.dispatch(locationChanged({ value: undefined, errorText, validationStatus }))
     }
-  }, [formState?.['location-place[id]']]);
+  }, [formState]);
 
   // for program type 'before-or-after-school'
   useEffect(() => {
@@ -173,12 +169,7 @@ export default function FormActionContainer({
       }
     }
 
-  }, [
-    formState?.['year-cycle'],
-    formState?.['start-date'],
-    formState?.['before-or-after-week-days'],
-    program_type
-  ]);
+  }, [formState, program_type]);
 
   // for program_type === 'summer-camp'
   useEffect(() => {
@@ -190,10 +181,7 @@ export default function FormActionContainer({
         }))
       }
     }
-  }, [
-    formState?.['reg-type-summer-camp'],
-    program_type
-  ])
+  }, [formState, program_type])
 
   // for program_type === 'vacation-camp'
   useEffect(() => {
@@ -204,10 +192,7 @@ export default function FormActionContainer({
         reduxStore.dispatch(vacationCampsSet({ value, errorText, validationStatus }));
       }
     }
-  }, [
-    formState?.['vacation-camps'],
-    program_type
-  ])
+  }, [formState, program_type])
 
   useEffect(() => {
     function pathToURL(numberToStep: number) {
@@ -273,7 +258,7 @@ export default function FormActionContainer({
                       program_type === 'summer-camp' ? 'groupon_summer_camp' : 'vacation_camp')
                 );
 
-                children.forEach((val: ChildInfoType) => {
+                childrenObj.forEach((val: ChildInfoType) => {
                   formData.append('child-info[][first_name]', encodeURIComponent(val.first_name));
                   formData.append('child-info[][last_name]', encodeURIComponent(val.last_name));
                   formData.append('child-info[][school_attending]', encodeURIComponent(val.school_attending));
@@ -315,8 +300,7 @@ export default function FormActionContainer({
     stepInNumber,
     formState,
     program_type,
-    cardDetails,
-    children,
+    childrenObj,
     location,
     highestStep,
 
@@ -352,7 +336,7 @@ export default function FormActionContainer({
     else if (stepInNumber === 4 && program_type === 'before-or-after-school')
       return (<RegistrationTypeSelectionBeforeOrAfterSchool />)
     else if (stepInNumber === highestStep)
-      return (<PaymentFormContainer program_type={program_type} children={children} />)
+      return (<PaymentFormContainer program_type={program_type} childrenArr={childrenObj} />)
 
     return null;
   }

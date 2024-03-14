@@ -30,7 +30,7 @@ export default function CardDetails({
                         <span className="tracking-wider">
                           {Array.from({ length: 12 }).map((_val, idx) => {
                             return (
-                              <span className="align-middle text-[20px]">
+                              <span key={`asterisk-billing-info-${idx}`} className="align-middle text-[20px]">
                                 &#42;
                               </span>
                             )

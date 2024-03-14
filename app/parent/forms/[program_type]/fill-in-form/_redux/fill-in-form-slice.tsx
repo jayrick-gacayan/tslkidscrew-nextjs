@@ -14,7 +14,7 @@ const initialState: FillInFormState = {
   stripeModalOpen: false,
   fillInForm: {
     location: fieldInputValue<Partial<LocationPlace> | undefined>(undefined),
-    children: [initChild],
+    childrenArr: [initChild],
     defDateForChildForm: undefined,
     TOSCondition: fieldInputValue<any[]>([]),
 
@@ -55,7 +55,7 @@ const fillInFormSlice = createSlice({
     childrenAdded: (state: FillInFormState) => {
       return {
         ...state,
-        fillInForm: { ...state.fillInForm, children: [...state.fillInForm.children, initChild] }
+        fillInForm: { ...state.fillInForm, childrenArr: [...state.fillInForm.childrenArr, initChild] }
       }
     },
     childrenRemoved: (state: FillInFormState, action: PayloadAction<number>) => {
@@ -63,7 +63,7 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          children: state.fillInForm.children.filter((val: ChildInfoType, idx: number) => {
+          childrenArr: state.fillInForm.childrenArr.filter((val: ChildInfoType, idx: number) => {
             return idx !== action.payload
           })
         }
@@ -83,7 +83,7 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          children: state.fillInForm.children.map((val: ChildInfoType, idx: number) => {
+          childrenArr: state.fillInForm.childrenArr.map((val: ChildInfoType, idx: number) => {
             return idx === index ? { ...val, [key]: value } : val
           })
         }

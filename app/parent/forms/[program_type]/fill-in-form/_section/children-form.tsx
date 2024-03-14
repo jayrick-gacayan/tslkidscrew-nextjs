@@ -1,18 +1,21 @@
 import InputCustom from "@/app/_components/input-custom";
 import { ChangeEvent, useMemo } from "react";
-
 import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-day-picker";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { ChildInfoType } from "@/types/input-types/child-info-type";
-import { childrenAdded, childrenFieldUpdated, childrenRemoved } from "../_redux/fill-in-form-slice";
+import {
+  childrenAdded,
+  childrenFieldUpdated,
+  childrenRemoved
+} from "../_redux/fill-in-form-slice";
 
 export default function ChildrenForm() {
   const fillInFormState = useAppSelector((state: RootState) => { return state.fillInForm; });
 
-  const children = useMemo(() => {
-    return fillInFormState.fillInForm.children
-  }, [fillInFormState.fillInForm.children])
+  const arrChildren = useMemo(() => {
+    return fillInFormState.fillInForm.childrenArr
+  }, [fillInFormState.fillInForm.childrenArr])
 
   // console.log('children', children)
   return (
@@ -24,12 +27,12 @@ export default function ChildrenForm() {
       <div className="w-full h-auto space-y-6">
 
         {
-          children.map((value: ChildInfoType, idx: number) => {
+          arrChildren.map((value: ChildInfoType, idx: number) => {
             return (
               <div key={`children-form-${idx}`} className="space-y-6 w-full h-auto">
                 <div className="p-4 relative rounded border border-secondary-light ">
                   {
-                    children.length > 1 &&
+                    arrChildren.length > 1 &&
                     (
                       <div className="absolute -top-4 -right-3 cursor-pointer bg-danger hover:bg-danger-light h-8 w-8 text-white rounded-full"
                         onClick={() => { reduxStore.dispatch(childrenRemoved(idx)) }}>
@@ -106,7 +109,7 @@ export default function ChildrenForm() {
                   </div>
                 </div>
                 {
-                  idx + 1 === children.length &&
+                  idx + 1 === arrChildren.length &&
                   (
                     <div onClick={() => { reduxStore.dispatch(childrenAdded()) }}>
                       <button type='button'
