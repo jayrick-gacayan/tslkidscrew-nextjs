@@ -28,7 +28,7 @@ const initialState: FillInFormState = {
 
     // for program type summer-camp
     summerCampPackageReg: fieldInputValue(''),
-    summerCampRegWeeks: [],
+    summerCampRegWeeks: fieldInputValue([]),
     promoPackage: fieldInputValue(undefined),
 
     // for program type vacation-camp
@@ -179,7 +179,7 @@ const fillInFormSlice = createSlice({
         }
       }
     },
-    summerCampRegWeeksSet: (state: FillInFormState, action: PayloadAction<Partial<SummerCampWeekSetting>[]>) => {
+    summerCampRegWeeksSet: (state: FillInFormState, action: PayloadAction<InputProps<Partial<SummerCampWeekSetting>[]>>) => {
       return {
         ...state,
         fillInForm: {

@@ -20,6 +20,7 @@ import {
   beforeOrAfterSchoolAttribObject,
   summerCampRecordAttribObj
 } from '@/types/helpers/create-reg-record-helpers';
+import numsIntoWord from '@/types/helpers/date-helpers';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 
@@ -131,13 +132,33 @@ export async function fillInFormAction(
             ...objectStep,
             'reg-type-summer-camp': {
               value: getRadioButtonData,
-              errorText: 'Please Select Summer Camp Registration Type',
+              errorText: 'Please select Summer Camp Registration Type',
               validatationStatus: ValidationType.ERROR
             }
           };
         }
+        else {
+          let summerCampWeeksData = formData.getAll('summer-camp-reg-weeks[]') as any[] ?? [];
 
-        return { ...objectStep, stepThree: true }
+          console.log('summer camp weeks ', getRadioButtonData)
+          if (getRadioButtonData === 'regular') {
+            if (summerCampWeeksData.length === 0) {
+              return {
+                ...objectStep,
+                'summer-camp-reg-weeks': {
+                  value: summerCampWeeksData,
+                  errorText: 'Please select at least one summer camp week',
+                  validatationStatus: ValidationType.ERROR
+                }
+              };
+            }
+
+            return { ...objectStep, stepThree: true }
+          }
+          return { ...objectStep, stepThree: true }
+        }
+
+
       }
       case 'vacation-camp': {
         let getVacationCamps = formData.getAll('vacation-camp[]') as any[] ?? []
@@ -275,10 +296,8 @@ export async function fillInFormAction(
             let summerCampOpt = formData.get('reg-summer-camp-option') as string ?? ''
             regRecord['summer_camp_registration_option'] = summerCampOpt;
 
-            console.log('summerCamp', summerCampOpt)
-            let weekNum = 10;
-
             if (summerCampOpt.includes('promo')) {
+              let weekNum = 10;
               let promoName = formData.get('promo_name') as string ?? '';
               regRecord['promo_name'] = formData.get('promo_name') as string ?? '';
 
@@ -289,10 +308,22 @@ export async function fillInFormAction(
                 case 'nine_weeks': weekNum = 9; break;
                 default: weekNum = 1; break;
               }
+              regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(weekNum);
             }
+            else {
+              let summer_camp_weeks = formData.getAll('summer_camp_weeks[]') as any[] ?? [];
 
-            regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(weekNum);
 
+              let arrWeekTo10 = Array.from({ length: 10 }).map((_val, _idx) => { return _idx + 1 });
+
+              regRecord['summer_camp_record_attributes'] = arrWeekTo10.reduce((curr, prev, idx) => {
+                let tempKey = `week_${numsIntoWord(arrWeekTo10[idx])}`
+
+                return Object.assign({
+                  [`${tempKey}`]: summer_camp_weeks.includes(tempKey)
+                }, curr)
+              }, {});
+            }
             break;
           case 'vacation-camp':
             let vacationCampsMonths = formData.getAll('month[]') as any[] ?? [];

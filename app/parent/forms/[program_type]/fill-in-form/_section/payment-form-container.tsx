@@ -73,10 +73,7 @@ export default function PaymentFormContainer({
       case 'vacation-camp': return VACATION_CAMP_TOS;
       default: return [];
     }
-  }, [
-    program_type,
-    BEFORE_OR_AFTER_SCHOOL_TOS,
-  ]);
+  }, [program_type,]);
 
   const totalPrice = useCallback(() => {
     switch (program_type) {
@@ -114,7 +111,7 @@ export default function PaymentFormContainer({
                         <InputCheckboxCustom key={`${program_type}-TOS-${num}`}
                           id={`${program_type}-TOS-${num}`}
                           labelText={text}
-                          name='${program_type}-tos[]'
+                          name={`${program_type}-tos[]`}
                           value={`${program_type}-TOS-${num}`}
                           checked={tosCondition.includes(`${program_type}-TOS-${num}`)}
                           onChange={(e: ChangeEvent<HTMLInputElement>) => {

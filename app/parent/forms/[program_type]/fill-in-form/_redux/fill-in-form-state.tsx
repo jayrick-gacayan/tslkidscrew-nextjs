@@ -20,10 +20,10 @@ export interface FillInFormState {
 
     //for program type summer-camp
     summerCampPackageReg: InputProps<string>;
-    summerCampRegWeeks: Partial<SummerCampWeekSetting>[]
+    summerCampRegWeeks: InputProps<Partial<SummerCampWeekSetting>[]>;
     promoPackage: InputProps<SummerCampPromoSetting | undefined>;
 
     //for program type vacation-camp
-    vacationCamps: InputProps<Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[]>
+    vacationCamps: InputProps<Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[]>;
   }
 }

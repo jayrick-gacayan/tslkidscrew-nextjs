@@ -17,7 +17,6 @@ export default function ChildrenForm() {
     return fillInFormState.fillInForm.childrenArr
   }, [fillInFormState.fillInForm.childrenArr])
 
-  // console.log('children', children)
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">

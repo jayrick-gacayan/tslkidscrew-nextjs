@@ -20,6 +20,7 @@ export default function FormsRadioButton({
   return (
     <label className={labelClassName}>
       <input type="radio"
+        value={value}
         checked={value === current}
         className="hidden peer"
         name={name}

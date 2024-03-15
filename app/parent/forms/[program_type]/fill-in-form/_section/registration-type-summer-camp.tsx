@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { FillInFormState } from "../_redux/fill-in-form-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
@@ -6,12 +6,14 @@ import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import {
   summerCampPackageRegChanged,
-  summerCampPromoSet
+  summerCampPromoSet,
+  summerCampRegWeeksSet
 } from "../_redux/fill-in-form-slice";
-import SummerCampPackageRegularContainer from "./summer-camp-package-regular-container";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import WeekPromos from "../_components/week-promos";
+import Link from "next/link";
+import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 
 export default function RegistrationTypeSummerCamp({
   summerCampPromos,
@@ -28,11 +30,32 @@ export default function RegistrationTypeSummerCamp({
     return fillInFormState.fillInForm.summerCampPackageReg;
   }, [fillInFormState.fillInForm.summerCampPackageReg]);
 
-  const children = useMemo(() => { return fillInFormState.fillInForm.childrenArr; }, [fillInFormState.fillInForm.childrenArr])
+  const summerCampRegWeeks = useMemo(() => {
+    return fillInFormState.fillInForm.summerCampRegWeeks
+  }, [fillInFormState.fillInForm.summerCampRegWeeks]);
+
+  const arrChildren = useMemo(() => { return fillInFormState.fillInForm.childrenArr; }, [fillInFormState.fillInForm.childrenArr])
 
   const promoPackage = useMemo(() => {
     return fillInFormState.fillInForm.promoPackage
   }, [fillInFormState.fillInForm.promoPackage])
+
+  const filterMemo = useMemo(() => {
+    return summerCampPromos.filter((val: SummerCampPromoSetting) => {
+      return val.child_record_count === arrChildren.length &&
+        val.week_count !== 0 && !val.with_swim_trip
+    })
+  }, [summerCampPromos, arrChildren]);
+
+  const weekPromos = useCallback((week_count: number) => {
+    return filterMemo.filter((val: SummerCampPromoSetting) => {
+      return val.week_count === week_count
+    });
+  }, [filterMemo]);
+
+  // useEffect(() => {
+  //   if (summerCampPackageReg.value !== 'regular') { reduxStore.dispatch(summerCampRegWeeksSet(fieldInputValue([]))); }
+  // }, [summerCampPackageReg.value])
 
   function renderRegTypeRadio(value: string, current: string) {
     return (
@@ -46,28 +69,7 @@ export default function RegistrationTypeSummerCamp({
     reduxStore.dispatch(summerCampPackageRegChanged(fieldInputValue(value)))
   }
 
-  const filterMemo = useMemo(() => {
-    return summerCampPromos.filter((val: SummerCampPromoSetting) => {
-      return val.child_record_count === children.length &&
-        val.week_count !== 0 && !val.with_swim_trip
-    })
-  }, [summerCampPromos, children])
 
-  const sixWeekPromo = filterMemo.filter((val: SummerCampPromoSetting) => {
-    return val.week_count === 6
-  });
-
-  const sevenWeekPromo = filterMemo.filter((val: SummerCampPromoSetting) => {
-    return val.week_count === 7
-  });
-
-  const eightWeekPromo = filterMemo.filter((val: SummerCampPromoSetting) => {
-    return val.week_count === 8
-  });
-
-  const nineWeekPromo = filterMemo.filter((val: SummerCampPromoSetting) => {
-    return val.week_count === 9
-  });
 
   return (
     <div className="space-y-8">
@@ -103,34 +105,74 @@ export default function RegistrationTypeSummerCamp({
             {
               summerCampPackageReg.value === 'regular' ?
                 (
-                  <SummerCampPackageRegularContainer summerCampWeeks={summerCampWeeks} />
+                  <div className="space-y-4">
+                    <div className="font-medium text-[18px]">
+                      If a week is not shown, it means that it is at the capacity. Contact
+                      <Link href='mailto:tsladventures@gmail.com'
+                        className="text-primary hover:underline mx-1">
+                        tsladventures@gmail.com
+                      </Link>
+                      to request being added to any closed week. Your request may or may not be accommodated.
+                    </div>
+                    <div className="space-y-1">
+                      {
+                        summerCampWeeks.map((summerCampRegWeek: Partial<SummerCampWeekSetting>) => {
+                          return (
+                            <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampRegWeek.id}`}
+                              id={`summer-camp-reg-weeks-${summerCampRegWeek.id}`}
+                              labelText={summerCampRegWeek.name}
+                              name='summer-camp-reg-weeks[]'
+                              checked={summerCampRegWeeks.value.find((value: Partial<SummerCampWeekSetting>) => {
+                                return value.id === summerCampRegWeek.id;
+                              }) ? true : false}
+                              value={summerCampRegWeek.id}
+                              onChange={() => {
+                                reduxStore.dispatch(summerCampRegWeeksSet(
+                                  fieldInputValue(summerCampRegWeeks.value.find((value: Partial<SummerCampWeekSetting>) => {
+                                    return summerCampRegWeek.id === value.id;
+                                  }) ? summerCampRegWeeks.value.filter((summerCampWeekReg: Partial<SummerCampWeekSetting>) => {
+                                    return summerCampRegWeek.id !== summerCampWeekReg.id
+                                  }) : [...summerCampRegWeeks.value, summerCampRegWeek]
+                                  )
+                                ))
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </div>
+                    {
+                      summerCampRegWeeks.errorText !== '' &&
+                      (<div className="text-danger">{summerCampRegWeeks.errorText}</div>)
+                    }
+                  </div>
                 ) :
                 (
                   <div className="space-y-4 bg-secondary rounded p-4">
                     <h1 className="text-[24px]">Promo Package registration</h1>
-                    <div>Number of Children: {children.length}</div>
+                    <div>Number of Children: {arrChildren.length}</div>
                     <div className="font-medium">Week Promos</div>
                     <div className="flex items-stretch justify-evenly gap-4">
                       <WeekPromos weekNum={6}
-                        summerCampPerWeekPromos={sixWeekPromo}
+                        summerCampPerWeekPromos={weekPromos(6)}
                         promoPackage={promoPackage.value}
                         onChange={(val: SummerCampPromoSetting) => {
                           reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                         }} />
                       <WeekPromos weekNum={7}
-                        summerCampPerWeekPromos={sevenWeekPromo}
+                        summerCampPerWeekPromos={weekPromos(7)}
                         promoPackage={promoPackage.value}
                         onChange={(val: SummerCampPromoSetting) => {
                           reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                         }} />
                       <WeekPromos weekNum={8}
-                        summerCampPerWeekPromos={eightWeekPromo}
+                        summerCampPerWeekPromos={weekPromos(8)}
                         promoPackage={promoPackage.value}
                         onChange={(val: SummerCampPromoSetting) => {
                           reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                         }} />
                       <WeekPromos weekNum={9}
-                        summerCampPerWeekPromos={nineWeekPromo}
+                        summerCampPerWeekPromos={weekPromos(9)}
                         promoPackage={promoPackage.value}
                         onChange={(val: SummerCampPromoSetting) => {
                           reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));

@@ -56,22 +56,19 @@ export default function BeforeAfterCurrentYearCyclePrice({
           <tbody>
             {
               [1, 2, 3].map((childValue) => {
-                let beforeBOAS = getBOASByProgramType(childValue, 'before');
-                let afterBOAS = getBOASByProgramType(childValue, 'after');
-                let bothBOAS = getBOASByProgramType(childValue, 'both');
                 return (
                   <tr key={`before-after-current-year-cycle-${childValue}`}
                     className='[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:bg-secondary'>
                     <td className='w-48'>Children #{childValue}</td>
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={beforeBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'before')!} />
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={afterBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'after')!} />
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={bothBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'both')!} />
                   </tr>
                 )
               })

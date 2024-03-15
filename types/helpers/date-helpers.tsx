@@ -65,7 +65,7 @@ export function dateTimeString(
   return new Date(date).toLocaleString('en-US', options);
 }
 
-export default function weekNumsIntoWord(num: number) {
+export default function numsIntoWord(num: number) {
   switch (num) {
     case 2: return 'two';
     case 3: return 'three';

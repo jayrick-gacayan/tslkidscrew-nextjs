@@ -19,6 +19,7 @@ import {
   locationChanged,
   modalStripeToggled,
   summerCampPackageRegChanged,
+  summerCampRegWeeksSet,
   tosConditionChanged,
   vacationCampsSet,
   yearCycleChanged
@@ -38,7 +39,7 @@ import { swalCreateRegRecordMessage } from '@/types/helpers/sweet-alert-helpers'
 import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
 import { ProgramYearCycleSetting } from '@/models/program-year-cycle-setting';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
-import weekNumsIntoWord from '@/types/helpers/date-helpers';
+import numsIntoWord from '@/types/helpers/date-helpers';
 
 export default function FormActionContainer({
   program_type,
@@ -101,6 +102,10 @@ export default function FormActionContainer({
   const promoPackage = useMemo(() => {
     return fillInFormState.fillInForm.promoPackage;
   }, [fillInFormState.fillInForm.promoPackage])
+
+  const summerCampRegWeeks = useMemo(() => {
+    return fillInFormState.fillInForm.summerCampRegWeeks.value
+  }, [fillInFormState.fillInForm.summerCampRegWeeks.value]);
   /* For Program Type summer-camp */
 
   /* For Program Type vacation-camp */
@@ -179,6 +184,10 @@ export default function FormActionContainer({
         reduxStore.dispatch(summerCampPackageRegChanged({
           value: '', errorText, validationStatus,
         }))
+      }
+      if (formState?.['summer-camp-reg-weeks']) {
+        let { value, errorText, validationStatus } = formState['summer-camp-reg-weeks'];
+        reduxStore.dispatch(summerCampRegWeeksSet({ value, errorText, validationStatus, }))
       }
     }
   }, [formState, program_type])
@@ -266,7 +275,7 @@ export default function FormActionContainer({
                   formData.append('child-info[][dob]', encodeURIComponent(format(new Date(val.birthdate!), 'yyyy-M-d')));
                 });
 
-                if (program_type === 'before_or_after_school') {
+                if (program_type === 'before-or-after-school') {
                   formData.append('year_cycle', encodeURIComponent(yearCycle))
                   formData.append('start_date', encodeURIComponent(format(new Date(startDate!), 'yyyy-M-d')));
                   WEEK_DAYS.forEach((val: string) => {
@@ -280,8 +289,18 @@ export default function FormActionContainer({
                   formData.append('reg-summer-camp-option', `summer_camp_${summerCampRegOpt.value}_registration`);
 
                   if (summerCampRegOpt.value === 'promo') {
-                    formData.append('promo_name', `${weekNumsIntoWord(promoPackage.value?.week_count ?? 1)}_weeks`);
+                    formData.append('promo_name', `${numsIntoWord(promoPackage.value?.week_count ?? 1)}_weeks`);
                   }
+
+                  Array.from({ length: 10 })
+                    .map((_val, _idx) => { return _idx + 1 })
+                    .forEach((val: number, idx) => {
+                      if (summerCampWeeks.find((scws: Partial<SummerCampWeekSetting>) => {
+                        return scws.name?.includes(`Week ${val}:`)
+                      })) {
+                        formData.append('summer_camp_weeks[]', `week_${numsIntoWord(val)}`)
+                      }
+                    });
                 }
                 else if (program_type === 'vacation-camp') {
                   campsVacation.forEach((val: Pick<VacationCampSetting, "id" | "name" | "month" | "year">) => {
@@ -313,6 +332,7 @@ export default function FormActionContainer({
     // for program type summer-camp
     promoPackage,
     summerCampRegOpt,
+    summerCampWeeks,
 
     // for program type vacation-camp
     campsVacation
@@ -341,7 +361,7 @@ export default function FormActionContainer({
     return null;
   }
 
-  // console.log('state', formState)
+  console.log('state', formState)
 
   return (
     <form className='space-y-6'

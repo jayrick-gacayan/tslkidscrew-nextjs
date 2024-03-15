@@ -7,7 +7,6 @@ import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { vacationCampsSet } from "../_redux/fill-in-form-slice";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 
-
 export default function AttendanceScheduleVacationCamp({
   vacationCamps,
 }: {
