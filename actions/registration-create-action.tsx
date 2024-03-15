@@ -21,7 +21,6 @@ import {
   beforeOrAfterSchoolAttribObject,
   summerCampRecordAttribObj
 } from '@/types/helpers/create-reg-record-helpers';
-import numsIntoWord from '@/types/helpers/date-helpers';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 
@@ -171,17 +170,8 @@ export async function fillInFormAction(
             }
             else {
               let weekCount = parseInt(summerCampPromoWeekData);
-              if (summerCampWeeksData.length < weekCount) {
-                return {
-                  ...objectStep,
-                  'summer-camp-reg-weeks': {
-                    value: summerCampWeeksData,
-                    errorText: `Please select at least ${weekCount} summer camp week on the promo you have selected`,
-                    validatationStatus: ValidationType.ERROR
-                  }
-                };
-              }
-              else if (summerCampPromoData.length > weekCount) {
+
+              if (summerCampWeeksData.length < weekCount || summerCampPromoData.length > weekCount) {
                 return {
                   ...objectStep,
                   'summer-camp-reg-weeks': {
