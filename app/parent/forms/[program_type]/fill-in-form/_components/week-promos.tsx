@@ -1,48 +1,48 @@
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { currencyFormat } from "@/types/helpers/currency-format";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import PopperWeekPromos from "./popper-week-promos";
 
 export default function WeekPromos({
   weekNum,
   summerCampPerWeekPromos,
   promoPackage,
   onChange,
+  summerCampWeeksForPromo,
+  weeksForSummerCamp,
+  onCheckboxChange,
 }: {
   weekNum: number
   summerCampPerWeekPromos: SummerCampPromoSetting[],
   promoPackage: SummerCampPromoSetting | undefined;
   onChange: (val: SummerCampPromoSetting) => void;
+  summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
+  weeksForSummerCamp: Partial<SummerCampWeekSetting>[];
+  onCheckboxChange: (summerCampWeek: Partial<SummerCampWeekSetting>) => void;
 }) {
+
   return (
-    <div className="space-y-4 w-full">
-      <div className="font-bold">{weekNum} weeks promos</div>
-      <div className="block space-y-2">
+    <div className="w-full flex flex-col gap-4">
+      <div className="font-bold flex-none">{weekNum} weeks promos</div>
+      <div className="block space-y-2 flex-1">
         {
           summerCampPerWeekPromos.length === 0 ?
-            (<div className="text-danger">No Promos Available</div>) :
+            (
+              <div className="text-danger flex items-center justify-center h-full">
+                <div className="w-full">No Promos Available</div>
+              </div>
+            ) :
             (
               <>
                 {
                   summerCampPerWeekPromos.map((val: SummerCampPromoSetting, index: number) => {
                     return (
-                      <label key={`${val.id}-${index}`}
-                        htmlFor={`${val.id}-${index}`}
-                        className="space-x-2 block cursor-pointer">
-                        <input type="radio"
-                          id={`${val.id}-${index}`}
-                          className="form-radio border border-secondary-light h-5 w-5"
-                          value={val.id}
-                          checked={promoPackage?.id === val.id}
-                          onChange={() => { onChange(val) }}
-                        />
-                        <span className="align-middle">
-                          {
-                            currencyFormat('en-US',
-                              { style: 'currency', currency: 'USD' },
-                              val.price ?? 0
-                            )
-                          }
-                        </span>
-                      </label>
+                      <PopperWeekPromos key={`${val.id}-${index}`}
+                        sumCampWeekPromo={val}
+                        promoPackage={promoPackage}
+                        onRadioButtonChange={onChange}
+                        summerCampWeeksForPromo={summerCampWeeksForPromo}
+                        weeksForSummerCamp={weeksForSummerCamp}
+                        onCheckboxChange={onCheckboxChange} />
                     )
                   })
                 }

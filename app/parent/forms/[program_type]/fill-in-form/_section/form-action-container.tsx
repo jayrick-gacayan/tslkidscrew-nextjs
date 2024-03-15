@@ -19,6 +19,7 @@ import {
   locationChanged,
   modalStripeToggled,
   summerCampPackageRegChanged,
+  summerCampPromoSet,
   summerCampRegWeeksSet,
   tosConditionChanged,
   vacationCampsSet,
@@ -40,6 +41,7 @@ import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
 import { ProgramYearCycleSetting } from '@/models/program-year-cycle-setting';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import numsIntoWord from '@/types/helpers/date-helpers';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
 
 export default function FormActionContainer({
   program_type,
@@ -51,6 +53,7 @@ export default function FormActionContainer({
   summerCampWeeks,
   programYearCycle,
   vacationCamps,
+  summerCampWeeksForPromo
 }: {
   program_type: string;
   step: string | undefined;
@@ -61,7 +64,7 @@ export default function FormActionContainer({
   summerCampWeeks: Partial<SummerCampWeekSetting>[];
   programYearCycle: ProgramYearCycleSetting & any | undefined;
   vacationCamps: Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[]
-
+  summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
   const formRef = useRef<HTMLFormElement>(null)
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
@@ -103,7 +106,7 @@ export default function FormActionContainer({
     return fillInFormState.fillInForm.promoPackage;
   }, [fillInFormState.fillInForm.promoPackage])
 
-  const summerCampRegWeeks = useMemo(() => {
+  const weekSummerCamps = useMemo(() => {
     return fillInFormState.fillInForm.summerCampRegWeeks.value
   }, [fillInFormState.fillInForm.summerCampRegWeeks.value]);
   /* For Program Type summer-camp */
@@ -189,8 +192,22 @@ export default function FormActionContainer({
         let { value, errorText, validationStatus } = formState['summer-camp-reg-weeks'];
         reduxStore.dispatch(summerCampRegWeeksSet({ value, errorText, validationStatus, }))
       }
+
+      if (formState?.['summer-camp-promo']) {
+        let { value, errorText, validationStatus } = formState['summer-camp-promo'];
+
+        reduxStore.dispatch(summerCampPromoSet({ value, errorText, validationStatus, }))
+      }
     }
-  }, [formState, program_type])
+  }, [formState, program_type]);
+
+  useEffect(() => {
+    reduxStore.dispatch(summerCampRegWeeksSet(fieldInputValue([])))
+  }, [fillInFormState.fillInForm.summerCampPackageReg.value])
+
+  useEffect(() => {
+    reduxStore.dispatch(summerCampRegWeeksSet(fieldInputValue([])))
+  }, [fillInFormState.fillInForm.promoPackage.value])
 
   // for program_type === 'vacation-camp'
   useEffect(() => {
@@ -295,7 +312,7 @@ export default function FormActionContainer({
                   Array.from({ length: 10 })
                     .map((_val, _idx) => { return _idx + 1 })
                     .forEach((val: number, idx) => {
-                      if (summerCampWeeks.find((scws: Partial<SummerCampWeekSetting>) => {
+                      if (weekSummerCamps.find((scws: Partial<SummerCampWeekSetting>) => {
                         return scws.name?.includes(`Week ${val}:`)
                       })) {
                         formData.append('summer_camp_weeks[]', `week_${numsIntoWord(val)}`)
@@ -332,7 +349,7 @@ export default function FormActionContainer({
     // for program type summer-camp
     promoPackage,
     summerCampRegOpt,
-    summerCampWeeks,
+    weekSummerCamps,
 
     // for program type vacation-camp
     campsVacation
@@ -346,8 +363,11 @@ export default function FormActionContainer({
         case 'before-or-after-school':
           return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
         case 'summer-camp':
-          return (<RegistrationTypeSummerCamp summerCampPromos={summerCampPromos}
-            summerCampWeeks={summerCampWeeks} />)
+          return (
+            <RegistrationTypeSummerCamp summerCampWeeks={summerCampWeeks}
+              summerCampPromos={summerCampPromos}
+              summerCampWeeksForPromo={summerCampWeeksForPromo} />
+          )
         case 'vacation-camp':
           return (<AttendanceScheduleVacationCamp vacationCamps={vacationCamps} />);
       }
@@ -366,7 +386,15 @@ export default function FormActionContainer({
   return (
     <form className='space-y-6'
       ref={formRef}
-      action={formAction}>
+      action={(formData) => {
+        if (summerCampRegOpt.value === 'promo' && program_type === 'summer-camp') {
+          weekSummerCamps.forEach((scrw: Partial<SummerCampWeekSetting>) => {
+            formData.append('summer-camp-reg-weeks[]', scrw.id!.toString())
+          })
+        }
+
+        formAction(formData);
+      }}>
       <StepperPanel />
       <FillInFormButtons program_type={program_type}
         step={step}

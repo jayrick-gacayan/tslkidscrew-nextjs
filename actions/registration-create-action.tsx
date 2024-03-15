@@ -11,6 +11,7 @@ import { getCustomerInfo } from '@/services/parent-info-services';
 import {
   getProgramSettingYearCycleForRegRecord,
   getSummerCampPromosForCreateRegRecord,
+  getSummerCampWeeksForPromo,
   getSummerCampWeeksForRegular,
   getVacationCampsForCreateRegRecord
 } from '@/services/program-settings-services';
@@ -139,8 +140,10 @@ export async function fillInFormAction(
         }
         else {
           let summerCampWeeksData = formData.getAll('summer-camp-reg-weeks[]') as any[] ?? [];
+          let summerCampPromoData = formData.get('summer-camp-promo') as string ?? '';
+          let summerCampPromoWeekData = formData.get('summer-camp-promo-week') as string ?? ''
 
-          console.log('summer camp weeks ', getRadioButtonData)
+          console.log('summerCamp', summerCampPromoWeekData)
           if (getRadioButtonData === 'regular') {
             if (summerCampWeeksData.length === 0) {
               return {
@@ -155,7 +158,43 @@ export async function fillInFormAction(
 
             return { ...objectStep, stepThree: true }
           }
-          return { ...objectStep, stepThree: true }
+          else {
+            if (summerCampPromoData === '') {
+              return {
+                ...objectStep,
+                'summer-camp-promo': {
+                  value: summerCampPromoData,
+                  errorText: 'Please choose a promo package',
+                  validationStatus: ValidationType.ERROR,
+                }
+              }
+            }
+            else {
+              let weekCount = parseInt(summerCampPromoWeekData);
+              if (summerCampWeeksData.length < weekCount) {
+                return {
+                  ...objectStep,
+                  'summer-camp-reg-weeks': {
+                    value: summerCampWeeksData,
+                    errorText: `Please select at least ${weekCount} summer camp week on the promo you have selected`,
+                    validatationStatus: ValidationType.ERROR
+                  }
+                };
+              }
+              else if (summerCampPromoData.length > weekCount) {
+                return {
+                  ...objectStep,
+                  'summer-camp-reg-weeks': {
+                    value: summerCampWeeksData,
+                    errorText: `Please select at least ${weekCount} summer camp week on the promo you have selected`,
+                    validatationStatus: ValidationType.ERROR
+                  }
+                };
+              }
+
+              return { ...objectStep, stepThree: true }
+            }
+          }
         }
 
 
@@ -294,36 +333,15 @@ export async function fillInFormAction(
             break;
           case 'summer-camp':
             let summerCampOpt = formData.get('reg-summer-camp-option') as string ?? ''
+            let summer_camp_weeks = formData.getAll('summer_camp_weeks[]') as any[] ?? [];
+
             regRecord['summer_camp_registration_option'] = summerCampOpt;
 
             if (summerCampOpt.includes('promo')) {
-              let weekNum = 10;
-              let promoName = formData.get('promo_name') as string ?? '';
+
               regRecord['promo_name'] = formData.get('promo_name') as string ?? '';
-
-              switch (promoName) {
-                case 'six_weeks': weekNum = 6; break;
-                case 'seven_weeks': weekNum = 7; break;
-                case 'eight_weeks': weekNum = 8; break;
-                case 'nine_weeks': weekNum = 9; break;
-                default: weekNum = 1; break;
-              }
-              regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(weekNum);
             }
-            else {
-              let summer_camp_weeks = formData.getAll('summer_camp_weeks[]') as any[] ?? [];
-
-
-              let arrWeekTo10 = Array.from({ length: 10 }).map((_val, _idx) => { return _idx + 1 });
-
-              regRecord['summer_camp_record_attributes'] = arrWeekTo10.reduce((curr, prev, idx) => {
-                let tempKey = `week_${numsIntoWord(arrWeekTo10[idx])}`
-
-                return Object.assign({
-                  [`${tempKey}`]: summer_camp_weeks.includes(tempKey)
-                }, curr)
-              }, {});
-            }
+            regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(summer_camp_weeks);
             break;
           case 'vacation-camp':
             let vacationCampsMonths = formData.getAll('month[]') as any[] ?? [];
@@ -343,7 +361,7 @@ export async function fillInFormAction(
             break;
         }
 
-        console.log('regRecord', regRecord);
+        // console.log('regRecord', regRecord);
         let result = await createRegistrationRecord(
           JSON.stringify({ registration_record: regRecord }),
           parent?.user?.accessToken!
@@ -421,6 +439,14 @@ export async function getVacationCampsForCreateRegRecordAction(location_id: stri
     location_id,
     parent?.user?.accessToken!
   );
+
+  return result.data ?? undefined;
+}
+
+export async function getSummerCampWeeksForPromoAction() {
+  let parent: Session | null = await auth();
+
+  let result: Result<Partial<SummerCampWeekSetting>[]> = await getSummerCampWeeksForPromo(parent?.user?.accessToken!);
 
   return result.data ?? undefined;
 }

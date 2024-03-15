@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { FillInFormState } from "../_redux/fill-in-form-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
@@ -17,11 +17,14 @@ import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 
 export default function RegistrationTypeSummerCamp({
   summerCampPromos,
-  summerCampWeeks
+  summerCampWeeks,
+  summerCampWeeksForPromo
 }: {
   summerCampPromos: SummerCampPromoSetting[];
   summerCampWeeks: Partial<SummerCampWeekSetting>[];
+  summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
+  const [promoPopId, setPromoPopId] = useState(-1);
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
@@ -30,7 +33,7 @@ export default function RegistrationTypeSummerCamp({
     return fillInFormState.fillInForm.summerCampPackageReg;
   }, [fillInFormState.fillInForm.summerCampPackageReg]);
 
-  const summerCampRegWeeks = useMemo(() => {
+  const weeksForSummerCamp = useMemo(() => {
     return fillInFormState.fillInForm.summerCampRegWeeks
   }, [fillInFormState.fillInForm.summerCampRegWeeks]);
 
@@ -69,7 +72,17 @@ export default function RegistrationTypeSummerCamp({
     reduxStore.dispatch(summerCampPackageRegChanged(fieldInputValue(value)))
   }
 
-
+  function onCheckboxChange(summerCampWeek: Partial<SummerCampWeekSetting>) {
+    reduxStore.dispatch(summerCampRegWeeksSet(
+      fieldInputValue(
+        weeksForSummerCamp.value.find((value: Partial<SummerCampWeekSetting>) => {
+          return summerCampWeek.id === value.id;
+        }) ? weeksForSummerCamp.value.filter((sumCampWeek: Partial<SummerCampWeekSetting>) => {
+          return summerCampWeek.id !== sumCampWeek.id
+        }) : [...weeksForSummerCamp.value, summerCampWeek]
+      )
+    ))
+  }
 
   return (
     <div className="space-y-8">
@@ -101,7 +114,7 @@ export default function RegistrationTypeSummerCamp({
       {
         summerCampPackageReg.value !== '' &&
         (
-          <div className="block">
+          <div className="block space-y-2">
             {
               summerCampPackageReg.value === 'regular' ?
                 (
@@ -116,71 +129,91 @@ export default function RegistrationTypeSummerCamp({
                     </div>
                     <div className="space-y-1">
                       {
-                        summerCampWeeks.map((summerCampRegWeek: Partial<SummerCampWeekSetting>) => {
+                        summerCampWeeks.map((summerCampWeek: Partial<SummerCampWeekSetting>) => {
                           return (
-                            <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampRegWeek.id}`}
-                              id={`summer-camp-reg-weeks-${summerCampRegWeek.id}`}
-                              labelText={summerCampRegWeek.name}
+                            <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampWeek.id}`}
+                              id={`summer-camp-reg-weeks-${summerCampWeek.id}`}
+                              labelText={summerCampWeek.name}
                               name='summer-camp-reg-weeks[]'
-                              checked={summerCampRegWeeks.value.find((value: Partial<SummerCampWeekSetting>) => {
-                                return value.id === summerCampRegWeek.id;
+                              checked={weeksForSummerCamp.value.find((value: Partial<SummerCampWeekSetting>) => {
+                                return value.id === summerCampWeek.id;
                               }) ? true : false}
-                              value={summerCampRegWeek.id}
-                              onChange={() => {
-                                reduxStore.dispatch(summerCampRegWeeksSet(
-                                  fieldInputValue(summerCampRegWeeks.value.find((value: Partial<SummerCampWeekSetting>) => {
-                                    return summerCampRegWeek.id === value.id;
-                                  }) ? summerCampRegWeeks.value.filter((summerCampWeekReg: Partial<SummerCampWeekSetting>) => {
-                                    return summerCampRegWeek.id !== summerCampWeekReg.id
-                                  }) : [...summerCampRegWeeks.value, summerCampRegWeek]
-                                  )
-                                ))
-                              }}
-                            />
+                              onChange={() => { onCheckboxChange(summerCampWeek); }}
+                              value={summerCampWeek.id} />
                           );
                         })
                       }
                     </div>
                     {
-                      summerCampRegWeeks.errorText !== '' &&
-                      (<div className="text-danger">{summerCampRegWeeks.errorText}</div>)
+                      weeksForSummerCamp.errorText !== '' &&
+                      (<div className="text-danger">{weeksForSummerCamp.errorText}</div>)
                     }
                   </div>
                 ) :
                 (
-                  <div className="space-y-4 bg-secondary rounded p-4">
-                    <h1 className="text-[24px]">Promo Package registration</h1>
-                    <div>Number of Children: {arrChildren.length}</div>
-                    <div className="font-medium">Week Promos</div>
-                    <div className="flex items-stretch justify-evenly gap-4">
-                      <WeekPromos weekNum={6}
-                        summerCampPerWeekPromos={weekPromos(6)}
-                        promoPackage={promoPackage.value}
-                        onChange={(val: SummerCampPromoSetting) => {
-                          reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
-                        }} />
-                      <WeekPromos weekNum={7}
-                        summerCampPerWeekPromos={weekPromos(7)}
-                        promoPackage={promoPackage.value}
-                        onChange={(val: SummerCampPromoSetting) => {
-                          reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
-                        }} />
-                      <WeekPromos weekNum={8}
-                        summerCampPerWeekPromos={weekPromos(8)}
-                        promoPackage={promoPackage.value}
-                        onChange={(val: SummerCampPromoSetting) => {
-                          reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
-                        }} />
-                      <WeekPromos weekNum={9}
-                        summerCampPerWeekPromos={weekPromos(9)}
-                        promoPackage={promoPackage.value}
-                        onChange={(val: SummerCampPromoSetting) => {
-                          reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
-                        }} />
+                  <>
+                    <div className="space-y-4 bg-secondary rounded p-4">
+                      <h1 className="text-[24px]">Promo Package registration</h1>
+                      <div>Number of Children: {arrChildren.length}</div>
+                      <div className="font-medium">Week Promos</div>
+                      <div className="w-full overflow-auto">
+                        <div className="w-full min-w-[1024px] pb-8">
+                          <div className="flex items-stretch justify-evenly gap-4 w-full">
+                            <WeekPromos weekNum={6}
+                              summerCampPerWeekPromos={weekPromos(6)}
+                              promoPackage={promoPackage.value}
+                              onChange={(val: SummerCampPromoSetting) => {
+                                reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
+                              }}
+                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              weeksForSummerCamp={weeksForSummerCamp.value}
+                              onCheckboxChange={onCheckboxChange} />
+                            <WeekPromos weekNum={7}
+                              summerCampPerWeekPromos={weekPromos(7)}
+                              promoPackage={promoPackage.value}
+                              onChange={(val: SummerCampPromoSetting) => {
+                                reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
+                              }}
+                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              weeksForSummerCamp={weeksForSummerCamp.value}
+                              onCheckboxChange={onCheckboxChange} />
+                            <WeekPromos weekNum={8}
+                              summerCampPerWeekPromos={weekPromos(8)}
+                              promoPackage={promoPackage.value}
+                              onChange={(val: SummerCampPromoSetting) => {
+                                reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
+                              }}
+                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              weeksForSummerCamp={weeksForSummerCamp.value}
+                              onCheckboxChange={onCheckboxChange} />
+                            <WeekPromos weekNum={9}
+                              summerCampPerWeekPromos={weekPromos(9)}
+                              promoPackage={promoPackage.value}
+                              onChange={(val: SummerCampPromoSetting) => {
+                                reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
+                              }}
+                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              weeksForSummerCamp={weeksForSummerCamp.value}
+                              onCheckboxChange={onCheckboxChange} />
+                          </div>
+                        </div>
+
+                      </div>
+
                     </div>
-                  </div>
+                    {
+                      promoPackage.errorText !== '' &&
+                      (<div className="text-danger">{promoPackage.errorText}</div>)
+                    }
+                    {
+                      weeksForSummerCamp.errorText !== '' &&
+                      (<div className="text-danger">{weeksForSummerCamp.errorText}</div>)
+                    }
+                  </>
                 )
             }
+
+
           </div>
         )
       }

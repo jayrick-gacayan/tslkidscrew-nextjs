@@ -4,6 +4,7 @@ import {
   getProgramSettingYearCycleForRegRecordAction,
   getSummerCampRegPromosForPromoAction,
   getSummerCampRegWeeksForRecordAction,
+  getSummerCampWeeksForPromoAction,
   getVacationCampsForCreateRegRecordAction
 } from "@/actions/registration-create-action";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
@@ -28,9 +29,11 @@ export default async function Page({
   params: { program_type: string }
   searchParams: { [key: string]: string | string[] | undefined; }
 }) {
-  let summerCampWeeks: Partial<SummerCampWeekSetting>[] | undefined = [];
+  let summerCampWeeks: Partial<SummerCampWeekSetting>[] = [];
   let programYearCycle: ProgramYearCycleSetting & any | undefined = undefined;
   let vacationCamps: Partial<VacationCampSetting>[] | undefined = [];
+  let summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[] = [];
+
 
   const { program_type } = params;
 
@@ -47,7 +50,8 @@ export default async function Page({
   if (location_id) {
     summerCampWeeks = (await getSummerCampRegWeeksForRecordAction(location_id)) ?? [];
     programYearCycle = await getProgramSettingYearCycleForRegRecordAction(location_id);
-    vacationCamps = (await getVacationCampsForCreateRegRecordAction(location_id)) ?? []
+    vacationCamps = (await getVacationCampsForCreateRegRecordAction(location_id)) ?? [];
+    summerCampWeeksForPromo = (await getSummerCampWeeksForPromoAction()) ?? [];
   }
 
   return (
@@ -60,6 +64,7 @@ export default async function Page({
 
           summerCampPromos={summerCampPromos!}
           summerCampWeeks={summerCampWeeks}
+          summerCampWeeksForPromo={summerCampWeeksForPromo}
           programYearCycle={programYearCycle}
           vacationCamps={vacationCamps} />
       </div>

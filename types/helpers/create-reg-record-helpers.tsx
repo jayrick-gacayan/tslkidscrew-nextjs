@@ -1,12 +1,14 @@
 import { WEEK_DAYS } from "../constants/week-days";
 import numsIntoWord from "./date-helpers";
 
-export function summerCampRecordAttribObj(weekNum: number) {
-  let arrayNum = Array.from({ length: 10 }).map((_val, _idx) => { return _idx + 1 });
+export function summerCampRecordAttribObj(summer_camp_weeks: any) {
+  let arrWeekTo10 = Array.from({ length: 10 }).map((_val, _idx) => { return _idx + 1 });
 
-  return arrayNum.reduce((curr, prev, index, arr) => {
+  return arrWeekTo10.reduce((curr, prev, idx) => {
+    let tempKey = `week_${numsIntoWord(arrWeekTo10[idx])}`
+
     return Object.assign({
-      [`week_${numsIntoWord(arr[index])}`]: index + 1 <= weekNum ? true : false
+      [`${tempKey}`]: summer_camp_weeks.includes(tempKey)
     }, curr)
   }, {});
 }
