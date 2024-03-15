@@ -89,7 +89,7 @@ export default function PopperWeekPromos({
           <div ref={refs.setFloating}
             style={floatingStyles}
             className="rounded-lg z-[99999] drop-shadow bg-white p-2 w-[360px] h-[360px] overflow-auto"
-            {...getFloatingProps({ autoFocus: false })} >
+            {...getFloatingProps()} >
             <div className="space-y-2 p-4">
               {
                 summerCampWeeksForPromo.map((summerCampWeek: Partial<SummerCampWeekSetting>) => {
@@ -97,7 +97,7 @@ export default function PopperWeekPromos({
                     <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampWeek.id}`}
                       id={`summer-camp-reg-weeks-${summerCampWeek.id}`}
                       labelText={summerCampWeek.name}
-                      name='summer-camp-reg-weeks[]'
+                      autoFocus={false}
                       checked={weeksForSummerCamp.find((value: Partial<SummerCampWeekSetting>) => {
                         return value.id === summerCampWeek.id;
                       }) ? true : false}

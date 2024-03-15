@@ -56,10 +56,6 @@ export default function RegistrationTypeSummerCamp({
     });
   }, [filterMemo]);
 
-  // useEffect(() => {
-  //   if (summerCampPackageReg.value !== 'regular') { reduxStore.dispatch(summerCampRegWeeksSet(fieldInputValue([]))); }
-  // }, [summerCampPackageReg.value])
-
   function renderRegTypeRadio(value: string, current: string) {
     return (
       <span className="rounded-full border border-warning h-5 w-5 p-1">
