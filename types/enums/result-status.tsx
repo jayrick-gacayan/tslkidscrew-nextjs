@@ -8,4 +8,4 @@ export enum ResultStatus {
   SERVER_ERROR,
   NOT_FOUND,
   NO_CONTENT,
-}
+};

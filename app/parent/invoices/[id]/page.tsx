@@ -1,20 +1,14 @@
 import BackButtonClient from "@/app/_components/back-button-client";
-import { auth } from "@/auth";
 import { Invoice } from "@/models/invoice";
-import { Parent } from "@/models/parent";
 import { Result } from "@/models/result";
-import { getCustomerInvoice } from "@/services/invoice-services";
-import { Session } from "next-auth";
 import { notFound } from "next/navigation";
 import InvoiceInfoData from "../_components/invoice-info-data";
+import { getCustomerInvoiceAction } from "@/actions/invoices-actions";
 
 export default async function Page({ params }: { params: { id: string; } }) {
-  let parent: Session | null = await auth();
-  let result: Result<Invoice> = await getCustomerInvoice(params.id, parent?.user?.accessToken!);
+  let result: Result<Invoice> = await getCustomerInvoiceAction(params.id);
 
-  if (!result.data) {
-    notFound();
-  }
+  if (!result.data) { notFound(); }
 
   let invoice: Invoice = result.data;
 

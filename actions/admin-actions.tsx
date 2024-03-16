@@ -2,16 +2,44 @@
 
 import { auth } from '@/auth';
 import {
+  activeAdminUsers,
   addAdminUser,
+  adminUser,
+  adminUsers,
   changeAdminUserActiveStatus,
   updateAdminUser
 } from '@/services/admin-services';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
-import { Session } from 'next-auth';
+import { Session, User } from 'next-auth';
 import * as Joi from 'joi';
 import { ValidationType } from '@/types/enums/validation-type';
 import { ResultStatus } from '@/types/enums/result-status';
 import { revalidatePath } from 'next/cache';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { Result } from '@/models/result';
+import { Admin } from '@/models/admin';
+
+export async function adminUsersAction(searchParams: SearchParamsProps) {
+  let admin: Session | null = await auth();
+
+  return await adminUsers(searchParams, admin?.user?.accessToken!);
+}
+
+export async function adminUserAction(id: string) {
+  let admin: Session | null = await auth();
+
+  return await adminUser(id, admin?.user?.accessToken!);
+}
+
+export async function activeAdminUsersAction() {
+  let admin: Session | null = await auth();
+  let result: Result<Admin[]> = await activeAdminUsers(admin?.user?.accessToken!);
+
+  return result.data?.map((admin: Admin) => {
+    let { id, email } = admin;
+    return { id, email }
+  }) ?? [] as Pick<Admin, 'id' | 'email'>[];
+}
 
 export async function addAdminUserAction(
   prevState: AdminUserFormStateProps,
@@ -39,7 +67,7 @@ export async function addAdminUserAction(
     return {
       message: 'Something went wrong. Please try again',
       success: false,
-    }
+    };
   }
 
   return {
@@ -55,12 +83,15 @@ export async function updateAdminUserAction(
 ) {
   let admin: Session | null = await auth();
 
-  formData.set('admin-user-email', email)
+  formData.set('admin-user-email', email);
 
   let tempEmail = formData.get('admin-user-email') as string ?? '';
   let name = formData.get('admin-user-name') as string ?? '';
 
-  let errors = adminUserFormValidate({ "admin-user-name": name });
+  let errors = adminUserFormValidate({
+    'admin-user-email': tempEmail,
+    'admin-user-name': name
+  });
 
   if (errors) { return errors; }
 
@@ -69,19 +100,19 @@ export async function updateAdminUserAction(
     name,
     isSuperAdmin: formData.get('admin-user-is-super-admin') ? true : false,
     isActive: formData.get('admin-user-active') ? true : false,
-  }, admin?.user?.accessToken!)
+  }, admin?.user?.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: 'Something went wrong. Please try again',
       success: false,
-    }
+    };
   }
 
   return {
     message: 'Successfully updated an admin user',
     success: true,
-  }
+  };
 }
 
 export async function changeAdminUserActiveStatusAction(id: number) {
@@ -106,16 +137,16 @@ const adminUserSchema = Joi.object({
       'string.empty': 'Admin user name is required.',
       'any.required': 'Admin user name is required.',
     })
-})
+});
 
-function adminUserFormValidate(validateData: Partial<{
+function adminUserFormValidate(validateData: {
   'admin-user-email': string;
   'admin-user-name': string;
-}>) {
-  const validate = adminUserSchema.validate(validateData, { abortEarly: false })
+}) {
+  const validate = adminUserSchema.validate(validateData, { abortEarly: false });
 
   if (validate?.error) {
-    return validate.error?.details.reduce((prev, curr) => {
+    return validate.error?.details.reduce((prev, curr, index) => {
       return Object.assign({
         [curr.context?.key ?? '']: {
           value: curr.context?.value,
@@ -127,4 +158,16 @@ function adminUserFormValidate(validateData: Partial<{
   }
 
   return validate.error;
+}
+
+export async function currentAdminAction() {
+  let admin: Session | null = await auth();
+
+  if (!!admin) {
+    let { accessToken, ...rest } = admin.user as User<Partial<Admin>>;
+
+    return { user: rest };
+  }
+
+  return undefined;
 }

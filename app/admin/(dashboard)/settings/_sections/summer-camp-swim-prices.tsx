@@ -1,18 +1,18 @@
 'use client';
 
-import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
-import { Listbox, Transition } from "@headlessui/react";
-import { capitalCase, noCase } from "change-case";
-import { useCallback, useMemo, useState } from "react";
-import SummerCampSwimSettingTableFormData from "../_components/summer-camp-swim-form-data";
+import { Fa6SolidChevronDown } from '@/app/_components/svg/fa6-solid-chevron-down';
+import { SummerCampSwimSetting } from '@/models/summer-camp-swim-setting';
+import { Listbox, Transition } from '@headlessui/react';
+import { capitalCase, noCase } from 'change-case';
+import { useCallback, useMemo, useState } from 'react';
+import SummerCampSwimSettingTableFormData from '../_components/summer-camp-swim-form-data';
 
 export default function SummerCampSwimPrices({
   summerCampSwimSettings
 }: {
   summerCampSwimSettings: SummerCampSwimSetting[];
 }) {
-  const [focusId, setFocusId] = useState<number | undefined>(undefined);
+  const [focusId, setFocusId] = useState<number | undefined>(-1);
   const [withSwim, setWithSwim] = useState<string>('without-swimming-rates');
 
   const summerCampSwimSettingsMemo = useMemo(() => {
@@ -32,22 +32,22 @@ export default function SummerCampSwimPrices({
     .reverse();
 
   return (
-    <div className="space-y-4">
-      <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center">
-        <div className="flex-1">
-          <h1 className="font-medium text-[24px] text-black">Prices</h1>
+    <div className='space-y-4'>
+      <div className='flex sm:flex-row flex-col items-start gap-2 sm:items-center'>
+        <div className='flex-1'>
+          <h1 className='font-medium text-[24px] text-black'>Prices</h1>
         </div>
-        <div className="flex-none relative">
+        <div className='flex-none relative'>
           <Listbox value={withSwim} onChange={(value: string) => { setWithSwim(value); }}>
             <Listbox.Button
-              as="div"
-              className="bg-primary rounded text-white flex items-center w-full justify-between">
+              as='div'
+              className='bg-primary rounded text-white flex items-center w-full justify-between'>
               {
                 ({ open }) => {
                   return (
                     <>
-                      <div className="px-3 py-2">{capitalCase(noCase(withSwim))}</div>
-                      <div className="px-3 py-2">
+                      <div className='px-3 py-2'>{capitalCase(noCase(withSwim))}</div>
+                      <div className='px-3 py-2'>
                         <Fa6SolidChevronDown className={`fill-white transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
                       </div>
                     </>
@@ -55,14 +55,14 @@ export default function SummerCampSwimPrices({
                 }
               }
             </Listbox.Button>
-            <Transition enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0">
+            <Transition enter='transition duration-100 ease-out'
+              enterFrom='transform scale-95 opacity-0'
+              enterTo='transform scale-100 opacity-100'
+              leave='transition duration-75 ease-out'
+              leaveFrom='transform scale-100 opacity-100'
+              leaveTo='transform scale-95 opacity-0'>
               <Listbox.Options as='div'
-                className="absolute top-[105%] left-0 w-full bg-white rounded drop-shadow overflow-hidden">
+                className='absolute top-[105%] left-0 w-full bg-white rounded drop-shadow overflow-hidden'>
                 {['with-swimming-rates', 'without-swimming-rates'].map((value: any, index: any) => (
                   <Listbox.Option
                     as='div'
@@ -79,15 +79,15 @@ export default function SummerCampSwimPrices({
           </Listbox>
         </div>
       </div>
-      <div className="block overflow-auto">
-        <table className="min-w-[1024px] w-full">
+      <div className='block overflow-auto'>
+        <table className='min-w-[1024px] w-full'>
           <thead>
-            <tr className="[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light">
-              <th className="w-48">Name</th>
+            <tr className='[&>th]:font-medium [&>th]:text-black [&>th]:px-2 [&>th]:py-3 [&>th]:bg-secondary-light'>
+              <th className='w-48'>Name</th>
               {
                 weeksSwimArray.map((value) => {
                   return (
-                    <th key={`prices-${withSwim}-${value}`} className="w-auto">
+                    <th key={`prices-${withSwim}-${value}`} className='w-auto'>
                       {value} Weeks or More {cbTableHeader()} Trip
                     </th>
                   );
@@ -100,8 +100,8 @@ export default function SummerCampSwimPrices({
               [1, 2, 3].map((childValue) => {
                 return (
                   <tr key={`prices-${withSwim}-${childValue}`}
-                    className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
-                    <td className="w-48">Children #{childValue}</td>
+                    className='[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary'>
+                    <td className='w-48'>Children #{childValue}</td>
                     {
                       summerCampSwimSettingsMemo.filter((summerCampSwimSetting: SummerCampSwimSetting) => {
                         return summerCampSwimSetting.child_record_count === childValue

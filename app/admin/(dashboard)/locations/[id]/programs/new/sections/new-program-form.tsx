@@ -8,7 +8,7 @@ import { LocationProgramFormStateProps } from "@/types/props/location-program-fo
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import CustomListbox from "@/app/_components/listbox-custom";
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import InputCheckboxCustom from "@/app/_components/input-checkbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
@@ -20,7 +20,7 @@ export default function NewProgramForm({
   activeAdmins,
   locationPlace,
 }: {
-  activeAdmins: Partial<Admin>[]
+  activeAdmins: Pick<Admin, 'id' | 'email'>[]
   locationPlace: LocationPlace
 }) {
   const [state, formAction] = useFormState(
@@ -57,7 +57,15 @@ export default function NewProgramForm({
     }
   }, [
     state
-  ])
+  ]);
+
+  function listboxClassName(value: string, placeholder: string) {
+    return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`;
+  }
+
+  function listboxDDIcon(open: boolean) {
+    return (<ListboxIconDropdownOne open={open} />);
+  }
 
   return (
     <form action={formAction} className="space-y-4" id='new-location-program'>
@@ -76,10 +84,8 @@ export default function NewProgramForm({
           items={PROGRAM_TYPES}
           labelText="Program"
           errorText={state?.name?.errorText}
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }}
-          listboxDropdownIcon={(open: boolean) => { return (<ListboxIconDropdownOne open={open} />) }}
+          valueClassName={listboxClassName}
+          listboxDropdownIcon={listboxDDIcon}
           validationStatus={state?.name?.validationStatus}
           keyDescription="new-program-form-name" />
         <InputCustom labelText="Name"
@@ -97,12 +103,11 @@ export default function NewProgramForm({
           items={activeAdmins}
           labelText="Director"
           by="id"
+          listboxDropdownIcon={listboxDDIcon}
           errorText={state?.['director[id]']?.errorText}
           validationStatus={state?.['director[id]']?.validationStatus}
           keyDescription="new-program-form-director"
-          valueClassName={(value: string, placeholder: string) => {
-            return `p-2 flex-1 ${value === placeholder ? 'text-secondary-light' : 'text-black'}`
-          }} />
+          valueClassName={listboxClassName} />
         <div className="flex items-center gap-2 w-full">
           <div className="w-full">
             <InputCustom labelText="Capacity"

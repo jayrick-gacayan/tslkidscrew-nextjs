@@ -1,14 +1,12 @@
 import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries"
 import BackButtonClient from "@/app/_components/back-button-client"
 import InfoContainer from "@/app/admin/(dashboard)/_components/info-container"
-import { auth } from "@/auth"
 import { LocationProgram } from "@/models/location-program"
 import { Result } from "@/models/result"
-import { locationProgram } from "@/services/location-program-services"
-import { Session } from "next-auth"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { currencyFormat } from "@/types/helpers/currency-format"
+import { locationProgramAction } from "@/actions/location-program-actions"
 
 export default async function Page({
   params
@@ -18,9 +16,7 @@ export default async function Page({
     program_id: string;
   }
 }) {
-  let currentAdmin: Session | null = await auth();
-
-  let result: Result<LocationProgram> = await locationProgram(params.program_id, currentAdmin?.user?.accessToken!);
+  let result: Result<LocationProgram> = await locationProgramAction(params.program_id);
 
   if (!result.data) { notFound(); }
 

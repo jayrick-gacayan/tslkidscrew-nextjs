@@ -1,5 +1,5 @@
-import { FormStateProps } from "./form-state-props";
-import { InputProps } from "./input-props";
+import { FormStateProps } from './form-state-props';
+import { InputProps } from './input-props';
 
 export interface AdminUserFormStateProps extends FormStateProps {
   'admin-user-email'?: InputProps<string>;

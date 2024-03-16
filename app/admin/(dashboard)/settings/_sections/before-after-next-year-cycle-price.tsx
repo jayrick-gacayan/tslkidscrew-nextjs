@@ -10,11 +10,11 @@ export default function BeforeAfterNextYearCyclePrice({
 }: {
   nextBeforeOrAfterSchoolSettings: BeforeOrAfterSchoolSetting[]
 }) {
-  const [daySelection, setDaySelection] = useState('everyday');
+  const [daySelection, setDaySelection] = useState('3-days-per-week');
   const [currentId, setCurrentId] = useState<number>(-1)
 
   const daysNumber = useMemo(() => {
-    return daySelection === 'everyday' ? 1 : daySelection === '3-days-per-week' ? 3 : 4;
+    return daySelection === '3-days-per-week' ? 3 : 4;
   }, [daySelection])
 
   const afterSettingsToShow = useMemo(() => {
@@ -40,7 +40,7 @@ export default function BeforeAfterNextYearCyclePrice({
           <div className="relative">
             <SettingListboxCustom listboxData={daySelection}
               onChangeListbox={(value: any) => { setDaySelection(value); }}
-              items={['up-to-3-days-a-week', '4-to-5-days-a-week', 'everyday']}
+              items={['up-to-3-days-a-week', '4-to-5-days-a-week']}
               keyDescription='show-current-before-or-after-setting' />
           </div>
         </div>
@@ -58,22 +58,19 @@ export default function BeforeAfterNextYearCyclePrice({
           <tbody>
             {
               [1, 2, 3].map((childValue) => {
-                let beforeBOAS = getBOASByProgramType(childValue, 'before');
-                let afterBOAS = getBOASByProgramType(childValue, 'after');
-                let bothBOAS = getBOASByProgramType(childValue, 'both');
                 return (
                   <tr key={`before-after-next-year-cycle-${childValue}`}
                     className="[&>td]:font-medium [&>td]:text-black [&>td]:text-center [&>td]:px-2 [&>td]:py-3 [&>td]:bg-secondary">
                     <td className="w-48">Children #{childValue}</td>
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={beforeBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'before')!} />
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={afterBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'after')!} />
                     <BeforeOrAfterSchoolFormData currentId={currentId}
                       setCurrentId={setCurrentId}
-                      beforeOrAfterSchoolSetting={bothBOAS!} />
+                      beforeOrAfterSchoolSetting={getBOASByProgramType(childValue, 'both')!} />
                   </tr>
                 )
               })

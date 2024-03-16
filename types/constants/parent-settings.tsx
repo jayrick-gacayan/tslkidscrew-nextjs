@@ -7,4 +7,4 @@ export const PARENT_SETTINGS = [
     name: 'Billing Info',
     altText: 'billing-info-settings',
   },
-]
+];

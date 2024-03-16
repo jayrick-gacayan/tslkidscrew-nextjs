@@ -4,7 +4,6 @@ import ProgramTypeTabContainer from "./_section/program-type-tab-container";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-import { Parent } from "@/models/parent";
 import { getCustomerInfo } from "@/services/parent-info-services";
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
@@ -33,12 +32,11 @@ export default async function Page({
 
   let customerInfoData = await getCustomerInfo(parent?.user.customer_id?.toString()!, parent?.user?.accessToken!);
 
-
   return (
     <div className="pb-12 w-full">
       <div className="rounded drop-shadow bg-white w-full lg:w-8/12 mx-auto block p-6 space-y-6">
         <h1 className="text-center font-medium text-[32px] text-black">
-          {capitalCase(program_type)} for Capital Region Families
+          {capitalCase(program_type)}
         </h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         <div className="block rounded bg-tertiary-dark h-72" />

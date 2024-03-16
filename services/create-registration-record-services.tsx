@@ -1,5 +1,5 @@
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
 
 export async function createRegistrationRecord(
   body: string,
@@ -13,9 +13,12 @@ export async function createRegistrationRecord(
       ...authHeaders(token)
     }
   );
+  console.log('respons on create reg record', body)
 
   try {
     let response = await result.json();
+
+    console.log('respons on create reg record', response)
 
     return new Result<any>({
       response: response,

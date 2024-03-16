@@ -3,15 +3,31 @@
 import { auth } from "@/auth";
 import {
   addLocationProgram,
+  locationProgram,
+  locationPrograms,
   removeLocationProgram,
   updateLocationProgram
 } from "@/services/location-program-services";
 import { ResultStatus } from "@/types/enums/result-status";
 import { ValidationType } from "@/types/enums/validation-type";
 import { LocationProgramFormStateProps } from "@/types/props/location-program-form-state-props";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 import * as Joi from "joi";
 import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
+
+export async function locationProgramsAction(id: string, searchParams: SearchParamsProps) {
+  let admin: Session | null = await auth();
+
+  return await locationPrograms(searchParams, id, admin?.user?.accessToken!);
+}
+
+export async function locationProgramAction(program_id: string) {
+  let admin: Session | null = await auth();
+
+  return await locationProgram(program_id, admin?.user?.accessToken!);
+}
+
 
 export async function editLocationProgramAction(
   id: number,
@@ -23,9 +39,7 @@ export async function editLocationProgramAction(
 
   let errors = locationProgramValidateErrors(formData);
 
-  if (errors) {
-    return errors;
-  }
+  if (errors) { return errors; }
 
   let result = await updateLocationProgram(
     getProgramInputs(location_id.toString(), formData),
@@ -38,14 +52,14 @@ export async function editLocationProgramAction(
       message: result.message ?? result.error,
       error: result.message ?? result.error,
       success: false
-    }
+    };
   }
 
   return {
     data: result.data,
     message: 'Successfully updated a location program',
     success: true
-  }
+  };
 }
 
 export async function addLocationProgramAction(
@@ -57,9 +71,7 @@ export async function addLocationProgramAction(
 
   let errors = locationProgramValidateErrors(formData);
 
-  if (errors) {
-    return errors;
-  }
+  if (errors) { return errors; }
 
   let result = await addLocationProgram(
     getProgramInputs(id.toString(), formData),
@@ -71,14 +83,14 @@ export async function addLocationProgramAction(
       message: result.message ?? 'Something went wrong.',
       error: result.error ?? result.message,
       success: false
-    }
+    };
   }
 
   return {
     data: result.data,
     message: 'Successfully created a program',
     success: true
-  }
+  };
 }
 
 export async function removeProgramAction(location_id: string, id: number) {
@@ -116,7 +128,7 @@ const locationProgramSchema = Joi.object({
       'any.required': 'Capacity is required.',
       'string.pattern.base': `Capacity must be numeric.`
     }),
-})
+});
 
 function getProgramInputs(id: string, formData: FormData) {
   return {
@@ -127,7 +139,7 @@ function getProgramInputs(id: string, formData: FormData) {
     name: formData.get('name') as string ?? '',
     name_suffix: formData.get('name-suffix') as string ?? '',
     is_package_active: !!formData.get('promo-package') ? 'true' : 'false'
-  }
+  };
 }
 
 function locationProgramValidateErrors(formData: FormData): LocationProgramFormStateProps | undefined {

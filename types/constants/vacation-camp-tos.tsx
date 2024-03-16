@@ -17,4 +17,4 @@ export const VACATION_CAMP_TOS: TOSInfos[] = [
     num: 'four',
     text: 'I agree that my child can attend an off-site park if enrolled at Sacred Heart, Clifton Park, Delmar, or Rotterdam.'
   },
-]
+];

@@ -1,4 +1,4 @@
-import { Admin } from "./admin";
+import { Admin } from './admin';
 
 export interface LocationPlace {
   id?: number;
@@ -6,9 +6,9 @@ export interface LocationPlace {
   address?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
-  deleted?: false,
+  deleted?: boolean;
   minimum_age?: number | null;
   director?: Admin | null;
   director_id?: number | null;
-  program_count?: number | null;
+  programs_count?: number | null;
 }

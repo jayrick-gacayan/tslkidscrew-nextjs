@@ -64,3 +64,19 @@ export function dateTimeString(
 ) {
   return new Date(date).toLocaleString('en-US', options);
 }
+
+export default function numsIntoWord(num: number) {
+  switch (num) {
+    case 2: return 'two';
+    case 3: return 'three';
+    case 4: return 'four';
+    case 5: return 'five';
+    case 10: return 'ten';
+    case 6: return 'six';
+    case 7: return 'seven';
+    case 8: return 'eight';
+    case 9: return 'nine';
+    case 1: return 'one';
+    default: return ' '
+  }
+}

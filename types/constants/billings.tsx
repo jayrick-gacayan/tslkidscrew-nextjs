@@ -7,4 +7,4 @@ export const PARENT_BILLINGS = [
     name: 'Receipts',
     altText: 'receipts',
   },
-]
+];

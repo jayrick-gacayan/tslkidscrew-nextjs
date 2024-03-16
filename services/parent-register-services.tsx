@@ -1,7 +1,7 @@
-import { Parent } from "@/models/parent";
-import { Result } from "@/models/result";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { CustomerInfoInputTypes } from "@/types/input-types/customer-info-input-types";
+import { Parent } from '@/models/parent';
+import { Result } from '@/models/result';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { CustomerInfoInputTypes } from '@/types/input-types/customer-info-input-types';
 
 export async function registerParent({
   email,
@@ -15,7 +15,7 @@ export async function registerParent({
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/register`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
         customer_user: {
           email,
@@ -64,7 +64,7 @@ export async function registerCustomer(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customers`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
         customer: {
           email,
@@ -83,12 +83,22 @@ export async function registerCustomer(
       ...authHeaders(token)
     });
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Parent>({
-    ...response,
-    data: response.customer ?? undefined,
-    message: response.message ?? result.statusText,
-    statusCode: result.status
-  });
+    return new Result<Parent>({
+      ...response,
+      data: response.customer ?? undefined,
+      message: response.message ?? result.statusText,
+      statusCode: result.status
+    });
+  } catch (error) {
+    return new Result<Parent>({
+      response: undefined,
+      error: result.statusText,
+      message: result.statusText,
+      statusCode: result.status
+    });
+  }
+
 }

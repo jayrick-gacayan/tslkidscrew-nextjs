@@ -1,4 +1,4 @@
-import { LocationPlace } from '@/models/location';
+import { LocationPlace } from '@/models/location-place';
 import LocationTableClient from './location-table-client';
 import TableEmptyData from '@/app/_components/table-empty-data';
 import SomethingWentWrongClient from '@/app/_components/table-something-went-wrong-client';

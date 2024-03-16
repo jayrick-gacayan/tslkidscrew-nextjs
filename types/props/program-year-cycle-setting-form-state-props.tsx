@@ -1,5 +1,5 @@
-import { FormStateProps } from "./form-state-props";
-import { InputProps } from "./input-props";
+import { FormStateProps } from './form-state-props';
+import { InputProps } from './input-props';
 
 export interface ProgramYearCycleSettingFormStateProps extends FormStateProps {
   'current-year'?: InputProps<string>;

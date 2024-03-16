@@ -1,4 +1,4 @@
-import { LocationPlace } from "@/models/location";
+import { LocationPlace } from "@/models/location-place";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
 import { FillInFormState } from "./fill-in-form-state";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -6,12 +6,16 @@ import { ChildInfoType } from "@/types/input-types/child-info-type";
 import { initChild } from "../_helpers/init-child";
 import { InputProps } from "@/types/props/input-props";
 import { ValidationType } from "@/types/enums/validation-type";
+import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
+import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
+import { VacationCampSetting } from "@/models/vacation-camp-setting";
 
 const initialState: FillInFormState = {
   stripeModalOpen: false,
   fillInForm: {
     location: fieldInputValue<Partial<LocationPlace> | undefined>(undefined),
-    children: [initChild],
+    childrenArr: [initChild],
+    defDateForChildForm: undefined,
     TOSCondition: fieldInputValue<any[]>([]),
 
     //for program type before-or-after-school
@@ -24,7 +28,11 @@ const initialState: FillInFormState = {
 
     // for program type summer-camp
     summerCampPackageReg: fieldInputValue(''),
-    promoPackage: undefined
+    summerCampRegWeeks: fieldInputValue([]),
+    promoPackage: fieldInputValue(undefined),
+
+    // for program type vacation-camp
+    vacationCamps: fieldInputValue([]),
   }
 }
 
@@ -47,7 +55,7 @@ const fillInFormSlice = createSlice({
     childrenAdded: (state: FillInFormState) => {
       return {
         ...state,
-        fillInForm: { ...state.fillInForm, children: [...state.fillInForm.children, initChild] }
+        fillInForm: { ...state.fillInForm, childrenArr: [...state.fillInForm.childrenArr, initChild] }
       }
     },
     childrenRemoved: (state: FillInFormState, action: PayloadAction<number>) => {
@@ -55,7 +63,7 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          children: state.fillInForm.children.filter((val: ChildInfoType, idx: number) => {
+          childrenArr: state.fillInForm.childrenArr.filter((val: ChildInfoType, idx: number) => {
             return idx !== action.payload
           })
         }
@@ -75,7 +83,7 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          children: state.fillInForm.children.map((val: ChildInfoType, idx: number) => {
+          childrenArr: state.fillInForm.childrenArr.map((val: ChildInfoType, idx: number) => {
             return idx === index ? { ...val, [key]: value } : val
           })
         }
@@ -161,6 +169,35 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: { ...state.fillInForm, summerCampPackageReg: action.payload }
       }
+    },
+    summerCampPromoSet: (state: FillInFormState, action: PayloadAction<InputProps<SummerCampPromoSetting | undefined>>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          promoPackage: action.payload,
+        }
+      }
+    },
+    summerCampRegWeeksSet: (state: FillInFormState, action: PayloadAction<InputProps<Partial<SummerCampWeekSetting>[]>>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          summerCampRegWeeks: action.payload
+        }
+      }
+    },
+
+    // for program-type 'vacation-camp'
+    vacationCampsSet: (state: FillInFormState, action: PayloadAction<InputProps<Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[]>>) => {
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          vacationCamps: action.payload
+        }
+      }
     }
   }
 })
@@ -182,6 +219,11 @@ export const {
 
   //for program type 'summer-camp'
   summerCampPackageRegChanged,
+  summerCampRegWeeksSet,
+  summerCampPromoSet,
+
+  // for program-type 'vacation-camp'
+  vacationCampsSet,
 
 } = fillInFormSlice.actions;
 

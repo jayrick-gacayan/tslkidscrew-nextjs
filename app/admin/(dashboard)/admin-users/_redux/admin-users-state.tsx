@@ -1,4 +1,3 @@
-import { RequestStatus } from "@/types/enums/request-status";
 import { InputProps } from "@/types/props/input-props";
 
 export interface AdminUsersState {
@@ -12,7 +11,6 @@ export interface AdminUsersState {
     name: InputProps<string>;
     isActive: boolean;
     isSuperAdmin: boolean;
-    requestStatus: RequestStatus;
     id?: number
   }
 }

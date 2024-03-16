@@ -9,13 +9,17 @@ import { ToastContentProps, toast } from "react-toastify";
 import Fa6UserXmark from "@/app/_components/svg/fa6-solid-user-xmark";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidUserCheck from "@/app/_components/svg/fa6-solid-user-check";
-import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
 import { dateString, dateTimeString } from "@/types/helpers/date-helpers";
 import { changeAdminUserActiveStatusAction } from "@/actions/admin-actions";
 import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
+import { reduxStore } from "@/react-redux/redux-store";
+import {
+  editAdminUserFields,
+  modalFormOpened,
+  modalFormTypeSet
+} from "../_redux/admin-users-slice";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
-  const { modalOpen, modalType, setDumpData } = useAdminUserHook();
   const [dataAdmins, setDataAdmins] = useState(admins);
   const [adminId, setAdminId] = useState<any>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
@@ -41,10 +45,11 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   }, [admins]);
 
   const showSwal = async (admin: Admin, activeAdmin: string) => {
+    console.log('admin', activeAdmin)
     let { id, name, email, active } = admin
 
     let result: SweetAlertResult<any> = await confirmSwalInfo(
-      `Are you sure you want to ${activeAdmin === 'No' ? 'in' : ''}activate`,
+      `Are you sure you want to ${activeAdmin === 'Yes' ? 'in' : ''}activate`,
       name! ?? email!
     );
 
@@ -84,7 +89,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     <tbody className="text-[15px]">
       {
         dataAdmins.map((admin: Admin, idx: number) => {
-          let { id, name, active, created_at, email, is_super_admin, updated_at, } = admin;
+          let { id, name, active, email, is_super_admin, updated_at, } = admin;
           let adminActive = (active === undefined || !active) ? 'No' : 'Yes'
 
           let ActiveIcon = adminActive === 'Yes' ? Fa6UserXmark : Fa6SolidUserCheck;
@@ -118,9 +123,10 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     (
                       <button className="text-warning block cursor-pointer"
                         onClick={() => {
-                          modalOpen(true);
-                          modalType('update');
-                          setDumpData(admin);
+                          let { name, email, id, is_super_admin, active } = admin;
+                          reduxStore.dispatch(modalFormOpened(true));
+                          reduxStore.dispatch(modalFormTypeSet('update'));
+                          reduxStore.dispatch(editAdminUserFields({ email, name, id, is_super_admin, active }))
                         }}>
                         <Fa6SolidPen />
                       </button>

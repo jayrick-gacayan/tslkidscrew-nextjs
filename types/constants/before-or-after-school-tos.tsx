@@ -1,4 +1,4 @@
-import { TOSInfos } from "../props/tos-infos";
+import { TOSInfos } from '../props/tos-infos';
 
 export const BEFORE_OR_AFTER_SCHOOL_TOS: TOSInfos[] = [
   {
@@ -11,7 +11,7 @@ export const BEFORE_OR_AFTER_SCHOOL_TOS: TOSInfos[] = [
   },
   {
     num: 'three',
-    text: 'I understand that my payment will be deducted on the 2 nd of each month if I am on auto pay.'
+    text: 'I understand that my payment will be deducted on the 2nd of each month if I am on auto pay.'
   },
   {
     num: 'four',
@@ -41,4 +41,4 @@ export const BEFORE_OR_AFTER_SCHOOL_TOS: TOSInfos[] = [
     num: 'ten',
     text: "I understand that if cancelling services prior to June that my deposit will be applied only if notice was given in advance of that month's billing cycle. i.e. if your last month of service is November, we need to know about it by October 31."
   },
-]
+];

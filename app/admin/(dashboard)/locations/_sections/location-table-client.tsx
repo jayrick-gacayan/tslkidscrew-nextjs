@@ -4,7 +4,7 @@ import { removeLocationPlaceAction } from "@/actions/location-actions";
 import Fa6SolidEye from "@/app/_components/svg/fa6-solid-eye";
 import { Fa6SolidPen } from "@/app/_components/svg/fa6-solid-pen";
 import Fa6SolidSchoolCircleXmark from "@/app/_components/svg/fa6-solid-school-circle-xmark";
-import { LocationPlace } from "@/models/location"
+import { LocationPlace } from "@/models/location-place"
 import { confirmSwalInfo } from "@/types/helpers/sweet-alert-helpers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -77,7 +77,7 @@ export default function LocationTableClient({ locationPlaces }: { locationPlaces
               <td className="w-56">
                 {locationPlace.director?.email ?? 'N?A'}
               </td>
-              <td className="w-24">{locationPlace?.program_count ?? "N/A"}</td>
+              <td className="w-24">{locationPlace?.programs_count ?? "N/A"}</td>
               <td className="w-40">{locationPlace.minimum_age!}</td>
               <td className="w-24">
                 <div className="flex items-center justify-center gap-2 w-full">

@@ -12,5 +12,5 @@ export default function ToastComponentClient() {
       bodyClassName='flex-1 font-medium block p-3 w-full flex text-black'
       autoClose={3000}
     />
-  )
+  );
 }

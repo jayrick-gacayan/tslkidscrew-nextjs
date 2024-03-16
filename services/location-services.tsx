@@ -1,9 +1,9 @@
-import { Paginate } from "@/models/paginate";
-import { Result } from "@/models/result";
-import { LocationPlace } from "@/models/location";
-import { LocationPlaceInputs } from "@/types/input-types/location-place-input-types";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import { Paginate } from '@/models/paginate';
+import { Result } from '@/models/result';
+import { LocationPlace } from '@/models/location-place';
+import { LocationPlaceInputs } from '@/types/input-types/location-place-input-types';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 
 export async function locationPlaces(
   searchParams: SearchParamsProps,
@@ -17,17 +17,25 @@ export async function locationPlaces(
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Paginate<LocationPlace>>({
-    ...response,
-    data: {
-      data: response.locations ?? [],
-      total: response.locations_count ?? 1,
-    } ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
+    return new Result<Paginate<LocationPlace>>({
+      ...response,
+      data: {
+        data: response.locations ?? [],
+        total: response.locations_count ?? 1,
+      } ?? undefined,
+      statusCode: result.status,
+      response: response
+    });
+  } catch (error) {
+    return new Result<Paginate<LocationPlace>>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText
+    });
+  }
 }
 
 export async function locationPlace(id: string, token?: string) {
@@ -66,9 +74,9 @@ export async function createLocationPlace({
 ) {
   let result = await fetch(process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        ["location"]: {
+        ['location']: {
           name,
           address,
           director_id,
@@ -111,7 +119,7 @@ export async function updateLocationPlace(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({
         ['location']: {
           name,
@@ -152,7 +160,7 @@ export async function removeLocationPlace(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
     {
       ...authHeaders(token),
-      method: "DELETE"
+      method: 'DELETE'
     }
   );
 
@@ -166,7 +174,7 @@ export async function removeLocationPlace(
   });
 }
 
-export async function getAllLocationsForRegRecordCreate(
+export async function getAllLocationsForCreateRegRecord(
   program_name: string,
   token: string
 ) {

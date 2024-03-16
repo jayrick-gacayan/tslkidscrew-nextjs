@@ -1,14 +1,11 @@
-import { auth } from "@/auth";
 import { Admin } from "@/models/admin";
-import { adminUser } from "@/services/admin-services";
-import { Session } from "next-auth";
 import { notFound } from "next/navigation";
 import AdminInfoData from "./admin-info-data";
 import EditInfoButton from "./edit-info-button";
+import { adminUserAction } from "@/actions/admin-actions";
 
 export default async function AdminInfoContainer({ id }: { id: string }) {
-  let currentAdmin: Session | null = await auth();
-  let result = await adminUser(id, currentAdmin?.user?.accessToken);
+  let result = await adminUserAction(id);
 
   if (!result.data) { notFound(); }
 

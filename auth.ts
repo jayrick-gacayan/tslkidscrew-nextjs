@@ -1,8 +1,8 @@
-import Credentials from "@auth/core/providers/credentials"
-import NextAuth, { User } from "next-auth"
-import { authConfig } from "./auth.config";
-import { Parent } from "./models/parent";
-import { Admin } from "./models/admin";
+import Credentials from '@auth/core/providers/credentials'
+import NextAuth, { User } from 'next-auth'
+import { authConfig } from './auth.config';
+import { Parent } from './models/parent';
+import { Admin } from './models/admin';
 
 export const {
   handlers: {
@@ -27,13 +27,13 @@ export const {
           (role === 'parent' ? `${env.NEXT_PUBLIC_API_PARENT_URL!}/sign-in` :
             `${env.NEXT_PUBLIC_API_ADMIN_URL!}/sign_in`),
           {
-            method: "POST",
+            method: 'POST',
             body: JSON.stringify({ [role === 'parent' ? 'customer_user' : 'user']: { email, password } }),
             headers: {
-              "Content-Type": "application/json"
+              'Content-Type': 'application/json'
             }
           }
-        )
+        );
 
         try {
           const response = await result.json();
@@ -42,7 +42,11 @@ export const {
             if (response.status === 200) {
 
               if (role === 'parent') {
-                let { customer_user: { access_token, first_name, last_name, email, customer_id, ...rest }, ...others } = response;
+                let {
+                  customer_user: { access_token, first_name, last_name, email, customer_id, ...rest },
+                  ...others
+                } = response;
+
                 return {
                   first_name,
                   last_name,
@@ -50,7 +54,7 @@ export const {
                   customer_id,
                   role: 'parent',
                   accessToken: access_token
-                } as User<Partial<Parent>>
+                } as User<Partial<Parent>>;
               }
               else if (role === 'admin') {
                 let { user: { access_token, name, email, ...rest } } = response;
@@ -60,17 +64,17 @@ export const {
                   email,
                   role: 'admin',
                   accessToken: response.token
-                } as User<Partial<Admin>>
+                } as User<Partial<Admin>>;
               }
 
             }
             else if (response.status === 300) {
-              throw new Error(response.error)
+              throw new Error(response.error);
             }
           }
         }
         catch (error) {
-          throw new Error('Something went wrong. Please try again.')
+          throw new Error('Something went wrong. Please try again.');
         }
 
         return null;

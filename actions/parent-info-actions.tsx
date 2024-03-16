@@ -1,7 +1,7 @@
 'use server';
 
 import { auth, unstable_update } from '@/auth';
-import { updateCustomerInfo } from '@/services/parent-info-services';
+import { getCustomerInfo, updateCustomerInfo } from '@/services/parent-info-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-state-props';
@@ -14,10 +14,6 @@ export async function updateCustomerInfoAction(
 ) {
   let parent: Session | null = await auth();
 
-  const rawFormData = Object.fromEntries(formData.entries());
-
-  console.log('sdfsdkf', rawFormData)
-
   let first_name = formData.get('first_name') as string ?? '';
   let last_name = formData.get('last_name') as string ?? '';
 
@@ -25,14 +21,14 @@ export async function updateCustomerInfoAction(
     first_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Firstname is required.",
-        "any.required": "Firstname is required",
+        'string.empty': 'Firstname is required.',
+        'any.required': 'Firstname is required',
       }),
     last_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Lastname is required.",
-        "any.required": "Lastname is required",
+        'string.empty': 'Lastname is required.',
+        'any.required': 'Lastname is required',
       }),
   });
 
@@ -41,7 +37,6 @@ export async function updateCustomerInfoAction(
     { abortEarly: false }
   );
 
-  console.log('validate.errors', validate.error)
   if (validate.error) {
     return validate.error?.details.reduce((prev, curr) => {
       return Object.assign({
@@ -70,16 +65,33 @@ export async function updateCustomerInfoAction(
     return {
       message: result.message,
       success: false,
-    }
+    };
   }
 
-  // let updateSession = await unstable_update({
-  //   first_name,
-  //   last_name,
-  // });
+  let updateSession = await unstable_update({
+    user: {
+      first_name,
+      last_name,
+    }
+  });
 
   return {
     message: 'Successfully updated your personal details.',
     success: true,
-  }
+  };
+}
+
+export async function getParentInfo() {
+  let parent: Session | null = await auth();
+
+  let parentData: Omit<Session, 'accessToken'> | null = parent;
+
+  return parentData;
+}
+
+export async function getCustomerInfoAction() {
+  let parent: Session | null = await auth();
+
+  let { customer_id, accessToken } = parent?.user!;
+  return await getCustomerInfo(customer_id?.toString()!, accessToken!);
 }

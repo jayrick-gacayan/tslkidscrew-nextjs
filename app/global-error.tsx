@@ -1,33 +1,8 @@
 'use client';
 
-import { Montserrat } from "next/font/google";
-import './globals.css';
-import PhSmileyAngryFill from "./_components/svg/ph-smiley-angry-fill";
 import SomethingWentWrong from "./_components/something-went-wrong";
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  style: [
-    'normal',
-    'italic'
-  ],
-  weight: [
-    '100',
-    '200',
-    '300',
-    '400',
-    '500',
-    '600',
-    '700',
-    '800',
-    '900'
-  ],
-  display: 'swap',
-  fallback: [
-    'system-ui',
-    'arial'
-  ],
-})
+import { montserrat } from "@/types/helpers/montserrat-font";
+import './globals.css';
 
 export default function GlobalError({
   error,
@@ -44,5 +19,5 @@ export default function GlobalError({
         </div>
       </body>
     </html>
-  )
+  );
 }

@@ -1,13 +1,12 @@
-import { Admin } from "@/models/admin";
-import { LocationPlace } from "@/models/location";
-import { LocationProgram } from "@/models/location-program";
-import { Result } from "@/models/result";
-import { adminUser } from "./admin-services";
-import { locationPlace } from "./location-services";
-import { Paginate } from "@/models/paginate";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { LocationProgramInputs } from "@/types/input-types/location-program-input-types";
+import { LocationPlace } from '@/models/location-place';
+import { LocationProgram } from '@/models/location-program';
+import { Result } from '@/models/result';
+import { adminUser } from './admin-services';
+import { locationPlace } from './location-services';
+import { Paginate } from '@/models/paginate';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { LocationProgramInputs } from '@/types/input-types/location-program-input-types';
 
 export async function locationProgram(id: string, token: string) {
   let result = await fetch(
@@ -15,31 +14,40 @@ export async function locationProgram(id: string, token: string) {
     { ...authHeaders(token!) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  if (result.status === 200) {
-    let director = await adminUser(response.program.director_id, token);
-    let locationPlaceData = await locationPlace(response.program.location_id, token);
+    if (result.status === 200) {
+      let director = await adminUser(response.program.director_id, token);
+      let locationPlaceData = await locationPlace(response.program.location_id, token);
+
+      return new Result<LocationProgram>({
+        ...response,
+        data: {
+          ...response.program,
+          director: director.data,
+          locationPlace: locationPlaceData.data
+        },
+        statusCode: result.status,
+        response: response
+      });
+
+    }
 
     return new Result<LocationProgram>({
       ...response,
-      data: {
-        ...response.program,
-        director: director.data,
-        locationPlace: locationPlaceData.data
-      },
+      data: response.program ?? undefined,
       statusCode: result.status,
       response: response
     });
-
+  } catch (error) {
+    return new Result<LocationProgram>({
+      response: undefined,
+      statusCode: result.status,
+      error: result.statusText,
+      message: result.statusText
+    });
   }
-
-  return new Result<LocationProgram>({
-    ...response,
-    data: response.program ?? undefined,
-    statusCode: result.status,
-    response: response
-  });
 }
 
 export async function locationPrograms(
@@ -56,16 +64,25 @@ export async function locationPrograms(
     { ...authHeaders(token!) }
   )
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<Paginate<LocationProgram>>({
-    ...response,
-    data: {
-      data: response.programs ?? [],
-      total: response.total_programs ?? 1,
-    },
-    statusCode: result.status
-  })
+    return new Result<Paginate<LocationProgram>>({
+      ...response,
+      data: {
+        data: response.programs ?? [],
+        total: response.total_programs ?? 1,
+      },
+      statusCode: result.status
+    })
+  } catch (error) {
+    return new Result<Paginate<LocationProgram>>({
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status
+    })
+  }
 }
 
 export async function addLocationProgram(
@@ -83,7 +100,7 @@ export async function addLocationProgram(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs`,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
         program: {
           location_id,
@@ -128,7 +145,7 @@ export async function removeLocationProgram(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/programs/${id}`,
     {
       ...authHeaders(token!),
-      method: "DELETE"
+      method: 'DELETE'
     }
   );
 

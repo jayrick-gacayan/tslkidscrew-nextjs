@@ -1,18 +1,18 @@
 'use server'
 
-import { nextauthSignIn, nextauthSignOut } from "@/services/nextauth-services";
-import { redirect } from "next/navigation";
-import * as Joi from "joi";
-import { ValidationType } from "@/types/enums/validation-type";
-import { LoginFormStateProps } from "@/types/props/login-form-state-props";
-import { ParentRegisterFormStateProps } from "@/types/props/parent-register-form-state-props";
-import { registerCustomer, registerParent } from "@/services/parent-register-services";
-import { ResultStatus } from "@/types/enums/result-status";
-import { Result } from "@/models/result";
-import { fieldInputValue } from "@/types/helpers/field-input-value";
-import { CustomerInfoFormStateProps } from "@/types/props/customer-info-form-state-props";
-import { Session } from "next-auth";
-import { auth, unstable_update } from "@/auth";
+import { nextauthSignIn, nextauthSignOut } from '@/services/nextauth-services';
+import { redirect } from 'next/navigation';
+import * as Joi from 'joi';
+import { ValidationType } from '@/types/enums/validation-type';
+import { LoginFormStateProps } from '@/types/props/login-form-state-props';
+import { ParentRegisterFormStateProps } from '@/types/props/parent-register-form-state-props';
+import { registerCustomer, registerParent } from '@/services/parent-register-services';
+import { ResultStatus } from '@/types/enums/result-status';
+import { Result } from '@/models/result';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
+import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-state-props';
+import { Session } from 'next-auth';
+import { auth, unstable_update } from '@/auth';
 
 export async function authSignOut(redirectTo: string) {
   let result = await nextauthSignOut(redirectTo);
@@ -65,7 +65,7 @@ export async function roleLogin(
       error: result.error,
       success: false,
       message: result.error,
-    }
+    };
   }
 
   redirect(result);
@@ -75,6 +75,10 @@ export async function registerParentAction(
   prevState: ParentRegisterFormStateProps,
   formData: FormData
 ) {
+
+  let email = formData.get('email') as string ?? '';
+  let password = formData.get('password') as string ?? '';
+
   let registerSchema = Joi.object({
     ...emailPassSchema,
     confirm_password: Joi.string()
@@ -85,12 +89,12 @@ export async function registerParentAction(
         'string.empty': 'Password confirmation is required',
         'any.required': 'Password confirmation is required',
       }),
-  })
+  });
 
   let registerDetails = {
-    email: formData.get('email') as string ?? '',
-    password: formData.get('password') as string ?? '',
     confirm_password: formData.get('confirm_password') as string ?? '',
+    email,
+    password,
   };
 
   let validate = registerSchema.validate(registerDetails, { abortEarly: false });
@@ -114,12 +118,12 @@ export async function registerParentAction(
       success: false,
       message: result.message ?? result.error,
       error: result.message ?? result.error,
-    }
+    };
   }
 
   return {
-    password: fieldInputValue(formData.get('password') as string ?? ''),
-    email: fieldInputValue(formData.get('email') as string ?? ''),
+    password: fieldInputValue(password),
+    email: fieldInputValue(email),
     success: true,
     message: 'Successfully registered parent account.'
   };
@@ -139,16 +143,16 @@ export async function registerCustomerAction(
     first_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Firstname is required.",
-        "any.required": "Firstname is required",
+        'string.empty': 'Firstname is required.',
+        'any.required': 'Firstname is required',
       }),
     last_name: Joi.string()
       .required()
       .messages({
-        "string.empty": "Lastname is required.",
-        "any.required": "Lastname is required",
+        'string.empty': 'Lastname is required.',
+        'any.required': 'Lastname is required',
       }),
-  })
+  });
 
   let validate = customerSchema.validate(
     { first_name, last_name },
@@ -185,15 +189,15 @@ export async function registerCustomerAction(
     return {
       message: result.message,
       success: false,
-    }
+    };
   }
 
-  // let updateSession = await unstable_update({ first_name, last_name });
+  let updateSession = await unstable_update({ user: { first_name, last_name } });
 
   return {
     message: result.message,
     success: true,
-  }
+  };
 }
 
 /* helpers */
@@ -202,14 +206,14 @@ const emailPassSchema = {
     .required()
     .email()
     .messages({
-      "string.empty": "Email is required.",
-      "string.email": "Email is in invalid format.",
-      "any.required": "Email is required",
+      'string.empty': 'Email is required.',
+      'string.email': 'Email is in invalid format.',
+      'any.required': 'Email is required',
     }),
   password: Joi.string()
     .required()
     .messages({
-      "string.empty": "Password is required.",
-      "any.required": "Password is required",
+      'string.empty': 'Password is required.',
+      'any.required': 'Password is required',
     }),
-}
+};

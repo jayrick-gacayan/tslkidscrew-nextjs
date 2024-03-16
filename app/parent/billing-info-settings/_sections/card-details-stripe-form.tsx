@@ -7,11 +7,12 @@ import {
   CardExpiryElement,
   CardCvcElement
 } from "@stripe/react-stripe-js";
-import { FormEvent } from "react";
+import { StripeError } from "@stripe/stripe-js";
+import { FormEvent, useState } from "react";
 import { ToastContentProps, toast } from "react-toastify";
 
 export default function CardDetailsStripeForm() {
-
+  const [error, setError] = useState<StripeError | undefined>(undefined);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -20,19 +21,17 @@ export default function CardDetailsStripeForm() {
 
     if (!stripe || !elements) { return; }
 
-    // Use elements.getElement to get references to the CardNumber, CardExpiry, and CardCvc elements.
+    // Use elements.getElement to get references to the CardNumber
     const cardNumberElement = elements.getElement(CardNumberElement);
-    const cardExpiryElement = elements.getElement(CardExpiryElement);
-    const cardCvcElement = elements.getElement(CardCvcElement);
 
     // Use the createToken method to create a token from the card Element.
     const { token, error } = await stripe.createToken(cardNumberElement!);
 
     if (error) {
-      console.error(error);
+      setError(error)
+      // console.error(error);
     } else {
-      console.log('token', token);
-
+      // console.log('token', token);
       let result = await addCardAction(token.id!);
 
       toast((props: ToastContentProps<unknown>) => {
@@ -62,8 +61,11 @@ export default function CardDetailsStripeForm() {
                   options={{ showIcon: true, }} />
               </div>
             </div>
+            {
+              (error && (error?.code === 'incomplete_number' || error?.code === 'invalid_number')) &&
+              <div className="text-danger">{error.message}</div>
+            }
           </label>
-
           <div className="flex items-center gap-4">
             <label className="w-full space-y-1">
               <span className="font-medium">Date Expiry</span>
@@ -88,9 +90,15 @@ export default function CardDetailsStripeForm() {
               </div>
             </label>
           </div>
-
+          {
+            (error && error?.code === 'incomplete_expiry') &&
+            <div className="text-danger">{error.message}</div>
+          }
+          {
+            (error && error?.code === 'incomplete_cvc') &&
+            <div className="text-danger">{error.message}</div>
+          }
         </div>
-
       </div>
       <div className="w-fit ml-auto block space-x-4">
         <button type="submit"

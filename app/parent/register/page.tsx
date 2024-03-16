@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+
   return (
     <div className="flex items-center justify-center pt-12">
       <div className="w-[448px] m-auto block bg-white rounded p-8 shadow-lg space-y-8">

@@ -1,25 +1,30 @@
 'use server';
 
-import { auth } from "@/auth";
-import { Admin } from "@/models/admin";
-import { Session } from "next-auth";
-import * as Joi from "joi";
-import { ValidationType } from "@/types/enums/validation-type";
+import { auth } from '@/auth';
+import { Session } from 'next-auth';
+import * as Joi from 'joi';
+import { ValidationType } from '@/types/enums/validation-type';
 import {
+  getBeforeOrAfterSchoolSettings,
+  getProgramYearCycleSettings,
+  getSummerCampPromoSettings,
+  getSummerCampSwimPrices,
+  getSummerCampWeekPrices,
+  getVacationCampSchedulesSettings,
   updateBeforeOrAfterSchoolSettings,
   updateProgramYearCycleSetting,
   updateSummerCampPromoSettings,
   updateSummerCampSwimSetting,
   updateSummerCampWeekSetting,
   updateVacationCampScheduleSetting
-} from "@/services/program-settings-services";
-import { Result } from "@/models/result";
-import { ResultStatus } from "@/types/enums/result-status";
-import { SummerCampWeekSettingFormStateProps } from "@/types/props/summer-camp-week-setting-form-state-props";
-import { SummerCampSwimSettingFormStateProps } from "@/types/props/summer-camp-swim-setting-form-state-props";
-import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
-import { ProgramYearCycleSettingFormStateProps } from "@/types/props/program-year-cycle-setting-form-state-props";
-import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
+} from '@/services/program-settings-services';
+import { Result } from '@/models/result';
+import { ResultStatus } from '@/types/enums/result-status';
+import { SummerCampWeekSettingFormStateProps } from '@/types/props/summer-camp-week-setting-form-state-props';
+import { SummerCampSwimSettingFormStateProps } from '@/types/props/summer-camp-swim-setting-form-state-props';
+import { VacationCampSettingFormStateProps } from '@/types/props/vacation-camp-setting-form-state-props';
+import { ProgramYearCycleSettingFormStateProps } from '@/types/props/program-year-cycle-setting-form-state-props';
+import { SummerCampSwimSetting } from '@/models/summer-camp-swim-setting';
 
 export async function updateSummerCampWeekSettingAction(
   id: number,
@@ -32,8 +37,8 @@ export async function updateSummerCampWeekSettingAction(
     'week-name': Joi.string()
       .required()
       .messages({
-        "string.empty": "Week name is required.",
-        "any.required": "Week name is required",
+        'string.empty': 'Week name is required.',
+        'any.required': 'Week name is required',
       }),
     'week-capacity': Joi.string()
       .required()
@@ -49,7 +54,7 @@ export async function updateSummerCampWeekSettingAction(
         'string.empty': 'Week start date is required.',
         'any.required': 'Week start date is required.',
       }),
-  })
+  });
 
   let weekName = formData.get('week-name') as string ?? '';
   let weekCapacity = formData.get('week-capacity') as string ?? '';
@@ -89,7 +94,7 @@ export async function updateSummerCampWeekSettingAction(
     return {
       success: false,
       message: result.message,
-    }
+    };
   }
 
   return {
@@ -114,7 +119,7 @@ export async function updateSummerCampSwimSettingAction(
         'any.required': 'Price is required.',
         'string.pattern.base': `Price must be numeric.`
       })
-  })
+  });
 
   let validate = updateSummerCampSwimSettingSchema.validate({
     'summer-camp-swim-price': formData.get('summer-camp-swim-price') ?? '',
@@ -144,7 +149,7 @@ export async function updateSummerCampSwimSettingAction(
     return {
       success: false,
       message: result.message,
-    }
+    };
   }
 
   return {
@@ -189,7 +194,7 @@ export async function updateSummerCampPromoSettingsAction(
         'any.required': 'Price is required.',
         'string.pattern.base': `Price must be in decimal form.`
       })
-  })
+  });
 
   let validateError: { errors: Array<{ [key: string]: any }> } = { errors: [] };
 
@@ -224,15 +229,15 @@ export async function updateSummerCampPromoSettingsAction(
         child_record_count: val?.child_record_count ?? 1,
         week_count: val?.week_count ?? 6,
         price: val?.price ?? 1,
-        with_swim_trip: "false"
+        with_swim_trip: 'false'
       }, admin?.user?.accessToken!)
     })
-  )
+  );
 
   return {
     message: 'Successfull updated the summer camp week promo setting',
     success: true,
-  }
+  };
 }
 
 export async function updateVacationCampSettingAction(
@@ -241,7 +246,6 @@ export async function updateVacationCampSettingAction(
   formData: FormData
 ) {
   let admin: Session | null = await auth();
-  const rawFormData = Object.fromEntries(formData.entries())
 
   let name = formData.get('vacation-camp-name') as string ?? '';
   let capacity = formData.get('vacation-camp-capacity') as string ?? '';
@@ -278,7 +282,7 @@ export async function updateVacationCampSettingAction(
     'vacation-camp-dates': dates,
   }, {
     abortEarly: false,
-  })
+  });
 
   if (validate.error) {
     return validate.error?.details.reduce((prev, curr) => {
@@ -295,7 +299,7 @@ export async function updateVacationCampSettingAction(
   let formDataToSend = new FormData();
 
   formDataToSend.append(`vacation_camp_schedules[${id}]name`, name);
-  formDataToSend.append(`vacation_camp_schedules[${id}]year`, yearStr)
+  formDataToSend.append(`vacation_camp_schedules[${id}]year`, yearStr);
   formDataToSend.append(`vacation_camp_schedules[${id}]month`, monthStr);
   formDataToSend.append(`vacation_camp_schedules[${id}]dates`, dates);
 
@@ -305,13 +309,13 @@ export async function updateVacationCampSettingAction(
     return {
       message: result.message ?? result.error,
       success: false,
-    }
+    };
   }
 
   return {
     message: 'Successfully updated a vacation schedule',
     success: true,
-  }
+  };
 }
 
 export async function updateProgramYearCycleSettingAction(
@@ -334,7 +338,7 @@ export async function updateProgramYearCycleSettingAction(
         'string.empty': 'Next Year Cycle is required.',
         'any.required': 'Next Year Cycle is required.',
       })
-  })
+  });
 
   let currentYear = formData.get('current-year') as string ?? '';
   let nextYear = formData.get('next-year') as string ?? ''
@@ -342,7 +346,7 @@ export async function updateProgramYearCycleSettingAction(
   let validate = programSettingSchema.validate({
     'current-year': currentYear,
     'next-year': nextYear
-  }, { abortEarly: false })
+  }, { abortEarly: false });
 
   if (validate.error) {
     return validate.error?.details.reduce((prev, curr) => {
@@ -367,15 +371,13 @@ export async function updateProgramYearCycleSettingAction(
     return {
       message: result.message,
       success: false,
-
-    }
+    };
   }
 
   return {
     message: 'Successfully updated program setting year cycle.',
     success: true,
-
-  }
+  };
 }
 
 export async function updateBeforeOrAfterSchoolSettingAction(
@@ -390,11 +392,24 @@ export async function updateBeforeOrAfterSchoolSettingAction(
     return {
       success: false,
       message: result.message,
-    }
+    };
   }
 
   return {
     success: true,
     message: 'Successfully update the before or after school setting data.'
   };
+}
+
+export async function getAllSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await Promise.all([
+    getSummerCampWeekPrices(admin?.user?.accessToken!),
+    getSummerCampSwimPrices(admin?.user?.accessToken!),
+    getSummerCampPromoSettings(admin?.user?.accessToken!),
+    getVacationCampSchedulesSettings(admin?.user?.accessToken!),
+    getProgramYearCycleSettings(admin?.user?.accessToken!),
+    getBeforeOrAfterSchoolSettings(admin?.user?.accessToken!, '2024-2025')
+  ]);
 }

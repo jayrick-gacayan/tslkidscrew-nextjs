@@ -3,7 +3,8 @@
 import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
 import ShowEntriesSelect from "../../../../_components/show-entries-select";
 import { SearchParamsProps } from "@/types/props/search-params-props";
-import { useAdminUserHook } from "../_contexts/use-admin-user-hook";
+import { reduxStore } from "@/react-redux/redux-store";
+import { modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
 
 export default function AdminUsersHeader({
   searchParams,
@@ -14,7 +15,6 @@ export default function AdminUsersHeader({
   showEntry: number;
   redirectURL: (url: string) => Promise<void>
 }) {
-  const { modalOpen, modalType } = useAdminUserHook();
   let baseURL = "/admin/admin-users";
 
   function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
@@ -42,8 +42,8 @@ export default function AdminUsersHeader({
         <div className="w-full">
           <button className="rounded text-white bg-primary px-4 py-2 text-sm text-center"
             onClick={() => {
-              modalOpen(true);
-              modalType('add');
+              reduxStore.dispatch(modalFormOpened(true));
+              reduxStore.dispatch(modalFormTypeSet('add'));
             }}>
             Add a New Admin User
           </button>

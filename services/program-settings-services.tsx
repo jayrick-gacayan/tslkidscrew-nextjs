@@ -1,13 +1,13 @@
-import { BeforeOrAfterSchoolSetting } from "@/models/before-or-after-school-setting";
-import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";
-import { Result } from "@/models/result";
-import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { SummerCampSwimSetting } from "@/models/summer-camp-swim-setting";
-import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
-import { VacationCampSetting } from "@/models/vacation-camp-setting";
-import { authHeaders } from "@/types/helpers/auth-headers";
-import { ProgramYearCycleSettingInputTypes } from "@/types/input-types/program-year-cycle-setting-input-types";
-import { SummerCampSwimSettingInputTypes } from "@/types/input-types/summer-camp-swim-setting-input-types";
+import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
+import { ProgramYearCycleSetting } from '@/models/program-year-cycle-setting';
+import { Result } from '@/models/result';
+import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
+import { SummerCampSwimSetting } from '@/models/summer-camp-swim-setting';
+import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
+import { VacationCampSetting } from '@/models/vacation-camp-setting';
+import { authHeaders } from '@/types/helpers/auth-headers';
+import { ProgramYearCycleSettingInputTypes } from '@/types/input-types/program-year-cycle-setting-input-types';
+import { SummerCampSwimSettingInputTypes } from '@/types/input-types/summer-camp-swim-setting-input-types';
 
 export async function getProgramYearCycleSettings(token: string) {
   let result = await fetch(
@@ -46,7 +46,7 @@ export async function updateProgramYearCycleSetting(
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/update-program-settings`,
     {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({
         program_setting: {
           id,
@@ -154,13 +154,21 @@ export async function getSummerCampWeekPrices(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<SummerCampWeekSetting[]>({
-    ...response,
-    data: response.week_settings ?? [],
-    statusCode: result.status,
-  })
+    return new Result<SummerCampWeekSetting[]>({
+      ...response,
+      data: response.week_settings ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampWeekSetting[]>({
+      response: undefined,
+      error: result.statusText,
+      statusCode: result.status,
+    })
+  }
 }
 
 export async function updateSummerCampWeekSetting(
@@ -201,13 +209,23 @@ export async function getSummerCampPromoSettings(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<SummerCampPromoSetting[]>({
-    ...response,
-    data: response.promos ?? [],
-    statusCode: result.status,
-  })
+    return new Result<SummerCampPromoSetting[]>({
+      ...response,
+      data: response.promos ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<SummerCampPromoSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
+
 }
 
 export async function updateSummerCampPromoSettings(
@@ -270,13 +288,22 @@ export async function getVacationCampSchedulesSettings(token: string) {
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
 
-  return new Result<VacationCampSetting[]>({
-    ...response,
-    data: response.vacation_camp ?? [],
-    statusCode: result.status,
-  })
+    return new Result<VacationCampSetting[]>({
+      ...response,
+      data: response.vacation_camp ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<VacationCampSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
 }
 
 export async function updateVacationCampScheduleSetting(formData: FormData, token: string) {
@@ -317,13 +344,22 @@ export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: s
     { ...authHeaders(token) }
   );
 
-  let response = await result.json();
+  try {
+    let response = await result.json();
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      response: response,
+      data: response.master_prices ?? [],
+      statusCode: result.status,
+    })
+  } catch (error) {
+    return new Result<BeforeOrAfterSchoolSetting[]>({
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status,
+      response: undefined,
+    })
+  }
 
-  return new Result<BeforeOrAfterSchoolSetting[]>({
-    response: response,
-    data: response.master_prices ?? [],
-    statusCode: result.status,
-  })
 }
 
 export async function updateBeforeOrAfterSchoolSettings(formData: FormData, token: string) {
@@ -386,3 +422,144 @@ export async function getProgramSettingYearCycleForRegRecord(location_id: string
     })
   }
 }
+
+export async function getSummerCampWeeksForRegular(location_id: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_summer_camp_weeks?location_id=${encodeURIComponent(location_id)}`,
+    {
+      ...authHeaders(token)
+    });
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<Partial<SummerCampWeekSetting>[]>({
+        response: response,
+        data: response.summer_camp_weeks,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}
+
+export async function getSummerCampPromosForCreateRegRecord(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_all_summer_camp_promo`,
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-promo-create-reg-record'] }
+    });
+
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<SummerCampPromoSetting[]>({
+        response: response,
+        data: response.promos,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<SummerCampPromoSetting[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<SummerCampPromoSetting[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}
+
+export async function getVacationCampsForCreateRegRecord(location_id: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_vacation_camp_schedules?location_id=${encodeURIComponent(location_id)}`,
+    { ...authHeaders(token) }
+  );
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<Partial<VacationCampSetting>[]>({
+        response: response,
+        data: response.vacation_camp_schedules,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<Partial<VacationCampSetting>[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}
+
+export async function getSummerCampWeeksForPromo(token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/summer_camp_week_settings`,
+    { ...authHeaders(token) }
+  );
+
+  try {
+    let response = await result.json();
+
+    if (result.status === 200) {
+      return new Result<Partial<SummerCampWeekSetting>[]>({
+        response: response,
+        data: response.week_settings,
+        statusCode: result.status,
+        message: result.statusText
+      })
+    }
+
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: result.status,
+    })
+
+  } catch (error) {
+    return new Result<Partial<SummerCampWeekSetting>[]>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+      error: result.statusText
+    })
+  }
+}
+
