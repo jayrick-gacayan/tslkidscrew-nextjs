@@ -92,8 +92,9 @@ export default function RegistrationTypeSummerCamp({
             value='promo'
             current={summerCampPackageReg.value}
             renderRadio={renderRegTypeRadio}
-            labelClassName='transition-all duration-100 has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
-            onChange={summerCampRegHandleChanged} />
+            labelClassName='transition-all duration-100 has-[:disabled]:cursor-not-allowed has-[:disabled]:bg-tertiary has-[:checked]:bg-primary has-[:checked]:text-white rounded flex px-4 py-4 gap-2 items-center bg-secondary-light cursor-pointer'
+            onChange={summerCampRegHandleChanged}
+            disabled={summerCampWeeks.length < 6} />
           <FormsRadioButton labelText='Regular Registration'
             value='regular'
             name="reg-type-summer-camp"

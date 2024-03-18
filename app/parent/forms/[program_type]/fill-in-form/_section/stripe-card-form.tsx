@@ -11,7 +11,11 @@ import { StripeError } from "@stripe/stripe-js";
 import { reduxStore } from "@/react-redux/redux-store";
 import { modalStripeToggled } from "../_redux/fill-in-form-slice";
 
-export default function StripeCardForm() {
+export default function StripeCardForm({
+  program_type
+}: {
+  program_type: string
+}) {
   const [error, setError] = useState<StripeError | undefined>(undefined);
   const stripe = useStripe();
   const elements = useElements();
@@ -32,8 +36,23 @@ export default function StripeCardForm() {
       console.error(error);
     } else {
 
+      let form = document.getElementById(`${program_type}-fill-in-form`) as HTMLFormElement;
 
+      if (!!form) {
+        let input = document.createElement('input');
+
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', 'stripe_token');
+        input.setAttribute('value', token.id);
+
+
+        form.append(input);
+
+        form.requestSubmit();
+        reduxStore.dispatch(modalStripeToggled(false));
+      }
       console.log(token)
+
       // Send the payment method ID to your server to complete the payment.
     }
   };

@@ -10,12 +10,10 @@ import { fillInFormReset } from '../_redux/fill-in-form-slice';
 export default function FillInFormButtons({
   program_type,
   step,
-  formAction,
   cardDetails,
 }: {
   program_type: string;
   step: string | undefined;
-  formAction: (formData: FormData) => void;
   cardDetails: Partial<Parent> | undefined
 }) {
   const { pending } = useFormStatus();
@@ -56,17 +54,11 @@ export default function FillInFormButtons({
             {
               stepInNumber > 1 &&
               (
-                <button type='button'
+                <button type='submit'
                   value='back'
                   name='back-button'
-                  className='px-4 py-2 bg-white text-primary rounded border border-primary'
-                  onClick={() => {
-                    if (stepInNumber > 1) {
-                      let formData = new FormData();
-                      formData.set('back-button', 'back');
-                      formAction(formData);
-                    }
-                  }}>
+                  className='px-4 py-2 disabled:cursor-not-allowed bg-white text-primary rounded border border-primary'
+                  disabled={pending}>
                   Previous
                 </button>
               )

@@ -73,7 +73,7 @@ export default function PaymentFormContainer({
       case 'vacation-camp': return VACATION_CAMP_TOS;
       default: return [];
     }
-  }, [program_type,]);
+  }, [program_type]);
 
   const totalPrice = useCallback(() => {
     switch (program_type) {
@@ -87,7 +87,7 @@ export default function PaymentFormContainer({
     program_type,
     vacationCamps,
     childrenArr
-  ])
+  ]);
 
   return (
     <div className="relative">
@@ -155,12 +155,7 @@ export default function PaymentFormContainer({
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Annual Package Fee:</div>
-              <div>{
-                Intl.NumberFormat('en-US', {
-                  style: "currency",
-                  currency: 'USD',
-                }).format(0.00)
-              }</div>
+              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD' }, 0.00)}</div>
             </div>
             <div className='px-4 py-2 flex justify-between items-center'>
               <div>Total Amount Due:</div>
@@ -170,8 +165,7 @@ export default function PaymentFormContainer({
         </div>
         <StripeFormContainer />
       </div>
-      <ModalCardInfoForStripe />
+      <ModalCardInfoForStripe program_type={program_type} />
     </div>
-
   )
 }
