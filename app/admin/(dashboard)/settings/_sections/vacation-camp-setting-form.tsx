@@ -16,8 +16,7 @@ import { VacationCampSetting } from "@/models/vacation-camp-setting";
 import ListboxIconDropdownTwo from "@/app/_components/listbox-icon-dropdown-two";
 import CustomListbox from "@/app/_components/listbox-custom";
 import DatepickerMonthYearInputCustom from '@/app/_components/react-datepicker/datepicker-month-year-custom-input';
-import { parse, format } from 'date-fns';
-import { toFirstUpperCase } from "@/types/helpers/string-helpers";
+import { format } from 'date-fns';
 import { VacationCampSettingFormStateProps } from "@/types/props/vacation-camp-setting-form-state-props";
 import { updateVacationCampSettingAction } from "@/actions/program-settings-actions";
 import { fieldInputValue } from "@/types/helpers/field-input-value";
@@ -25,6 +24,7 @@ import PopoverReactDayPicker from "@/app/_components/react-day-picker/popover-da
 import { pathRevalidate } from "@/actions/common-actions";
 import { toast, ToastContentProps } from "react-toastify";
 import SettingFormSubmit from "../_components/setting-form-submit";
+import { parseDates } from "@/types/helpers/date-helpers";
 
 const today = new Date();
 const maxDate = addYears(today, 1);
@@ -48,13 +48,7 @@ export default function VacationCampSettingForm({
   });
 
   const cbParseDate = useCallback((dateStr?: string, formatParse: string = 'yyyy-MMMM') => {
-    let strDate = `${vacationCampData?.year?.toString()}-${toFirstUpperCase(vacationCampData?.month ?? '')}`;
-
-    if (dateStr) {
-      strDate += `-${dateStr}`
-    }
-
-    return parse(strDate, formatParse, new Date());
+    return parseDates(dateStr, vacationCampData, formatParse);
   }, [
     vacationCampData
   ])
@@ -154,7 +148,6 @@ export default function VacationCampSettingForm({
                 <p className="font-semibold text-black">Capacity</p>
               </div>
               <div className="w-full sm:flex-1">
-
                 <InputCustom id='schedule-capacity'
                   name='vacation-camp-capacity'
                   type="text"

@@ -99,9 +99,7 @@ export async function fillInFormAction(
     }
 
     // Push the last object to the array
-    if (Object.keys(curChild).length !== 0) {
-      childrenArray.push(curChild);
-    }
+    if (Object.keys(curChild).length !== 0) { childrenArray.push(curChild); }
 
     return { ...objectStep, stepTwo: true, };
   } else if (step === 3) {
@@ -254,9 +252,37 @@ export async function fillInFormAction(
           validationStatus: ValidationType.ERROR,
         },
       };
-    }
+    }// checks if the user checks all the TOS checkboxes
+    else {
+      let stripeToken = formData.get('stripe_token') as string ?? '';
 
-    if (!!formData.get('location')) {
+      const childrenArray = [];
+      let curObjForChild: { [key: string]: any } = {};
+
+      for (const pair of formData.entries()) {
+        const [key, value] = pair;
+        if (key.includes('child-info')) {
+          if (key.includes('firstname')) {
+            if (Object.keys(curObjForChild).length !== 0) {
+              childrenArray.push(curObjForChild);
+              curObjForChild = {};
+            }
+          }
+          curObjForChild[key.replace('child-info[][', '').replace(']', '')] = value;
+        }
+      }
+
+      if (Object.keys(curObjForChild).length !== 0) {
+        childrenArray.push(curObjForChild);
+      }
+
+      let regRecord: { [key: string]: any } = {
+        location: decodeURIComponent(formData.get('location') as string ?? ''),
+        child_records_attributes: childrenArray,
+        referrer: formData.get('referrer') as string ?? '',
+        agree_to_tos: formData.get('agree_to_tos') as string === "true",
+      };
+
       if (!!customerInfo.data) {
         let {
           first_name,
@@ -272,29 +298,9 @@ export async function fillInFormAction(
           email,
         }: Parent = customerInfo.data;
 
-        const childrenArray = [];
-        let curObjForChild: { [key: string]: any } = {};
-
-        for (const pair of formData.entries()) {
-          const [key, value] = pair;
-          if (key.includes('child-info')) {
-            if (key.includes('firstname')) {
-              if (Object.keys(curObjForChild).length !== 0) {
-                childrenArray.push(curObjForChild);
-                curObjForChild = {};
-              }
-            }
-            curObjForChild[key.replace('child-info[][', '').replace(']', '')] = value;
-          }
-        }
-
-        if (Object.keys(curObjForChild).length !== 0) {
-          childrenArray.push(curObjForChild);
-        }
-
-        let regRecord: { [key: string]: any } = {
+        regRecord = {
+          ...regRecord,
           email: email,
-          location: decodeURIComponent(formData.get('location') as string ?? ''),
           customer_id: id?.toString(),
           parent_first_name: first_name,
           parent_last_name: last_name,
@@ -305,9 +311,6 @@ export async function fillInFormAction(
           city,
           state,
           zip_code,
-          agree_to_tos: formData.get('agree_to_tos') as string === "true",
-          referrer: formData.get('referrer') as string ?? '',
-          child_records_attributes: childrenArray,
         }
 
         switch (programType) {
@@ -334,26 +337,32 @@ export async function fillInFormAction(
             regRecord['summer_camp_record_attributes'] = summerCampRecordAttribObj(summer_camp_weeks);
             break;
           case 'vacation-camp':
-            let vacationCampsMonths = formData.getAll('month[]') as any[] ?? [];
+            let vacationCampsMonths = formData.getAll('month[][month]') as any[] ?? [];
+            let vacationCampsId = formData.getAll('month[][id]') as any[] ?? [];
 
             if (vacationCampsMonths.length > 0) {
-              regRecord['vacation_camp_record_attributes'] = vacationCampsMonths.map((val: string) => {
-                return {
-                  month: val,
-                  'monday': true,
-                  'tuesday': true,
-                  'wednesday': true,
-                  'thursday': true,
-                  'friday': true,
-                }
+              let attendanceObj: { [key: string]: any } = {};
+
+              vacationCampsMonths.forEach((value: any, idx: number) => {
+                attendanceObj[`${value}`] = vacationCampsId[idx];
               })
+
+
+              regRecord['attendance'] = attendanceObj;
             }
             break;
         }
 
+      }// data inserted for registration record;
+
+      if (!!stripeToken) {
         // console.log('regRecord', regRecord);
+
         let result = await createRegistrationRecord(
-          JSON.stringify({ registration_record: regRecord }),
+          JSON.stringify({
+            registration_record: regRecord,
+            stripeToken,
+          }),
           parent?.user?.accessToken!
         );
 
@@ -374,16 +383,37 @@ export async function fillInFormAction(
           success: true,
         }
       }
-    }
-    else {
-      if (!!customerInfo.data &&
-        !!customerInfo.data.card_last_four &&
-        customerInfo.resultStatus === ResultStatus.SUCCESS) {
-
-        return { ...objectStep, hasStripeCard: true };
-      }
       else {
-        return { ...objectStep, hasStripeCard: false };
+        if (!!customerInfo.data &&
+          !!customerInfo.data.card_last_four &&
+          customerInfo.resultStatus === ResultStatus.SUCCESS) {
+
+          console.log('regRecord', regRecord);
+          let result = await createRegistrationRecord(
+            JSON.stringify({ registration_record: regRecord }),
+            parent?.user?.accessToken!
+          );
+
+          if (result.resultStatus !== ResultStatus.SUCCESS) {
+            return {
+              ...objectStep,
+              message: result.message,
+              success: false,
+            }
+          }
+
+          let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+
+          return {
+            ...objectStep,
+            [stepKey]: true,
+            message: 'Successfully created a record',
+            success: true,
+          }
+        }
+        else {
+          return { ...objectStep, hasStripeCard: false };
+        }
       }
     }
   }

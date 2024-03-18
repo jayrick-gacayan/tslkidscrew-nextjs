@@ -5,7 +5,7 @@ import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-dow
 import CustomListbox from "@/app/_components/listbox-custom";
 import ListboxIconDropdownTwo from "@/app/_components/listbox-icon-dropdown-two";
 import VacationCampSettingForm from "./vacation-camp-setting-form";
-import { setDayNumber } from "@/types/helpers/date-helpers";
+import { getDayNumArr, setDayNumber } from "@/types/helpers/date-helpers";
 
 export default function VacationCampTabPanelContainer({
   vacationCampSettings
@@ -38,18 +38,7 @@ export default function VacationCampTabPanelContainer({
   ]);
 
   const getVacationCampDateRangeArr: any[] = useMemo(() => {
-    let result: any[] = [];
-
-    if (vacationCampData) {
-      let { id, name, month, updated_at, created_at, capacity, year, ...rest } = vacationCampData;
-
-      Object.entries(rest).forEach(([key, value]) => {
-        if (value) {
-          result.push(setDayNumber(key))
-        }
-      });
-    }
-    return result;
+    return getDayNumArr(vacationCampData);
   }, [
     vacationCampData
   ]);

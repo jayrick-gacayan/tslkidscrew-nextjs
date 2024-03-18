@@ -34,7 +34,6 @@ export default async function Page({
   let vacationCamps: Partial<VacationCampSetting>[] | undefined = [];
   let summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[] = [];
 
-
   const { program_type } = params;
 
   let step = typeof searchParams.step === 'string' ? searchParams.step : undefined;
