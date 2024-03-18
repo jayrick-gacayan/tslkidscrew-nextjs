@@ -47,13 +47,10 @@ export default function BankDetails() {
         });
       }
 
-
       addOrUpdateBank(public_token);
       // send public_token to server
       // console.log('public token', public_token)
       // console.log('metadata', metadata)
-
-
     },
   });
   return (
