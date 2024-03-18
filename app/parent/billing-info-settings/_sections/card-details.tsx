@@ -15,7 +15,7 @@ export default function CardDetails({
   cardDetails: Partial<Parent> | undefined;
 }) {
 
-  console.log('card details', cardDetails)
+  // console.log('card details', cardDetails)
   return (
     <Tab.Panel as='div' className="space-y-8">
       {

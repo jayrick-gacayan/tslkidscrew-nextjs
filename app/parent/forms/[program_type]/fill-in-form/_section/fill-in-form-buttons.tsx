@@ -74,7 +74,7 @@ export default function FillInFormButtons({
                 ) :
                 (
                   <div className='space-x-2'>
-                    <ButtonForPlaid />
+                    <ButtonForPlaid program_type={program_type} />
                     <button type='submit'
                       className={`px-4 py-2 w-44 bg-primary text-white rounded disabled:cursor-not-allowed`}
                       disabled={pending}>

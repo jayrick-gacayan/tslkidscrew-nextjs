@@ -1,7 +1,12 @@
+import { Products } from 'plaid';
 import { useEffect, useState } from 'react';
-import { usePlaidLink } from 'react-plaid-link';
+import { PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
-export default function ButtonForPlaid() {
+export default function ButtonForPlaid({
+  program_type
+}: {
+  program_type: string;
+}) {
   const [linkToken, setLinkToken] = useState<string>('');
 
   useEffect(() => {
@@ -12,23 +17,45 @@ export default function ButtonForPlaid() {
       });
 
       let response = await result.json();
-
-      // console.log('response', response)
       setLinkToken(response.link_token)
-
     }
-
     getLinkToken();
   }, []);
 
   const { open, ready } = usePlaidLink({
-
+    publicKey: process.env.NEXT_PLAID_PUBLIC_KEY!,
+    env: process.env.NEXT_PLAID_SECRET_KEY!,
+    clientName: 'TSL Adventures',
+    product: [Products.Auth],
     token: linkToken,
-    onSuccess: (public_token: any, metadata: any) => {
+    onSuccess: (
+      public_token: string,
+      metadata: PlaidLinkOnSuccessMetadata
+    ) => {
       // send public_token to server
-      console.log('public token', public_token)
-      console.log('metadata', metadata)
+      // console.log('public token', public_token)
+      // console.log('metadata', metadata)
 
+      let form = document.getElementById(`${program_type}-fill-in-form`) as HTMLFormElement;
+
+      if (!!form) {
+        let inputPublicToken = document.createElement('input');
+
+        inputPublicToken.setAttribute('type', 'hidden');
+        inputPublicToken.setAttribute('name', 'public_token');
+        inputPublicToken.setAttribute('value', public_token);
+
+        let inputAccountId = document.createElement('input');
+
+        inputAccountId.setAttribute('type', 'hidden');
+        inputAccountId.setAttribute('name', 'account_id');
+        inputAccountId.setAttribute('value', metadata.accounts[0].id);
+
+        form.append(inputPublicToken);
+        form.append(inputAccountId);
+
+        form.requestSubmit();
+      }
     },
   });
 

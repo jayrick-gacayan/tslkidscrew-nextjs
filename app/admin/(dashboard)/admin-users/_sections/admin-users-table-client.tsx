@@ -18,6 +18,7 @@ import {
   modalFormOpened,
   modalFormTypeSet
 } from "../_redux/admin-users-slice";
+import PopoverChangeActiveStatus from "../_components/popper-change-active-status";
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
   const [dataAdmins, setDataAdmins] = useState(admins);
@@ -49,7 +50,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     let { id, name, email, active } = admin
 
     let result: SweetAlertResult<any> = await confirmSwalInfo(
-      `Are you sure you want to ${activeAdmin === 'Yes' ? 'in' : ''}activate`,
+      `Are you sure you want to ${activeAdmin === 'Yes' ? 'de' : ''}activate`,
       name! ?? email!
     );
 
@@ -61,7 +62,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
       toast((props: ToastContentProps<Admin>) => {
         return (
           <div className="text-black flex gap-2">
-            <div className="flex-1">{props.data.name ?? props.data.email} has been {activeAdmin === 'No' ? 'in' : ''}activated from the admin list.</div>
+            <div className="flex-1">{props.data.name ?? props.data.email} has been {activeAdmin === 'Yes' ? 'de' : ''}activated from the admin list.</div>
             <div className="underline text-primary"
               onClick={() => {
                 setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
@@ -90,7 +91,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
       {
         dataAdmins.map((admin: Admin, idx: number) => {
           let { id, name, active, email, is_super_admin, updated_at, } = admin;
-          let adminActive = (active === undefined || !active) ? 'No' : 'Yes'
+          let adminActive: 'Yes' | 'No' = (active === undefined || !active) ? 'No' : 'Yes'
 
           let ActiveIcon = adminActive === 'Yes' ? Fa6UserXmark : Fa6SolidUserCheck;
 
@@ -99,7 +100,10 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
               className="bg-secondary [&>td]:px-3 [&>td]:py-2 [&>td]:text-center">
               <td className="w-56">{email}</td>
               <td className="w-auto">{name}</td>
-              <td className="w-12">{adminActive}</td>
+              <td className="w-12">
+                <PopoverChangeActiveStatus activeAdmin={adminActive}
+                  onClick={async () => { await showSwal(admin, adminActive); }} />
+              </td>
               <td className="w-12"> {(is_super_admin === undefined || !is_super_admin) ? 'No' : 'Yes'}</td>
               <td className="w-48">{dateString(updated_at!, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
               <td className="w-40 space-y-1">
@@ -112,12 +116,6 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                     className="text-primary block cursor-pointer">
                     <Fa6SolidEye />
                   </Link>
-                  <button onClick={async () => { await showSwal(admin, adminActive); }}
-                    className={`${adminActive === 'No' ? 'text-success' : 'text-danger'} 
-                    cursor-pointer disabled:cursor-not-allowed`}
-                    disabled={toastStatus === 'opened' || toastStatus === 'closed'}>
-                    <ActiveIcon className="inline-block" />
-                  </button>
                   {
                     id! !== 1 &&
                     (

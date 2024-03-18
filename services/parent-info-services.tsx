@@ -85,3 +85,34 @@ export async function updateCustomerInfo(
     })
   }
 }
+
+export async function addOrUpdateBankDetails(body: any, token: string) {
+  console.log('public token', body)
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customers/update_stripe_information${body}`,
+    {
+      method: 'POST',
+      ...authHeaders(token)
+    }
+  );
+
+  console.log('dfasdfds', result.status, result.statusText);
+  try {
+    let response = await result.json();
+    console.log('response dfasdfds', response);
+    return new Result<Parent>({
+      response: response,
+      data: response.customer ?? undefined,
+      statusCode: result.status,
+      message: result.statusText,
+    });
+
+  } catch (error) {
+    return new Result<Parent>({
+      response: undefined,
+      message: result.statusText,
+      error: result.statusText,
+      statusCode: result.status
+    })
+  }
+}

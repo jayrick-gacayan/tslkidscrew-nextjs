@@ -1,7 +1,9 @@
 'use server';
 
 import { auth, unstable_update } from '@/auth';
-import { getCustomerInfo, updateCustomerInfo } from '@/services/parent-info-services';
+import { Parent } from '@/models/parent';
+import { Result } from '@/models/result';
+import { addOrUpdateBankDetails, getCustomerInfo, updateCustomerInfo } from '@/services/parent-info-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { ValidationType } from '@/types/enums/validation-type';
 import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-state-props';
@@ -94,4 +96,26 @@ export async function getCustomerInfoAction() {
 
   let { customer_id, accessToken } = parent?.user!;
   return await getCustomerInfo(customer_id?.toString()!, accessToken!);
+}
+
+export async function addOrUpdateBankDetailsAction(public_token: string) {
+  console.log('public token', public_token)
+  let parent: Session | null = await auth();
+  let urlSearchParams = new URLSearchParams();
+  urlSearchParams.set('public_token', public_token)
+
+  let result: Result<Parent> = await addOrUpdateBankDetails(`?${urlSearchParams.toString()}`, parent?.user.accessToken!);
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      message: result.message,
+      success: false
+    }
+  }
+
+  return {
+    message: 'Successfully add or update bank details',
+    success: true
+  }
+
 }

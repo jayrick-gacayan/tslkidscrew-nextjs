@@ -162,7 +162,7 @@ export default function RegistrationTypeSummerCamp({
                               onChange={(val: SummerCampPromoSetting) => {
                                 reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                               }}
-                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              summerCampWeeksForPromo={summerCampWeeks}
                               weeksForSummerCamp={weeksForSummerCamp.value}
                               onCheckboxChange={onCheckboxChange} />
                             <WeekPromos weekNum={7}
@@ -171,7 +171,7 @@ export default function RegistrationTypeSummerCamp({
                               onChange={(val: SummerCampPromoSetting) => {
                                 reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                               }}
-                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              summerCampWeeksForPromo={summerCampWeeks}
                               weeksForSummerCamp={weeksForSummerCamp.value}
                               onCheckboxChange={onCheckboxChange} />
                             <WeekPromos weekNum={8}
@@ -180,7 +180,7 @@ export default function RegistrationTypeSummerCamp({
                               onChange={(val: SummerCampPromoSetting) => {
                                 reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                               }}
-                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              summerCampWeeksForPromo={summerCampWeeks}
                               weeksForSummerCamp={weeksForSummerCamp.value}
                               onCheckboxChange={onCheckboxChange} />
                             <WeekPromos weekNum={9}
@@ -189,7 +189,7 @@ export default function RegistrationTypeSummerCamp({
                               onChange={(val: SummerCampPromoSetting) => {
                                 reduxStore.dispatch(summerCampPromoSet(fieldInputValue(val)));
                               }}
-                              summerCampWeeksForPromo={summerCampWeeksForPromo}
+                              summerCampWeeksForPromo={summerCampWeeks}
                               weeksForSummerCamp={weeksForSummerCamp.value}
                               onCheckboxChange={onCheckboxChange} />
                           </div>

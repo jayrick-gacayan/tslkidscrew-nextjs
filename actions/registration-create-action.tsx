@@ -255,6 +255,8 @@ export async function fillInFormAction(
     }// checks if the user checks all the TOS checkboxes
     else {
       let stripeToken = formData.get('stripe_token') as string ?? '';
+      let public_token = formData.get('public_token') as string ?? '';
+      let account_id = formData.get('account_id') as string ?? '';
 
       const childrenArray = [];
       let curObjForChild: { [key: string]: any } = {};
@@ -362,6 +364,33 @@ export async function fillInFormAction(
           JSON.stringify({
             registration_record: regRecord,
             stripeToken,
+          }),
+          parent?.user?.accessToken!
+        );
+
+        if (result.resultStatus !== ResultStatus.SUCCESS) {
+          return {
+            ...objectStep,
+            message: result.message,
+            success: false,
+          }
+        }
+
+        let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+
+        return {
+          ...objectStep,
+          [stepKey]: true,
+          message: 'Successfully created a record',
+          success: true,
+        }
+      }
+      else if (!!public_token && !!account_id) {
+        let result = await createRegistrationRecord(
+          JSON.stringify({
+            registration_record: regRecord,
+            public_token,
+            account_id
           }),
           parent?.user?.accessToken!
         );

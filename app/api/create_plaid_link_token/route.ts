@@ -1,12 +1,7 @@
-
 import { auth } from "@/auth";
-import { Parent } from "@/models/parent";
-import { User } from "next-auth";
 import { NextAuthRequest } from "next-auth/lib";
 import { NextResponse } from "next/server";
 import { Configuration, CountryCode, PlaidApi, PlaidEnvironments, Products } from 'plaid';
-
-
 
 export const POST = auth(async (req: NextAuthRequest) => {
   // req.auth
@@ -28,7 +23,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
   try {
     const request = {
       user: {
-        client_user_id: '1'
+        client_user_id: parent?.customer_id?.toString() ?? '1',
       },
       client_name: 'TSL Adventures',
       products: [Products.Auth],
@@ -36,7 +31,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
       country_codes: [CountryCode.Us],
     };
 
-    const createTokenResponse = await client.linkTokenCreate(request);
+    const createTokenResponse = await client.linkTokenCreate({ ...request, });
 
     // console.log('createToken Resposne', createTokenResponse)
     return NextResponse.json(createTokenResponse.data, { status: 200 });
