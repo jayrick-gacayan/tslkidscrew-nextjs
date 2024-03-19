@@ -9,6 +9,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((req: NextAuthRequest) => {
   let { auth, nextUrl: { pathname, ...rest } } = req;
 
+  console.log('sdafsdfsd', req.auth);
   console.log('process.env.nodeenv', process.env.NODE_ENV)
 
   if (!req.nextUrl.origin.includes('http://localhost')) {
