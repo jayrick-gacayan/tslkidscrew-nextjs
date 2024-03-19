@@ -27,7 +27,7 @@ function CustomerInfoFormButton() {
   )
 }
 
-export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }) {
+export default function CustomerInfoForm() {
 
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
 
@@ -152,7 +152,7 @@ export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }
 
       <div className="lg:w-1/2 w-full">
         <CustomListbox value={howDidYouHearAboutUs}
-          name='how_did_you_hear_about_us'
+          name='how-did-you-hear-about-us'
           placeholder='How did you hear about us?'
           onChange={(value: any) => { setHowDidYouHearAboutUs(value); }}
           items={HOW_DID_YOU_HEAR_ABOUT_US}

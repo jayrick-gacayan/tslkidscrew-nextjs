@@ -244,7 +244,7 @@ export default function FormActionContainer({
       await redirectToPath(url);
     }
 
-    let { stepOne, stepTwo, stepThree, stepFour, stepFive, ...rest } = formState;
+    let { stepOne, stepTwo, stepThree, stepFour, ...rest } = formState;
 
     if (stepInNumber === 1) { if (stepOne) { pathToURL(1); } }
     else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
@@ -262,16 +262,14 @@ export default function FormActionContainer({
         }))
       }
       else {
-        if (formRef.current) {
-          if (rest?.['payment-tos-terms-error']) {
-            let { value, errorText, validationStatus } = rest['payment-tos-terms-error']
-            reduxStore.dispatch(tosConditionChanged({ value, errorText, validationStatus, }))
-          }
-          else {
-            if (rest?.hasStripeCard !== undefined) {
-              if (!rest.hasStripeCard) {
-                reduxStore.dispatch(modalStripeToggled(true));
-              }
+        if (rest?.['payment-tos-terms-error']) {
+          let { value, errorText, validationStatus } = rest['payment-tos-terms-error']
+          reduxStore.dispatch(tosConditionChanged({ value, errorText, validationStatus, }))
+        }
+        else {
+          if (rest?.hasStripeCard !== undefined) {
+            if (!rest.hasStripeCard) {
+              reduxStore.dispatch(modalStripeToggled(true));
             }
           }
         }

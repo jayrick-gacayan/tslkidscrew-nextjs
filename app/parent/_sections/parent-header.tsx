@@ -42,9 +42,16 @@ export default function ParentHeader({ parent }: { parent: Parent }) {
                   ) :
                   (
                     <>
-                      <FormsMenu pathname={pathname} />
-                      <BillingsMenu pathname={pathname} />
-                      <SettingsMenu pathname={pathname} />
+                      {
+                        (!!parent.first_name && !!parent.last_name) &&
+                        (
+                          <>
+                            <FormsMenu pathname={pathname} />
+                            <BillingsMenu pathname={pathname} />
+                            <SettingsMenu pathname={pathname} />
+                          </>
+                        )
+                      }
                       <div className="w-full">
                         <Menu as='div' className='relative'>
                           {({ open, close }) => {
