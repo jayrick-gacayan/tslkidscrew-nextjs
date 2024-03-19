@@ -26,7 +26,7 @@ export default function BeforeOrAfterSchoolFormData({
   currentId: number | undefined;
   beforeOrAfterSchoolSetting: BeforeOrAfterSchoolSetting;
 }) {
-  const [price, setPrice] = useState(beforeOrAfterSchoolSetting?.price?.toString() ?? '')
+  const [price, setPrice] = useState(beforeOrAfterSchoolSetting?.price?.toString() ?? '0')
   const divRef = useRef<HTMLDivElement>(null);
   const [state, formAction] = useFormState(updateBeforeOrAfterSchoolSettingAction, {} as any);
 
@@ -74,7 +74,13 @@ export default function BeforeOrAfterSchoolFormData({
         <div className='w-full'>
           <span className={`${currentId !== beforeOrAfterSchoolSetting?.id ? 'block' : 'hidden'} w-full border border-secondary-light p-3 bg-white rounded text-center`}
             onClick={() => { setCurrentId(beforeOrAfterSchoolSetting?.id ?? 1); }}>
-            {currencyFormat('en-US', { style: 'currency', currency: 'USD' }, beforeOrAfterSchoolSetting?.price ?? 0)}
+            {
+              currencyFormat(
+                'en-US',
+                { style: 'currency', currency: 'USD' },
+                parseFloat(price)
+              )
+            }
           </span>
           <form action={formAction}
             className={`flex min-w-fit w-full gap-1 ${currentId !== beforeOrAfterSchoolSetting?.id ? 'hidden' : ''}`}>

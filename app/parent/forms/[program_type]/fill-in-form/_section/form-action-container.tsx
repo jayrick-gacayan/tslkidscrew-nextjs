@@ -319,7 +319,9 @@ export default function FormActionContainer({
       id={`${program_type}-fill-in-form`}
       ref={formRef}
       action={(formData) => {
-        if (summerCampRegOpt.value === 'promo' && program_type === 'summer-camp') {
+        if (summerCampRegOpt.value === 'promo' &&
+          program_type === 'summer-camp' &&
+          stepInNumber === 3) {
           weekSummerCamps.forEach((scrw: Partial<SummerCampWeekSetting>) => {
             formData.append('summer-camp-reg-weeks[]', scrw.id!.toString())
           })

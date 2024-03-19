@@ -140,7 +140,6 @@ export async function fillInFormAction(
           let summerCampPromoData = formData.get('summer-camp-promo') as string ?? '';
           let summerCampPromoWeekData = formData.get('summer-camp-promo-week') as string ?? ''
 
-          console.log('summerCamp', summerCampPromoWeekData)
           if (getRadioButtonData === 'regular') {
             if (summerCampWeeksData.length === 0) {
               return {
@@ -359,7 +358,6 @@ export async function fillInFormAction(
 
       if (!!stripeToken) {
         // console.log('regRecord', regRecord);
-
         let result = await createRegistrationRecord(
           JSON.stringify({
             registration_record: regRecord,
@@ -386,6 +384,7 @@ export async function fillInFormAction(
         }
       }
       else if (!!public_token && !!account_id) {
+        // console.log('regRecord', regRecord);
         let result = await createRegistrationRecord(
           JSON.stringify({
             registration_record: regRecord,
@@ -417,7 +416,7 @@ export async function fillInFormAction(
           !!customerInfo.data.card_last_four &&
           customerInfo.resultStatus === ResultStatus.SUCCESS) {
 
-          console.log('regRecord', regRecord);
+          // console.log('regRecord', regRecord);
           let result = await createRegistrationRecord(
             JSON.stringify({ registration_record: regRecord }),
             parent?.user?.accessToken!

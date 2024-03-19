@@ -91,7 +91,11 @@ export default function SummerCampSwimSettingTableFormData({
          ${summerCampSwimSetting.id !== focusId ? 'block' : 'hidden'}`}
         onClick={() => { setFocusId(summerCampSwimSetting.id) }}>
         {
-          currencyFormat('en-US', { style: 'currency', currency: 'USD', }, summerCampSwimSetting.price ?? 0)
+          currencyFormat(
+            'en-US',
+            { style: 'currency', currency: 'USD', },
+            parseFloat(price) ?? 0
+          )
         }
       </span>
     </div>
