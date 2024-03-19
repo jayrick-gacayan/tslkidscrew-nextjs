@@ -36,9 +36,7 @@ export default function VacationCampTabPanelContainer({
 
   const getVacationCampDateRangeArr: any[] = useMemo(() => {
     return getDayNumArr(vacationCampData);
-  }, [
-    vacationCampData
-  ]);
+  }, [vacationCampData]);
 
   useEffect(() => {
     setVacationCamp(partialVCSettings.find((value: VacationCampSetting) => {
