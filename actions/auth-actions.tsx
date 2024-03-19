@@ -130,7 +130,6 @@ export async function registerParentAction(
 }
 
 export async function registerCustomerAction(
-  email: string,
   prevState: CustomerInfoFormStateProps,
   formData: FormData
 ) {
@@ -172,13 +171,13 @@ export async function registerCustomerAction(
   }
 
   let result = await registerCustomer({
-    email: email,
+    email: parent?.user.email ?? '',
     first_name,
     last_name,
-    phone_number: formData.get('phone_number') as string ?? '',
-    emergency_phone_number: formData.get('emergency_number') as string ?? '',
-    address_line_one: formData.get('address_line_one') as string ?? '',
-    address_line_two: formData.get('address_line_two') as string ?? '',
+    phone_number: formData.get('phone-number') as string ?? '',
+    emergency_phone_number: formData.get('emergency-number') as string ?? '',
+    address_line_one: formData.get('address-line-one') as string ?? '',
+    address_line_two: formData.get('address-line-two') as string ?? '',
     city: formData.get('address-city') as string ?? '',
     state: formData.get('address-state') as string ?? '',
     zip_code: formData.get('address-zip_code') as string ?? '',

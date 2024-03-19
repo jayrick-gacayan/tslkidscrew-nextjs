@@ -28,11 +28,11 @@ function CustomerInfoFormButton() {
 }
 
 export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }) {
-  console.log('parent', parent)
+
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
 
   const [state, formAction] = useFormState(
-    registerCustomerAction.bind(null, parent.email!),
+    registerCustomerAction,
     {
       first_name: fieldInputValue(''),
       last_name: fieldInputValue('')
