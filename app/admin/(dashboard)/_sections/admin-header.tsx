@@ -30,40 +30,42 @@ export default function AdminHeader({
         </div>
         <div>
           <Menu as='div' className='relative w-auto'>
-            {({ open, close }) => {
-              return (
-                <>
-                  <Menu.Button as='div' className='flex items-center gap-2 w-full cursor-pointer'>
-                    <div className='size-10 rounded-full bg-primary inline-block' />
-                    <div>{admin?.name! ?? admin?.email!}</div>
-                    <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
-                  </Menu.Button>
-                  <Transition enter='transition duration-100 ease-out'
-                    enterFrom='transform scale-95 opacity-0'
-                    enterTo='transform scale-100 opacity-100'
-                    leave='transition duration-75 ease-out'
-                    leaveFrom='transform scale-100 opacity-100'
-                    leaveTo='transform scale-95 opacity-0'>
-                    <div className='overflow-hidden border focus:border-tertiary absolute top-[110%] right-0 z-[100] bg-white drop-shadow-lg rounded w-48'>
-                      <Menu.Item as='div'
-                        className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'>
-                        Profile
-                      </Menu.Item>
-                      <Menu.Item as='div'
-                        className='block'>
-                        <LogoutButton redirectTo='/admin/login'
-                          className='hover:bg-primary hover:text-white'>
-                          Logout
-                        </LogoutButton>
-                      </Menu.Item>
-                    </div>
-                  </Transition>
-                </>
-              )
-            }}
+            {
+              ({ open }) => {
+                return (
+                  <>
+                    <Menu.Button as='div' className='flex items-center gap-2 w-full cursor-pointer'>
+                      <div className='size-10 rounded-full bg-primary inline-block' />
+                      <div>{admin?.name! ?? admin?.email!}</div>
+                      <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
+                    </Menu.Button>
+                    <Transition enter='transition duration-100 ease-out'
+                      enterFrom='transform scale-95 opacity-0'
+                      enterTo='transform scale-100 opacity-100'
+                      leave='transition duration-75 ease-out'
+                      leaveFrom='transform scale-100 opacity-100'
+                      leaveTo='transform scale-95 opacity-0'>
+                      <div className='overflow-hidden border focus:border-tertiary absolute top-[110%] right-0 z-[100] bg-white drop-shadow-lg rounded w-48'>
+                        <Menu.Item as='div'
+                          className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'>
+                          Profile
+                        </Menu.Item>
+                        <Menu.Item as='div'
+                          className='block'>
+                          <LogoutButton redirectTo='/admin/login'
+                            className='hover:bg-primary hover:text-white'>
+                            Logout
+                          </LogoutButton>
+                        </Menu.Item>
+                      </div>
+                    </Transition>
+                  </>
+                );
+              }
+            }
           </Menu>
         </div>
       </div>
     </div>
-  )
+  );
 }

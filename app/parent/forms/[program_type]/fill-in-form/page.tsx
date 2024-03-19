@@ -6,7 +6,7 @@ import {
   getSummerCampRegWeeksForRecordAction,
   getSummerCampWeeksForPromoAction,
   getVacationCampsForCreateRegRecordAction
-} from "@/actions/registration-create-action";
+} from "@/actions/registration-create-actions";
 import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
 import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
 import { ProgramYearCycleSetting } from "@/models/program-year-cycle-setting";

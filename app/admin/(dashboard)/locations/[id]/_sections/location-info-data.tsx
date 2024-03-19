@@ -1,5 +1,5 @@
 import { LocationPlace } from "@/models/location-place";
-import InfoContainer from "../../../_components/info-container";
+import InfoContainer from "../../../../../_components/info-container";
 import { notFound } from "next/navigation";
 import { Result } from "@/models/result";
 import { locationPlaceAction } from "@/actions/location-actions";

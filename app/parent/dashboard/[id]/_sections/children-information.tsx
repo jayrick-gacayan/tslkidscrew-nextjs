@@ -1,4 +1,4 @@
-import InfoContainer from "@/app/admin/(dashboard)/_components/info-container";
+import InfoContainer from "@/app/_components/info-container";
 
 export default function ChildrenInformation() {
   let children = [
@@ -15,7 +15,7 @@ export default function ChildrenInformation() {
             <div key={`parent-program-children-${value.firstName}`}
               className="rounded p-8 bg-secondary space-y-4">
               {children.length > 1 && (<div>CHILDREN # {index + 1}</div>)}
-              <div className="columns-1 lg:columns-2">
+              <div className="columns-1 lg:columns-2 space-y-4">
                 <InfoContainer label='FIRST NAME' data={value.firstName} />
                 <InfoContainer label='LAST NAME' data={value.lastName} />
                 <InfoContainer label='AGE' data={18} />

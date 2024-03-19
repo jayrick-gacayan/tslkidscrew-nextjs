@@ -1,10 +1,10 @@
 'use client';
 
-import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
-import ShowEntriesSelect from "../../../../_components/show-entries-select";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { reduxStore } from "@/react-redux/redux-store";
-import { modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
+import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
+import ShowEntriesSelect from '../../../../_components/show-entries-select';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { reduxStore } from '@/react-redux/redux-store';
+import { modalFormOpened, modalFormTypeSet } from '../_redux/admin-users-slice';
 
 export default function AdminUsersHeader({
   searchParams,
@@ -15,7 +15,7 @@ export default function AdminUsersHeader({
   showEntry: number;
   redirectURL: (url: string) => Promise<void>
 }) {
-  let baseURL = "/admin/admin-users";
+  let baseURL = '/admin/admin-users';
 
   function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
     let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
@@ -39,8 +39,8 @@ export default function AdminUsersHeader({
           onChange={(value: any) => {
             redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} />
-        <div className="w-full">
-          <button className="rounded text-white bg-primary px-4 py-2 text-sm text-center"
+        <div className='w-full'>
+          <button className='rounded text-white bg-primary px-4 py-2 text-sm text-center'
             onClick={() => {
               reduxStore.dispatch(modalFormOpened(true));
               reduxStore.dispatch(modalFormTypeSet('add'));
@@ -50,5 +50,5 @@ export default function AdminUsersHeader({
         </div>
       </div>
     </AdminHeaderWithEntries>
-  )
+  );
 }

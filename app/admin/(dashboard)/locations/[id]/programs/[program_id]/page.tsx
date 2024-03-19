@@ -1,6 +1,6 @@
 import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries"
 import BackButtonClient from "@/app/_components/back-button-client"
-import InfoContainer from "@/app/admin/(dashboard)/_components/info-container"
+import InfoContainer from "@/app/_components/info-container"
 import { LocationProgram } from "@/models/location-program"
 import { Result } from "@/models/result"
 import Link from "next/link"
@@ -27,7 +27,7 @@ export default async function Page({
       <BackButtonClient />
       <AdminHeaderWithEntries headerText='Location Program Information' />
       <div className="bg-secondary p-6">
-        <div className="columns-1 lg:columns-2">
+        <div className="columns-1 lg:columns-2 space-y-4">
           <InfoContainer label='Name' data={locationProgramData.name!} />
           <InfoContainer label='Suffix' data={locationProgramData.name_suffix!} />
           <InfoContainer label='Type' data='Daycare' />

@@ -1,5 +1,5 @@
 import { Admin } from "@/models/admin";
-import InfoContainer from "../../../_components/info-container";
+import InfoContainer from "../../../../../_components/info-container";
 
 export default async function AdminInfoData({
   admin
@@ -10,7 +10,7 @@ export default async function AdminInfoData({
 
   return (
     <>
-      <div className="columns-1 lg:columns-2">
+      <div className="columns-1 lg:columns-2 space-y-4">
         <InfoContainer label='Name' data={name ?? 'N/A'} />
         <InfoContainer label='Email' data={email ?? 'N/A'} />
         <InfoContainer label="Active" data={active === undefined || !active ? 'No' : 'Yes'} />

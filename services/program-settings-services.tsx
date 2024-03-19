@@ -333,11 +333,9 @@ export async function updateVacationCampScheduleSetting(formData: FormData, toke
     }
   );
 
-  console.log('result', result)
   try {
     let response = await result.json();
 
-    console.log('result', response)
     return new Result<VacationCampSetting[]>({
       ...response,
       data: response.vacation_camp ?? undefined,

@@ -17,8 +17,10 @@ export default function DrawerRoot({
 
   return (
     <div className='relative h-screen overflow-auto'>
-      <AdminHeader admin={admin} onDrawerOpen={() => { setDrawerOpen(true); }} />
-      <Sidebar drawerOpen={drawerOpen} onDrawerOpen={(open: boolean) => { setDrawerOpen(open) }} />
+      <AdminHeader admin={admin}
+        onDrawerOpen={() => { setDrawerOpen(true); }} />
+      <Sidebar drawerOpen={drawerOpen}
+        onDrawerOpen={(open: boolean) => { setDrawerOpen(open); }} />
       <div className='w-full lg:ps-64 pt-12 overflow-auto h-full relative'>
         <div className='p-12 relative h-full'>
           {children}
