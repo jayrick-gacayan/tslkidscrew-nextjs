@@ -12,7 +12,10 @@ import { SummerCampSwimSettingInputTypes } from '@/types/input-types/summer-camp
 export async function getProgramYearCycleSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-program-settings`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['program-year-cycle-settings'], revalidate: 5 }
+    }
   )
 
   try {
@@ -78,7 +81,10 @@ export async function updateProgramYearCycleSetting(
 export async function getSummerCampSwimPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-summer-camp-prices`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-swim-settings'], revalidate: 5 }
+    }
   );
 
   try {
@@ -151,7 +157,10 @@ export async function updateSummerCampSwimSetting(
 export async function getSummerCampWeekPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/edit`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-week-settings'], revalidate: 5 }
+    }
   );
 
   try {
@@ -206,7 +215,10 @@ export async function updateSummerCampWeekSetting(
 export async function getSummerCampPromoSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/edit-all`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-promo-settings'], revalidate: 5 }
+    }
   );
 
   try {
@@ -285,7 +297,10 @@ export async function updateSummerCampPromoSettings(
 export async function getVacationCampSchedulesSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['vacation-camp-settings'], revalidate: 5 }
+    }
   );
 
   try {
@@ -341,7 +356,10 @@ export async function updateVacationCampScheduleSetting(formData: FormData, toke
 export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/edit-all?year_cycle=${cycleYear}`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['before-or-after-school-settings'], revalidate: 5 }
+    }
   );
 
   try {

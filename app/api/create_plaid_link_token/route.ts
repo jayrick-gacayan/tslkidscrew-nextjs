@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
-import { NextAuthRequest } from "next-auth/lib";
-import { NextResponse } from "next/server";
+import { auth } from '@/auth';
+import { NextAuthRequest } from 'next-auth/lib';
+import { NextResponse } from 'next/server';
 import {
   Configuration,
   CountryCode,
