@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   Dispatch,
   SetStateAction,
   useCallback,
@@ -112,6 +113,7 @@ export default function VacationCampSettingForm({
     }
   }, [state])
 
+
   return (
     <div className="space-y-4">
       <div className="flex items-center">
@@ -154,9 +156,14 @@ export default function VacationCampSettingForm({
                   inputMode="numeric"
                   className="bg-white p-2 px-3"
                   placeholder="Capacity:"
-                  defaultValue={dataVacationCamp["vacation-camp-capacity"]}
+                  value={dataVacationCamp["vacation-camp-capacity"]}
                   errorText={state["vacation-camp-capacity"]?.errorText}
-                  validationStatus={state["vacation-camp-capacity"]?.validationStatus} />
+                  validationStatus={state["vacation-camp-capacity"]?.validationStatus}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    setDataVacationCamp((value) => {
+                      return { ...value, "vacation-camp-capacity": event.target.value }
+                    })
+                  }} />
               </div>
             </div>
             <div className="flex sm:flex-row flex-col items-start sm:items-center gap-2">

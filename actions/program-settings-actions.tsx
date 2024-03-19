@@ -300,6 +300,7 @@ export async function updateVacationCampSettingAction(
 
   formDataToSend.append(`vacation_camp_schedules[${id}]name`, name);
   formDataToSend.append(`vacation_camp_schedules[${id}]year`, yearStr);
+  formDataToSend.append(`vacation_camp_schedules[${id}]capacity`, capacity);
   formDataToSend.append(`vacation_camp_schedules[${id}]month`, monthStr);
   formDataToSend.append(`vacation_camp_schedules[${id}]dates`, dates);
 
