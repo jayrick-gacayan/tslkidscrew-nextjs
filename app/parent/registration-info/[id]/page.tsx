@@ -2,12 +2,13 @@ import { getRegistrationRecordAction } from '@/actions/registration-record-actio
 import InfoContainer from '@/app/_components/info-container';
 import { ChildRecord } from '@/models/child-record';
 import { RegistrationRecord } from '@/models/registration-record';
+import { Result } from '@/models/result';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string; } }) {
-  let registrationRecord: RegistrationRecord | undefined = await getRegistrationRecordAction(params.id);
+  let registrationRecord: Result<RegistrationRecord> = await getRegistrationRecordAction(params.id);
 
-  if (!registrationRecord) { notFound(); }
+  if (!registrationRecord.data) { notFound(); }
 
   return (
     <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
@@ -24,7 +25,7 @@ export default async function Page({ params }: { params: { id: string; } }) {
       <div className='block space-y-4'>
         <div className='text-tertiary font-[500]'>CHILDREN INFORMATION</div>
         {
-          registrationRecord?.child_records!.map((child: ChildRecord, index: number) => {
+          registrationRecord.data?.child_records?.map((child: ChildRecord, index: number) => {
             return (
               <div key={`registration-child-record-${index}`}
                 className='space-y-4'>

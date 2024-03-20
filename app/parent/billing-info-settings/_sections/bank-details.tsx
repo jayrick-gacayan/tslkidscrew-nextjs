@@ -1,6 +1,6 @@
 import { addOrUpdateBankDetailsAction } from "@/actions/parent-info-actions";
 import { Tab } from "@headlessui/react";
-import { Products } from "plaid";
+import { PlaidEnvironments, Products } from "plaid";
 import { useEffect, useState } from "react";
 import { PlaidLinkOnSuccessMetadata, usePlaidLink } from "react-plaid-link";
 import { ToastContentProps, toast } from "react-toastify";
@@ -23,11 +23,10 @@ export default function BankDetails() {
   }, []);
 
   const { open, ready } = usePlaidLink({
+    env: PlaidEnvironments.sandbox,
     publicKey: process.env.NEXT_PLAID_PUBLIC_KEY!,
-    env: process.env.NEXT_PLAID_SECRET_KEY!,
     clientName: 'TSL Adventures',
     product: [Products.Auth],
-
     token: linkToken,
     onSuccess: (
       public_token: string,

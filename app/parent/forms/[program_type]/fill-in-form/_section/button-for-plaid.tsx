@@ -1,6 +1,9 @@
 import { Products } from 'plaid';
 import { useEffect, useState } from 'react';
-import { PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
+import {
+  PlaidLinkOnSuccessMetadata,
+  usePlaidLink
+} from 'react-plaid-link';
 
 export default function ButtonForPlaid({
   program_type
@@ -23,8 +26,8 @@ export default function ButtonForPlaid({
   }, []);
 
   const { open, ready } = usePlaidLink({
+    env: "sandbox",
     publicKey: process.env.NEXT_PLAID_PUBLIC_KEY!,
-    env: process.env.NEXT_PLAID_SECRET_KEY!,
     clientName: 'TSL Adventures',
     product: [Products.Auth],
     token: linkToken,

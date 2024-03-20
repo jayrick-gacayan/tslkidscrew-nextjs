@@ -40,7 +40,7 @@ export async function getRegistrationRecords(token: string) {
 
     if (response.status === 200) {
 
-      return new Result<Paginate<any>>({
+      return new Result<Paginate<RegistrationRecord>>({
         ...response,
         data: {
           data: response.registrations ?? [],
@@ -50,14 +50,14 @@ export async function getRegistrationRecords(token: string) {
       })
     }
 
-    return new Result<Paginate<any>>({
+    return new Result<Paginate<RegistrationRecord>>({
       ...response,
       data: undefined,
       statusCode: response.status ?? result.status
     })
 
   } catch (error) {
-    return new Result<Paginate<any>>({
+    return new Result<Paginate<RegistrationRecord>>({
       response: undefined,
       message: result.statusText,
       statusCode: result.status

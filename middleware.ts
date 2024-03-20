@@ -9,8 +9,8 @@ const { auth } = NextAuth(authConfig);
 export default auth((req: NextAuthRequest) => {
   let { auth, nextUrl: { pathname, ...rest } } = req;
 
-  console.log('sdafsdfsd', req.auth);
-  console.log('process.env.nodeenv', process.env.NODE_ENV)
+  // console.log('sdafsdfsd', req.auth);
+  // console.log('process.env.nodeenv', process.env.NODE_ENV)
 
   if (!req.nextUrl.origin.includes('http://localhost')) {
     if (req.nextUrl.pathname.startsWith('/api/auth')) {
