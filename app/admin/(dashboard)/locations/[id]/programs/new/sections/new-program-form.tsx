@@ -96,7 +96,7 @@ export default function NewProgramForm({
           placeholder="Program Name Suffix:"
           errorText={state?.["name-suffix"]?.errorText}
           validationStatus={state?.["name-suffix"]?.validationStatus} />
-        <CustomListbox value={director}
+        <CustomListbox value={director ?? ''}
           name='director'
           placeholder='Director'
           onChange={(value: any) => { setDirector(value); }}

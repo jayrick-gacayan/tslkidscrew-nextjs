@@ -191,11 +191,10 @@ export async function getAllLocationsForCreateRegRecord(
 
   let response = await result.json();
 
-
   return new Result<LocationPlace[]>({
     response: response,
     data: response.locations ?? [],
     statusCode: response.status ?? result.status,
     message: response.message ?? result.statusText
-  })
+  });
 }

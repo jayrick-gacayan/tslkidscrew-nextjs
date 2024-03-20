@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 
   return (
     <div className='pb-6'>
-      <div className='rounded bg-white drop-shadow-lg p-4 space-y-6 relative'>
+      <div className='rounded3 bg-white drop-shadow-lg p-4 space-y-6 relative'>
         <AdminUsersHeader searchParams={searchParams}
           showEntry={showEntry}
           redirectURL={redirectToPath} />
@@ -43,5 +43,5 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         }
       </div>
     </div>
-  )
+  );
 }

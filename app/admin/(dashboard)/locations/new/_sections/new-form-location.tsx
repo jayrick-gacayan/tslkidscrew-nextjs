@@ -71,7 +71,7 @@ export function NewFormLocation({ admins }: { admins: Pick<Admin, 'id' | 'email'
           placeholder="Address:"
           errorText={state?.address?.errorText}
           validationStatus={state?.address?.validationStatus} />
-        <CustomListbox value={director}
+        <CustomListbox value={director ?? ''}
           name='director'
           placeholder='Director'
           onChange={(value: any) => { setDirector(value); }}
