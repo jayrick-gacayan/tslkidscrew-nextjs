@@ -13,11 +13,7 @@ import { useFormState } from "react-dom";
 import { ToastContentProps, toast } from "react-toastify";
 import LocationSubmitButton from "../../_components/location-submit-button";
 
-export function NewFormLocation({
-  admins
-}: {
-  admins: Pick<Admin, 'id' | 'email'>[]
-}) {
+export function NewFormLocation({ admins }: { admins: Pick<Admin, 'id' | 'email'>[] }) {
   const [state, formAction] = useFormState(
     addLocationPlace,
     {
@@ -27,12 +23,13 @@ export function NewFormLocation({
       ['director[id]']: fieldInputValue(''),
     } as LocationPlaceFormStateProps
   );
-  const [director, setDirector] = useState<Partial<Admin> | undefined>(undefined);
+  const [director, setDirector] = useState<Pick<Admin, 'id' | 'email'> | undefined>(undefined);
 
   useEffect(() => {
-    async function pathToRedirect(id: number) {
+    async function tagToRevalidate(id: number) {
       await redirectToPath(`/admin/locations/${id}`);
     }
+
     let { message, success, data } = state;
 
     if (success !== undefined) {
@@ -48,7 +45,7 @@ export function NewFormLocation({
       })
 
       if (success && data) {
-        pathToRedirect(data.id!);
+        tagToRevalidate(data.id!);
       }
     }
   }, [

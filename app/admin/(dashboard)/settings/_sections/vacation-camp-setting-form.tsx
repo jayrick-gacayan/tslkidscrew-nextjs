@@ -22,7 +22,7 @@ import { VacationCampSettingFormStateProps } from '@/types/props/vacation-camp-s
 import { updateVacationCampSettingAction } from '@/actions/program-settings-actions';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
 import PopoverReactDayPicker from '@/app/_components/react-day-picker/popover-day-picker';
-import { pathRevalidate, tagRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
 import { toast, ToastContentProps } from 'react-toastify';
 import SettingFormSubmit from '../_components/setting-form-submit';
 import { parseDates } from '@/types/helpers/date-helpers';

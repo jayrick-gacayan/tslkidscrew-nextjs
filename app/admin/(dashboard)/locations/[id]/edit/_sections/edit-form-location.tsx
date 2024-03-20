@@ -31,7 +31,7 @@ export function EditFormLocation({
     } as LocationPlaceFormStateProps
   );
 
-  const [director, setDirector] = useState<Partial<Admin> | undefined>(locationPlace?.director ?? undefined);
+  const [director, setDirector] = useState<Pick<Admin, "id" | "email"> | undefined>(locationPlace?.director ?? undefined);
 
   useEffect(() => {
     async function pathToBeRedirected() {

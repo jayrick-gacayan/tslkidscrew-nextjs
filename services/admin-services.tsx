@@ -8,7 +8,10 @@ import { SearchParamsProps } from '@/types/props/search-params-props';
 export async function adminUser(id: string, token?: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
-    { ...authHeaders(token!) }
+    {
+      next: { tags: ['admin-user'] },
+      ...authHeaders(token!)
+    }
   );
 
   try {
@@ -39,7 +42,10 @@ export async function adminUsers(
 
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts${strSP === '' ? '' : `?${strSP}`}`,
-    { ...authHeaders(token!) }
+    {
+      next: { tags: ['admin-users'] },
+      ...authHeaders(token!)
+    }
   );
 
   try {

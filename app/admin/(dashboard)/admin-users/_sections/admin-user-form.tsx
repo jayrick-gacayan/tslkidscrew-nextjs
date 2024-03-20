@@ -1,10 +1,9 @@
 import { updateAdminUserAction, addAdminUserAction } from '@/actions/admin-actions';
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
 import InputCheckboxCustom from '@/app/_components/input-checkbox-custom';
 import InputCustom from '@/app/_components/input-custom';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
-import { usePathname } from 'next/navigation';
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useFormState } from 'react-dom';
 import { ToastContentProps, toast } from 'react-toastify';
@@ -39,8 +38,6 @@ export default function AdminUserForm({
     };
   }, [adminsUserState.adminUserForm]);
 
-  const pathname = usePathname();
-
   const [state, formAction] = useFormState(
     type === 'update' ? updateAdminUserAction.bind(null, data.email.value) : addAdminUserAction,
     {
@@ -50,8 +47,10 @@ export default function AdminUserForm({
   );
 
   useEffect(() => {
-    async function pathToRevalidate(pathName: string) {
-      await pathRevalidate(pathName);
+    async function tagToRevalidate(type: string) {
+
+      if (type === 'update') { await tagRevalidate('admin-user'); }
+      await tagRevalidate('admin-users');
     }
 
     let { message, success } = state;
@@ -65,8 +64,8 @@ export default function AdminUserForm({
         hideProgressBar: true,
       });
 
-      if (success) {
-        pathToRevalidate(pathname);
+      if (success && type !== '') {
+        tagToRevalidate(type);
         formReset();
       }
     }
@@ -87,8 +86,8 @@ export default function AdminUserForm({
     }
   }, [
     state,
+    type,
     formReset,
-    pathname
   ]);
 
   function handleInputTextChanged(key: 'email' | 'name') {
