@@ -1,4 +1,4 @@
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
 import { updateBeforeOrAfterSchoolSettingAction } from '@/actions/program-settings-actions';
 import InputCustom from '@/app/_components/input-custom';
 import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
@@ -6,7 +6,6 @@ import { currencyFormat } from '@/types/helpers/currency-format';
 import {
   ChangeEvent,
   Dispatch,
-  FormEvent,
   SetStateAction,
   useEffect,
   useRef,
@@ -35,8 +34,8 @@ export default function BeforeOrAfterSchoolFormData({
   }, [beforeOrAfterSchoolSetting])
 
   useEffect(() => {
-    async function pathToRevalidate() {
-      await pathRevalidate('/admin/settings')
+    async function tagToRevalidate() {
+      await tagRevalidate('before-or-after-school-settings')
     }
     let { message, success } = state;
     if (success !== undefined) {
@@ -45,11 +44,11 @@ export default function BeforeOrAfterSchoolFormData({
           <div className='text-black'>{message}</div>
         )
       }, {
-        toastId: `update-summer-camp-swim-setting-${Date.now()}`,
+        toastId: `update-before-or-after-school-setting-${Date.now()}`,
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       })
-      pathToRevalidate();
+      tagToRevalidate();
       setCurrentId(-1)
     }
   }, [

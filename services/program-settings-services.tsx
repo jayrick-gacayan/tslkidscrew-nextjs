@@ -14,7 +14,7 @@ export async function getProgramYearCycleSettings(token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-program-settings`,
     {
       ...authHeaders(token),
-      next: { tags: ['program-year-cycle-settings'], revalidate: 5 }
+      next: { tags: ['program-year-cycle-settings'] }
     }
   )
 
@@ -83,7 +83,7 @@ export async function getSummerCampSwimPrices(token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-summer-camp-prices`,
     {
       ...authHeaders(token),
-      next: { tags: ['summer-camp-swim-settings'], revalidate: 5 }
+      next: { tags: ['summer-camp-swim-settings'] }
     }
   );
 
@@ -159,7 +159,7 @@ export async function getSummerCampWeekPrices(token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/edit`,
     {
       ...authHeaders(token),
-      next: { tags: ['summer-camp-week-settings'], revalidate: 5 }
+      next: { tags: ['summer-camp-week-settings'] }
     }
   );
 
@@ -217,7 +217,7 @@ export async function getSummerCampPromoSettings(token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/edit-all`,
     {
       ...authHeaders(token),
-      next: { tags: ['summer-camp-promo-settings'], revalidate: 5 }
+      next: { tags: ['summer-camp-promo-settings'] }
     }
   );
 
@@ -299,7 +299,7 @@ export async function getVacationCampSchedulesSettings(token: string) {
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
     {
       ...authHeaders(token),
-      next: { tags: ['vacation-camp-settings'], revalidate: 5 }
+      next: { tags: ['vacation-camp-settings'] }
     }
   );
 
@@ -358,7 +358,7 @@ export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: s
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/edit-all?year_cycle=${cycleYear}`,
     {
       ...authHeaders(token),
-      next: { tags: ['before-or-after-school-settings'], revalidate: 5 }
+      next: { tags: ['before-or-after-school-settings'] }
     }
   );
 
@@ -412,12 +412,12 @@ export async function updateBeforeOrAfterSchoolSettings(formData: FormData, toke
   }
 }
 
+/* Parent  */
 export async function getProgramSettingYearCycleForRegRecord(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/before_and_after_school_availability?location_id=${encodeURIComponent(location_id)}`,
-    {
-      ...authHeaders(token)
-    });
+    { ...authHeaders(token) }
+  );
 
   try {
     let response = await result.json();
@@ -444,9 +444,8 @@ export async function getProgramSettingYearCycleForRegRecord(location_id: string
 export async function getSummerCampWeeksForRegular(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_summer_camp_weeks?location_id=${encodeURIComponent(location_id)}`,
-    {
-      ...authHeaders(token)
-    });
+    { ...authHeaders(token) }
+  );
 
   try {
     let response = await result.json();
@@ -481,7 +480,6 @@ export async function getSummerCampPromosForCreateRegRecord(token: string) {
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_all_summer_camp_promo`,
     {
       ...authHeaders(token),
-      next: { tags: ['summer-camp-promo-create-reg-record'] }
     });
 
 
@@ -516,7 +514,10 @@ export async function getSummerCampPromosForCreateRegRecord(token: string) {
 export async function getVacationCampsForCreateRegRecord(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_vacation_camp_schedules?location_id=${encodeURIComponent(location_id)}`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+
+    }
   );
 
   try {
@@ -550,7 +551,9 @@ export async function getVacationCampsForCreateRegRecord(location_id: string, to
 export async function getSummerCampWeeksForPromo(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/summer_camp_week_settings`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token)
+    }
   );
 
   try {

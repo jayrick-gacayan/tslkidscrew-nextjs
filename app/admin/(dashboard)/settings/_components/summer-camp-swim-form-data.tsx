@@ -1,4 +1,4 @@
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
 import { updateSummerCampSwimSettingAction } from '@/actions/program-settings-actions';
 import InputCustom from '@/app/_components/input-custom';
 import { SummerCampSwimSetting } from '@/models/summer-camp-swim-setting';
@@ -31,10 +31,12 @@ export default function SummerCampSwimSettingTableFormData({
   )
 
   useEffect(() => {
-    async function pathToRevalidate() {
-      await pathRevalidate('/admin/settings')
+    async function tagToRevalidate() {
+      await tagRevalidate('summer-camp-swim-settings')
     }
+
     let { message, success } = state;
+
     if (success !== undefined) {
       toast((props: ToastContentProps<unknown>) => {
         return (<div className='text-black'>{message}</div>);
@@ -43,7 +45,8 @@ export default function SummerCampSwimSettingTableFormData({
         type: success ? 'success' : 'error',
         hideProgressBar: true,
       })
-      pathToRevalidate();
+
+      tagToRevalidate();
       setFocusId(-1)
     }
   }, [

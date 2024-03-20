@@ -25,6 +25,7 @@ import { SummerCampSwimSettingFormStateProps } from '@/types/props/summer-camp-s
 import { VacationCampSettingFormStateProps } from '@/types/props/vacation-camp-setting-form-state-props';
 import { ProgramYearCycleSettingFormStateProps } from '@/types/props/program-year-cycle-setting-form-state-props';
 import { SummerCampSwimSetting } from '@/models/summer-camp-swim-setting';
+import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
 
 export async function updateSummerCampWeekSettingAction(
   id: number,
@@ -401,6 +402,43 @@ export async function updateBeforeOrAfterSchoolSettingAction(
     message: 'Successfully update the before or after school setting data.'
   };
 }
+
+export async function getSummerCampWeekPricesAction() {
+  let admin: Session | null = await auth();
+
+  return await getSummerCampWeekPrices(admin?.user?.accessToken!);
+}
+
+export async function getSummerCampSwimPricesAction() {
+  let admin: Session | null = await auth();
+
+  return await getSummerCampSwimPrices(admin?.user?.accessToken!);
+}
+
+export async function getSummerCampPromoSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await getSummerCampPromoSettings(admin?.user?.accessToken!);
+}
+
+export async function getVacationCampSchedulesSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await getVacationCampSchedulesSettings(admin?.user?.accessToken!);
+}
+
+export async function getProgramYearCycleSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await getProgramYearCycleSettings(admin?.user?.accessToken!);
+}
+
+export async function getBeforeOrAfterSchoolSettingsAction() {
+  let admin: Session | null = await auth();
+
+  return await getBeforeOrAfterSchoolSettings(admin?.user?.accessToken!, '2024-2025');
+}
+
 
 export async function getAllSettingsAction() {
   let admin: Session | null = await auth();
