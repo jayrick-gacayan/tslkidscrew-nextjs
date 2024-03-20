@@ -1,16 +1,11 @@
-'use client'
-
 import { Transition, Dialog } from "@headlessui/react";
-import { Elements } from "@stripe/react-stripe-js";
 import { Fragment } from "react";
 import StripeCardForm from "./stripe-card-form";
-import getStripe from "@/types/helpers/get-stripe";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { modalStripeToggled } from "../_redux/fill-in-form-slice";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { FillInFormState } from "../_redux/fill-in-form-state";
-
-const stripePromise = getStripe();
+import StripeElements from "@/app/parent/_components/stripe-elements";
 
 export default function ModalCardInfoForStripe({
   program_type
@@ -46,9 +41,9 @@ export default function ModalCardInfoForStripe({
             <Dialog.Title as="h1" className='font-medium text-[24px]'>
               Payment
             </Dialog.Title>
-            <Elements stripe={stripePromise} options={{}}>
+            <StripeElements>
               <StripeCardForm program_type={program_type} />
-            </Elements>
+            </StripeElements>
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>

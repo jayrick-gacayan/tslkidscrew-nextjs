@@ -2,7 +2,7 @@ import BackButtonClient from "@/app/_components/back-button-client";
 import { Invoice } from "@/models/invoice";
 import { Result } from "@/models/result";
 import { notFound } from "next/navigation";
-import InvoiceInfoData from "../_components/invoice-info-data";
+import ParentInfoData from "../../_components/parent-info-data";
 import { getCustomerInvoiceAction } from "@/actions/invoices-actions";
 
 export default async function Page({ params }: { params: { id: string; } }) {
@@ -18,27 +18,27 @@ export default async function Page({ params }: { params: { id: string; } }) {
         <BackButtonClient />
         <h1 className="font-medium text-[24px]">Invoice {params.id}</h1>
         <div className="space-y-4">
-          <InvoiceInfoData labelText='Invoice Amount:'
+          <ParentInfoData labelText='Invoice Amount:'
             data={Intl.NumberFormat('en-US', {
               style: "currency",
               currency: 'USD',
             }).format(invoice.invoice_amount!)} />
-          <InvoiceInfoData labelText='Amount Paid:'
+          <ParentInfoData labelText='Amount Paid:'
             data={Intl.NumberFormat('en-US', {
               style: "currency",
               currency: 'USD',
             }).format(invoice.amount_paid!)} />
-          <InvoiceInfoData labelText='Discounts:'
+          <ParentInfoData labelText='Discounts:'
             data={Intl.NumberFormat('en-US', {
               style: "currency",
               currency: 'USD',
             }).format(invoice.discount!)} />
-          <InvoiceInfoData labelText='Fees:'
+          <ParentInfoData labelText='Fees:'
             data={Intl.NumberFormat('en-US', {
               style: "currency",
               currency: 'USD',
             }).format(invoice.fees!)} />
-          <InvoiceInfoData labelText='Due:'
+          <ParentInfoData labelText='Due:'
             data={Intl.NumberFormat('en-US', {
               style: "currency",
               currency: 'USD',

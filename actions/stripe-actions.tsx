@@ -1,7 +1,8 @@
 'use server'
 
 import { auth } from '@/auth';
-import { addCard } from '@/services/stripe-services';
+import { Result } from '@/models/result';
+import { addCard, unlinkStripeCard } from '@/services/stripe-services';
 import { ResultStatus } from '@/types/enums/result-status';
 import { Session } from 'next-auth';
 
@@ -23,6 +24,24 @@ export async function addCardAction(stripeToken: string) {
 
   return {
     message: result?.message,
+    success: true,
+  };
+}
+
+export async function unlinkStripeCardAction() {
+  let parent: Session | null = await auth();
+
+  let result: Result<any> = await unlinkStripeCard(parent?.user.accessToken!);
+
+  if (result.resultStatus !== ResultStatus.SUCCESS) {
+    return {
+      message: result.message ?? result.error,
+      success: false,
+    };
+  }
+
+  return {
+    message: 'Successfully unlink bank details.',
     success: true,
   };
 }

@@ -5,9 +5,9 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import PersonalDetails from "./personal-details";
 import LoginDetails from "./login-details";
-import { Parent } from "@/models/parent";
+import { AccountInfoForParent } from "../prop-types/custom-pick-parent";
 
-export default function AccountSettingsTabContainer({ parent }: { parent: Partial<Parent> | undefined }) {
+export default function AccountSettingsTabContainer({ parent }: { parent: AccountInfoForParent | undefined }) {
 
   function classNameTab(selected: boolean) {
     return `p-2 border-b-0 border-b-none`;
