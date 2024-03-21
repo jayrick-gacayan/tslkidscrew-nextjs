@@ -41,7 +41,7 @@ export default function ChildrenForm() {
                   }
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
-                      <InputCustom labelText="Firstname"
+                      <InputCustom labelText="First Name"
                         id={`children-firstname-${idx}`}
                         name={`children[][firstname]`}
                         type="text"
@@ -55,7 +55,7 @@ export default function ChildrenForm() {
                             value: e.target.value
                           }))
                         }} />
-                      <InputCustom labelText="Lastname"
+                      <InputCustom labelText="Last Name"
                         name='children[][lastname]'
                         type="text"
                         className="bg-secondary p-4 border-transparent"
