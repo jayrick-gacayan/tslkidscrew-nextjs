@@ -92,8 +92,38 @@ export default function PaymentFormContainer({
   return (
     <div className="relative">
       <div className="space-y-8">
-        <div className="space-y-2 text-black">
+        <div className="space-y-4 text-black">
           <h1 className="font-bold text-[36px]">Payment</h1>
+          <div className="rounded border shadow-lg overflow-hidden flex items-center lg:flex-row flex-col gap-4 w-full">
+            <div className="flex-none w-full lg:w-[192px] text-primary lg:p-0 p-4 border-b lg:border-b-0">
+              <PhShoppingCartBold height={72} width={192} className="m-auto block" />
+            </div>
+            <div className="flex-1 w-full divide-y divide-y-secondary-light">
+              <div className='px-4 py-2 flex justify-between items-center'>
+                <div>Deposit Fee:</div>
+                <div>{
+                  currencyFormat('en-US',
+                    { style: "currency", currency: 'USD' },
+                    program_type === 'summer-camp' ? 200 :
+                      program_type === 'before-or-after-school' ? 0 :
+                        vacationCampPrice(vacationCamps.length, childrenArr.length)
+                  )
+                }</div>
+              </div>
+              <div className='px-4 py-2 flex justify-between items-center'>
+                <div>Registration Fee:</div>
+                <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, 25)}</div>
+              </div>
+              <div className='px-4 py-2 flex justify-between items-center'>
+                <div>Annual Package Fee:</div>
+                <div>{currencyFormat('en-US', { style: "currency", currency: 'USD' }, 0.00)}</div>
+              </div>
+              <div className='px-4 py-2 flex justify-between items-center'>
+                <div>Total Amount Due:</div>
+                <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, totalPrice())}</div>
+              </div>
+            </div>
+          </div>
           <p className="italic font-medium text-[18px]">The TOS is your binding CONTRACT with TSL. Please take time to read it before proceeding.</p>
           {
             errorText !== '' &&
@@ -133,36 +163,7 @@ export default function PaymentFormContainer({
               )
           }
         </div>
-        <div className="rounded border shadow-lg overflow-hidden flex items-center lg:flex-row flex-col gap-4 w-full">
-          <div className="flex-none w-full lg:w-[192px] text-primary lg:p-0 p-4 border-b lg:border-b-0">
-            <PhShoppingCartBold height={72} width={192} className="m-auto block" />
-          </div>
-          <div className="flex-1 w-full divide-y divide-y-secondary-light">
-            <div className='px-4 py-2 flex justify-between items-center'>
-              <div>Deposit Fee:</div>
-              <div>{
-                currencyFormat('en-US',
-                  { style: "currency", currency: 'USD' },
-                  program_type === 'summer-camp' ? 200 :
-                    program_type === 'before-or-after-school' ? 0 :
-                      vacationCampPrice(vacationCamps.length, childrenArr.length)
-                )
-              }</div>
-            </div>
-            <div className='px-4 py-2 flex justify-between items-center'>
-              <div>Registration Fee:</div>
-              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, 25)}</div>
-            </div>
-            <div className='px-4 py-2 flex justify-between items-center'>
-              <div>Annual Package Fee:</div>
-              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD' }, 0.00)}</div>
-            </div>
-            <div className='px-4 py-2 flex justify-between items-center'>
-              <div>Total Amount Due:</div>
-              <div>{currencyFormat('en-US', { style: "currency", currency: 'USD', }, totalPrice())}</div>
-            </div>
-          </div>
-        </div>
+
         <StripeFormContainer />
       </div>
       <ModalCardInfoForStripe program_type={program_type} />
