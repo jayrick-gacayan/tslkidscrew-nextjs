@@ -71,9 +71,6 @@ export default function FormActionContainer({
 }) {
   const formRef = useRef<HTMLFormElement>(null);
 
-
-
-
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
@@ -293,10 +290,6 @@ export default function FormActionContainer({
     location,
     highestStep,
   ]);
-
-
-
-
 
   function StepperPanel() {
     if (stepInNumber === 1) return (<LocationForm locations={locations} />);
