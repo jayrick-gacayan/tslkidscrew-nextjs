@@ -56,15 +56,16 @@ export default function ButtonForPlaid({
 
       form.requestSubmit();
     }
-  }, []);
+  }, [program_type,]);
 
   const onEvent = useCallback<PlaidLinkOnEvent>((eventName: string, metadata: any) => {
     console.log(eventName, metadata);
   }, []);
+
   const onExit = useCallback<PlaidLinkOnExit>((error: PlaidLinkError | null, metadata: PlaidLinkOnExitMetadata) => {
     setButtonPress('')
     console.log(error, metadata);
-  }, []);
+  }, [setButtonPress]);
 
 
   const { open, ready } = usePlaidLink({

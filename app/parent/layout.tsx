@@ -12,10 +12,10 @@ export default async function Layout({
   let parent: Session | null = await auth();
 
   return (
-    <div className='relative w-screen h-screen'>
+    <div className='relative min-h-screen min-w-full h-full w-full'>
       <ParentHeader parent={parent?.user!} />
-      <div className='h-[calc(100vh-96px)] overflow-auto'>
-        <div className='container mx-auto flex flex-col h-full gap-12 lg:px-0 px-4'>
+      <div className='min-h-[calc(100vh-96px)] flex flex-col h-full overflow-auto'>
+        <div className='container flex-1 mx-auto flex flex-col gap-12 lg:px-0 px-8 h-full'>
           <ParentBreadcrumbs />
           {children}
         </div>

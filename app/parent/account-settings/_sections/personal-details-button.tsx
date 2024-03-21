@@ -12,7 +12,7 @@ export default function PersonalDetailsButtons() {
         Cancel my account
       </button>
       <button disabled={pending}
-        className='w-48 disabled:cursor-not-allowed p-2 text-white border border-primary rounded bg-primary'>
+        className='disabled:cursor-not-allowed p-2 text-white border border-primary rounded bg-primary'>
         {
           !pending ? 'Update' :
             (

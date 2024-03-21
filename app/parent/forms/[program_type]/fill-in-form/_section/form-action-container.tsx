@@ -44,7 +44,6 @@ import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-
 export default function FormActionContainer({
   program_type,
   step,
@@ -324,10 +323,8 @@ export default function FormActionContainer({
     return null;
   }
 
-  console.log('state', formState)
-
   return (
-    <form className='flex flex-col gap-6 justify-between h-full'
+    <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
       id={`${program_type}-fill-in-form`}
       ref={formRef}
       action={(formData) => {

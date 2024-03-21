@@ -52,22 +52,24 @@ export default async function Page({
     vacationCamps = (await getVacationCampsForCreateRegRecordAction(location_id)) ?? [];
     summerCampWeeksForPromo = (await getSummerCampWeeksForPromoAction()) ?? [];
   }
-  console.log('customer data', customerData.data)
+  // console.log('customer data', customerData.data)
 
   return (
-    <div className='pb-12 flex-1 w-full'>
-      <div className="rounded drop-shadow h-full bg-white w-full xl:w-8/12 m-auto block p-6">
-        <FormActionContainer step={step}
-          program_type={program_type}
-          cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
-          locations={locationsByProgramType}
+    <div className='flex-1 w-full h-full'>
+      <div className="pb-12">
+        <div className="rounded drop-shadow h-full bg-white w-full xl:w-8/12 m-auto block p-6">
+          <FormActionContainer step={step}
+            program_type={program_type}
+            cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
+            locations={locationsByProgramType}
 
-          summerCampPromos={summerCampPromos!}
-          summerCampWeeks={summerCampWeeks}
-          summerCampWeeksForPromo={summerCampWeeksForPromo}
-          programYearCycle={programYearCycle}
-          vacationCamps={vacationCamps}
-          bankName={bank_name ?? ''} />
+            summerCampPromos={summerCampPromos!}
+            summerCampWeeks={summerCampWeeks}
+            summerCampWeeksForPromo={summerCampWeeksForPromo}
+            programYearCycle={programYearCycle}
+            vacationCamps={vacationCamps}
+            bankName={bank_name ?? ''} />
+        </div>
       </div>
     </div>
   )

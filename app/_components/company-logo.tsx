@@ -38,7 +38,8 @@ export default function CompanyLogo({
         height={height}
         sizes="100vw"
         quality={100}
-        priority />
+        priority
+        className="aspect-auto" />
     </Link>
   )
 }

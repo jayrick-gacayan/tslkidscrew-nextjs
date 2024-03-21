@@ -17,14 +17,14 @@ export default function ParentHeader({ parent }: { parent: Parent }) {
 
   return (
     <div className="sticky top-0 left-0 z-[20] bg-primary w-full">
-      <div className="px-12 py-4 w-full">
+      <div className="container mx-auto lg:px-0 px-8 py-4 w-full">
         <div className="flex items-center justify-between gap-4 w-full">
           <div className="flex-1">
             <div className="w-fit">
               <CompanyLogo height={164} width={128} href="/parent/dashboard" />
             </div>
           </div>
-          <div className="flex-none w-[368px]">
+          <div className="hidden md:block flex-none w-[368px]">
             <div className="flex items-center w-full gap-4 justify-end">
               {
                 PARENT_PUBLIC_ROUTES.includes(pathname) ?
