@@ -41,12 +41,11 @@ export default function ChildrenForm() {
                   }
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
-                      <InputCustom labelText="First Name"
-                        id={`children-firstname-${idx}`}
+                      <InputCustom id={`children-firstname-${idx}`}
                         name={`children[][firstname]`}
                         type="text"
                         className="bg-secondary p-4 border-transparent"
-                        placeholder="Firstname:"
+                        placeholder="First Name:"
                         value={value.first_name}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                           reduxStore.dispatch(childrenFieldUpdated({
@@ -55,11 +54,10 @@ export default function ChildrenForm() {
                             value: e.target.value
                           }))
                         }} />
-                      <InputCustom labelText="Last Name"
-                        name='children[][lastname]'
+                      <InputCustom name='children[][lastname]'
                         type="text"
                         className="bg-secondary p-4 border-transparent"
-                        placeholder="Lastname:"
+                        placeholder="Last Name:"
                         value={value.last_name}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                           reduxStore.dispatch(childrenFieldUpdated({
