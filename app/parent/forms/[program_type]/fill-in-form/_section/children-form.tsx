@@ -23,8 +23,7 @@ export default function ChildrenForm() {
         <h1 className="font-bold text-[36px]">Child&#47;ren&#39;s Information</h1>
         <p>Accepting children {fillInFormState.fillInForm.location.value?.minimum_age} years old and up at this location.</p>
       </div>
-      <div className="w-full h-auto space-y-6">
-
+      <div className="w-full h-auto space-y-10">
         {
           arrChildren.map((value: ChildInfoType, idx: number) => {
             return (
