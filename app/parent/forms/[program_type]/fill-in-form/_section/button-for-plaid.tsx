@@ -120,8 +120,8 @@ export default function ButtonForPlaid({
         pending && buttonPress === 'plaid' ? (<FillInFormPendingAction />) :
           <>
             {
-              bankName === '' ? 'Link Bank Details and Pay' :
-                'Pay with Bank Details on File'
+              bankName === '' ? 'Link Bank Details and Proceed to Payment' :
+                'Proceed to Payment with Bank Details on File'
             }
           </>
       }

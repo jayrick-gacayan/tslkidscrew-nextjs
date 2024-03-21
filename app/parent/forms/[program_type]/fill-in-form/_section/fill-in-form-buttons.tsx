@@ -112,7 +112,7 @@ export default function FillInFormButtons({
                 pending && buttonPress === 'stripe' ? (<FillInFormPendingAction />) :
                   <>
                     {
-                      !cardDetails ? 'Submit and Pay' : 'Submit and Pay with Card on File'
+                      !cardDetails ? 'Proceed to Payment' : 'Proceed to Payment with Card on File'
                     }
                   </>
               }
