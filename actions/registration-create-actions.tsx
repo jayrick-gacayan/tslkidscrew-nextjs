@@ -238,6 +238,7 @@ export async function fillInFormAction(
 
     if (!!formData.get('back-button')) { return { ...objectStep, [stepKey]: false }; }
 
+
     let getAllCheckboxes: string[] = formData.getAll(`${programType}-tos[]`) as string[];
 
     let checkItems = programType === 'before-or-after-school' ? 10 : programType === 'summer-camp' ? 11 : 4
@@ -358,89 +359,128 @@ export async function fillInFormAction(
 
       if (!!stripeToken) {
         // console.log('regRecord', regRecord);
-        let result = await createRegistrationRecord(
-          JSON.stringify({
-            registration_record: regRecord,
-            stripeToken,
-          }),
-          parent?.user?.accessToken!
-        );
+        // let result = await createRegistrationRecord(
+        //   JSON.stringify({
+        //     registration_record: regRecord,
+        //     stripeToken,
+        //   }),
+        //   parent?.user?.accessToken!
+        // );
 
-        if (result.resultStatus !== ResultStatus.SUCCESS) {
-          return {
-            ...objectStep,
-            message: result.message,
-            success: false,
-          }
-        }
+        // if (result.resultStatus !== ResultStatus.SUCCESS) {
+        //   return {
+        //     ...objectStep,
+        //     message: result.message,
+        //     success: false,
+        //   }
+        // }
 
         let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
 
         return {
           ...objectStep,
-          [stepKey]: true,
+          // [stepKey]: true,
           message: 'Successfully created a record',
-          success: true,
+          success: false,
         }
       }
       else if (!!public_token && !!account_id) {
         // console.log('regRecord', regRecord);
-        let result = await createRegistrationRecord(
-          JSON.stringify({
-            registration_record: regRecord,
-            public_token,
-            account_id
-          }),
-          parent?.user?.accessToken!
-        );
+        // let result = await createRegistrationRecord(
+        //   JSON.stringify({
+        //     registration_record: regRecord,
+        //     public_token,
+        //     account_id
+        //   }),
+        //   parent?.user?.accessToken!
+        // );
 
-        if (result.resultStatus !== ResultStatus.SUCCESS) {
-          return {
-            ...objectStep,
-            message: result.message,
-            success: false,
-          }
-        }
+        // if (result.resultStatus !== ResultStatus.SUCCESS) {
+        //   return {
+        //     ...objectStep,
+        //     message: result.message,
+        //     success: false,
+        //   }
+        // }
 
         let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
 
         return {
           ...objectStep,
-          [stepKey]: true,
+          // [stepKey]: true,
           message: 'Successfully created a record',
-          success: true,
+          success: false,
         }
       }
       else {
-        if (!!customerInfo.data &&
-          !!customerInfo.data.card_last_four &&
-          customerInfo.resultStatus === ResultStatus.SUCCESS) {
+        if (!!customerInfo.data) {
+          console.log('formData submit stripe button', formData.get('submit-stripe-button'))
+          console.log('formData submit plaid button', formData.get('submit-plaid-button'))
+          if (!!formData.get('submit-stripe-button')) {
+            if (!!customerInfo.data.card_last_four) {
+              // console.log('regRecord', regRecord);
+              // let result = await createRegistrationRecord(
+              //   JSON.stringify({ registration_record: regRecord }),
+              //   parent?.user?.accessToken!
+              // );
 
-          // console.log('regRecord', regRecord);
-          let result = await createRegistrationRecord(
-            JSON.stringify({ registration_record: regRecord }),
-            parent?.user?.accessToken!
-          );
+              // if (result.resultStatus !== ResultStatus.SUCCESS) {
+              //   return {
+              //     ...objectStep,
+              //     message: result.message,
+              //     success: false,
+              //   }
+              // }
 
-          if (result.resultStatus !== ResultStatus.SUCCESS) {
-            return {
-              ...objectStep,
-              message: result.message,
-              success: false,
+              // let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+
+              return {
+                ...objectStep,
+                // [stepKey]: true,
+                message: 'Successfully created a record',
+                success: false,
+              }
+            } else {
+              return { ...objectStep, hasStripeCard: false };
+            }
+          }
+          else if (!!formData.get('submit-plaid-button')) {
+            if (!!customerInfo.data.bank_name) {
+              // console.log('regRecord', regRecord);
+              // let result = await createRegistrationRecord(
+              //   JSON.stringify({ registration_record: regRecord }),
+              //   parent?.user?.accessToken!
+              // );
+
+              // if (result.resultStatus !== ResultStatus.SUCCESS) {
+              //   return {
+              //     ...objectStep,
+              //     message: result.message,
+              //     success: false,
+              //   }
+              // }
+
+              // let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+
+              return {
+                ...objectStep,
+                // [stepKey]: true,
+                message: 'Successfully created a record',
+                success: false,
+              }
+            } else {
+              return { ...objectStep, hasBankDetails: false };
             }
           }
 
-          let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
 
-          return {
-            ...objectStep,
-            [stepKey]: true,
-            message: 'Successfully created a record',
-            success: true,
-          }
         }
         else {
-          return { ...objectStep, hasStripeCard: false };
+          return {
+            ...objectStep,
+            message: 'No data exist for customer info',
+            success: false,
+          };
         }
       }
     }

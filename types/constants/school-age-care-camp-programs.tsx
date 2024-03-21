@@ -33,7 +33,7 @@ export const SCHOOL_AGE_CARE_CAMP_PROGRAMS = [
     isDisabled: true
   },
   {
-    name: 'Before or After School',
+    name: 'Before and After School',
     altText: 'before-or-after-school',
   },
   {

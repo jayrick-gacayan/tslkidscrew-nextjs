@@ -28,18 +28,20 @@ export default function ParentBreadcrumbs() {
     ];
 
     if (pathSegments.length > 2 && pathSegments[1] === 'forms') {
+      let textProgramType = pathSegments[2] === 'before-or-after-school' ?
+        'Before and After School' : pathSegments[2]
       if (pathSegments.length === 3) {
         arraybc.push({
           altText: pathSegments[2],
           href: `/parent/forms/${pathSegments[2]}`,
-          text: capitalCase(pathSegments[2])
+          text: textProgramType
         })
       }
       else if (pathSegments.length === 4) {
         arraybc.push({
           altText: pathSegments[2],
           href: `/parent/forms/${pathSegments[2]}`,
-          text: capitalCase(pathSegments[2])
+          text: textProgramType
         })
 
         arraybc.push({

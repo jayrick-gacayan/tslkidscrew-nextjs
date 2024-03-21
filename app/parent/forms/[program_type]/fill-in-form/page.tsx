@@ -44,7 +44,7 @@ export default async function Page({
   let locationsByProgramType: LocationPlace[] = await getAllLocationOnProgramTypeAction(program_type);
   let customerData = await getCustomerInfoAction()
 
-  let { card_last_four, card_brand } = customerData.data!;
+  let { card_last_four, card_brand, bank_name, } = customerData.data!;
 
   if (location_id) {
     summerCampWeeks = (await getSummerCampRegWeeksForRecordAction(location_id)) ?? [];
@@ -52,6 +52,7 @@ export default async function Page({
     vacationCamps = (await getVacationCampsForCreateRegRecordAction(location_id)) ?? [];
     summerCampWeeksForPromo = (await getSummerCampWeeksForPromoAction()) ?? [];
   }
+  console.log('customer data', customerData.data)
 
   return (
     <div className='pb-12 w-full'>
@@ -65,7 +66,8 @@ export default async function Page({
           summerCampWeeks={summerCampWeeks}
           summerCampWeeksForPromo={summerCampWeeksForPromo}
           programYearCycle={programYearCycle}
-          vacationCamps={vacationCamps} />
+          vacationCamps={vacationCamps}
+          bankName={bank_name ?? ''} />
       </div>
     </div>
   )

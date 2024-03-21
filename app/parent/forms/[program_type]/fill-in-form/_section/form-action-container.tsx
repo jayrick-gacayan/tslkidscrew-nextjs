@@ -43,11 +43,13 @@ import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import numsIntoWord from '@/types/helpers/date-helpers';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
 
+
 export default function FormActionContainer({
   program_type,
   step,
   locations,
   cardDetails,
+  bankName,
 
   summerCampPromos,
   summerCampWeeks,
@@ -59,6 +61,7 @@ export default function FormActionContainer({
   step: string | undefined;
   locations: Partial<LocationPlace>[];
   cardDetails: Partial<Parent> | undefined;
+  bankName: string;
 
   summerCampPromos: SummerCampPromoSetting[];
   summerCampWeeks: Partial<SummerCampWeekSetting>[];
@@ -66,7 +69,11 @@ export default function FormActionContainer({
   vacationCamps: Partial<VacationCampSetting>[]
   summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
-  const formRef = useRef<HTMLFormElement>(null)
+  const formRef = useRef<HTMLFormElement>(null);
+
+
+
+
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
@@ -272,6 +279,9 @@ export default function FormActionContainer({
               reduxStore.dispatch(modalStripeToggled(true));
             }
           }
+
+
+
         }
       }
     }
@@ -283,6 +293,10 @@ export default function FormActionContainer({
     location,
     highestStep,
   ]);
+
+
+
+
 
   function StepperPanel() {
     if (stepInNumber === 1) return (<LocationForm locations={locations} />);
@@ -383,7 +397,9 @@ export default function FormActionContainer({
       <StepperPanel />
       <FillInFormButtons program_type={program_type}
         step={step}
-        cardDetails={cardDetails} />
+        cardDetails={cardDetails}
+        bankName={bankName}
+        hasBankDetails={formState?.hasBankDetails} />
     </form>
   )
 }

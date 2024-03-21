@@ -20,7 +20,7 @@ export default function ChildrenForm() {
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
-        <h1 className="font-medium text-[36px]">Child&#47;ren&#39;s Information</h1>
+        <h1 className="font-bold text-[36px]">Child&#47;ren&#39;s Information</h1>
         <p>Accepting children {fillInFormState.fillInForm.location.value?.minimum_age} years old and up at this location.</p>
       </div>
       <div className="w-full h-auto space-y-6">

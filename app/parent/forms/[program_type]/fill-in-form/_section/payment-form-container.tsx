@@ -93,7 +93,7 @@ export default function PaymentFormContainer({
     <div className="relative">
       <div className="space-y-8">
         <div className="space-y-2 text-black">
-          <h1 className="font-medium text-[36px]">Payment</h1>
+          <h1 className="font-bold text-[36px]">Payment</h1>
           <p className="italic font-medium text-[18px]">The TOS is your binding CONTRACT with TSL. Please take time to read it before proceeding.</p>
           {
             errorText !== '' &&

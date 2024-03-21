@@ -44,7 +44,7 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-medium text-[36px]">Registration Type Selection</h1>
+      <h1 className="font-bold text-[36px]">Registration Type Selection</h1>
       <div className="space-y-6">
         <div className="relative space-y-1">
           <div className="font-medium">Start Date</div>
@@ -63,43 +63,47 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
           </div>
         </div>
         <div className="space-y-6">
+          <div className="text-tertiary font-semibold text-[20px]">BEFORE OR AFTER SCHOOL INFORMATION</div>
           <div className="italic text-danger font-medium">&#42; Select at least 3 Week Days to continue with your registration.</div>
-          <div className='block space-y-2'>
-            <h4 className="font-medium">Before School:</h4>
-            <div className="flex lg:flex-row flex-col items-start lg:items-center gap-4">
-              {
-                WEEK_DAYS.map((val: string, idx: number) => {
-                  return (
-                    <InputCheckboxCustom key={`before-school-${val}-${idx}`}
-                      labelText={val}
-                      id={`before-school-${val.toLowerCase()}`}
-                      name='before-school[]'
-                      checked={beforeSchool.includes(val)}
-                      value={val}
-                      onChange={handleCheckboxChange('beforeSchool', beforeSchool)} />
-                  )
-                })
-              }
+          <div className="flex lg:flex-row flex-col gap-2">
+            <div className='block space-y-2 w-full'>
+              <h4 className="font-medium">Before School:</h4>
+              <div className="flex flex-col items-start gap-4">
+                {
+                  WEEK_DAYS.map((val: string, idx: number) => {
+                    return (
+                      <InputCheckboxCustom key={`before-school-${val}-${idx}`}
+                        labelText={val}
+                        id={`before-school-${val.toLowerCase()}`}
+                        name='before-school[]'
+                        checked={beforeSchool.includes(val)}
+                        value={val}
+                        onChange={handleCheckboxChange('beforeSchool', beforeSchool)} />
+                    )
+                  })
+                }
+              </div>
+            </div>
+            <div className='block space-y-2 w-full'>
+              <h4 className="font-medium">After School:</h4>
+              <div className="flex flex-col items-start gap-4">
+                {
+                  WEEK_DAYS.map((val: string, idx: number) => {
+                    return (
+                      <InputCheckboxCustom key={`after-school-${val}-${idx}`}
+                        labelText={val}
+                        id={`after-school-${val.toLowerCase()}`}
+                        name='after-school[]'
+                        checked={afterSchool.includes(val)}
+                        value={val}
+                        onChange={handleCheckboxChange('afterSchool', afterSchool)} />
+                    )
+                  })
+                }
+              </div>
             </div>
           </div>
-          <div className='block space-y-2'>
-            <h4 className="font-medium">After School:</h4>
-            <div className="flex lg:flex-row flex-col items-start lg:items-center gap-4">
-              {
-                WEEK_DAYS.map((val: string, idx: number) => {
-                  return (
-                    <InputCheckboxCustom key={`after-school-${val}-${idx}`}
-                      labelText={val}
-                      id={`after-school-${val.toLowerCase()}`}
-                      name='after-school[]'
-                      checked={afterSchool.includes(val)}
-                      value={val}
-                      onChange={handleCheckboxChange('afterSchool', afterSchool)} />
-                  )
-                })
-              }
-            </div>
-          </div>
+
           {
             errorText !== '' && (<div className="text-danger">{errorText}</div>)
           }

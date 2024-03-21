@@ -23,9 +23,7 @@ export default function LocationForm({
 
   return (
     <div className="space-y-4 w-full">
-      <div>
-        <h1 className="font-medium text-[36px] text-black">Pick A Location</h1>
-      </div>
+      <h1 className="font-bold text-[36px] text-black">Pick A Location</h1>
       <div className="w-full relative">
         <CustomListbox value={value ?? ''}
           name='location-place'

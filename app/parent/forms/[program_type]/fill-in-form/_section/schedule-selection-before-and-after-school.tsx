@@ -55,7 +55,7 @@ export default function ScheduleSelectionBeforeAndAfterSchool({
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
-        <h1 className="font-medium text-[36px]">Schedule&#39;s Selection</h1>
+        <h1 className="font-bold text-[36px]">Schedule&#39;s Selection</h1>
         <div className="flex items-center gap-2">
           <div className="flex-none">
             <PhInfoLight className="text-warning text-[24px]" />

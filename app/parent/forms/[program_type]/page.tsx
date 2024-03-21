@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: { program_type: string 
   return (
     <div className='pb-12 w-full'>
       <div className='rounded drop-shadow bg-white w-full lg:w-8/12 mx-auto block p-6 space-y-6'>
-        <h1 className='text-center font-medium text-[32px] text-black'>
+        <h1 className='text-center font-bold text-[32px] text-black'>
           {program_type === 'before-or-after-school' ? 'Before and After School' : capitalCase(program_type)}
         </h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>

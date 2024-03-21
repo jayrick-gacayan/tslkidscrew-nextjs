@@ -1,29 +1,22 @@
 import { Products } from 'plaid';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   PlaidLinkOnSuccessMetadata,
   usePlaidLink
 } from 'react-plaid-link';
 
 export default function ButtonForPlaid({
-  program_type
+  program_type,
+  hasBankDetails,
+  pending,
+  setButtonPress,
 }: {
   program_type: string;
+  hasBankDetails?: boolean | undefined;
+  pending: boolean;
+  setButtonPress: Dispatch<SetStateAction<string>>
 }) {
   const [linkToken, setLinkToken] = useState<string>('');
-
-  useEffect(() => {
-    async function getLinkToken() {
-      const result = await fetch(`/api/create_plaid_link_token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      let response = await result.json();
-      setLinkToken(response.link_token)
-    }
-    getLinkToken();
-  }, []);
 
   const { open, ready } = usePlaidLink({
     env: "sandbox",
@@ -62,12 +55,50 @@ export default function ButtonForPlaid({
     },
   });
 
+  useEffect(() => {
+    async function getLinkToken() {
+      const result = await fetch(`/api/create_plaid_link_token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      let response = await result.json();
+      setLinkToken(response.link_token)
+    }
+    getLinkToken();
+  }, []);
+
+  useEffect(() => {
+    if (hasBankDetails !== undefined) {
+      if (!hasBankDetails) {
+        open();
+      }
+    }
+  }, [
+    hasBankDetails,
+    open,
+  ]);
+
+
+
   return (
-    <button type='button'
-      onClick={() => { open() }}
+    <button name='submit-plaid-button'
+      value='submit-plaid-button'
+      type='submit'
       className='px-4 py-2 w-44 bg-orange-500 hover:bg-orange-300/70 text-white rounded disabled:cursor-not-allowed'
-      disabled={!ready}>
+      disabled={pending}
+      onClick={() => {
+        setButtonPress('plaid')
+      }}>
       Link Bank Details and Pay
+      {/* {
+        pending ? (<PendingAction />) :
+          <>
+            {
+              bankName === '' ? 'Link Bank Details and Pay' : 'Pay with Bank Details on File'
+            }
+          </>
+      } */}
     </button>
   )
 }

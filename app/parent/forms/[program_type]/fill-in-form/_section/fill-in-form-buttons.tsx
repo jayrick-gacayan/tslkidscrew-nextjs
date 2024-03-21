@@ -6,16 +6,22 @@ import ButtonForPlaid from './button-for-plaid';
 import Link from 'next/link';
 import { reduxStore } from '@/react-redux/redux-store';
 import { fillInFormReset } from '../_redux/fill-in-form-slice';
+import { SetStateAction, useState } from 'react';
 
 export default function FillInFormButtons({
   program_type,
   step,
   cardDetails,
+  bankName,
+  hasBankDetails,
 }: {
   program_type: string;
   step: string | undefined;
-  cardDetails: Partial<Parent> | undefined
+  cardDetails: Partial<Parent> | undefined;
+  bankName: string;
+  hasBankDetails?: boolean | undefined
 }) {
+  const [buttonPress, setButtonPress] = useState<string>('');
   const { pending } = useFormStatus();
 
   const stepInNumber = !step ? 1 : parseInt(step);
@@ -74,10 +80,17 @@ export default function FillInFormButtons({
                 ) :
                 (
                   <div className='space-x-2'>
-                    <ButtonForPlaid program_type={program_type} />
-                    <button type='submit'
+                    <ButtonForPlaid program_type={program_type}
+                      pending={pending && buttonPress === 'plaid'}
+                      setButtonPress={setButtonPress}
+                      hasBankDetails={hasBankDetails} />
+                    <button
+                      name='submit-stripe-button'
+                      value='submit-stripe-button'
+                      type='submit'
                       className={`px-4 py-2 w-44 bg-primary text-white rounded disabled:cursor-not-allowed`}
-                      disabled={pending}>
+                      disabled={pending && buttonPress === 'stripe'}
+                      onClick={() => { setButtonPress('stripe') }}>
                       {
                         pending ? (<PendingAction />) :
                           <>
