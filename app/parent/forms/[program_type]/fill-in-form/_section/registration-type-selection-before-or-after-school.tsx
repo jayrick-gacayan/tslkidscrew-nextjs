@@ -63,7 +63,7 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool() {
           </div>
         </div>
         <div className="space-y-6">
-          <div className="text-tertiary font-semibold text-[20px]">BEFORE OR AFTER SCHOOL INFORMATION</div>
+          <div className="text-tertiary font-semibold text-[20px]">BEFORE AND AFTER SCHOOL INFORMATION</div>
           <div className="italic text-danger font-medium">&#42; Select at least 3 Week Days to continue with your registration.</div>
           <div className="flex lg:flex-row flex-col gap-2">
             <div className='block space-y-2 w-full'>
