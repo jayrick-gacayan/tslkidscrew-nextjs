@@ -22,7 +22,7 @@ export default function LocationForm({
   }, [fillInFormState.fillInForm.location])
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="space-y-4 flex-1 w-full">
       <h1 className="font-bold text-[36px] text-black">Pick A Location</h1>
       <div className="w-full relative">
         <CustomListbox value={value ?? ''}

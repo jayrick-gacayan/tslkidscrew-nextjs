@@ -55,8 +55,8 @@ export default async function Page({
   console.log('customer data', customerData.data)
 
   return (
-    <div className='pb-12 w-full'>
-      <div className="rounded drop-shadow bg-white w-full xl:w-8/12 m-auto block p-6 max-h-fit">
+    <div className='pb-12 flex-1 w-full'>
+      <div className="rounded drop-shadow h-full bg-white w-full xl:w-8/12 m-auto block p-6">
         <FormActionContainer step={step}
           program_type={program_type}
           cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
