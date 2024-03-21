@@ -29,7 +29,8 @@ export default function ParentBreadcrumbs() {
 
     if (pathSegments.length > 2 && pathSegments[1] === 'forms') {
       let textProgramType = pathSegments[2] === 'before-or-after-school' ?
-        'Before and After School' : pathSegments[2]
+        'Before and After School' : capitalCase(pathSegments[2]);
+
       if (pathSegments.length === 3) {
         arraybc.push({
           altText: pathSegments[2],
