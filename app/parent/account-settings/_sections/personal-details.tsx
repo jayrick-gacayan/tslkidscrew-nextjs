@@ -49,7 +49,7 @@ export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoFo
       <form action={formAction} className='space-y-8'>
         <div className='space-y-4'>
           <div className='flex items-stretch gap-4'>
-            <InputCustom labelText='Firstname'
+            <InputCustom labelText='First Name'
               id='firstName'
               name='first_name'
               className='bg-secondary p-2 border-transparent'
@@ -58,7 +58,7 @@ export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoFo
               defaultValue={parent?.first_name ?? ''}
               errorText={state.first_name?.errorText}
               validationStatus={state.first_name?.validationStatus} />
-            <InputCustom labelText='Lastname'
+            <InputCustom labelText='Last Name'
               id='lastName'
               name='last_name'
               className='bg-secondary p-2 border-transparent'
@@ -124,7 +124,7 @@ export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoFo
             placeholder='State:'
             type='text'
             prefixIcon={<PrefixLocationDotIcon />} />
-          <InputCustom labelText='Zipcode'
+          <InputCustom labelText='Zip Code'
             id='address-zipcode'
             name='address-zipcode'
             defaultValue={parent?.zip_code ?? ''}
