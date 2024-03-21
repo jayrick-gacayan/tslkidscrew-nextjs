@@ -71,7 +71,7 @@ export default function CustomerInfoForm() {
         <div className="block">
           <div className="w-full lg:w-2/3 block space-y-4">
             <InputCustom id='firstname'
-              labelText="Firstname"
+              labelText="First Name"
               name='first_name'
               type="text"
               placeholder="Firstname:"
@@ -80,7 +80,7 @@ export default function CustomerInfoForm() {
               errorText={state.first_name?.errorText}
               validationStatus={state.first_name?.validationStatus} />
             <InputCustom id='lastname'
-              labelText="Lastname"
+              labelText="Last Name"
               name='last_name'
               type="text"
               placeholder="Lastname:"

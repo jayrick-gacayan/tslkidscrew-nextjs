@@ -13,22 +13,25 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let totalPages: number = Math.ceil((result.data?.total ?? 1) / showEntry) ?? 1
   let data: any[] | undefined = result.data?.data;
 
-
   return (
-    <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
-      <RegistrationInfoHeader showEntry={showEntry} searchParams={searchParams} />
-      <RegistrationInfoTable registration_records={data} />
-      {
-        (!data || totalPages < 2) ? null :
-          (
-            <div className='w-fit m-auto block'>
-              <Pagination baseURL='/parent/registration-info'
-                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-                searchParams={searchParams}
-                totalPages={totalPages} />
-            </div>
-          )
-      }
+    <div className='flex-1'>
+      <div className="pb-12">
+        <div className='rounded h-full bg-white drop-shadow-lg py-4 px-8 space-y-6'>
+          <RegistrationInfoHeader showEntry={showEntry} searchParams={searchParams} />
+          <RegistrationInfoTable registration_records={data} />
+          {
+            (!data || totalPages < 2) ? null :
+              (
+                <div className='w-fit m-auto block'>
+                  <Pagination baseURL='/parent/registration-info'
+                    currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                    searchParams={searchParams}
+                    totalPages={totalPages} />
+                </div>
+              )
+          }
+        </div>
+      </div>
     </div>
   )
 }

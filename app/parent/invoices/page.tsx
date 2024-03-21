@@ -14,20 +14,24 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let data: Invoice[] | undefined = result.data?.data;
 
   return (
-    <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-6'>
-      <InvoicesHeader showEntry={showEntry} searchParams={searchParams} />
-      <InvoicesInfoTable invoices={data} />
-      {
-        (!data || totalPages < 2) ? null :
-          (
-            <div className='w-fit m-auto block'>
-              <Pagination baseURL='/parent/invoices'
-                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-                searchParams={searchParams}
-                totalPages={totalPages} />
-            </div>
-          )
-      }
+    <div className='flex-1'>
+      <div className="pb-12">
+        <div className='rounded h-full bg-white drop-shadow-lg py-4 px-8 space-y-6'>
+          <InvoicesHeader showEntry={showEntry} searchParams={searchParams} />
+          <InvoicesInfoTable invoices={data} />
+          {
+            (!data || totalPages < 2) ? null :
+              (
+                <div className='w-fit m-auto block'>
+                  <Pagination baseURL='/parent/invoices'
+                    currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                    searchParams={searchParams}
+                    totalPages={totalPages} />
+                </div>
+              )
+          }
+        </div>
+      </div>
     </div>
-  )
+  );
 }
