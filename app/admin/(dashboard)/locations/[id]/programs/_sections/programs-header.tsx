@@ -4,22 +4,23 @@ import Link from "next/link";
 import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries";
 import ShowEntriesSelect from "@/app/_components/show-entries-select";
 import { SearchParamsProps } from "@/types/props/search-params-props";
+import { RedirectType, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function ProgramsHeader({
   location_id,
   searchParams,
   showEntry,
-  redirectURL,
 }: {
   location_id: string;
   searchParams: SearchParamsProps;
   showEntry: number;
-  redirectURL: (url: string) => Promise<void>
 }) {
-  let baseURL = `/admin/locations/${location_id}/programs`;
+  const router: AppRouterInstance = useRouter();
+  let baseURL: string = `/admin/locations/${location_id}/programs`;
 
-  function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
-    let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
+  function urlPaginate(searchParams: SearchParamsProps, per_page?: number): string {
+    let urlSearchParams: URLSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
     if (urlSearchParams.has('page')) { urlSearchParams.delete('page'); }
     if (!per_page) { urlSearchParams.delete('per_page'); }
@@ -38,7 +39,7 @@ export default function ProgramsHeader({
       <div className='flex w-fit items-center gap-4'>
         <ShowEntriesSelect value={showEntry}
           onChange={(value) => {
-            redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
+            router.replace(urlPaginate(searchParams, value === 10 ? undefined : value))
           }} items={[10, 20, 30]} />
         <div>
           <Link href={`/admin/locations/${location_id}/programs/new`}

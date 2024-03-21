@@ -4,7 +4,6 @@ import { Result } from '@/models/result';
 import InvoicesHeader from './_sections/invoices-header';
 import { SearchParamsProps } from '@/types/props/search-params-props';
 import InvoicesInfoTable from './_sections/invoices-info-table';
-import { redirectToPath } from '@/actions/common-actions';
 import Pagination from '@/app/_components/pagination';
 import { getAllCustomerInvoicesAction } from '@/actions/invoices-actions';
 
@@ -16,7 +15,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 
   return (
     <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-6'>
-      <InvoicesHeader showEntry={showEntry} searchParams={searchParams} redirectURL={redirectToPath} />
+      <InvoicesHeader showEntry={showEntry} searchParams={searchParams} />
       <InvoicesInfoTable invoices={data} />
       {
         (!data || totalPages < 2) ? null :

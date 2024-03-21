@@ -2,7 +2,6 @@ import AdminUsersHeader from './_sections/admin-users-header';
 import AdminUsersTable from './_sections/admin-users-table';
 import type { Metadata } from 'next';
 import { SearchParamsProps } from '@/types/props/search-params-props';
-import { redirectToPath } from '@/actions/common-actions';
 import Pagination from '@/app/_components/pagination';
 import { Admin } from '@/models/admin';
 import { Paginate } from '@/models/paginate';
@@ -24,9 +23,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   return (
     <div className='pb-6'>
       <div className='rounded3 bg-white drop-shadow-lg p-4 space-y-6 relative'>
-        <AdminUsersHeader searchParams={searchParams}
-          showEntry={showEntry}
-          redirectURL={redirectToPath} />
+        <AdminUsersHeader searchParams={searchParams} showEntry={showEntry} />
         <Suspense fallback={<div>Loading....</div>}>
           <AdminUsersTable admins={data} />
         </Suspense>

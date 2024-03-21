@@ -31,10 +31,7 @@ export default async function Page({
     <div className="pb-6">
       <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
         <BackButtonClient />
-        <ProgramsHeader location_id={params.id}
-          searchParams={searchParams}
-          showEntry={showEntry}
-          redirectURL={redirectToPath} />
+        <ProgramsHeader location_id={params.id} searchParams={searchParams} showEntry={showEntry} />
         <ProgramsTable location_id={params.id} locationPrograms={data} />
         {
           (!data || totalPages < 2) ? null :

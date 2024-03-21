@@ -1,12 +1,11 @@
-import { getRegistrationRecordsAction } from "@/actions/registration-record-actions";
-import RegistrationInfoHeader from "./_sections/registration-info-header";
-import RegistrationInfoTable from "./_sections/registration-info-table";
-import { Result } from "@/models/result";
-import { Paginate } from "@/models/paginate";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { redirectToPath } from "@/actions/common-actions";
-import Pagination from "@/app/_components/pagination";
-import { RegistrationRecord } from "@/models/registration-record";
+import { getRegistrationRecordsAction } from '@/actions/registration-record-actions';
+import RegistrationInfoHeader from './_sections/registration-info-header';
+import RegistrationInfoTable from './_sections/registration-info-table';
+import { Result } from '@/models/result';
+import { Paginate } from '@/models/paginate';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import Pagination from '@/app/_components/pagination';
+import { RegistrationRecord } from '@/models/registration-record';
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
   let result: Result<Paginate<RegistrationRecord>> = await getRegistrationRecordsAction();
@@ -16,8 +15,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 
 
   return (
-    <div className="rounded bg-white drop-shadow-lg p-4 space-y-6">
-      <RegistrationInfoHeader showEntry={showEntry} searchParams={searchParams} redirectURL={redirectToPath} />
+    <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
+      <RegistrationInfoHeader showEntry={showEntry} searchParams={searchParams} />
       <RegistrationInfoTable registration_records={data} />
       {
         (!data || totalPages < 2) ? null :
