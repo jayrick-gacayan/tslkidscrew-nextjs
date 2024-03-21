@@ -9,7 +9,6 @@ import PaymentFormContainer from './payment-form-container';
 import RegistrationTypeSelectionBeforeOrAfterSchool from './registration-type-selection-before-or-after-school';
 import { useEffect, useMemo, useRef } from 'react';
 import { LocationPlace } from '@/models/location-place';
-import { redirectToPath } from '@/actions/common-actions';
 import { Parent } from '@/models/parent';
 import { RootState, reduxStore } from '@/react-redux/redux-store';
 import {
@@ -42,6 +41,8 @@ import { ProgramYearCycleSetting } from '@/models/program-year-cycle-setting';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import numsIntoWord from '@/types/helpers/date-helpers';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 
 export default function FormActionContainer({
@@ -70,6 +71,7 @@ export default function FormActionContainer({
   summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
   const formRef = useRef<HTMLFormElement>(null);
+  const router: AppRouterInstance = useRouter();
 
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
@@ -142,7 +144,7 @@ export default function FormActionContainer({
 
       if (swalResult.isConfirmed) {
         if (type === 'success') {
-          await redirectToPath(`/parent/forms`);
+          router.replace(`/parent/forms`);
           reduxStore.dispatch(fillInFormReset());
         }
       }
@@ -153,7 +155,10 @@ export default function FormActionContainer({
 
       swalMessage(formState['message'], formState['success'] ? 'success' : 'error');
     }
-  }, [formState]);
+  }, [
+    formState,
+    router
+  ]);
 
   useEffect(() => {
     if (formState?.['location-place[id]']) {
@@ -226,6 +231,7 @@ export default function FormActionContainer({
 
   useEffect(() => {
     function pathToURL(numberToStep: number) {
+
       pathToRedirectURL(stepInNumber + numberToStep, location?.id ?? undefined)
     }
 
@@ -234,7 +240,7 @@ export default function FormActionContainer({
       else { if (stepToInc) { pathToURL(1); } }
     }
 
-    async function pathToRedirectURL(
+    function pathToRedirectURL(
       numberStep: number,
       location_id?: number,
     ) {
@@ -245,7 +251,8 @@ export default function FormActionContainer({
 
       let strSP = urlSearchParams.toString();
       let url = `/parent/forms/${program_type}/fill-in-form${strSP === '' ? `` : `?${strSP}`}`
-      await redirectToPath(url);
+
+      router.replace(url);
     }
 
     let { stepOne, stepTwo, stepThree, stepFour, ...rest } = formState;
@@ -253,7 +260,9 @@ export default function FormActionContainer({
     if (stepInNumber === 1) { if (stepOne) { pathToURL(1); } }
     else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
     else if (stepInNumber === 3) { pathToStep(stepTwo, stepThree); }
-    else if (stepInNumber === 4 && program_type === 'before-or-after-school') { pathToStep(stepThree, stepFour); }
+    else if (stepInNumber === 4 && program_type === 'before-or-after-school') {
+      pathToStep(stepThree, stepFour);
+    }
     else if (stepInNumber === highestStep) {
       let stepError = program_type === 'before-or-after-school' ? stepFour : stepThree;
 
@@ -276,9 +285,6 @@ export default function FormActionContainer({
               reduxStore.dispatch(modalStripeToggled(true));
             }
           }
-
-
-
         }
       }
     }
@@ -289,6 +295,7 @@ export default function FormActionContainer({
     childrenObj,
     location,
     highestStep,
+    router
   ]);
 
   function StepperPanel() {
