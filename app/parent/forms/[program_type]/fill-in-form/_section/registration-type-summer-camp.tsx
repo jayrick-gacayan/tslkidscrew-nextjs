@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import FormsRadioButton from "../_components/forms-radio-button";
 import { FillInFormState } from "../_redux/fill-in-form-state";
 import { useAppSelector } from "@/hooks/redux-hooks";
@@ -209,8 +209,6 @@ export default function RegistrationTypeSummerCamp({
                   </>
                 )
             }
-
-
           </div>
         )
       }

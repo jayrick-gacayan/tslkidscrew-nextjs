@@ -395,27 +395,21 @@ export default function FormActionContainer({
       }
       {
         stepInNumber === 3 &&
-        (
-          <>
-            {
-              () => {
-                switch (program_type) {
-                  case 'before-or-after-school':
-                    return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
-                  case 'summer-camp':
-                    return (
-                      <RegistrationTypeSummerCamp summerCampWeeks={summerCampWeeks}
-                        summerCampPromos={summerCampPromos}
-                        summerCampWeeksForPromo={summerCampWeeksForPromo} />
-                    )
-                  case 'vacation-camp':
-                    return (<AttendanceScheduleVacationCamp vacationCamps={vacationCamps} />);
-                }
-                return null;
-              }
-            }
-          </>
-        )//step three form
+        (() => {
+          switch (program_type) {
+            case 'before-or-after-school':
+              return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
+            case 'summer-camp':
+              return (
+                <RegistrationTypeSummerCamp summerCampWeeks={summerCampWeeks}
+                  summerCampPromos={summerCampPromos}
+                  summerCampWeeksForPromo={summerCampWeeksForPromo} />
+              )
+            case 'vacation-camp':
+              return (<AttendanceScheduleVacationCamp vacationCamps={vacationCamps} />);
+          }
+          return null;
+        })()//step three form
       }
       {
         stepInNumber === 4 && program_type === 'before-or-after-school' &&
