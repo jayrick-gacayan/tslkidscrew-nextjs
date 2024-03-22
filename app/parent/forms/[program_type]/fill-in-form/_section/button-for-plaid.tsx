@@ -9,7 +9,7 @@ import {
   PlaidLinkOnSuccessMetadata,
   usePlaidLink
 } from 'react-plaid-link';
-import FillInFormPendingAction from '../_components/pending-actions';
+import PendingAction from '../_components/pending-actions';
 
 export default function ButtonForPlaid({
   program_type,
@@ -118,7 +118,7 @@ export default function ButtonForPlaid({
       disabled={pending}
       onClick={() => { setButtonPress('plaid'); }}>
       {
-        pending && buttonPress === 'plaid' ? (<FillInFormPendingAction />) :
+        pending && buttonPress === 'plaid' ? (<PendingAction />) :
           <>
             {
               bankName === '' ? 'Link Bank Details and Proceed to Payment' :

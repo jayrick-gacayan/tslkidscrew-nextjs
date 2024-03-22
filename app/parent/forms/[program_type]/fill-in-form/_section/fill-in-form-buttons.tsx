@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { reduxStore } from '@/react-redux/redux-store';
 import { fillInFormReset } from '../_redux/fill-in-form-slice';
 import { useEffect, useState } from 'react';
-import FillInFormPendingAction from '../_components/pending-actions';
+import PendingAction from '../_components/pending-actions';
 
 export default function FillInFormButtons({
   program_type,
@@ -89,7 +89,7 @@ export default function FillInFormButtons({
                 <button type='submit'
                   className='px-4 py-2 w-auto bg-primary text-white rounded disabled:cursor-not-allowed'
                   disabled={pending}>
-                  {!pending ? 'Next' : (<FillInFormPendingAction />)}
+                  {!pending ? 'Next' : (<PendingAction />)}
                 </button>
               )
             }
@@ -113,7 +113,7 @@ export default function FillInFormButtons({
               disabled={pending && buttonPress === 'stripe'}
               onClick={() => { setButtonPress('stripe') }}>
               {
-                pending && buttonPress === 'stripe' ? (<FillInFormPendingAction />) :
+                pending && buttonPress === 'stripe' ? (<PendingAction />) :
                   <>
                     {
                       !cardDetails ? 'Proceed to Payment' : 'Proceed to Payment with Card on File'

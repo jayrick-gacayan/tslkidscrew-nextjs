@@ -118,12 +118,12 @@ export async function forgotPassword(email: string) {
   }
 }
 
-export async function changePassword(body: string) {
+export async function changePassword(body: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/change_password${body}`,
     {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' }
+      ...authHeaders(token)
     }
   );
 

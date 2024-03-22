@@ -10,9 +10,6 @@ export async function addOrUpdateBankDetailsAction(
   public_token: string,
   account_id: string
 ) {
-  console.log('public token', public_token);
-  console.log('account id', account_id);
-
   let parent: Session | null = await auth();
   let urlSearchParams = new URLSearchParams();
   urlSearchParams.set('public_token', public_token);

@@ -47,7 +47,7 @@ export default function RegistrationTypeSelectionBeforeOrAfterSchool({
         </div>
         <div className='space-y-6'>
           <div className='text-tertiary font-semibold text-[20px]'>BEFORE AND AFTER SCHOOL INFORMATION</div>
-          <div className='italic text-danger font-medium'>&#42; Select at least 3 Week Days to continue with your registration.</div>
+          <div className='italic text-danger font-medium'>&#42; Select at least 3 Week Days to before and after school to continue with your registration.</div>
           <div className='flex lg:flex-row flex-col gap-2'>
             <WeekDaysBeforeAfterSchool keyString={'beforeSchool'}
               arrWeekDays={beforeSchool}
