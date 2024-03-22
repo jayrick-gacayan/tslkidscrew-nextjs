@@ -63,7 +63,7 @@ export default function ChildrenForm({
                     </div>
                     <div className='relative w-full'>
                       <div className='relative space-y-1'>
-                        <div className='font-medium'>Start Date</div>
+                        <div className='font-medium'>Birth Date</div>
                         <div className='relative w-full'>
                           <PopoverReactDayPicker placeholder='Enter date'
                             selected={value.birthdate ? new Date(value.birthdate) : undefined}
