@@ -1,14 +1,15 @@
-import { Listbox, Transition } from "@headlessui/react";
-import { Fragment, ReactNode, Ref, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
-import { ValidationType } from "@/types/enums/validation-type";
+import { Listbox, Transition } from '@headlessui/react';
+import { Fragment, ReactNode, Ref, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { ValidationType } from '@/types/enums/validation-type';
 
 type MyListboxProps = {
-  name?: string;
   value: any;
-  placeholder?: string;
+  keyDescription: string;
   onChange: (value: any) => void;
   items: any[];
+  placeholder?: string;
+  name?: string;
   by?: string;
   listButtonClassName?: string;
   labelText?: string;
@@ -16,7 +17,6 @@ type MyListboxProps = {
   validationStatus?: ValidationType;
   valueClassName?: (value: string, placeholder: string) => string;
   listboxDropdownIcon?: (open: boolean) => ReactNode;
-  keyDescription: string;
 }
 
 function CustomListbox(
@@ -38,7 +38,7 @@ function CustomListbox(
   ref: Ref<HTMLElement> | undefined
 ) {
   return (
-    <div className="relative w-full">
+    <div className='relative w-full'>
       <Listbox ref={ref}
         value={value}
         onChange={onChange}
@@ -50,12 +50,12 @@ function CustomListbox(
               value ? (value.email ?? value.name) : placeholder
             return (
               <>
-                <div className="space-y-[2px]">
+                <div className='space-y-[2px]'>
                   {
                     labelText &&
                     <Listbox.Label className={
                       twMerge(
-                        "font-semibold text-black",
+                        'font-semibold text-black',
                         validationStatus === ValidationType.ERROR ? 'text-danger' : ''
                       )
                     }>
@@ -76,16 +76,16 @@ function CustomListbox(
                     </div>
                     {listboxDropdownIcon && listboxDropdownIcon(open)}
                   </Listbox.Button>
-                  {errorText !== '' && (<div className="text-danger">{errorText}</div>)}
+                  {errorText !== '' && (<div className='text-danger'>{errorText}</div>)}
                 </div>
                 <Transition show={open}
                   as={Fragment}
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0">
+                  enter='transition duration-100 ease-out'
+                  enterFrom='transform scale-95 opacity-0'
+                  enterTo='transform scale-100 opacity-100'
+                  leave='transition duration-75 ease-out'
+                  leaveFrom='transform scale-100 opacity-100'
+                  leaveTo='transform scale-95 opacity-0'>
                   <Listbox.Options as={Fragment}>
                     <div
                       className={

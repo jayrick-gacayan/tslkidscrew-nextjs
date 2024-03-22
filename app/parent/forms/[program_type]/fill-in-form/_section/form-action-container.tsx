@@ -7,13 +7,16 @@ import ChildrenForm from './children-form';
 import LocationForm from './location-form';
 import PaymentFormContainer from './payment-form-container';
 import RegistrationTypeSelectionBeforeOrAfterSchool from './registration-type-selection-before-or-after-school';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { LocationPlace } from '@/models/location-place';
 import { Parent } from '@/models/parent';
 import { RootState, reduxStore } from '@/react-redux/redux-store';
 import {
   beforeOrAfterSchoolStartDateChanged,
   beforeOrAfterWeekDaysSetError,
+  childrenAdded,
+  childrenFieldUpdated,
+  childrenRemoved,
   fillInFormReset,
   locationChanged,
   modalStripeToggled,
@@ -69,20 +72,23 @@ export default function FormActionContainer({
   vacationCamps: Partial<VacationCampSetting>[]
   summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
-  const formRef = useRef<HTMLFormElement>(null);
   const router: AppRouterInstance = useRouter();
 
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   });
 
-  const location: Partial<LocationPlace> | undefined = useMemo(() => {
-    return fillInFormState.fillInForm.location.value
+  const locationValue = useMemo(() => {
+    return fillInFormState.fillInForm.location
   }, [fillInFormState.fillInForm.location]);
 
-  const childrenObj = useMemo(() => {
+  const arrChildren = useMemo(() => {
     return fillInFormState.fillInForm.childrenArr
   }, [fillInFormState.fillInForm.childrenArr]);
+
+  const tosCondition = useMemo(() => {
+    return fillInFormState.fillInForm.TOSCondition;
+  }, [fillInFormState.fillInForm.TOSCondition])
 
   /* For Program Type before-or-after-school */
   const { startDate, beforeSchool, afterSchool } = useMemo(() => {
@@ -160,11 +166,13 @@ export default function FormActionContainer({
   ]);
 
   useEffect(() => {
-    if (formState?.['location-place[id]']) {
-      let { errorText, validationStatus } = formState?.['location-place[id]']
-      reduxStore.dispatch(locationChanged({ value: undefined, errorText, validationStatus }))
+    if (stepInNumber === 1) {
+      if (formState?.['location-place[id]']) {
+        let { errorText, validationStatus } = formState?.['location-place[id]']
+        reduxStore.dispatch(locationChanged({ value: undefined, errorText, validationStatus }));
+      }
     }
-  }, [formState]);
+  }, [formState, stepInNumber]);
 
   // for program type 'before-or-after-school'
   useEffect(() => {
@@ -230,8 +238,7 @@ export default function FormActionContainer({
 
   useEffect(() => {
     function pathToURL(numberToStep: number) {
-
-      pathToRedirectURL(stepInNumber + numberToStep, location?.id ?? undefined)
+      pathToRedirectURL(stepInNumber + numberToStep, locationValue.value?.id ?? undefined);
     }
 
     function pathToStep(stepToDec: boolean, stepToInc: boolean) {
@@ -239,10 +246,7 @@ export default function FormActionContainer({
       else { if (stepToInc) { pathToURL(1); } }
     }
 
-    function pathToRedirectURL(
-      numberStep: number,
-      location_id?: number,
-    ) {
+    function pathToRedirectURL(numberStep: number, location_id?: number) {
       let urlSearchParams = new URLSearchParams();
 
       if (numberStep > 1) { urlSearchParams.set('step', numberStep.toString()); }
@@ -291,42 +295,14 @@ export default function FormActionContainer({
     stepInNumber,
     formState,
     program_type,
-    childrenObj,
-    location,
+    locationValue,
     highestStep,
     router
   ]);
 
-  function StepperPanel() {
-    if (stepInNumber === 1) return (<LocationForm locations={locations} />);
-    else if (stepInNumber === 2) return (<ChildrenForm />);
-    else if (stepInNumber === 3) {
-      switch (program_type) {
-        case 'before-or-after-school':
-          return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
-        case 'summer-camp':
-          return (
-            <RegistrationTypeSummerCamp summerCampWeeks={summerCampWeeks}
-              summerCampPromos={summerCampPromos}
-              summerCampWeeksForPromo={summerCampWeeksForPromo} />
-          )
-        case 'vacation-camp':
-          return (<AttendanceScheduleVacationCamp vacationCamps={vacationCamps} />);
-      }
-      return null;
-    }
-    else if (stepInNumber === 4 && program_type === 'before-or-after-school')
-      return (<RegistrationTypeSelectionBeforeOrAfterSchool />)
-    else if (stepInNumber === highestStep)
-      return (<PaymentFormContainer program_type={program_type} childrenArr={childrenObj} />)
-
-    return null;
-  }
-
   return (
     <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
       id={`${program_type}-fill-in-form`}
-      ref={formRef}
       action={(formData) => {
         if (summerCampRegOpt.value === 'promo' &&
           program_type === 'summer-camp' &&
@@ -337,7 +313,7 @@ export default function FormActionContainer({
         }
 
         if (stepInNumber === highestStep) {
-          formData.append('location', encodeURIComponent(location?.name!))
+          formData.append('location', encodeURIComponent(locationValue?.value?.name!))
           formData.append('agree_to_tos', encodeURIComponent(true));
 
           formData.append('referrer',
@@ -346,7 +322,7 @@ export default function FormActionContainer({
                 program_type === 'summer-camp' ? 'groupon_summer_camp' : 'vacation_camp')
           );
 
-          childrenObj.forEach((val: ChildInfoType) => {
+          arrChildren.forEach((val: ChildInfoType) => {
             formData.append('child-info[][first_name]', encodeURIComponent(val.first_name));
             formData.append('child-info[][last_name]', encodeURIComponent(val.last_name));
             formData.append('child-info[][school_attending]', encodeURIComponent(val.school_attending));
@@ -391,7 +367,79 @@ export default function FormActionContainer({
 
         formAction(formData);
       }}>
-      <StepperPanel />
+      {
+        stepInNumber === 1 &&
+        (
+          <LocationForm locations={locations}
+            locationValue={locationValue}
+            onChange={(val: any) => { reduxStore.dispatch(locationChanged(fieldInputValue(val))) }} />
+        )// location form
+      }
+      {
+        stepInNumber === 2 &&
+        (
+          <ChildrenForm arrChildren={arrChildren}
+            minimum_age={locationValue?.value?.minimum_age ?? 1}
+            onChildrenUpdated={
+              (idx: number, key: "first_name" | "last_name" | "birthdate" | "school_attending", value: string) => {
+                reduxStore.dispatch(childrenFieldUpdated({
+                  index: idx,
+                  key: key,
+                  value: value
+                }))
+              }
+            }
+            onChildrenRemoved={(idx: number) => { reduxStore.dispatch(childrenRemoved(idx)) }}
+            onChildrenAdded={() => { reduxStore.dispatch(childrenAdded()) }} />
+        )// children form
+      }
+      {
+        stepInNumber === 3 &&
+        (
+          <>
+            {
+              () => {
+                switch (program_type) {
+                  case 'before-or-after-school':
+                    return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
+                  case 'summer-camp':
+                    return (
+                      <RegistrationTypeSummerCamp summerCampWeeks={summerCampWeeks}
+                        summerCampPromos={summerCampPromos}
+                        summerCampWeeksForPromo={summerCampWeeksForPromo} />
+                    )
+                  case 'vacation-camp':
+                    return (<AttendanceScheduleVacationCamp vacationCamps={vacationCamps} />);
+                }
+                return null;
+              }
+            }
+          </>
+        )//step three form
+      }
+      {
+        stepInNumber === 4 && program_type === 'before-or-after-school' &&
+        (<RegistrationTypeSelectionBeforeOrAfterSchool />) // step four and before-or-after-school
+      }
+      {
+        stepInNumber === highestStep &&
+        (
+          <PaymentFormContainer program_type={program_type}
+            childrenArr={arrChildren}
+            tosCondition={tosCondition}
+            vacationCamps={campsVacation}
+            onCheckboxChange={(value) => {
+              reduxStore.dispatch(
+                tosConditionChanged(
+                  fieldInputValue(
+                    !tosCondition.value.includes(value) ? [...tosCondition.value, value] :
+                      tosCondition.value.filter((val: any) => { return val !== value; })
+                  )
+                )
+              );
+            }} />
+        )
+      }
       <FillInFormButtons program_type={program_type}
         step={step}
         cardDetails={cardDetails}

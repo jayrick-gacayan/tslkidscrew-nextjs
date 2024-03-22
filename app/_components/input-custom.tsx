@@ -1,7 +1,6 @@
-import { ValidationType } from "@/types/enums/validation-type";
-import { ForwardedRef, InputHTMLAttributes, ReactNode, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
-
+import { ValidationType } from '@/types/enums/validation-type';
+import { ForwardedRef, InputHTMLAttributes, ReactNode, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
   suffixIcon?: ReactNode;
@@ -31,7 +30,7 @@ function InputCustom(
           <label htmlFor={id}
             className={
               twMerge(
-                "font-medium peer-has-[input:focus]:text-primary",
+                'font-medium peer-has-[input:focus]:text-primary',
                 validationStatus === ValidationType.ERROR ? 'text-danger' : ''
               )
             }>
@@ -39,8 +38,9 @@ function InputCustom(
           </label>
         )
       }
-      <div className="relative w-full">
+      <div className='relative w-full'>
         <input ref={ref}
+          {...props}
           id={id}
           className={
             twMerge(
@@ -51,11 +51,11 @@ function InputCustom(
               className,
               validationStatus === ValidationType.ERROR ? 'border-danger bg-danger-light' : '',
             )
-          } {...props} />
+          } />
         {prefixIcon && prefixIcon}
         {suffixIcon && suffixIcon}
       </div>
-      {errorText !== '' && <div className="text-danger">{errorText}</div>}
+      {errorText !== '' && <div className='text-danger'>{errorText}</div>}
     </div>
   )
 }
