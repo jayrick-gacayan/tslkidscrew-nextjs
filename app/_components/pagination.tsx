@@ -42,7 +42,7 @@ export default function Pagination({
           Array.from({ length: totalPages <= 5 ? totalPages : 5 }).map((_val, idx) => {
             return (totalPages <= 5 || pageNumber <= 5) ? idx + 1 :
               pageNumber === totalPages ? (idx + ((totalPages - 5) + 1)) :
-                (idx + ((pageNumber - 5) + 1))
+                (idx + ((pageNumber - 5) + 1));
           }).map((value: number, index: number) => {
             return (
               <div key={`pagination-${value}-index`}>
@@ -53,7 +53,7 @@ export default function Pagination({
                   {value}
                 </Link>
               </div>
-            )
+            );
           })
         }
         <div>

@@ -9,12 +9,11 @@ export default function AdminUserFormButtonSubmit({ formReset }: { formReset: ()
       <button type='button'
         className='bg-white text-primary p-2 disabled:cursor-not-allowed'
         disabled={pending}
-        onClick={() => { formReset(); }}>Cancel</button>
+        onClick={formReset}>Cancel</button>
       <button type='submit'
         className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'
         disabled={pending}>
-        {
-          pending ? <Spinners3DotsScale className='text-white text-[24px] inline-block mr-1' /> : 'Save'}
+        {pending ? <Spinners3DotsScale className='text-white text-[24px] inline-block mr-1' /> : 'Save'}
       </button>
     </div>
   );

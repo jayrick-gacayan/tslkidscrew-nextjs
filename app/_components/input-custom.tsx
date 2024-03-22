@@ -7,7 +7,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   prefixIcon?: ReactNode;
   errorText?: string;
   validationStatus?: ValidationType;
-}
+};
 
 function InputCustom(
   {
@@ -57,9 +57,9 @@ function InputCustom(
       </div>
       {errorText !== '' && <div className='text-danger'>{errorText}</div>}
     </div>
-  )
+  );
 }
 
-export default forwardRef<HTMLInputElement, InputProps>(InputCustom)
+export default forwardRef<HTMLInputElement, InputProps>(InputCustom);
 
 

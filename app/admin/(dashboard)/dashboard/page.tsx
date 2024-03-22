@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Page() {
 
   return (
-    <div className='rounded h-full bg-white drop-shadow-lg py-4 px-8 lg:px-4 overflow-auto'>
+    <div className='p-8'>
       <SearchContainer />
     </div>
   );

@@ -17,7 +17,7 @@ type MyListboxProps = {
   validationStatus?: ValidationType;
   valueClassName?: (value: string, placeholder: string) => string;
   listboxDropdownIcon?: (open: boolean) => ReactNode;
-}
+};
 
 function CustomListbox(
   {
@@ -47,7 +47,7 @@ function CustomListbox(
         {
           ({ open, value }) => {
             let getValue = typeof value === 'string' ? (value !== '' ? value : placeholder) :
-              value ? (value.email ?? value.name) : placeholder
+              value ? (value.email ?? value.name) : placeholder;
             return (
               <>
                 <div className='space-y-[2px]'>
@@ -93,17 +93,20 @@ function CustomListbox(
                           `absolute top-[115%] left-0 w-full bg-white z-[60] rounded drop-shadow` +
                           ` ${items.length < 6 ? `h-auto overflow-hidden` : `h-[240px] overflow-auto`}`
                         )}>
-                      {items.map((value: any, index: any) => (
-                        <Listbox.Option
-                          as='div'
-                          key={`${keyDescription}-${value}${index}`}
-                          className={({ selected, active }) => {
-                            return `p-2 hover:cursor-pointer hover:bg-primary hover:text-white ${selected ? 'bg-primary text-white' : 'bg-white text-black'}`
-                          }}
-                          value={value}>
-                          {typeof value === 'string' ? value : (value.email ?? value.name)}
-                        </Listbox.Option>
-                      ))}
+                      {
+                        items.map((value: any, index: number) => {
+                          return (
+                            <Listbox.Option as='div'
+                              key={`${keyDescription}-${value}${index}`}
+                              className={({ selected, active }) => {
+                                return `p-2 hover:cursor-pointer hover:bg-primary hover:text-white ${selected ? 'bg-primary text-white' : 'bg-white text-black'}`
+                              }}
+                              value={value}>
+                              {typeof value === 'string' ? value : (value.email ?? value.name)}
+                            </Listbox.Option>
+                          );
+                        })
+                      }
                     </div>
                   </Listbox.Options>
                 </Transition>
@@ -113,7 +116,7 @@ function CustomListbox(
         }
       </Listbox>
     </div>
-  )
+  );
 }
 
 export default forwardRef(CustomListbox);

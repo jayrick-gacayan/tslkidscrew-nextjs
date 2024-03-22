@@ -43,7 +43,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
     setDataAdmins(admins);
   }, [admins]);
 
-  const showSwal = async (admin: Admin, activeAdmin: string) => {
+  async function showSwal(admin: Admin, activeAdmin: string) {
     let { id, name, email, active } = admin;
 
     let result: SweetAlertResult<any> = await confirmSwalInfo(
@@ -53,7 +53,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
 
     if (result.isConfirmed) {
       setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
-        return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active }
+        return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active };
       }));
       setAdminId(admin.id);
 
@@ -135,5 +135,5 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
         )
       }
     </tbody>
-  )
+  );
 }

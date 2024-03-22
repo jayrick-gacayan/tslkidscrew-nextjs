@@ -449,7 +449,8 @@ export default function FormActionContainer({
         step={step}
         cardDetails={cardDetails}
         bankName={bankName}
-        hasBankDetails={formState?.hasBankDetails} />
+        hasBankDetails={formState?.hasBankDetails}
+        stripeModalOpen={fillInFormState.stripeModalOpen} />
     </form>
   )
 }

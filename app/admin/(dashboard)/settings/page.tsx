@@ -16,7 +16,6 @@ import {
   getVacationCampSchedulesSettingsAction
 } from '@/actions/program-settings-actions';
 
-
 export default async function Page() {
   let summerCampWeekSettings: Result<SummerCampWeekSetting[]> = await (await getSummerCampWeekPricesAction());
   let summerCampSwimSettings: Result<SummerCampSwimSetting[]> = await (await getSummerCampSwimPricesAction());
@@ -26,16 +25,14 @@ export default async function Page() {
   let beforeOrAfterSchoolSettings: Result<BeforeOrAfterSchoolSetting[]> = await (await getBeforeOrAfterSchoolSettingsAction());
 
   return (
-    <div className='pb-6'>
-      <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-4'>
-        <AdminHeaderWithEntries headerText='Settings' />
-        <TabsContainer summerCampWeekSettings={summerCampWeekSettings?.data ?? []}
-          summerCampSwimSettings={summerCampSwimSettings?.data ?? []}
-          summerCampPromoSettings={summerCampPromoSettings?.data ?? []}
-          programYearCycleSetting={programYearCycleSetting?.data!}
-          vacationCampSettings={vacationCampSettings?.data ?? []}
-          beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings?.data ?? []} />
-      </div>
+    <div className='p-8 space-y-4'>
+      <AdminHeaderWithEntries headerText='Settings' />
+      <TabsContainer summerCampWeekSettings={summerCampWeekSettings?.data ?? []}
+        summerCampSwimSettings={summerCampSwimSettings?.data ?? []}
+        summerCampPromoSettings={summerCampPromoSettings?.data ?? []}
+        programYearCycleSetting={programYearCycleSetting?.data!}
+        vacationCampSettings={vacationCampSettings?.data ?? []}
+        beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings?.data ?? []} />
     </div>
   );
 }

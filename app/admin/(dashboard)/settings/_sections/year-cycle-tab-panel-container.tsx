@@ -88,6 +88,5 @@ export default function YearCycleTabPanelContainer({ programYearCycleSetting }: 
         </div>
       </div>
     </Tab.Panel>
-  )
+  );
 }
-

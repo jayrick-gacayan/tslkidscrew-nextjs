@@ -3,12 +3,10 @@ import { Parent } from '@/models/parent';
 import Fa6BrandVisa from '@/app/_components/svg/fa6-brand-visa';
 import ButtonForPlaid from './button-for-plaid';
 import Link from 'next/link';
-import { RootState, reduxStore } from '@/react-redux/redux-store';
+import { reduxStore } from '@/react-redux/redux-store';
 import { fillInFormReset } from '../_redux/fill-in-form-slice';
 import { useEffect, useState } from 'react';
 import FillInFormPendingAction from '../_components/pending-actions';
-import { useAppSelector } from '@/hooks/redux-hooks';
-import { FillInFormState } from '../_redux/fill-in-form-state';
 
 export default function FillInFormButtons({
   program_type,
@@ -16,17 +14,15 @@ export default function FillInFormButtons({
   cardDetails,
   bankName,
   hasBankDetails,
+  stripeModalOpen
 }: {
   program_type: string;
   step: string | undefined;
   cardDetails: Partial<Parent> | undefined;
   bankName: string;
-  hasBankDetails?: boolean | undefined
+  stripeModalOpen: boolean;
+  hasBankDetails?: boolean | undefined;
 }) {
-  const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
-    return state.fillInForm;
-  });
-
   const [buttonPress, setButtonPress] = useState<string>('');
   const { pending } = useFormStatus();
 
@@ -34,20 +30,28 @@ export default function FillInFormButtons({
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
 
   useEffect(() => {
-    if (!fillInFormState.stripeModalOpen && buttonPress === 'stripe' && !pending) {
+    if (!stripeModalOpen && buttonPress === 'stripe' && !pending) {
       setButtonPress('');
     }
-  }, [fillInFormState.stripeModalOpen, buttonPress]);
+  }, [stripeModalOpen, buttonPress]);
 
   return (
     <>
       <div className='space-y-2'>
         {
           cardDetails && (stepInNumber === highestStep) &&
-          (<div>Card on File: {<span>{
-            cardDetails?.card_brand !== 'Visa' ? cardDetails?.card_brand :
-              <Fa6BrandVisa className='align-middle inline-block text-primary text-[32px]' />
-          }</span>} ending ************{cardDetails?.card_last_four}</div>)
+          (
+            <div>
+              Card on File:
+              <span className='mx-1'>
+                {
+                  cardDetails?.card_brand !== 'Visa' ? cardDetails?.card_brand :
+                    (<Fa6BrandVisa className='align-middle inline-block text-primary text-[32px]' />)
+                }
+              </span>
+              ending ************{cardDetails?.card_last_four}
+            </div>
+          )
         }
         {
           bankName !== '' && (stepInNumber === highestStep) &&

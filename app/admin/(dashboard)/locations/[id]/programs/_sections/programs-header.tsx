@@ -1,11 +1,11 @@
 'use client';
 
-import Link from "next/link";
-import AdminHeaderWithEntries from "@/app/admin/(dashboard)/_components/admin-header-with-entries";
-import ShowEntriesSelect from "@/app/_components/show-entries-select";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { RedirectType, useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import AdminHeaderWithEntries from '@/app/admin/(dashboard)/_components/admin-header-with-entries';
+import ShowEntriesSelect from '@/app/_components/show-entries-select';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import CreateNewButton from '@/app/admin/(dashboard)/_components/create-new-button';
 
 export default function ProgramsHeader({
   location_id,
@@ -25,13 +25,10 @@ export default function ProgramsHeader({
     if (urlSearchParams.has('page')) { urlSearchParams.delete('page'); }
     if (!per_page) { urlSearchParams.delete('per_page'); }
     else {
-      urlSearchParams.set(
-        encodeURIComponent('per_page'),
-        encodeURIComponent(per_page)
-      );
+      urlSearchParams.set('per_page', encodeURIComponent(per_page));
     }
 
-    return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`
+    return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`;
   }
 
   return (
@@ -41,13 +38,8 @@ export default function ProgramsHeader({
           onChange={(value) => {
             router.replace(urlPaginate(searchParams, value === 10 ? undefined : value))
           }} items={[10, 20, 30]} />
-        <div>
-          <Link href={`/admin/locations/${location_id}/programs/new`}
-            className="rounded text-white bg-primary px-4 py-2 text-sm block text-center">
-            Create a New Program
-          </Link>
-        </div>
+        <CreateNewButton href={`/admin/locations/${location_id}/programs/new`} text='Create a New Program' />
       </div>
     </AdminHeaderWithEntries>
-  )
+  );
 }

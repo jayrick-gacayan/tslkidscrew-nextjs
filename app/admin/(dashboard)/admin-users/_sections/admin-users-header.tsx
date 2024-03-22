@@ -1,12 +1,12 @@
 'use client';
 
-import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
-import ShowEntriesSelect from '../../../../_components/show-entries-select';
 import { SearchParamsProps } from '@/types/props/search-params-props';
 import { reduxStore } from '@/react-redux/redux-store';
 import { modalFormOpened, modalFormTypeSet } from '../_redux/admin-users-slice';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
+import ShowEntriesSelect from '@/app/_components/show-entries-select';
 
 export default function AdminUsersHeader({
   searchParams,
@@ -41,7 +41,7 @@ export default function AdminUsersHeader({
             router.replace(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} />
         <div className='w-full'>
-          <button className='rounded text-white bg-primary px-4 py-2 text-sm text-center'
+          <button className='rounded text-white hover:bg-primary/70 bg-primary px-4 py-2 text-sm text-center'
             onClick={() => {
               reduxStore.dispatch(modalFormOpened(true));
               reduxStore.dispatch(modalFormTypeSet('add'));

@@ -4,7 +4,11 @@ import { Fragment, useCallback, useMemo } from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import AdminUserForm from './admin-user-form';
 import { RootState, reduxStore } from '@/react-redux/redux-store';
-import { adminUserFormReset, modalFormOpened, modalFormTypeSet } from '../_redux/admin-users-slice';
+import {
+  adminUserFormReset,
+  modalFormOpened,
+  modalFormTypeSet
+} from '../_redux/admin-users-slice';
 import { AdminUsersState } from '../_redux/admin-users-state';
 import { useAppSelector } from '@/hooks/redux-hooks';
 

@@ -1,11 +1,12 @@
 'use client';
 
-import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
-import ShowEntriesSelect from '../../../../_components/show-entries-select';
 import Link from 'next/link';
 import { SearchParamsProps } from '@/types/props/search-params-props';
-import { RedirectType, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
+import ShowEntriesSelect from '@/app/_components/show-entries-select';
+import CreateNewButton from '../../_components/create-new-button';
 
 export default function LocationsHeader({
   searchParams,
@@ -39,13 +40,8 @@ export default function LocationsHeader({
           onChange={(value: any) => {
             router.replace(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} />
-        <div className='w-full'>
-          <Link href='/admin/locations/new'
-            className='rounded text-white bg-primary px-4 py-2 text-sm block text-center'>
-            Create a New Location
-          </Link>
-        </div>
+        <CreateNewButton href='/admin/locations/new' text='Create a New Location' />
       </div>
     </AdminHeaderWithEntries>
-  )
+  );
 }

@@ -12,7 +12,7 @@ import { adminUsersAction } from '@/actions/admin-actions';
 export const metadata: Metadata = {
   title: 'Admin Users',
   description: 'Admin Users Page'
-}
+};
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
   let result: Result<Paginate<Admin>> = await adminUsersAction(searchParams);
@@ -21,7 +21,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let data: Admin[] | undefined = result.data?.data;
 
   return (
-    <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-6 relative'>
+    <div className='p-8 space-y-6'>
       <AdminUsersHeader searchParams={searchParams} showEntry={showEntry} />
       <Suspense fallback={<div>Loading....</div>}>
         <AdminUsersTable admins={data} />

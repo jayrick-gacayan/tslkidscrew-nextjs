@@ -20,22 +20,20 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let totalPages: number = Math.ceil((result?.data?.total ?? 1) / showEntry) ?? 1;
 
   return (
-    <div className="pb-6">
-      <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
-        <LocationsHeader searchParams={searchParams} showEntry={showEntry} />
-        <LocationsTable locationPlaces={data} />
-        {
-          (!data || totalPages < 2) ? null :
-            (
-              <div className='w-fit m-auto block'>
-                <Pagination baseURL='/admin/locations'
-                  currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-                  searchParams={searchParams}
-                  totalPages={totalPages} />
-              </div>
-            )
-        }
-      </div>
+    <div className='p-8 space-y-6'>
+      <LocationsHeader searchParams={searchParams} showEntry={showEntry} />
+      <LocationsTable locationPlaces={data} />
+      {
+        (!data || totalPages < 2) ? null :
+          (
+            <div className='w-fit m-auto block'>
+              <Pagination baseURL='/admin/locations'
+                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                searchParams={searchParams}
+                totalPages={totalPages} />
+            </div>
+          )
+      }
     </div>
-  )
+  );
 }

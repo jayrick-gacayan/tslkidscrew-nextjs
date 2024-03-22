@@ -16,13 +16,7 @@ import {
 } from '../_redux/admin-users-slice';
 import AdminUserFormButtonSubmit from './admin-user-form-button-submit';
 
-export default function AdminUserForm({
-  type,
-  formReset
-}: {
-  type: string;
-  formReset: () => void;
-}) {
+export default function AdminUserForm({ type, formReset }: { type: string; formReset: () => void; }) {
   const adminsUserState: AdminUsersState = useAppSelector((state: RootState) => {
     return state.adminUsers;
   });
@@ -48,7 +42,6 @@ export default function AdminUserForm({
 
   useEffect(() => {
     async function tagToRevalidate(type: string) {
-
       if (type === 'update') { await tagRevalidate('admin-user'); }
       await tagRevalidate('admin-users');
     }
