@@ -34,7 +34,7 @@ export default function FillInFormButtons({
   const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
 
   useEffect(() => {
-    if (!fillInFormState.stripeModalOpen && buttonPress === 'stripe') {
+    if (!fillInFormState.stripeModalOpen && buttonPress === 'stripe' && !pending) {
       setButtonPress('');
     }
   }, [fillInFormState.stripeModalOpen, buttonPress]);

@@ -11,12 +11,8 @@ import {
   useClick,
   useInteractions,
   useDismiss,
-
 } from "@floating-ui/react";
-
-import { useEffect, useState } from "react";
-
-
+import { useState } from "react";
 
 export default function PopperWeekPromos({
   sumCampWeekPromo,
@@ -33,7 +29,6 @@ export default function PopperWeekPromos({
   weeksForSummerCamp: Partial<SummerCampWeekSetting>[];
   onCheckboxChange: (sumCampWeek: Partial<SummerCampWeekSetting>) => void;
 }) {
-
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const { refs, floatingStyles, context } = useFloating({
@@ -59,8 +54,6 @@ export default function PopperWeekPromos({
     click,
     dismiss
   ]);
-  console.log('context', context)
-
 
   return (
     <div className="relative">
@@ -76,7 +69,6 @@ export default function PopperWeekPromos({
           value={sumCampWeekPromo.id}
           checked={promoPackage?.id === sumCampWeekPromo.id}
           onChange={() => {
-            context.onOpenChange(!context.open)
             onRadioButtonChange(sumCampWeekPromo)
           }}
         />
@@ -90,19 +82,16 @@ export default function PopperWeekPromos({
         </span>
       </label>
       {
-        context.open &&
-
+        popoverOpen &&
         <div ref={refs.setFloating}
           style={floatingStyles}
           className="rounded-lg z-[99999] drop-shadow bg-white p-2 w-[360px] h-[360px] overflow-auto"
           {...getFloatingProps()}>
           <div className="p-4">
             <div className="space-y-2">
-
               {
                 summerCampWeeksForPromo.map((summerCampWeek: Partial<SummerCampWeekSetting>, index: number) => {
                   return (
-
                     <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampWeek.id}-${index}`}
                       id={`summer-camp-reg-weeks-${summerCampWeek.id}`}
                       labelText={summerCampWeek.name}
@@ -110,11 +99,8 @@ export default function PopperWeekPromos({
                         return value.id === summerCampWeek.id;
                       }) ? true : false}
                       onChange={() => {
-                        context.onOpenChange(true);
                         onCheckboxChange(summerCampWeek);
-
                       }}
-
                       value={summerCampWeek.id!}
                     />
                   );

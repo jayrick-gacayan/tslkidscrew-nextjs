@@ -348,8 +348,6 @@ export async function fillInFormAction(
               vacationCampsMonths.forEach((value: any, idx: number) => {
                 attendanceObj[`${value}`] = vacationCampsId[idx];
               })
-
-
               regRecord['attendance'] = attendanceObj;
             }
             break;
@@ -358,7 +356,7 @@ export async function fillInFormAction(
       }// data inserted for registration record;
 
       if (!!stripeToken) {
-        console.log('regRecord', regRecord);
+        // console.log('regRecord', regRecord);
         let result = await createRegistrationRecord(
           JSON.stringify({
             registration_record: regRecord,
@@ -414,8 +412,6 @@ export async function fillInFormAction(
       }
       else {
         if (!!customerInfo.data) {
-          console.log('formData submit stripe button', formData.get('submit-stripe-button'))
-          console.log('formData submit plaid button', formData.get('submit-plaid-button'))
           if (!!formData.get('submit-stripe-button')) {
             if (!!customerInfo.data.card_last_four) {
               // console.log('regRecord', regRecord);

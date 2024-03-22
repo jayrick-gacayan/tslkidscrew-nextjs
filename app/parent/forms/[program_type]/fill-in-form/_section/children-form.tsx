@@ -14,8 +14,14 @@ export default function ChildrenForm({
   arrChildren: ChildInfoType[];
   onChildrenRemoved: (idx: number) => void;
   onChildrenAdded: () => void;
-  onChildrenUpdated: (idx: number, key: "first_name" | "last_name" | "birthdate" | "school_attending", value: string) => void;
+  onChildrenUpdated: (idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending', value: string) => void;
 }) {
+
+  function handleInputChanged(idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending') {
+    return function (e: ChangeEvent<HTMLInputElement>) {
+      onChildrenUpdated(idx, key, e.target.value);
+    }
+  }
 
   return (
     <div className='space-y-8'>
@@ -25,7 +31,6 @@ export default function ChildrenForm({
       </div>
       <div className='w-full h-auto space-y-10'>
         {
-
           arrChildren.map((value: ChildInfoType, idx: number) => {
             return (
               <div key={`children_form_${idx}`}
@@ -48,17 +53,13 @@ export default function ChildrenForm({
                         className='bg-secondary p-4 border-transparent'
                         placeholder='First Name:'
                         value={value.first_name}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          onChildrenUpdated(idx, 'first_name', e.target.value);
-                        }} />
+                        onChange={handleInputChanged(idx, 'first_name')} />
                       <InputCustom name='children[][lastname]'
                         type='text'
                         className='bg-secondary p-4 border-transparent'
                         placeholder='Last Name:'
                         value={value.last_name}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          onChildrenUpdated(idx, 'last_name', e.target.value);
-                        }} />
+                        onChange={handleInputChanged(idx, 'last_name')} />
                     </div>
                     <div className='relative w-full'>
                       <div className='relative space-y-1'>
@@ -70,9 +71,7 @@ export default function ChildrenForm({
                             options={{
                               mode: 'single',
                               selected: value.birthdate ? new Date(value.birthdate) : undefined,
-                              onSelect: (value: any) => {
-                                onChildrenUpdated(idx, 'birthdate', value.toISOString());
-                              },
+                              onSelect: (value: any) => { onChildrenUpdated(idx, 'birthdate', value.toISOString()); },
                               today: value.birthdate ? new Date(value.birthdate) : undefined,
                             }} />
                         </div>
@@ -85,17 +84,14 @@ export default function ChildrenForm({
                       className='bg-secondary p-4 border-transparent'
                       placeholder='School Attending:'
                       value={value.school_attending}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        onChildrenUpdated(idx, 'school_attending', e.target.value);
-                      }} />
+                      onChange={handleInputChanged(idx, 'school_attending')} />
                   </div>
                 </div>
                 {
                   idx + 1 === arrChildren.length &&
                   (
                     <div onClick={onChildrenAdded}>
-                      <button type='button'
-                        className='p-3 text-white w-full rounded bg-primary'>Add Child</button>
+                      <button type='button' className='p-3 text-white w-full rounded bg-primary'>Add Child</button>
                     </div>
                   )
                 }
@@ -105,5 +101,5 @@ export default function ChildrenForm({
         }
       </div>
     </div>
-  )
+  );
 }

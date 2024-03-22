@@ -16,7 +16,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   return (
     <div className='flex-1'>
       <div className="pb-12">
-        <div className='rounded h-full bg-white drop-shadow-lg py-4 px-8 space-y-6'>
+        <div className='rounded min-h-[560px] h-full bg-white drop-shadow-lg py-4 px-8 space-y-6'>
           <InvoicesHeader showEntry={showEntry} searchParams={searchParams} />
           <InvoicesInfoTable invoices={data} />
           {

@@ -21,24 +21,22 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let data: Admin[] | undefined = result.data?.data;
 
   return (
-    <div className='pb-6'>
-      <div className='rounded3 bg-white drop-shadow-lg p-4 space-y-6 relative'>
-        <AdminUsersHeader searchParams={searchParams} showEntry={showEntry} />
-        <Suspense fallback={<div>Loading....</div>}>
-          <AdminUsersTable admins={data} />
-        </Suspense>
-        {
-          (!data || totalPages < 2) ? null :
-            (
-              <div className='w-fit m-auto block'>
-                <Pagination baseURL='/admin/admin-users'
-                  currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-                  searchParams={searchParams}
-                  totalPages={totalPages} />
-              </div>
-            )
-        }
-      </div>
+    <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-6 relative'>
+      <AdminUsersHeader searchParams={searchParams} showEntry={showEntry} />
+      <Suspense fallback={<div>Loading....</div>}>
+        <AdminUsersTable admins={data} />
+      </Suspense>
+      {
+        (!data || totalPages < 2) ? null :
+          (
+            <div className='w-fit m-auto block'>
+              <Pagination baseURL='/admin/admin-users'
+                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                searchParams={searchParams}
+                totalPages={totalPages} />
+            </div>
+          )
+      }
     </div>
   );
 }

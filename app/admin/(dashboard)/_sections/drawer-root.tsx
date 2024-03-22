@@ -21,7 +21,7 @@ export default function DrawerRoot({
         onDrawerOpen={() => { setDrawerOpen(true); }} />
       <Sidebar drawerOpen={drawerOpen}
         onDrawerOpen={(open: boolean) => { setDrawerOpen(open); }} />
-      <div className='w-full lg:ps-64 pt-12 overflow-auto h-full relative'>
+      <div className='w-full lg:ps-64 pt-12 overflow-auto min-h-[576px] h-full'>
         <div className='p-12 relative h-full'>
           {children}
         </div>

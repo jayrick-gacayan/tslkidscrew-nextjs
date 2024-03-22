@@ -14,20 +14,24 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   let data: Receipt[] | undefined = result.data?.data;
 
   return (
-    <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-6'>
-      <ReceiptHeader showEntry={showEntry} searchParams={searchParams} />
-      <ReceiptInfoTable receipts={data} />
-      {
-        (!data || totalPages < 2) ? null :
-          (
-            <div className='w-fit m-auto block'>
-              <Pagination baseURL='/parent/receipts'
-                currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
-                searchParams={searchParams}
-                totalPages={totalPages} />
-            </div>
-          )
-      }
+    <div className='flex-1'>
+      <div className="pb-12">
+        <div className='rounded min-h-[560px] h-full bg-white drop-shadow-lg py-4 px-8 space-y-6'>
+          <ReceiptHeader showEntry={showEntry} searchParams={searchParams} />
+          <ReceiptInfoTable receipts={data} />
+          {
+            (!data || totalPages < 2) ? null :
+              (
+                <div className='w-fit m-auto block'>
+                  <Pagination baseURL='/parent/receipts'
+                    currentPage={typeof searchParams.page === 'string' ? searchParams.page : undefined}
+                    searchParams={searchParams}
+                    totalPages={totalPages} />
+                </div>
+              )
+          }
+        </div>
+      </div>
     </div>
-  )
+  );
 }

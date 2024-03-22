@@ -13,6 +13,7 @@ import { Parent } from '@/models/parent';
 import { RootState, reduxStore } from '@/react-redux/redux-store';
 import {
   beforeOrAfterSchoolStartDateChanged,
+  beforeOrAfterWeekDaysSet,
   beforeOrAfterWeekDaysSetError,
   childrenAdded,
   childrenFieldUpdated,
@@ -46,6 +47,7 @@ import numsIntoWord from '@/types/helpers/date-helpers';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { InputProps } from '@/types/props/input-props';
 
 export default function FormActionContainer({
   program_type,
@@ -78,29 +80,29 @@ export default function FormActionContainer({
     return state.fillInForm;
   });
 
-  const locationValue = useMemo(() => {
+  const locationValue: InputProps<Partial<LocationPlace> | undefined> = useMemo(() => {
     return fillInFormState.fillInForm.location
   }, [fillInFormState.fillInForm.location]);
 
-  const arrChildren = useMemo(() => {
+  const arrChildren: ChildInfoType[] = useMemo(() => {
     return fillInFormState.fillInForm.childrenArr
   }, [fillInFormState.fillInForm.childrenArr]);
 
-  const tosCondition = useMemo(() => {
+  const tosCondition: InputProps<any[]> = useMemo(() => {
     return fillInFormState.fillInForm.TOSCondition;
   }, [fillInFormState.fillInForm.TOSCondition])
 
   /* For Program Type before-or-after-school */
-  const { startDate, beforeSchool, afterSchool } = useMemo(() => {
+  const { startDate, beforeSchool, afterSchool, beforeAfterWeekDaysErrorText } = useMemo(() => {
     return {
-      startDate: fillInFormState.fillInForm.startDate.value,
+      startDate: fillInFormState.fillInForm.startDate,
       beforeSchool: fillInFormState.fillInForm.beforeOrAfterWeekDays.value.beforeSchool,
       afterSchool: fillInFormState.fillInForm.beforeOrAfterWeekDays.value.afterSchool,
+      beforeAfterWeekDaysErrorText: fillInFormState.fillInForm.beforeOrAfterWeekDays.errorText
     }
   }, [
     fillInFormState.fillInForm.startDate,
-    fillInFormState.fillInForm.beforeOrAfterWeekDays.value.beforeSchool,
-    fillInFormState.fillInForm.beforeOrAfterWeekDays.value.afterSchool,
+    fillInFormState.fillInForm.beforeOrAfterWeekDays
   ]);
 
   const yearCycle = useMemo(() => {
@@ -160,10 +162,7 @@ export default function FormActionContainer({
 
       swalMessage(formState['message'], formState['success'] ? 'success' : 'error');
     }
-  }, [
-    formState,
-    router
-  ]);
+  }, [formState, router]);
 
   useEffect(() => {
     if (stepInNumber === 1) {
@@ -300,6 +299,8 @@ export default function FormActionContainer({
     router
   ]);
 
+  console.log('state', formState)
+
   return (
     <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
       id={`${program_type}-fill-in-form`}
@@ -332,7 +333,7 @@ export default function FormActionContainer({
 
           if (program_type === 'before-or-after-school') {
             formData.append('year_cycle', encodeURIComponent(yearCycle))
-            formData.append('start_date', encodeURIComponent(format(new Date(startDate!), 'yyyy-M-d')));
+            formData.append('start_date', encodeURIComponent(format(new Date(startDate.value!), 'yyyy-M-d')));
             WEEK_DAYS.forEach((val: string) => {
               formData.append(`before_school_${val.toLowerCase()}`, encodeURIComponent(beforeSchool.includes(val)))
             })
@@ -358,7 +359,7 @@ export default function FormActionContainer({
               });
           }
           else if (program_type === 'vacation-camp') {
-            campsVacation.forEach((val: Pick<VacationCampSetting, "id" | "name" | "month" | "year">) => {
+            campsVacation.forEach((val: Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>) => {
               formData.append('month[][month]', val.month!);
               formData.append('month[][id]', encodeURIComponent(val.id!));
             })
@@ -372,7 +373,7 @@ export default function FormActionContainer({
         (
           <LocationForm locations={locations}
             locationValue={locationValue}
-            onChange={(val: any) => { reduxStore.dispatch(locationChanged(fieldInputValue(val))) }} />
+            onChange={(val: any) => { reduxStore.dispatch(locationChanged(fieldInputValue(val))); }} />
         )// location form
       }
       {
@@ -380,15 +381,9 @@ export default function FormActionContainer({
         (
           <ChildrenForm arrChildren={arrChildren}
             minimum_age={locationValue?.value?.minimum_age ?? 1}
-            onChildrenUpdated={
-              (idx: number, key: "first_name" | "last_name" | "birthdate" | "school_attending", value: string) => {
-                reduxStore.dispatch(childrenFieldUpdated({
-                  index: idx,
-                  key: key,
-                  value: value
-                }))
-              }
-            }
+            onChildrenUpdated={(idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending', value: string) => {
+              reduxStore.dispatch(childrenFieldUpdated({ index: idx, key, value }));
+            }}
             onChildrenRemoved={(idx: number) => { reduxStore.dispatch(childrenRemoved(idx)) }}
             onChildrenAdded={() => { reduxStore.dispatch(childrenAdded()) }} />
         )// children form
@@ -413,7 +408,23 @@ export default function FormActionContainer({
       }
       {
         stepInNumber === 4 && program_type === 'before-or-after-school' &&
-        (<RegistrationTypeSelectionBeforeOrAfterSchool />) // step four and before-or-after-school
+        (
+          <RegistrationTypeSelectionBeforeOrAfterSchool startDate={startDate}
+            afterSchool={afterSchool}
+            beforeSchool={beforeSchool}
+            onStartDateSelected={(val: string) => {
+              reduxStore.dispatch(beforeOrAfterSchoolStartDateChanged(fieldInputValue(val)));
+            }}
+            onCheckboxChanged={(key: 'beforeSchool' | 'afterSchool', arrSchool: any[], value: string) => {
+              reduxStore.dispatch(
+                beforeOrAfterWeekDaysSet({
+                  key, value: !arrSchool.includes(value) ? [...arrSchool, value] :
+                    arrSchool.filter((value: string) => { return value !== value })
+                })
+              );
+            }}
+            errorText={beforeAfterWeekDaysErrorText} />
+        ) // step four and before-or-after-school
       }
       {
         stepInNumber === highestStep &&
