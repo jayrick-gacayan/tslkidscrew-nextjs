@@ -8,7 +8,7 @@ export default function ForgotPassword({ searchParams }: { searchParams: SearchP
       <div className='w-[448px] m-auto block bg-white rounded p-8 shadow-lg space-y-4'>
         <h1 className='text-[24px]'>Forgot Password</h1>
         <div className='space-y-4'>
-          <ForgotPasswordFormContainer />
+          <ForgotPasswordFormContainer searchParams={searchParams} />
         </div>
       </div>
     </div>

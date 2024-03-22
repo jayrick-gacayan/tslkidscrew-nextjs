@@ -35,10 +35,8 @@ export const POST = auth(async (req: NextAuthRequest) => {
         products: [Products.Auth],
         language: 'en',
         country_codes: [CountryCode.Us],
-
       });
 
-      // console.log('createToken Resposne', createTokenResponse)
       return NextResponse.json(createTokenResponse.data, { status: 200 });
     } catch (err) {
       const errorMessage: string = err instanceof Error ? err.message : 'Internal server error';
@@ -48,4 +46,4 @@ export const POST = auth(async (req: NextAuthRequest) => {
 
   return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
 
-})
+});

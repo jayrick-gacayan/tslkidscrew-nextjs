@@ -27,7 +27,7 @@ export default function LoginDetails({ email }: { email: string }) {
           name='password'
           className='bg-secondary p-2 pl-10 pr-10 border-transparent'
           placeholder='Password:'
-          type='text'
+          type={passwordShow ? 'text' : 'password'}
           suffixIcon={<PasswordIcon passwordShow={passwordShow} onPasswordShown={setPasswordShow} />}
           prefixIcon={<PrefixLockIcon />} />
         <InputCustom labelText='Confirm Password'
@@ -35,7 +35,7 @@ export default function LoginDetails({ email }: { email: string }) {
           name='password-confirmation'
           className='bg-secondary p-2 pl-10 border-transparent'
           placeholder='Confirm Password:'
-          type='text'
+          type={passwordConfirmationShow ? 'text' : 'password'}
           suffixIcon={<PasswordIcon passwordShow={passwordConfirmationShow} onPasswordShown={setPasswordConfirmationShow} />}
           prefixIcon={<PrefixLockIcon />}
         />
