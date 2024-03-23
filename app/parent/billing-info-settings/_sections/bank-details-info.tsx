@@ -3,7 +3,8 @@ import ParentInfoData from '../../_components/parent-info-data';
 import Fa6SolidLink from '@/app/_components/svg/fa6-solid-link';
 import { unlinkBankDetailsAction } from '@/actions/plaid-actions';
 import { ToastContentProps, toast } from 'react-toastify';
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
+import { confirmSwalInfo } from '@/types/helpers/sweet-alert-helpers';
 
 export default function BankDetailsInfo({
   bankDetails,
@@ -13,22 +14,25 @@ export default function BankDetailsInfo({
 
   async function unlinkBankDetails() {
 
-    let result = await unlinkBankDetailsAction();
+    let swalResult = await confirmSwalInfo(
+      'Are you sure you want to unlink bank',
+      bankDetails.bank_name
+    );
 
-    let { message, success } = result;
+    if (swalResult.isConfirmed) {
+      let result = await unlinkBankDetailsAction();
 
-    toast((props: ToastContentProps<unknown>) => {
-      return (
-        <div className="text-black">{message}</div>
-      )
-    }, {
-      toastId: `unlink-bank-details-${Date.now()}`,
-      type: success ? 'success' : 'error',
-      hideProgressBar: true,
-    });
-    console.log("I am here", success)
-    if (success) {
-      await pathRevalidate('/parent/billing-info-settings');
+      let { message, success } = result;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (<div className="text-black">{message}</div>);
+      }, {
+        toastId: `unlink-bank-details-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+
+      if (success) { await tagRevalidate('customer-info'); }
     }
   }
 

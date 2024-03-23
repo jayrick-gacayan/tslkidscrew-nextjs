@@ -23,7 +23,7 @@ export async function addCardAction(stripeToken: string) {
   }
 
   return {
-    message: result?.message,
+    message: 'Successfully linked card from your account.',
     success: true,
   };
 }
@@ -41,7 +41,7 @@ export async function unlinkStripeCardAction() {
   }
 
   return {
-    message: 'Successfully unlink bank details.',
+    message: 'Successfully unlinked card from your account.',
     success: true,
   };
 }

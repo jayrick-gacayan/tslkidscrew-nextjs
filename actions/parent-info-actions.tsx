@@ -98,3 +98,14 @@ export async function getCustomerInfoAction() {
   let { customer_id, accessToken } = parent?.user!;
   return await getCustomerInfo(customer_id?.toString()!, accessToken!);
 }
+
+export async function currentParentAction() {
+  let parent: Session | null = await auth();
+
+  if (!!parent) {
+    let { accessToken, ...rest } = parent?.user!;
+    return rest;
+  }
+
+  return undefined;
+}

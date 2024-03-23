@@ -7,8 +7,10 @@ export async function getCustomerInfo(customer_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customers/${customer_id}`,
     {
-      ...authHeaders(token)
-    });
+      ...authHeaders(token),
+      next: { tags: ['customer-info'] }
+    }
+  );
 
   try {
     let response = await result.json();

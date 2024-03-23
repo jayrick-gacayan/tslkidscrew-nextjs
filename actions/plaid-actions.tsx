@@ -6,12 +6,10 @@ import { addOrUpdateBankDetails, unlinkBankDetails } from '@/services/plaid-serv
 import { ResultStatus } from '@/types/enums/result-status';
 import { Session } from 'next-auth';
 
-export async function addOrUpdateBankDetailsAction(
-  public_token: string,
-  account_id: string
-) {
+export async function addOrUpdateBankDetailsAction(public_token: string, account_id: string) {
   let parent: Session | null = await auth();
   let urlSearchParams = new URLSearchParams();
+
   urlSearchParams.set('public_token', public_token);
   urlSearchParams.set('account_id', account_id);
 
@@ -21,13 +19,13 @@ export async function addOrUpdateBankDetailsAction(
     return {
       message: result.message,
       success: false
-    }
+    };
   }
 
   return {
-    message: 'Successfully add or update bank details',
+    message: 'Successfully linked bank details from your account.',
     success: true
-  }
+  };
 }
 
 export async function unlinkBankDetailsAction() {
@@ -43,7 +41,7 @@ export async function unlinkBankDetailsAction() {
   }
 
   return {
-    message: 'Successfully unlink bank details.',
+    message: 'Successfully unlinked bank details from your account.',
     success: true,
   };
 }
