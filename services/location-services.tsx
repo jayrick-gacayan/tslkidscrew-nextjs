@@ -14,7 +14,10 @@ export async function locationPlaces(
   let strSP = urlSearchParams.toString();
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations${strSP === '' ? '' : `?${strSP}`}`,
-    { ...authHeaders(token!) }
+    {
+      ...authHeaders(token!),
+      next: { tags: ['location-places'] }
+    }
   );
 
   try {
@@ -41,7 +44,10 @@ export async function locationPlaces(
 export async function locationPlace(id: string, token?: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/locations/${id}`,
-    { ...authHeaders(token!) }
+    {
+      ...authHeaders(token!),
+      next: { tags: ['location-place'] }
+    }
   );
 
   try {
@@ -185,11 +191,10 @@ export async function getAllLocationsForCreateRegRecord(
 
   let response = await result.json();
 
-
   return new Result<LocationPlace[]>({
     response: response,
     data: response.locations ?? [],
     statusCode: response.status ?? result.status,
     message: response.message ?? result.statusText
-  })
+  });
 }

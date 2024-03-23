@@ -18,7 +18,7 @@ import { SearchParamsProps } from '@/types/props/search-params-props';
 import { capitalCase } from 'change-case';
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function locationPlacesAction(searchParams: SearchParamsProps) {
   let admin: Session | null = await auth();
@@ -122,7 +122,7 @@ export async function removeLocationPlaceAction(id: string) {
 
   let result = await removeLocationPlace(id, admin?.user?.accessToken!);
 
-  revalidatePath('/admin/locations');
+  revalidateTag('location-places');
 }
 
 /* helpers */

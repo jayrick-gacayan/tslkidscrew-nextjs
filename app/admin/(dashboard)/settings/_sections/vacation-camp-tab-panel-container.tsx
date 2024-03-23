@@ -1,11 +1,8 @@
-import { Listbox, Tab, Transition } from "@headlessui/react";
-import { Fragment, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Tab } from "@headlessui/react";
+import { useEffect, useMemo, useState } from "react";
 import { VacationCampSetting } from "@/models/vacation-camp-setting";
-import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down";
-import CustomListbox from "@/app/_components/listbox-custom";
-import ListboxIconDropdownTwo from "@/app/_components/listbox-icon-dropdown-two";
 import VacationCampSettingForm from "./vacation-camp-setting-form";
-import { setDayNumber } from "@/types/helpers/date-helpers";
+import { getDayNumArr } from "@/types/helpers/date-helpers";
 
 export default function VacationCampTabPanelContainer({
   vacationCampSettings
@@ -38,21 +35,8 @@ export default function VacationCampTabPanelContainer({
   ]);
 
   const getVacationCampDateRangeArr: any[] = useMemo(() => {
-    let result: any[] = [];
-
-    if (vacationCampData) {
-      let { id, name, month, updated_at, created_at, capacity, year, ...rest } = vacationCampData;
-
-      Object.entries(rest).forEach(([key, value]) => {
-        if (value) {
-          result.push(setDayNumber(key))
-        }
-      });
-    }
-    return result;
-  }, [
-    vacationCampData
-  ]);
+    return getDayNumArr(vacationCampData);
+  }, [vacationCampData]);
 
   useEffect(() => {
     setVacationCamp(partialVCSettings.find((value: VacationCampSetting) => {

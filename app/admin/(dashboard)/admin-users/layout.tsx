@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import ModalAdminUsersForm from "./_sections/modal-admin-users-form";
+import { ReactNode } from 'react';
+import ModalAdminUsersForm from './_sections/modal-admin-users-form';
 
 export default async function Layout({ children }: { children: ReactNode; }) {
 

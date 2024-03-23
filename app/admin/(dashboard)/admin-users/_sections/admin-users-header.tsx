@@ -1,24 +1,25 @@
 'use client';
 
-import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
-import ShowEntriesSelect from "../../../../_components/show-entries-select";
-import { SearchParamsProps } from "@/types/props/search-params-props";
-import { reduxStore } from "@/react-redux/redux-store";
-import { modalFormOpened, modalFormTypeSet } from "../_redux/admin-users-slice";
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { reduxStore } from '@/react-redux/redux-store';
+import { modalFormOpened, modalFormTypeSet } from '../_redux/admin-users-slice';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
+import ShowEntriesSelect from '@/app/_components/show-entries-select';
 
 export default function AdminUsersHeader({
   searchParams,
   showEntry,
-  redirectURL,
 }: {
   searchParams: SearchParamsProps;
   showEntry: number;
-  redirectURL: (url: string) => Promise<void>
 }) {
-  let baseURL = "/admin/admin-users";
+  const router: AppRouterInstance = useRouter();
+  let baseURL: string = '/admin/admin-users';
 
   function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
-    let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
+    let urlSearchParams: URLSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
     if (urlSearchParams.has('page')) { urlSearchParams.delete('page'); }
     if (!per_page) { urlSearchParams.delete('per_page'); }
@@ -37,10 +38,10 @@ export default function AdminUsersHeader({
       <div className='flex w-full sm:w-fit items-center gap-4'>
         <ShowEntriesSelect value={showEntry} items={[10, 20, 30]}
           onChange={(value: any) => {
-            redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
+            router.replace(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} />
-        <div className="w-full">
-          <button className="rounded text-white bg-primary px-4 py-2 text-sm text-center"
+        <div className='w-full'>
+          <button className='rounded text-white hover:bg-primary/70 bg-primary px-4 py-2 text-sm text-center'
             onClick={() => {
               reduxStore.dispatch(modalFormOpened(true));
               reduxStore.dispatch(modalFormTypeSet('add'));
@@ -50,5 +51,5 @@ export default function AdminUsersHeader({
         </div>
       </div>
     </AdminHeaderWithEntries>
-  )
+  );
 }

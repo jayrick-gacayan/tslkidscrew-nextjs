@@ -37,4 +37,6 @@ export interface VacationCampSetting {
   day_twenty_nine?: boolean | null;
   day_thirty?: boolean | null;
   day_thirty_one?: boolean | null;
+  program_id?: number | null;
+  deleted?: boolean | null;
 }

@@ -19,5 +19,9 @@ export interface Parent {
   card_brand?: string | null;
   autopay_enabled?: boolean | null;
   stripe_customer_identifier?: string | null;
+  customer_url?: string | null;
+  bank_verified?: boolean | null;
+  bank_name?: string | null;
+  stripe_bank_identifier?: string | null;
 
 }

@@ -9,7 +9,10 @@ const { auth } = NextAuth(authConfig);
 export default auth((req: NextAuthRequest) => {
   let { auth, nextUrl: { pathname, ...rest } } = req;
 
-  if (!req.nextUrl.origin.includes('http://localhost')) {
+  // console.log('sdafsdfsd', req.auth);
+  // console.log('process.env.nodeenv', process.env.NODE_ENV)
+
+  if (process.env.NODE_ENV! === 'production') {
     if (req.nextUrl.pathname.startsWith('/api/auth')) {
       return NextResponse.json({ message: 'Unauthorized' })
     }

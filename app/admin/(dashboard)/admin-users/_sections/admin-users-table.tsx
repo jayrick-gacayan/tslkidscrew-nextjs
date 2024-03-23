@@ -27,5 +27,5 @@ export default function AdminUsersTable({ admins }: { admins: Admin[] | undefine
         }
       </table>
     </div>
-  )
+  );
 }

@@ -1,18 +1,17 @@
-'use client'
-
 import { Transition, Dialog } from "@headlessui/react";
-import { Elements } from "@stripe/react-stripe-js";
 import { Fragment } from "react";
 import StripeCardForm from "./stripe-card-form";
-import getStripe from "@/types/helpers/get-stripe";
 import { RootState, reduxStore } from "@/react-redux/redux-store";
 import { modalStripeToggled } from "../_redux/fill-in-form-slice";
 import { useAppSelector } from "@/hooks/redux-hooks";
 import { FillInFormState } from "../_redux/fill-in-form-state";
+import StripeElements from "@/app/parent/_components/stripe-elements";
 
-const stripePromise = getStripe();
-
-export default function ModalCardInfoForStripe() {
+export default function ModalCardInfoForStripe({
+  program_type
+}: {
+  program_type: string;
+}) {
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
   })
@@ -21,9 +20,7 @@ export default function ModalCardInfoForStripe() {
     <Transition appear show={fillInFormState.stripeModalOpen} as={Fragment}>
       <Dialog as="div"
         className='fixed h-screen w-screen top-0 left-0 z-[500] flex items-center justify-center'
-        onClose={() => {
-          reduxStore.dispatch(modalStripeToggled(false));
-        }}>
+        onClose={() => { reduxStore.dispatch(modalStripeToggled(false)); }}>
         <Transition.Child as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -33,7 +30,6 @@ export default function ModalCardInfoForStripe() {
           leaveTo="opacity-0">
           <div className="fixed inset-0 bg-black/30 z-0" />
         </Transition.Child>
-
         <Transition.Child as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0 scale-95"
@@ -45,10 +41,9 @@ export default function ModalCardInfoForStripe() {
             <Dialog.Title as="h1" className='font-medium text-[24px]'>
               Payment
             </Dialog.Title>
-            <Elements stripe={stripePromise} options={{}}>
-              <StripeCardForm />
-            </Elements>
-
+            <StripeElements>
+              <StripeCardForm program_type={program_type} />
+            </StripeElements>
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>

@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function InvoicesInfoTable({ invoices }: { invoices: Invoice[] | undefined; }) {
 
   return (
-    <div className='block overflow-auto rounded bg-secondary min-h-[512px] h-full'>
+    <div className='block overflow-auto rounded bg-secondary'>
       <table className={`min-w-[1024px] w-full
         ${(!invoices || invoices.length === 0 || invoices.length > 10) ? 'h-full min-h-[512px]' : 'h-auto'}`}>
         <thead>

@@ -12,7 +12,10 @@ import { SummerCampSwimSettingInputTypes } from '@/types/input-types/summer-camp
 export async function getProgramYearCycleSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-program-settings`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['program-year-cycle-settings'] }
+    }
   )
 
   try {
@@ -78,7 +81,10 @@ export async function updateProgramYearCycleSetting(
 export async function getSummerCampSwimPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/program_settings/edit-summer-camp-prices`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-swim-settings'] }
+    }
   );
 
   try {
@@ -151,7 +157,10 @@ export async function updateSummerCampSwimSetting(
 export async function getSummerCampWeekPrices(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_week_settings/edit`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-week-settings'] }
+    }
   );
 
   try {
@@ -206,7 +215,10 @@ export async function updateSummerCampWeekSetting(
 export async function getSummerCampPromoSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/summer_camp_promos/edit-all`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['summer-camp-promo-settings'] }
+    }
   );
 
   try {
@@ -285,7 +297,10 @@ export async function updateSummerCampPromoSettings(
 export async function getVacationCampSchedulesSettings(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/vacation_camp_schedule_settings/edit-all`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['vacation-camp-settings'] }
+    }
   );
 
   try {
@@ -341,7 +356,10 @@ export async function updateVacationCampScheduleSetting(formData: FormData, toke
 export async function getBeforeOrAfterSchoolSettings(token: string, cycleYear: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/master_after_school_prices/edit-all?year_cycle=${cycleYear}`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+      next: { tags: ['before-or-after-school-settings'] }
+    }
   );
 
   try {
@@ -394,12 +412,12 @@ export async function updateBeforeOrAfterSchoolSettings(formData: FormData, toke
   }
 }
 
+/* Parent  */
 export async function getProgramSettingYearCycleForRegRecord(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/before_and_after_school_availability?location_id=${encodeURIComponent(location_id)}`,
-    {
-      ...authHeaders(token)
-    });
+    { ...authHeaders(token) }
+  );
 
   try {
     let response = await result.json();
@@ -426,9 +444,8 @@ export async function getProgramSettingYearCycleForRegRecord(location_id: string
 export async function getSummerCampWeeksForRegular(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_summer_camp_weeks?location_id=${encodeURIComponent(location_id)}`,
-    {
-      ...authHeaders(token)
-    });
+    { ...authHeaders(token) }
+  );
 
   try {
     let response = await result.json();
@@ -463,7 +480,6 @@ export async function getSummerCampPromosForCreateRegRecord(token: string) {
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_all_summer_camp_promo`,
     {
       ...authHeaders(token),
-      next: { tags: ['summer-camp-promo-create-reg-record'] }
     });
 
 
@@ -498,7 +514,10 @@ export async function getSummerCampPromosForCreateRegRecord(token: string) {
 export async function getVacationCampsForCreateRegRecord(location_id: string, token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/data/get_vacation_camp_schedules?location_id=${encodeURIComponent(location_id)}`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token),
+
+    }
   );
 
   try {
@@ -532,7 +551,9 @@ export async function getVacationCampsForCreateRegRecord(location_id: string, to
 export async function getSummerCampWeeksForPromo(token: string) {
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_PARENT_URL! + `/summer_camp_week_settings`,
-    { ...authHeaders(token) }
+    {
+      ...authHeaders(token)
+    }
   );
 
   try {

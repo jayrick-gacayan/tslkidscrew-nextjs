@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import SearchContainer from "./sections/search-container";
+import type { Metadata } from 'next';
+import SearchContainer from './sections/search-container';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -7,9 +7,10 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+
   return (
-    <div className="rounded bg-white drop-shadow-lg py-4 px-8 lg:px-4">
+    <div className='p-8'>
       <SearchContainer />
     </div>
-  )
+  );
 }

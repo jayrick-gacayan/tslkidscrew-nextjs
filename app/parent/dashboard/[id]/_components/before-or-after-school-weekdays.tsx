@@ -1,4 +1,4 @@
-import InfoContainer from "@/app/admin/(dashboard)/_components/info-container"
+import InfoContainer from "@/app/_components/info-container"
 import { ReactNode } from "react"
 
 export default function BeforeOrAfterSchoolWeekdays({

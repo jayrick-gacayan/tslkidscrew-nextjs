@@ -1,20 +1,20 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AdminUsersState } from "./admin-users-state";
-import { fieldInputValue } from "@/types/helpers/field-input-value";
-import { Admin } from "@/models/admin";
-import { InputProps } from "@/types/props/input-props";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AdminUsersState } from './admin-users-state';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
+import { Admin } from '@/models/admin';
+import { InputProps } from '@/types/props/input-props';
 
 const adminFormInitValues = {
   email: fieldInputValue<string>(''),
   name: fieldInputValue<string>(''),
   isActive: false,
   isSuperAdmin: false,
-}
+};
 
 const initialState: AdminUsersState = {
   modalForm: { open: false, type: '' },
   adminUserForm: adminFormInitValues
-}
+};
 
 const adminUsersSlice = createSlice({
   name: 'adminUsers',
@@ -28,7 +28,7 @@ const adminUsersSlice = createSlice({
       return {
         ...state,
         adminUserForm: { ...state.adminUserForm, [key]: data }
-      }
+      };
     },
     adminInputCheckboxFieldChanged: (
       state: AdminUsersState,
@@ -39,8 +39,7 @@ const adminUsersSlice = createSlice({
       return {
         ...state,
         adminUserForm: { ...state.adminUserForm, [key]: data }
-      }
-
+      };
     },
     editAdminUserFields: (state, action: PayloadAction<Partial<Admin>>) => {
       return {
@@ -53,16 +52,22 @@ const adminUsersSlice = createSlice({
           isSuperAdmin: action.payload.is_super_admin ?? false,
           id: action.payload.id
         }
-      }
+      };
     },
     adminUserFormReset: (state: AdminUsersState) => {
       return { ...state, adminUserForm: adminFormInitValues };
     },
     modalFormOpened: (state: AdminUsersState, action: PayloadAction<boolean>) => {
-      return { ...state, modalForm: { ...state.modalForm, open: action.payload } }
+      return {
+        ...state,
+        modalForm: { ...state.modalForm, open: action.payload }
+      };
     },
     modalFormTypeSet: (state: AdminUsersState, action: PayloadAction<string>) => {
-      return { ...state, modalForm: { ...state.modalForm, type: action.payload } }
+      return {
+        ...state,
+        modalForm: { ...state.modalForm, type: action.payload }
+      };
     }
   },
 });

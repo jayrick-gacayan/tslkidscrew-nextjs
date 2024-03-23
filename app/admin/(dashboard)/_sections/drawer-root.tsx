@@ -16,12 +16,14 @@ export default function DrawerRoot({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
 
   return (
-    <div className='relative h-screen overflow-auto'>
+    <div className='relative min-h-screen min-w-full h-full w-full overflow-auto'>
       <AdminHeader admin={admin} onDrawerOpen={() => { setDrawerOpen(true); }} />
-      <Sidebar drawerOpen={drawerOpen} onDrawerOpen={(open: boolean) => { setDrawerOpen(open) }} />
-      <div className='w-full lg:ps-64 pt-12 overflow-auto h-full relative'>
-        <div className='p-12 relative h-full'>
-          {children}
+      <Sidebar drawerOpen={drawerOpen} onDrawerOpen={(open: boolean) => { setDrawerOpen(open); }} />
+      <div className='w-full lg:ps-64 pt-12 h-full'>
+        <div className='p-12 h-full'>
+          <div className='relative rounded min-h-[calc(100vh-144px)] h-full bg-white drop-shadow-lg'>
+            {children}
+          </div>
         </div>
       </div>
     </div>

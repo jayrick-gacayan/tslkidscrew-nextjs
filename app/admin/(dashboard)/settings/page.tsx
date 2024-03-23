@@ -7,36 +7,32 @@ import { ProgramYearCycleSetting } from '@/models/program-year-cycle-setting';
 import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import { BeforeOrAfterSchoolSetting } from '@/models/before-or-after-school-setting';
-import { getAllSettingsAction } from '@/actions/program-settings-actions';
+import {
+  getBeforeOrAfterSchoolSettingsAction,
+  getProgramYearCycleSettingsAction,
+  getSummerCampPromoSettingsAction,
+  getSummerCampSwimPricesAction,
+  getSummerCampWeekPricesAction,
+  getVacationCampSchedulesSettingsAction
+} from '@/actions/program-settings-actions';
 
 export default async function Page() {
-  const [
-    summerCampWeekSettings,
-    summerCampSwimSettings,
-    summerCampPromoSettings,
-    vacationCampSettings,
-    programYearCycleSetting,
-    beforeOrAfterSchoolSettings,
-  ]: [
-      Result<SummerCampWeekSetting[]>,
-      Result<SummerCampSwimSetting[]>,
-      Result<SummerCampPromoSetting[]>,
-      Result<VacationCampSetting[]>,
-      Result<ProgramYearCycleSetting>,
-      Result<BeforeOrAfterSchoolSetting[]>
-    ] = await getAllSettingsAction();
+  let summerCampWeekSettings: Result<SummerCampWeekSetting[]> = await (await getSummerCampWeekPricesAction());
+  let summerCampSwimSettings: Result<SummerCampSwimSetting[]> = await (await getSummerCampSwimPricesAction());
+  let summerCampPromoSettings: Result<SummerCampPromoSetting[]> = await (await getSummerCampPromoSettingsAction());
+  let vacationCampSettings: Result<VacationCampSetting[]> = await (await getVacationCampSchedulesSettingsAction());
+  let programYearCycleSetting: Result<ProgramYearCycleSetting> = await (await getProgramYearCycleSettingsAction());
+  let beforeOrAfterSchoolSettings: Result<BeforeOrAfterSchoolSetting[]> = await (await getBeforeOrAfterSchoolSettingsAction());
 
   return (
-    <div className='pb-6'>
-      <div className='rounded bg-white drop-shadow-lg py-4 px-8 space-y-4'>
-        <AdminHeaderWithEntries headerText='Settings' />
-        <TabsContainer summerCampWeekSettings={summerCampWeekSettings.data ?? []}
-          summerCampSwimSettings={summerCampSwimSettings.data ?? []}
-          summerCampPromoSettings={summerCampPromoSettings.data ?? []}
-          programYearCycleSetting={programYearCycleSetting.data!}
-          vacationCampSettings={vacationCampSettings.data ?? []}
-          beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings.data ?? []} />
-      </div>
+    <div className='p-8 space-y-4'>
+      <AdminHeaderWithEntries headerText='Settings' />
+      <TabsContainer summerCampWeekSettings={summerCampWeekSettings?.data ?? []}
+        summerCampSwimSettings={summerCampSwimSettings?.data ?? []}
+        summerCampPromoSettings={summerCampPromoSettings?.data ?? []}
+        programYearCycleSetting={programYearCycleSetting?.data!}
+        vacationCampSettings={vacationCampSettings?.data ?? []}
+        beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings?.data ?? []} />
     </div>
   );
 }

@@ -9,10 +9,8 @@ import {
   shift,
   autoUpdate,
   useClick,
-  useDismiss,
   useInteractions,
-  FloatingFocusManager,
-  useFocus
+  useDismiss,
 } from "@floating-ui/react";
 import { useState } from "react";
 
@@ -31,12 +29,15 @@ export default function PopperWeekPromos({
   weeksForSummerCamp: Partial<SummerCampWeekSetting>[];
   onCheckboxChange: (sumCampWeek: Partial<SummerCampWeekSetting>) => void;
 }) {
-
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const { refs, floatingStyles, context } = useFloating({
     open: popoverOpen,
-    onOpenChange: setPopoverOpen,
+    onOpenChange(isOpen, event, reason) {
+      setPopoverOpen(isOpen);
+      event && console.log('event', event);
+      reason && console.log('reason', reason);
+    },
     middleware: [
       offset(10),
       flip({ fallbackAxisSideDirection: "end" }),
@@ -48,67 +49,66 @@ export default function PopperWeekPromos({
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
-  const focus = useFocus(context)
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
-    dismiss,
-    focus
+    dismiss
   ]);
 
   return (
     <div className="relative">
-      <button type="button"
-        ref={refs.setReference}
+      <label ref={refs.setReference}
         {...getReferenceProps()}
-        className="block">
-        <label htmlFor={`${sumCampWeekPromo.id}-${sumCampWeekPromo.name}`}
-          className="space-x-2 block cursor-pointer">
-          <input type='hidden' name='summer-camp-promo-week' value={sumCampWeekPromo.week_count!} />
-          <input type="radio"
-            name='summer-camp-promo'
-            id={`${sumCampWeekPromo.id}-${sumCampWeekPromo.name}`}
-            className="transition-all form-radio border border-secondary-light h-6 w-6"
-            value={sumCampWeekPromo.id}
-            checked={promoPackage?.id === sumCampWeekPromo.id}
-            onChange={() => { onRadioButtonChange(sumCampWeekPromo) }}
-          />
-          <span className="align-middle">
-            {
-              currencyFormat('en-US',
-                { style: 'currency', currency: 'USD' },
-                sumCampWeekPromo.price ?? 0
-              )
-            }
-          </span>
-        </label>
-      </button>
+        htmlFor={`${sumCampWeekPromo.id}-${sumCampWeekPromo.name}`}
+        className="space-x-2 w-fit block cursor-pointer">
+        <input type='hidden' name='summer-camp-promo-week' value={sumCampWeekPromo.week_count!} />
+        <input type="radio"
+          name='summer-camp-promo'
+          id={`${sumCampWeekPromo.id}-${sumCampWeekPromo.name}`}
+          className="transition-all form-radio border border-secondary-light h-6 w-6"
+          value={sumCampWeekPromo.id}
+          checked={promoPackage?.id === sumCampWeekPromo.id}
+          onChange={() => {
+            onRadioButtonChange(sumCampWeekPromo)
+          }}
+        />
+        <span className="align-middle">
+          {
+            currencyFormat('en-US',
+              { style: 'currency', currency: 'USD' },
+              sumCampWeekPromo.price ?? 0
+            )
+          }
+        </span>
+      </label>
       {
         popoverOpen &&
-        <FloatingFocusManager closeOnFocusOut={true} context={context}>
-          <div ref={refs.setFloating}
-            style={floatingStyles}
-            className="rounded-lg z-[99999] drop-shadow bg-white p-2 w-[360px] h-[360px] overflow-auto"
-            {...getFloatingProps()} >
-            <div className="space-y-2 p-4">
+        <div ref={refs.setFloating}
+          style={floatingStyles}
+          className="rounded-lg z-[99999] drop-shadow bg-white p-2 w-[360px] h-[360px] overflow-auto"
+          {...getFloatingProps()}>
+          <div className="p-4">
+            <div className="space-y-2">
               {
-                summerCampWeeksForPromo.map((summerCampWeek: Partial<SummerCampWeekSetting>) => {
+                summerCampWeeksForPromo.map((summerCampWeek: Partial<SummerCampWeekSetting>, index: number) => {
                   return (
-                    <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampWeek.id}`}
+                    <InputCheckboxCustom key={`summer-camp-reg-weeks-${summerCampWeek.id}-${index}`}
                       id={`summer-camp-reg-weeks-${summerCampWeek.id}`}
                       labelText={summerCampWeek.name}
-                      autoFocus={false}
                       checked={weeksForSummerCamp.find((value: Partial<SummerCampWeekSetting>) => {
                         return value.id === summerCampWeek.id;
                       }) ? true : false}
-                      onChange={() => { onCheckboxChange(summerCampWeek); }}
-                      value={summerCampWeek.id} />
+                      onChange={() => {
+                        onCheckboxChange(summerCampWeek);
+                      }}
+                      value={summerCampWeek.id!}
+                    />
                   );
                 })
               }
             </div>
           </div>
-        </FloatingFocusManager>
+        </div>
       }
     </div>
   )

@@ -8,7 +8,7 @@ export default async function Page() {
       <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">
         <h1 className="text-[24px] font-bold">Welcome to TSL!</h1>
         <p>It appears that we have some of your information already. Please confirm by reviewing the following form.</p>
-        <CustomerInfoForm parent={(await getParentInfo())?.user} />
+        <CustomerInfoForm />
       </div>
     </div>
   )

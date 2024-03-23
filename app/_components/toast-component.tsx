@@ -1,9 +1,7 @@
-import { forwardRef, ForwardedRef, HTMLAttributes } from "react";
-import { ToastContentProps } from "react-toastify";
+import { forwardRef, ForwardedRef, HTMLAttributes } from 'react';
+import { ToastContentProps } from 'react-toastify';
 
-export interface ToastProps<T> extends ToastContentProps<T>,
-  HTMLAttributes<HTMLDivElement> {
-}
+export interface ToastProps<T> extends ToastContentProps<T>, HTMLAttributes<HTMLDivElement> { }
 
 function ToastComponent<T>(
   {

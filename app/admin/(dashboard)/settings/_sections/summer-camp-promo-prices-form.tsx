@@ -1,13 +1,13 @@
-import InputCustom from "@/app/_components/input-custom";
-import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import SettingListboxCustom from "../_components/setting-custom-lisbox";
-import SettingFormSubmit from "../_components/setting-form-submit";
-import { useFormState } from "react-dom";
-import { updateSummerCampPromoSettingsAction } from "@/actions/program-settings-actions";
-import { ValidationType } from "@/types/enums/validation-type";
-import { pathRevalidate } from "@/actions/common-actions";
-import { toast, ToastContentProps } from "react-toastify";
+import InputCustom from '@/app/_components/input-custom';
+import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import SettingListboxCustom from '../_components/setting-custom-lisbox';
+import SettingFormSubmit from '../_components/setting-form-submit';
+import { useFormState } from 'react-dom';
+import { updateSummerCampPromoSettingsAction } from '@/actions/program-settings-actions';
+import { ValidationType } from '@/types/enums/validation-type';
+import { tagRevalidate } from '@/actions/common-actions';
+import { toast, ToastContentProps } from 'react-toastify';
 
 export default function SummerCampPromoPricesForm({
   weekStr,
@@ -24,15 +24,15 @@ export default function SummerCampPromoPricesForm({
   const [state, formAction] = useFormState(updateSummerCampPromoSettingsAction, undefined as any)
 
   useEffect(() => {
-    async function pathToRevalidate() {
-      await pathRevalidate('/admin/settings')
+    async function tagToRevalidate() {
+      await tagRevalidate('summer-camp-promo-settings');
     }
 
     if (state?.success !== undefined) {
       let { message, success } = state;
       toast((props: ToastContentProps<unknown>) => {
         return (
-          <div className="text-black">{message}</div>
+          <div className='text-black'>{message}</div>
         )
       }, {
         toastId: `update-summer-camp-promo-setting-success-${Date.now()}`,
@@ -41,19 +41,19 @@ export default function SummerCampPromoPricesForm({
       });
 
 
-      pathToRevalidate();
+      tagToRevalidate();
     }
   }, [state])
 
   return (
     <>
-      <div className="flex sm:flex-row flex-col items-start gap-2 sm:items-center">
-        <div className="flex-1">
-          <h1 className="font-medium text-[24px] text-black">Update Promos</h1>
+      <div className='flex sm:flex-row flex-col items-start gap-2 sm:items-center'>
+        <div className='flex-1'>
+          <h1 className='font-medium text-[24px] text-black'>Update Promos</h1>
         </div>
-        <div className="flex-none sm:w-auto w-full">
-          <div className="flex w-full sm:w-72 items-center gap-4">
-            <div className="w-full">
+        <div className='flex-none sm:w-auto w-full'>
+          <div className='flex w-full sm:w-72 items-center gap-4'>
+            <div className='w-full'>
 
             </div>
             <SettingListboxCustom listboxData={weekStr}
@@ -65,9 +65,9 @@ export default function SummerCampPromoPricesForm({
       </div>
       <form id='summer-camp-promo-setting-form-action'
         action={formAction}
-        className="space-y-4">
-        <div className="block bg-secondary p-4">
-          <div className="w-full sm:w-8/12 block space-y-4">
+        className='space-y-4'>
+        <div className='block bg-secondary p-4'>
+          <div className='w-full sm:w-8/12 block space-y-4'>
             {
               summerCampPromoData.sort((b: SummerCampPromoSetting, a: SummerCampPromoSetting) => {
                 return b.child_record_count! - a.child_record_count!
@@ -75,24 +75,24 @@ export default function SummerCampPromoPricesForm({
                 console.log('errorText', state?.errors?.find((val: any) => { return val.id === value.id?.toString() }))
                 return (
                   <div key={`update-promos-children-${index}`}
-                    className="flex sm:flex-row flex-col items-center justify-between gap-4 sm:gap-8">
-                    <div className="w-full">
-                      <h1 className="font-medium text-[20px]">
+                    className='flex sm:flex-row flex-col items-center justify-between gap-4 sm:gap-8'>
+                    <div className='w-full'>
+                      <h1 className='font-medium text-[20px]'>
                         Children #{value?.child_record_count}
                       </h1>
                     </div>
-                    <div className="w-full">
-                      <input type="hidden" name="summer-camp-promo[][id]" value={value?.id ?? 1} />
-                      <input type="hidden" name="summer-camp-promo[][week-count]" value={value?.week_count ?? 1} />
-                      <input type="hidden" name="summer-camp-promo[][child-record-count]" value={value?.child_record_count ?? 1} />
-                      <input type="hidden" name="summer-camp-promo[][name]" value={value?.name ?? 1} />
-                      <input type="hidden" name="summer-camp-promo[][swim-trip]"
+                    <div className='w-full'>
+                      <input type='hidden' name='summer-camp-promo[][id]' value={value?.id ?? 1} />
+                      <input type='hidden' name='summer-camp-promo[][week-count]' value={value?.week_count ?? 1} />
+                      <input type='hidden' name='summer-camp-promo[][child-record-count]' value={value?.child_record_count ?? 1} />
+                      <input type='hidden' name='summer-camp-promo[][name]' value={value?.name ?? 1} />
+                      <input type='hidden' name='summer-camp-promo[][swim-trip]'
                         value={(value?.with_swim_trip ? 'true' : 'false') ?? 'false'} />
-                      <InputCustom type="text"
+                      <InputCustom type='text'
                         name='summer-camp-promo[][price]'
-                        prefixIcon={<div className="absolute left-3 z-20 top-2 block">&#36;</div>}
-                        inputMode="numeric"
-                        className="bg-white p-2 pl-10"
+                        prefixIcon={<div className='absolute left-3 z-20 top-2 block'>&#36;</div>}
+                        inputMode='numeric'
+                        className='bg-white p-2 pl-10'
                         defaultValue={value?.price ?? ''}
                         errorText={
                           state?.errors?.find((val: any) => { return val.id === value.id?.toString() })?.price?.errorText ?? ''

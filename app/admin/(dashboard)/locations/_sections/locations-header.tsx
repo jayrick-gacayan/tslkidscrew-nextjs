@@ -1,23 +1,25 @@
 'use client';
 
-import AdminHeaderWithEntries from "../../_components/admin-header-with-entries";
-import ShowEntriesSelect from "../../../../_components/show-entries-select";
-import Link from "next/link";
-import { SearchParamsProps } from "@/types/props/search-params-props";
+import Link from 'next/link';
+import { SearchParamsProps } from '@/types/props/search-params-props';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import AdminHeaderWithEntries from '../../_components/admin-header-with-entries';
+import ShowEntriesSelect from '@/app/_components/show-entries-select';
+import CreateNewButton from '../../_components/create-new-button';
 
 export default function LocationsHeader({
   searchParams,
   showEntry,
-  redirectURL,
 }: {
   searchParams: SearchParamsProps;
   showEntry: number;
-  redirectURL: (url: string) => Promise<void>
 }) {
-  let baseURL = "/admin/locations";
+  const router: AppRouterInstance = useRouter();
+  let baseURL: string = '/admin/locations';
 
-  function urlPaginate(searchParams: SearchParamsProps, per_page?: number) {
-    let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
+  function urlPaginate(searchParams: SearchParamsProps, per_page?: number): string {
+    let urlSearchParams: URLSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
 
     if (urlSearchParams.has('page')) { urlSearchParams.delete('page'); }
     if (!per_page) { urlSearchParams.delete('per_page'); }
@@ -36,15 +38,10 @@ export default function LocationsHeader({
       <div className='flex w-full sm:w-fit items-center gap-4'>
         <ShowEntriesSelect value={showEntry} items={[10, 20, 30]}
           onChange={(value: any) => {
-            redirectURL(urlPaginate(searchParams, value === 10 ? undefined : value));
+            router.replace(urlPaginate(searchParams, value === 10 ? undefined : value));
           }} />
-        <div className="w-full">
-          <Link href='/admin/locations/new'
-            className="rounded text-white bg-primary px-4 py-2 text-sm block text-center">
-            Create a New Location
-          </Link>
-        </div>
+        <CreateNewButton href='/admin/locations/new' text='Create a New Location' />
       </div>
     </AdminHeaderWithEntries>
-  )
+  );
 }

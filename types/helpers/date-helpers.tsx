@@ -1,3 +1,6 @@
+import { toFirstUpperCase } from "./string-helpers";
+import { parse } from 'date-fns';
+
 export function setDayNumber(strDayName: string) {
   switch (strDayName) {
     case 'day_one': return 1;
@@ -79,4 +82,42 @@ export default function numsIntoWord(num: number) {
     case 1: return 'one';
     default: return ' '
   }
+}
+
+export function getDayNumArr(arr?: { [key: string]: any }) {
+  let result: any[] = [];
+
+  if (arr) {
+    let {
+      id,
+      name,
+      month,
+      updated_at,
+      created_at,
+      capacity,
+      year,
+      program_id,
+      deleted,
+      ...rest
+    } = arr;
+
+    Object.entries(rest).forEach(([key, value]) => {
+      if (value) {
+        result.push(setDayNumber(key))
+      }
+    });
+  }
+  return result;
+}
+
+export function parseDates(
+  dateStr?: string,
+  data?: { [key: string]: any },
+  formatParse: string = 'yyyy-MMMM',
+) {
+  let strDate = `${data?.year?.toString()}-${toFirstUpperCase(data?.month ?? '')}`;
+
+  if (dateStr) { strDate += `-${dateStr}`; }
+
+  return parse(strDate, formatParse, new Date());
 }

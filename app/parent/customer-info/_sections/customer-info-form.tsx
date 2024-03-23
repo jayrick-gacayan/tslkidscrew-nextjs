@@ -27,12 +27,12 @@ function CustomerInfoFormButton() {
   )
 }
 
-export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }) {
-  console.log('parent', parent)
+export default function CustomerInfoForm() {
+
   const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState<string>('')
 
   const [state, formAction] = useFormState(
-    registerCustomerAction.bind(null, parent.email!),
+    registerCustomerAction,
     {
       first_name: fieldInputValue(''),
       last_name: fieldInputValue('')
@@ -71,7 +71,7 @@ export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }
         <div className="block">
           <div className="w-full lg:w-2/3 block space-y-4">
             <InputCustom id='firstname'
-              labelText="Firstname"
+              labelText="First Name"
               name='first_name'
               type="text"
               placeholder="Firstname:"
@@ -80,7 +80,7 @@ export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }
               errorText={state.first_name?.errorText}
               validationStatus={state.first_name?.validationStatus} />
             <InputCustom id='lastname'
-              labelText="Lastname"
+              labelText="Last Name"
               name='last_name'
               type="text"
               placeholder="Lastname:"
@@ -152,7 +152,7 @@ export default function CustomerInfoForm({ parent }: { parent: Partial<Parent> }
 
       <div className="lg:w-1/2 w-full">
         <CustomListbox value={howDidYouHearAboutUs}
-          name='how_did_you_hear_about_us'
+          name='how-did-you-hear-about-us'
           placeholder='How did you hear about us?'
           onChange={(value: any) => { setHowDidYouHearAboutUs(value); }}
           items={HOW_DID_YOU_HEAR_ABOUT_US}

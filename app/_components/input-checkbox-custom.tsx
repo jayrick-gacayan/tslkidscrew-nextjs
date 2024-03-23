@@ -14,17 +14,20 @@ function InputCustomCheckbox(
     validationType = ValidationType.NONE,
     className,
     id,
+    checked,
     ...props
   }: InputPropsCheckbox,
   ref: ForwardedRef<HTMLInputElement>
 ) {
   return (
-    <div className="block form-control">
+    <div className="block">
       <label htmlFor={id}
         className="flex items-center gap-3 w-fit">
-        <input ref={ref}
+        <input {...props}
+
           id={id}
-          type="checkbox"
+          type='checkbox'
+          checked={checked}
           className={
             twMerge(
               'peer form-checkbox h-5 w-5 rounded border border-secondary-light ring-0 ring-transparent outline-0 outline-transparent' +
@@ -33,7 +36,7 @@ function InputCustomCheckbox(
               className!,
               errorText !== '' ? 'border-danger bg-danger-light' : '',
             )
-          } {...props} />
+          } />
         {labelText && <span className="block">{labelText}</span>}
       </label>
       {errorText !== '' && <div className="text-danger">{errorText}</div>}

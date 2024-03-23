@@ -1,9 +1,6 @@
 import RegistrationInfoHeader from "./_sections/registration-info-header";
 import RegistrationInfoTable from "./_sections/registration-info-table";
 import { SearchParamsProps } from "@/types/props/search-params-props";
-import { auth } from "@/auth";
-import { Parent } from "@/models/parent";
-import { Session } from "next-auth";
 import Pagination from "@/app/_components/pagination";
 import type { Metadata } from "next";
 
@@ -12,15 +9,17 @@ export const metadata: Metadata = {
 }
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps; }) {
-  let data: Session | null = await auth();
+
   let showEntry: number = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
   let totalPages: number = Math.ceil(1 / showEntry) ?? 1
 
   return (
-    <div className="rounded bg-white drop-shadow-lg py-4 px-8 space-y-6">
-      <RegistrationInfoHeader />
-      <RegistrationInfoTable />
-      {/* {
+    <div className='flex-1'>
+      <div className="pb-12">
+        <div className="rounded min-h-[560px] h-full bg-white drop-shadow-lg py-4 px-8 space-y-6">
+          <RegistrationInfoHeader />
+          <RegistrationInfoTable />
+          {/* {
         totalPages < 2 ? null :
           (
             <div className="w-fit m-auto block">
@@ -32,6 +31,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
             </div>
           )
       } */}
+        </div>
+      </div>
     </div>
   )
 }

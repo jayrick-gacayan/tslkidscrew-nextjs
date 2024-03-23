@@ -1,4 +1,4 @@
-import { InputProps } from "@/types/props/input-props";
+import { InputProps } from '@/types/props/input-props';
 
 export interface AdminUsersState {
   modalForm: {
@@ -11,6 +11,6 @@ export interface AdminUsersState {
     name: InputProps<string>;
     isActive: boolean;
     isSuperAdmin: boolean;
-    id?: number
+    id?: number;
   }
 }

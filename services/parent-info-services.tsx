@@ -85,3 +85,62 @@ export async function updateCustomerInfo(
     })
   }
 }
+
+export async function forgotPassword(email: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/forgot_password`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        customer_user: {
+          email
+        }
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    return new Result<any>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: response.status ?? result.status,
+    })
+  }
+  catch (error) {
+    return new Result<any>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+    })
+  }
+}
+
+export async function changePassword(body: string, token: string) {
+  let result = await fetch(
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/change_password${body}`,
+    {
+      method: 'PUT',
+      ...authHeaders(token)
+    }
+  );
+
+  try {
+    let response = await result.json();
+
+    return new Result<any>({
+      response: response,
+      message: response.message ?? result.statusText,
+      statusCode: response.status ?? result.status,
+    })
+  }
+  catch (error) {
+    return new Result<any>({
+      response: undefined,
+      statusCode: result.status,
+      message: result.statusText,
+    })
+  }
+}

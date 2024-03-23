@@ -1,6 +1,5 @@
-import { ForwardedRef, TextareaHTMLAttributes, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
-
+import { ForwardedRef, TextareaHTMLAttributes, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   labelText?: string;
 }
@@ -20,12 +19,12 @@ function TextareaCustom(
         labelText &&
         (
           <label htmlFor={id}
-            className="font-medium peer-has-[input:invalid]:text-danger peer-has-[input:focus]:text-primary">
+            className='font-medium peer-has-[input:invalid]:text-danger peer-has-[input:focus]:text-primary'>
             {labelText}
           </label>
         )
       }
-      <div className="relative w-full">
+      <div className='relative w-full'>
         <textarea ref={ref}
           className={
             twMerge(
@@ -39,7 +38,7 @@ function TextareaCustom(
           } {...props} />
       </div>
     </div>
-  )
+  );
 }
 
-export default forwardRef(TextareaCustom)
+export default forwardRef(TextareaCustom);
