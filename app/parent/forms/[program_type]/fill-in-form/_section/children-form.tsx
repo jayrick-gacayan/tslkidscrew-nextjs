@@ -53,6 +53,7 @@ export default function ChildrenForm({
                     <div className='flex items-center gap-4'>
                       <InputCustom id={`children-firstname-${idx}`}
                         name={`children[][first_name]`}
+                        labelText='First Name'
                         type='text'
                         className='bg-secondary p-4 border-transparent'
                         placeholder=''
@@ -62,6 +63,7 @@ export default function ChildrenForm({
                         validationStatus={value.first_name.validationStatus} />
                       <InputCustom name='children[][last_name]'
                         type='text'
+                        labelText='Last Name'
                         className='bg-secondary p-4 border-transparent'
                         placeholder=''
                         value={value.last_name.value}
@@ -88,6 +90,7 @@ export default function ChildrenForm({
                     <InputCustom labelText='School Attending'
                       id={`children-school-attending-${idx}`}
                       name='children[][school_attending]'
+
                       type='text'
                       className='bg-secondary p-4 border-transparent'
                       placeholder=''
