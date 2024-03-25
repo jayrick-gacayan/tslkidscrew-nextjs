@@ -7,13 +7,17 @@ import { usePathname } from 'next/navigation';
 import { Fragment, useCallback, useMemo } from "react";
 
 export default function ParentBreadcrumbs() {
-  const pathname = usePathname();
+  const pathname: string = usePathname();
 
-  let pathSegments = useMemo(() => {
+  let pathSegments: string[] = useMemo(() => {
     return pathname.substring(1, pathname.length).split('/');
-  }, [pathname])
+  }, [pathname]);
 
-  const cbArrBreadCrumbs = useCallback(() => {
+  const cbArrBreadCrumbs: () => {
+    altText: string;
+    text: string;
+    href: string;
+  }[] = useCallback(() => {
     let arraybc = [
       {
         altText: 'dashboard',
@@ -36,23 +40,23 @@ export default function ParentBreadcrumbs() {
           altText: pathSegments[2],
           href: `/parent/forms/${pathSegments[2]}`,
           text: textProgramType
-        })
+        });
       }
       else if (pathSegments.length === 4) {
         arraybc.push({
           altText: pathSegments[2],
           href: `/parent/forms/${pathSegments[2]}`,
           text: textProgramType
-        })
+        });
 
         arraybc.push({
           altText: pathSegments[3],
           href: `/parent/forms/${pathSegments[2]}/${pathSegments[3]}`,
           text: capitalCase(pathSegments[3])
-        })
+        });
       }
-
     }
+
     return arraybc;
   }, [pathSegments, pathname]);
 
@@ -62,24 +66,26 @@ export default function ParentBreadcrumbs() {
     (
       <div className="flex flex-wrap items-center gap-2 pt-12">
         {
-          cbArrBreadCrumbs().map((value: any, index: number) => {
-            return (
-              <Fragment key={`parent-breadcrumbs-${value.text}-${index}`}>
-                <Link href={value.href}
-                  className={`cursor-pointer block hover:underline 
+          cbArrBreadCrumbs().map(
+            (value: any, index: number) => {
+              return (
+                <Fragment key={`parent-breadcrumbs-${value.text}-${index}`}>
+                  <Link href={value.href}
+                    className={`cursor-pointer block hover:underline 
                 ${value.altText === cbArrBreadCrumbs()[cbArrBreadCrumbs().length - 1].altText ? 'text-primary' : ''}`}>
-                  {value.text}
-                </Link>
-                {
-                  index < cbArrBreadCrumbs().length - 1 &&
-                  (
-                    <Fa6SolidChevronRight className='block' />
-                  )
-                }
-              </Fragment>
-            )
-          })
+                    {value.text}
+                  </Link>
+                  {
+                    index < cbArrBreadCrumbs().length - 1 &&
+                    (
+                      <Fa6SolidChevronRight className='block' />
+                    )
+                  }
+                </Fragment>
+              );
+            }
+          )
         }
       </div>
-    )
+    );
 }

@@ -1,27 +1,27 @@
-import { Fa6SolidChevronDown } from "@/app/_components/svg/fa6-solid-chevron-down"
-import { PARENT_SETTINGS } from "@/types/constants/parent-settings"
-import { Menu, Transition } from "@headlessui/react"
-import Link from "next/link"
-import { Fragment } from "react"
+import { Fa6SolidChevronDown } from '@/app/_components/svg/fa6-solid-chevron-down'
+import { PARENT_SETTINGS } from '@/types/constants/parent-settings'
+import { Menu, Transition } from '@headlessui/react'
+import Link from 'next/link'
+import { Fragment } from 'react'
 
 export default function SettingsMenu({ pathname }: { pathname: string }) {
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <Menu as='div' className='relative'>
-        {({ open, close }) => {
+        {({ open }) => {
           return (
             <>
-              <Menu.Button as="div"
-                className="flex items-center gap-2 w-full cursor-pointer text-white  hover:text-primary-light/70">
+              <Menu.Button as='div'
+                className='flex items-center gap-2 w-full cursor-pointer text-white  hover:text-primary-light/70'>
                 <div>Settings</div>
                 <Fa6SolidChevronDown className={`transition-all duration-200 ${open ? '-rotate-90' : 'rotate-0'}`} />
               </Menu.Button>
-              <Transition enter="transition duration-100 ease-out"
-                enterFrom="transform scale-95 opacity-0"
-                enterTo="transform scale-100 opacity-100"
-                leave="transition duration-75 ease-out"
-                leaveFrom="transform scale-100 opacity-100"
-                leaveTo="transform scale-95 opacity-0">
+              <Transition enter='transition duration-100 ease-out'
+                enterFrom='transform scale-95 opacity-0'
+                enterTo='transform scale-100 opacity-100'
+                leave='transition duration-75 ease-out'
+                leaveFrom='transform scale-100 opacity-100'
+                leaveTo='transform scale-95 opacity-0'>
                 <div className='text-black overflow-hidden border focus:border-tertiary absolute top-[115%] right-0 z-[100] bg-white drop-shadow-lg rounded w-56'>
                   {
                     PARENT_SETTINGS.map((value: any) => {
@@ -33,7 +33,7 @@ export default function SettingsMenu({ pathname }: { pathname: string }) {
                                 <div className='relative'>
                                   <Link href={`/parent/${value.altText}`}
                                     className={`p-3 block w-full hover:bg-primary hover:text-white ${pathname.includes(value.altText) ? 'bg-primary text-white' : ''}`}
-                                    onClick={() => { close() }}>
+                                    onClick={close}>
                                     {value.name}
                                   </Link>
                                 </div>

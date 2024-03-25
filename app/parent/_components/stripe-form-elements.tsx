@@ -1,5 +1,4 @@
 import Fa6SolidCreditCard from '@/app/_components/svg/fa6-solid-credit-card';
-import { reduxStore } from '@/react-redux/redux-store';
 import {
   useStripe,
   useElements,
@@ -7,14 +6,26 @@ import {
   CardExpiryElement,
   CardCvcElement
 } from '@stripe/react-stripe-js';
-import { StripeError } from '@stripe/stripe-js';
+import {
+  Stripe,
+  StripeCardNumberElement,
+  StripeElements,
+  StripeError
+} from '@stripe/stripe-js';
 import { useState, FormEvent } from 'react';
-import { modalStripeToggled } from '../forms/[program_type]/fill-in-form/_redux/fill-in-form-slice';
 
-export default function StripeFormElements({ onSuccessStripe }: { onSuccessStripe: (token: string) => Promise<void>; }) {
+export default function StripeFormElements({
+  buttonText,
+  onSuccessStripe,
+  onCancel,
+}: {
+  buttonText: string;
+  onSuccessStripe: (token: string) => Promise<void>;
+  onCancel?: () => void;
+}) {
   const [error, setError] = useState<StripeError | undefined>(undefined);
-  const stripe = useStripe();
-  const elements = useElements();
+  const stripe: Stripe | null = useStripe();
+  const elements: StripeElements | null = useElements();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +33,7 @@ export default function StripeFormElements({ onSuccessStripe }: { onSuccessStrip
     if (!stripe || !elements) { return; }
 
     // Use elements.getElement to get references to the CardNumber
-    const cardNumberElement = elements.getElement(CardNumberElement);
+    const cardNumberElement: StripeCardNumberElement | null = elements.getElement(CardNumberElement);
 
     // Use the createPaymentMethod method to create a payment method from the card elements.
     const { token, error } = await stripe.createToken(cardNumberElement!);
@@ -44,10 +55,6 @@ export default function StripeFormElements({ onSuccessStripe }: { onSuccessStrip
               <CardNumberElement className='py-3' options={{ showIcon: true, }} />
             </div>
           </div>
-          {
-            (error && (error?.code === 'incomplete_number' || error?.code === 'invalid_number')) &&
-            <div className='text-danger'>{error.message}</div>
-          }
         </label>
         <div className='flex items-center gap-4'>
           <label className='w-full space-y-1'>
@@ -73,15 +80,21 @@ export default function StripeFormElements({ onSuccessStripe }: { onSuccessStrip
             </div>
           </label>
         </div>
-        {(error && error?.code === 'incomplete_expiry') && (<div className='text-danger'>{error.message}</div>)}
-        {(error && error?.code === 'incomplete_cvc') && (<div className='text-danger'>{error.message}</div>)}
+        {error && (<div className='text-danger'>{error.message}</div>)}
       </div>
       <div className='flex items-center justify-end gap-4'>
-        <button type='button'
-          className='bg-white text-primary p-2'
-          onClick={() => { reduxStore.dispatch(modalStripeToggled(false)); }}>Cancel</button>
+        {
+          onCancel &&
+          (
+            <button type='button'
+              className='bg-white text-primary p-2'
+              onClick={onCancel}>
+              Cancel
+            </button>
+          )
+        }
         <button className='disabled:cursor-not-allowed bg-primary text-white rounded p-2'>
-          Submit And Pay
+          {buttonText}
         </button>
       </div>
     </form>

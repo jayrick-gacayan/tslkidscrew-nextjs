@@ -15,7 +15,6 @@ export async function confirmSwalInfo(text: string, data: any | ReactNode) {
     },
     showCancelButton: true,
     buttonsStyling: false,
-
   });
 }
 

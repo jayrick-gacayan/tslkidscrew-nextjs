@@ -1,4 +1,4 @@
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
 import { addOrUpdateBankDetailsAction } from '@/actions/plaid-actions';
 import { Products } from 'plaid';
 import { useState, useEffect } from 'react';
@@ -49,7 +49,7 @@ export default function AddBankDetailsUsingPlaid() {
         });
 
         if (success) {
-          await pathRevalidate('/parent/billing-info-settings');
+          await tagRevalidate('customer-info');
         }
       }
 

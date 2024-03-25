@@ -4,27 +4,54 @@ import { Parent } from '@/models/parent'
 import ParentInfoData from '../../_components/parent-info-data'
 import { unlinkStripeCardAction } from '@/actions/stripe-actions';
 import { ToastContentProps, toast } from 'react-toastify';
-import { pathRevalidate } from '@/actions/common-actions';
+import { tagRevalidate } from '@/actions/common-actions';
+import { confirmSwalInfo } from '@/types/helpers/sweet-alert-helpers';
 
 export default function CardDetailsInfo({ cardDetails }: { cardDetails: Pick<Parent, 'card_last_four' | 'card_brand'> }) {
+
   async function unlinkStripeCard() {
 
-    let result = await unlinkStripeCardAction();
-
-    let { message, success } = result;
-
-    toast((props: ToastContentProps<unknown>) => {
-      return (
-        <div className="text-black">{message}</div>
+    let swalResult = await confirmSwalInfo(
+      'Are you sure you want to unlink card',
+      (
+        <div className='block space-y-2'>
+          <ParentInfoData labelText='Card Number'
+            data={
+              <span className='tracking-wider'>
+                {Array.from({ length: 12 }).map((_val, idx) => {
+                  return (
+                    <span key={`asterisk-billing-info-${idx}`} className='align-middle text-[20px]'>
+                      &#42;
+                    </span>
+                  )
+                })}
+                <span>{cardDetails.card_last_four}</span>
+              </span>
+            } />
+          <ParentInfoData labelText='Card Type'
+            data={
+              cardDetails?.card_brand === 'Visa' ?
+                (<Fa6BrandVisa className='align-middle inline-block text-primary text-[32px]' />) :
+                cardDetails.card_brand
+            } />
+        </div>
       )
-    }, {
-      toastId: `unlink-bank-details-${Date.now()}`,
-      type: success ? 'success' : 'error',
-      hideProgressBar: true,
-    });
-    console.log("I am here", success)
-    if (success) {
-      await pathRevalidate('/parent/billing-info-settings');
+    );
+
+    if (swalResult.isConfirmed) {
+      let result = await unlinkStripeCardAction();
+
+      let { message, success } = result;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (<div className="text-black">{message}</div>);
+      }, {
+        toastId: `unlink-bank-details-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+
+      if (success) { await tagRevalidate('customer-info'); }
     }
   }
 
@@ -61,5 +88,5 @@ export default function CardDetailsInfo({ cardDetails }: { cardDetails: Pick<Par
         </div>
       </div>
     </div>
-  )
+  );
 }
