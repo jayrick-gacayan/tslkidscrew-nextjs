@@ -55,7 +55,7 @@ export default function ChildrenForm({
                         name={`children[][first_name]`}
                         type='text'
                         className='bg-secondary p-4 border-transparent'
-                        placeholder='First Name:'
+                        placeholder=''
                         value={value.first_name.value}
                         onChange={handleInputChanged(idx, 'first_name')}
                         errorText={value.first_name.errorText}
@@ -63,7 +63,7 @@ export default function ChildrenForm({
                       <InputCustom name='children[][last_name]'
                         type='text'
                         className='bg-secondary p-4 border-transparent'
-                        placeholder='Last Name:'
+                        placeholder=''
                         value={value.last_name.value}
                         onChange={handleInputChanged(idx, 'last_name')}
                         errorText={value.last_name.errorText}
@@ -90,7 +90,7 @@ export default function ChildrenForm({
                       name='children[][school_attending]'
                       type='text'
                       className='bg-secondary p-4 border-transparent'
-                      placeholder='School Attending:'
+                      placeholder=''
                       value={value.school_attending.value}
                       onChange={handleInputChanged(idx, 'school_attending')}
                       errorText={value.school_attending.errorText}

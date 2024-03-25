@@ -19,7 +19,7 @@ export default function LocationForm({
       <div className='w-full relative'>
         <CustomListbox value={locationValue.value ?? ''}
           name='location-place'
-          placeholder='Location'
+          placeholder=''
           onChange={onChange}
           items={locations}
           labelText='Location'
