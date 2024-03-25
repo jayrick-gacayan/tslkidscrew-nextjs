@@ -16,6 +16,7 @@ import {
   beforeOrAfterWeekDaysSet,
   beforeOrAfterWeekDaysSetError,
   childrenAdded,
+  childrenFieldBirthdateUpdated,
   childrenFieldUpdated,
   childrenRemoved,
   fillInFormReset,
@@ -34,7 +35,6 @@ import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
 import AttendanceScheduleVacationCamp from './attendance-schedule-vacation-camp';
 import RegistrationTypeSummerCamp from './registration-type-summer-camp';
 import ScheduleSelectionBeforeAndAfterSchool from './schedule-selection-before-and-after-school';
-import { ChildInfoType } from '@/types/input-types/child-info-type';
 import { format } from 'date-fns';
 import { WEEK_DAYS } from '@/types/constants/week-days';
 import { ValidationType } from '@/types/enums/validation-type';
@@ -48,6 +48,7 @@ import { fieldInputValue } from '@/types/helpers/field-input-value';
 import { useRouter } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { InputProps } from '@/types/props/input-props';
+import { ChildInputTypes } from '@/types/input-types/child-input-types';
 
 export default function FormActionContainer({
   program_type,
@@ -84,9 +85,9 @@ export default function FormActionContainer({
     return fillInFormState.fillInForm.location
   }, [fillInFormState.fillInForm.location]);
 
-  const arrChildren: ChildInfoType[] = useMemo(() => {
-    return fillInFormState.fillInForm.childrenArr
-  }, [fillInFormState.fillInForm.childrenArr]);
+  const arrChildren: ChildInputTypes[] = useMemo(() => {
+    return fillInFormState.fillInForm.arrChildren;
+  }, [fillInFormState.fillInForm.arrChildren]);
 
   const tosCondition: InputProps<any[]> = useMemo(() => {
     return fillInFormState.fillInForm.TOSCondition;
@@ -169,6 +170,23 @@ export default function FormActionContainer({
       if (formState?.['location-place[id]']) {
         let { errorText, validationStatus } = formState?.['location-place[id]']
         reduxStore.dispatch(locationChanged({ value: undefined, errorText, validationStatus }));
+      }
+    }
+  }, [formState, stepInNumber]);
+
+  useEffect(() => {
+    if (stepInNumber === 2) {
+      if (formState?.['childrenErrors']) {
+        formState?.['childrenErrors'].forEach((child: { [key: string]: any }, index: number) => {
+          Object.keys(child).forEach((key) => {
+            reduxStore.dispatch(
+              childrenFieldUpdated({
+                index,
+                key: key as 'first_name' | 'last_name' | 'school_attending',
+                value: child[key],
+              }))
+          })
+        });
       }
     }
   }, [formState, stepInNumber]);
@@ -323,10 +341,10 @@ export default function FormActionContainer({
                 program_type === 'summer-camp' ? 'groupon_summer_camp' : 'vacation_camp')
           );
 
-          arrChildren.forEach((val: ChildInfoType) => {
-            formData.append('child-info[][first_name]', encodeURIComponent(val.first_name));
-            formData.append('child-info[][last_name]', encodeURIComponent(val.last_name));
-            formData.append('child-info[][school_attending]', encodeURIComponent(val.school_attending));
+          arrChildren.forEach((val: ChildInputTypes) => {
+            formData.append('child-info[][first_name]', encodeURIComponent(val.first_name.value));
+            formData.append('child-info[][last_name]', encodeURIComponent(val.last_name.value));
+            formData.append('child-info[][school_attending]', encodeURIComponent(val.school_attending.value));
             formData.append('child-info[][child_classification]', encodeURIComponent('pre-schooler'));
             formData.append('child-info[][dob]', encodeURIComponent(format(new Date(val.birthdate!), 'yyyy-M-d')));
           });
@@ -381,9 +399,20 @@ export default function FormActionContainer({
         (
           <ChildrenForm arrChildren={arrChildren}
             minimum_age={locationValue?.value?.minimum_age ?? 1}
-            onChildrenUpdated={(idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending', value: string) => {
-              reduxStore.dispatch(childrenFieldUpdated({ index: idx, key, value }));
-            }}
+            onChildrenUpdated={
+              (
+                idx: number,
+                key: 'first_name' | 'last_name' | 'school_attending',
+                value: InputProps<string>
+              ) => {
+                reduxStore.dispatch(childrenFieldUpdated({ index: idx, key, value }));
+              }
+            }
+            onChildrenBirthdateUpdated={
+              (idx: number, value: string) => {
+                reduxStore.dispatch(childrenFieldBirthdateUpdated({ idx, value }));
+              }
+            }
             onChildrenRemoved={(idx: number) => { reduxStore.dispatch(childrenRemoved(idx)) }}
             onChildrenAdded={() => { reduxStore.dispatch(childrenAdded()) }} />
         )// children form
@@ -430,7 +459,7 @@ export default function FormActionContainer({
         stepInNumber === highestStep &&
         (
           <PaymentFormContainer program_type={program_type}
-            childrenArr={arrChildren}
+            arrChildren={arrChildren}
             tosCondition={tosCondition}
             vacationCamps={campsVacation}
             onCheckboxChange={(value) => {

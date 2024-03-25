@@ -1,16 +1,16 @@
-import { LocationPlace } from "@/models/location-place";
-import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
-import { VacationCampSetting } from "@/models/vacation-camp-setting";
-import { ChildInfoType } from "@/types/input-types/child-info-type";
-import { InputProps } from "@/types/props/input-props";
+import { LocationPlace } from '@/models/location-place';
+import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
+import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
+import { VacationCampSetting } from '@/models/vacation-camp-setting';
+import { ChildInputTypes } from '@/types/input-types/child-input-types';
+import { InputProps } from '@/types/props/input-props';
 
 export interface FillInFormState {
   stripeModalOpen: boolean;
   fillInForm: {
     location: InputProps<Partial<LocationPlace> | undefined>;
     defDateForChildForm: string | undefined;
-    childrenArr: ChildInfoType[];
+    arrChildren: ChildInputTypes[];
 
     //for program type before-or-after-school
     yearCycle: InputProps<string>;

@@ -1,7 +1,9 @@
 import InputCustom from '@/app/_components/input-custom';
 import { ChangeEvent } from 'react';
 import PopoverReactDayPicker from '@/app/_components/react-day-picker/popover-day-picker';
-import { ChildInfoType } from '@/types/input-types/child-info-type';
+import { ChildInputTypes } from '@/types/input-types/child-input-types';
+import { InputProps } from '@/types/props/input-props';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
 
 export default function ChildrenForm({
   minimum_age,
@@ -9,17 +11,19 @@ export default function ChildrenForm({
   onChildrenRemoved,
   onChildrenAdded,
   onChildrenUpdated,
+  onChildrenBirthdateUpdated,
 }: {
   minimum_age: number;
-  arrChildren: ChildInfoType[];
+  arrChildren: ChildInputTypes[];
   onChildrenRemoved: (idx: number) => void;
   onChildrenAdded: () => void;
-  onChildrenUpdated: (idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending', value: string) => void;
+  onChildrenBirthdateUpdated: (idx: number, value: string) => void;
+  onChildrenUpdated: (idx: number, key: 'first_name' | 'last_name' | 'school_attending', value: InputProps<string>) => void;
 }) {
 
-  function handleInputChanged(idx: number, key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending') {
+  function handleInputChanged(idx: number, key: 'first_name' | 'last_name' | 'school_attending') {
     return function (e: ChangeEvent<HTMLInputElement>) {
-      onChildrenUpdated(idx, key, e.target.value);
+      onChildrenUpdated(idx, key, fieldInputValue(e.target.value));
     }
   }
 
@@ -31,7 +35,7 @@ export default function ChildrenForm({
       </div>
       <div className='w-full h-auto space-y-10'>
         {
-          arrChildren.map((value: ChildInfoType, idx: number) => {
+          arrChildren.map((value: ChildInputTypes, idx: number) => {
             return (
               <div key={`children_form_${idx}`}
                 className='space-y-6 w-full h-auto'>
@@ -48,18 +52,22 @@ export default function ChildrenForm({
                   <div className='space-y-4'>
                     <div className='flex items-center gap-4'>
                       <InputCustom id={`children-firstname-${idx}`}
-                        name={`children[][firstname]`}
+                        name={`children[][first_name]`}
                         type='text'
                         className='bg-secondary p-4 border-transparent'
                         placeholder='First Name:'
-                        value={value.first_name}
-                        onChange={handleInputChanged(idx, 'first_name')} />
-                      <InputCustom name='children[][lastname]'
+                        value={value.first_name.value}
+                        onChange={handleInputChanged(idx, 'first_name')}
+                        errorText={value.first_name.errorText}
+                        validationStatus={value.first_name.validationStatus} />
+                      <InputCustom name='children[][last_name]'
                         type='text'
                         className='bg-secondary p-4 border-transparent'
                         placeholder='Last Name:'
-                        value={value.last_name}
-                        onChange={handleInputChanged(idx, 'last_name')} />
+                        value={value.last_name.value}
+                        onChange={handleInputChanged(idx, 'last_name')}
+                        errorText={value.last_name.errorText}
+                        validationStatus={value.last_name.validationStatus} />
                     </div>
                     <div className='relative w-full'>
                       <div className='relative space-y-1'>
@@ -71,7 +79,7 @@ export default function ChildrenForm({
                             options={{
                               mode: 'single',
                               selected: value.birthdate ? new Date(value.birthdate) : undefined,
-                              onSelect: (value: any) => { onChildrenUpdated(idx, 'birthdate', value.toISOString()); },
+                              onSelect: (value: any) => { onChildrenBirthdateUpdated(idx, value.toISOString()); },
                               today: value.birthdate ? new Date(value.birthdate) : undefined,
                             }} />
                         </div>
@@ -79,12 +87,14 @@ export default function ChildrenForm({
                     </div>
                     <InputCustom labelText='School Attending'
                       id={`children-school-attending-${idx}`}
-                      name='children[][school-attending]'
+                      name='children[][school_attending]'
                       type='text'
                       className='bg-secondary p-4 border-transparent'
                       placeholder='School Attending:'
-                      value={value.school_attending}
-                      onChange={handleInputChanged(idx, 'school_attending')} />
+                      value={value.school_attending.value}
+                      onChange={handleInputChanged(idx, 'school_attending')}
+                      errorText={value.school_attending.errorText}
+                      validationStatus={value.school_attending.validationStatus} />
                   </div>
                 </div>
                 {

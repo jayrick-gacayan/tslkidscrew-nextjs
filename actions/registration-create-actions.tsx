@@ -88,7 +88,7 @@ export async function fillInFormAction(
     for (const pair of formData.entries()) {
       const [key, value] = pair;
       if (key.includes('children')) {
-        if (key.includes('firstname')) {
+        if (key.includes('first_name')) {
           if (Object.keys(curChild).length !== 0) {
             childrenArray.push(curChild);
             curChild = {};
@@ -100,6 +100,61 @@ export async function fillInFormAction(
 
     // Push the last object to the array
     if (Object.keys(curChild).length !== 0) { childrenArray.push(curChild); }
+
+    let childInfoSchema = Joi.object({
+      first_name: Joi.string()
+        .required()
+        .messages({
+          'any.required': 'Firstname is required.',
+          'string.empty': 'Firstname is required.',
+        }),
+      last_name: Joi.string()
+        .required()
+        .messages({
+          'any.required': 'Lastname is required.',
+          'string.empty': 'Lastname is required',
+        }),
+      school_attending: Joi.string()
+        .required()
+        .messages({
+          'any.required': 'School Attending is required.',
+          'string.empty': 'School Attending is required.',
+        }),
+    });
+
+    let childrenErrors: any[] = [];
+
+    if (childrenArray.length > 0) {
+
+      childrenArray.forEach((child: { [key: string]: any }) => {
+        let validate = childInfoSchema.validate({
+          first_name: child['first_name'],
+          last_name: child['last_name'],
+          school_attending: child['school_attending']
+        }, {
+          abortEarly: false,
+        });
+
+        if (validate?.error) {
+          childrenErrors.push(validate.error.details.reduce((prev, curr, index) => {
+            return Object.assign({
+              [curr.context?.key ?? '']: {
+                value: curr.context?.value,
+                errorText: curr.message,
+                validationStatus: ValidationType.ERROR,
+              }
+            }, prev)
+          }, {}));
+        }
+      });
+    }
+
+    if (childrenErrors.length > 0) {
+      return {
+        ...objectStep,
+        'childrenErrors': childrenErrors,
+      }
+    }
 
     return { ...objectStep, stepTwo: true, };
   } else if (step === 3) {
@@ -237,7 +292,6 @@ export async function fillInFormAction(
     let stepKey = programType === 'before-or-after-school' ? 'stepFour' : 'stepThree';
 
     if (!!formData.get('back-button')) { return { ...objectStep, [stepKey]: false }; }
-
 
     let getAllCheckboxes: string[] = formData.getAll(`${programType}-tos[]`) as string[];
 

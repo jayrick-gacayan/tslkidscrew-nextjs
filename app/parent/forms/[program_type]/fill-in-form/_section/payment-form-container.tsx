@@ -2,7 +2,6 @@ import StripeFormContainer from './credit-card-info-container';
 import { PhShoppingCartBold } from '@/app/_components/svg/ph-shopping-cart-bold';
 import { ChangeEvent, useCallback } from 'react';
 import ModalCardInfoForStripe from './modal-card-info-for-stripe';
-import { ChildInfoType } from '@/types/input-types/child-info-type';
 import { BEFORE_OR_AFTER_SCHOOL_TOS } from '@/types/constants/before-or-after-school-tos';
 import { SUMMER_CAMP_SCHOOL_TOS } from '@/types/constants/summer-camp-tos';
 import { VACATION_CAMP_TOS } from '@/types/constants/vacation-camp-tos';
@@ -11,6 +10,7 @@ import InputCheckboxCustom from '@/app/_components/input-checkbox-custom';
 import { currencyFormat } from '@/types/helpers/currency-format';
 import { InputProps } from '@/types/props/input-props';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
+import { ChildInputTypes } from '@/types/input-types/child-input-types';
 
 function vacationCampPrice(numOfVacCamps: number, numOfChildren: number) {
   switch (numOfChildren) {
@@ -40,13 +40,13 @@ function vacationCampPrice(numOfVacCamps: number, numOfChildren: number) {
 
 export default function PaymentFormContainer({
   program_type,
-  childrenArr,
+  arrChildren,
   tosCondition,
   vacationCamps,
   onCheckboxChange,
 }: {
   program_type: string;
-  childrenArr: ChildInfoType[];
+  arrChildren: ChildInputTypes[];
   tosCondition: InputProps<any[]>;
   vacationCamps: Pick<VacationCampSetting, 'id' | 'name' | 'month' | 'year'>[];
   onCheckboxChange: (value: string) => void;
@@ -66,13 +66,13 @@ export default function PaymentFormContainer({
       case 'before-or-after-school': return 25;
       case 'summer-camp': return 200 + 25;
       case 'vacation-camp':
-        return vacationCampPrice(vacationCamps.length, childrenArr.length) + 25;
+        return vacationCampPrice(vacationCamps.length, arrChildren.length) + 25;
       default: return 0;
     }
   }, [
     program_type,
     vacationCamps,
-    childrenArr
+    arrChildren
   ]);
 
   return (
@@ -92,7 +92,7 @@ export default function PaymentFormContainer({
                     { style: 'currency', currency: 'USD' },
                     program_type === 'summer-camp' ? 200 :
                       program_type === 'before-or-after-school' ? 0 :
-                        vacationCampPrice(vacationCamps.length, childrenArr.length)
+                        vacationCampPrice(vacationCamps.length, arrChildren.length)
                   )
                 }</div>
               </div>

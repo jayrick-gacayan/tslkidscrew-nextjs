@@ -1,22 +1,22 @@
-import { LocationPlace } from "@/models/location-place";
-import { fieldInputValue } from "@/types/helpers/field-input-value";
-import { FillInFormState } from "./fill-in-form-state";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { ChildInfoType } from "@/types/input-types/child-info-type";
-import { initChild } from "../_helpers/init-child";
-import { InputProps } from "@/types/props/input-props";
-import { ValidationType } from "@/types/enums/validation-type";
-import { SummerCampWeekSetting } from "@/models/summer-camp-week-setting";
-import { SummerCampPromoSetting } from "@/models/summer-camp-promo-setting";
-import { VacationCampSetting } from "@/models/vacation-camp-setting";
+import { LocationPlace } from '@/models/location-place';
+import { fieldInputValue } from '@/types/helpers/field-input-value';
+import { FillInFormState } from './fill-in-form-state';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { childInit } from '../_helpers/init-child';
+import { InputProps } from '@/types/props/input-props';
+import { ValidationType } from '@/types/enums/validation-type';
+import { SummerCampWeekSetting } from '@/models/summer-camp-week-setting';
+import { SummerCampPromoSetting } from '@/models/summer-camp-promo-setting';
+import { VacationCampSetting } from '@/models/vacation-camp-setting';
+import { ChildInputTypes } from '@/types/input-types/child-input-types';
 
 const initialState: FillInFormState = {
   stripeModalOpen: false,
   fillInForm: {
     location: fieldInputValue<Partial<LocationPlace> | undefined>(undefined),
-    childrenArr: [initChild],
     defDateForChildForm: undefined,
     TOSCondition: fieldInputValue<any[]>([]),
+    arrChildren: [childInit],
 
     //for program type before-or-after-school
     yearCycle: fieldInputValue<string>(''),
@@ -55,7 +55,7 @@ const fillInFormSlice = createSlice({
     childrenAdded: (state: FillInFormState) => {
       return {
         ...state,
-        fillInForm: { ...state.fillInForm, childrenArr: [...state.fillInForm.childrenArr, initChild] }
+        fillInForm: { ...state.fillInForm, arrChildren: [...state.fillInForm.arrChildren, childInit] }
       }
     },
     childrenRemoved: (state: FillInFormState, action: PayloadAction<number>) => {
@@ -63,18 +63,31 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          childrenArr: state.fillInForm.childrenArr.filter((val: ChildInfoType, idx: number) => {
+          arrChildren: state.fillInForm.arrChildren.filter((val: ChildInputTypes, idx: number) => {
             return idx !== action.payload
           })
         }
       }
     },
+    childrenFieldBirthdateUpdated: (state: FillInFormState, action: PayloadAction<{ idx: number; value: string; }>) => {
+      let { idx, value } = action.payload;
+
+      return {
+        ...state,
+        fillInForm: {
+          ...state.fillInForm,
+          arrChildren: state.fillInForm.arrChildren.map((val: ChildInputTypes, index: number) => {
+            return idx === index ? { ...val, birthdate: value } : val;
+          })
+        }
+      };
+    },
     childrenFieldUpdated: (
       state: FillInFormState,
       action: PayloadAction<{
         index: number;
-        value: string;
-        key: 'first_name' | 'last_name' | 'birthdate' | 'school_attending';
+        value: InputProps<string>;
+        key: 'first_name' | 'last_name' | 'school_attending';
       }>
     ) => {
       let { index, key, value } = action.payload;
@@ -83,7 +96,7 @@ const fillInFormSlice = createSlice({
         ...state,
         fillInForm: {
           ...state.fillInForm,
-          childrenArr: state.fillInForm.childrenArr.map((val: ChildInfoType, idx: number) => {
+          arrChildren: state.fillInForm.arrChildren.map((val: ChildInputTypes, idx: number) => {
             return idx === index ? { ...val, [key]: value } : val
           })
         }
@@ -206,6 +219,7 @@ export const {
   childrenAdded,
   childrenFieldUpdated,
   childrenRemoved,
+  childrenFieldBirthdateUpdated,
   locationChanged,
   modalStripeToggled,
   fillInFormReset,
