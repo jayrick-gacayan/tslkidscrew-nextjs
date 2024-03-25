@@ -6,7 +6,6 @@ import {
   addAdminUser,
   adminUser,
   adminUsers,
-  changeAdminUserActiveStatus,
   updateAdminUser
 } from '@/services/admin-services';
 import { AdminUserFormStateProps } from '@/types/props/admin-user-form-state-props';
@@ -14,7 +13,7 @@ import { Session, User } from 'next-auth';
 import * as Joi from 'joi';
 import { ValidationType } from '@/types/enums/validation-type';
 import { ResultStatus } from '@/types/enums/result-status';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { SearchParamsProps } from '@/types/props/search-params-props';
 import { Result } from '@/models/result';
 import { Admin } from '@/models/admin';
@@ -115,11 +114,17 @@ export async function updateAdminUserAction(
   };
 }
 
-export async function changeAdminUserActiveStatusAction(id: number) {
+export async function changeAdminUserActiveStatusAction(changeAdmin: Admin) {
   let admin: Session | null = await auth();
 
-  let result = await changeAdminUserActiveStatus(id, admin?.user?.accessToken!);
-  revalidatePath('/admin/admin-users');
+  let result = await updateAdminUser({
+    email: changeAdmin.email ?? '',
+    name: changeAdmin.name ?? '',
+    isSuperAdmin: changeAdmin.is_super_admin ?? false,
+    isActive: !changeAdmin.active ?? false
+  }, admin?.user.accessToken!);
+
+  revalidateTag('admin-users');
 }
 
 const adminUserSchema = Joi.object({

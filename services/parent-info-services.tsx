@@ -94,9 +94,7 @@ export async function forgotPassword(email: string) {
     {
       method: 'POST',
       body: JSON.stringify({
-        customer_user: {
-          email
-        }
+        customer_user: { email }
       }),
       headers: { 'Content-Type': 'application/json' }
     }
@@ -104,6 +102,8 @@ export async function forgotPassword(email: string) {
 
   try {
     let response = await result.json();
+
+    console.log('response', response)
 
     return new Result<any>({
       response: response,

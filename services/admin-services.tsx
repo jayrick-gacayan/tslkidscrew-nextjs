@@ -124,6 +124,7 @@ export async function updateAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
+  console.log('result', isActive)
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {
@@ -158,25 +159,6 @@ export async function updateAdminUser(
       error: result.statusText
     })
   }
-}
-
-export async function changeAdminUserActiveStatus(id: number, token: string) {
-  let result = await fetch(
-    process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/${id}`,
-    {
-      method: 'DELETE',
-      ...authHeaders(token!)
-    }
-  );
-
-  let response = await result.json();
-
-  return new Result<Admin>({
-    ...response,
-    data: response.data ?? undefined,
-    statusCode: result.status,
-    response: response
-  })
 }
 
 export async function activeAdminUsers(token?: string | null) {

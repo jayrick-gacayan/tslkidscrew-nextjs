@@ -19,25 +19,25 @@ import {
 import PopoverChangeActiveStatus from '../_components/popper-change-active-status';
 
 export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
-  const [dataAdmins, setDataAdmins] = useState(admins);
-  const [adminId, setAdminId] = useState<any>(undefined);
+  const [dataAdmins, setDataAdmins] = useState<Admin[]>(admins);
+  const [tempAdmin, setTempAdmin] = useState<Admin | undefined>(undefined);
   const [toastStatus, setToastStatus] = useState('none');
 
   useEffect(() => {
     switch (toastStatus) {
       case 'closed':
-        if (adminId) {
+        if (tempAdmin !== undefined) {
           async function changeAdminActiveStatus() {
-            await changeAdminUserActiveStatusAction(adminId);
+            await changeAdminUserActiveStatusAction(tempAdmin!);
           }
           changeAdminActiveStatus();
-          setAdminId(undefined);
+          setTempAdmin(undefined);
         }
 
         setToastStatus('none');
         break;
     }
-  }, [toastStatus, adminId]);
+  }, [toastStatus, tempAdmin]);
 
   useEffect(() => {
     setDataAdmins(admins);
@@ -55,7 +55,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
       setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
         return dataAdmin.id !== id ? dataAdmin : { ...admin, active: !active };
       }));
-      setAdminId(admin.id);
+      setTempAdmin(admin);
 
       toast((props: ToastContentProps<Admin>) => {
         return (
@@ -66,7 +66,7 @@ export default function AdminUsersTableClient({ admins }: { admins: Admin[] }) {
                 setDataAdmins(dataAdmins.map((dataAdmin: Admin) => {
                   return dataAdmin.id === id ? admin : dataAdmin
                 }));
-                setAdminId(undefined);
+                setTempAdmin(undefined);
                 props.closeToast();
               }}>
               Undo

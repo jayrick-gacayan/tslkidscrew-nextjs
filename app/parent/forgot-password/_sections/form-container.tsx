@@ -1,20 +1,41 @@
 'use client';
 
+import { forgotPasswordAction } from '@/actions/parent-info-actions';
 import InputCustom from '@/app/_components/input-custom';
 import PasswordIcon from '@/app/_components/password-icon';
 import { SearchParamsProps } from '@/types/props/search-params-props';
 import Link from 'next/link';
-import { ChangeEvent, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useFormState } from 'react-dom';
+import { ToastContentProps, toast } from 'react-toastify';
 
 export default function ForgotPasswordFormContainer({ searchParams }: { searchParams: SearchParamsProps }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formState, formAction] = useFormState(forgotPasswordAction, {} as any);
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
-  const formRef = useRef<HTMLFormElement>(null);
+
+
+  useEffect(() => {
+    if (formState?.message !== undefined && formState?.success !== undefined) {
+      let { message, success } = formState;
+
+      toast((props: ToastContentProps<unknown>) => {
+        return (<div className='text-black'>{message}</div>);
+      }, {
+        toastId: `forgot-password-${Date.now()}`,
+        type: success ? 'success' : 'error',
+        hideProgressBar: true,
+      });
+    }
+  }, [formState]);
+
+  console.log('state', formState)
 
   return (
-    <form ref={formRef} className='space-y-4'>
+    <form ref={formRef} action={formAction} className='space-y-4'>
       {
-        typeof searchParams.token === 'string' ?
+        typeof searchParams.reset_password_token === 'string' ?
           (
             <>
               <InputCustom labelText='Password'
@@ -33,13 +54,16 @@ export default function ForgotPasswordFormContainer({ searchParams }: { searchPa
                 className='bg-secondary border-transparent p-2 px-3 pr-10' />
             </>
           ) :
-          (<InputCustom labelText='Email'
-            id='forgot-password-email'
-            name='email'
-            type='text'
-            placeholder='Email Address:'
-            onChange={(event: ChangeEvent<HTMLInputElement>) => { }}
-            className='bg-secondary border-transparent p-2 px-3' />)
+          (
+            <InputCustom labelText='Email'
+              id='forgot-password-email'
+              name='email'
+              type='text'
+              placeholder='Email Address:'
+              className='bg-secondary border-transparent p-2 px-3'
+              errorText={formState?.email?.errorText}
+              validationStatus={formState?.email?.validationStatus} />
+          )
       }
 
       <button className='bg-primary p-2 rounded text-white w-auto m-auto block'>Submit</button>
