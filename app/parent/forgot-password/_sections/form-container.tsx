@@ -19,15 +19,17 @@ function ForgotPasswordSubmit() {
     </button>
   );
 }
+
 export default function ForgotPasswordFormContainer({ searchParams }: { searchParams: SearchParamsProps }) {
   const formRef = useRef<HTMLFormElement>(null);
   const token: string = useMemo(() => {
     let password_token = searchParams.reset_password_token;
+
     return typeof password_token === 'string' && password_token !== '' ? password_token : '';
   }, [searchParams]);
 
   const [formState, formAction] = useFormState(
-    token ? forgotPasswordTokenAction.bind(null, token) :
+    token !== '' ? forgotPasswordTokenAction.bind(null, token) :
       forgotPasswordEmailAction, {} as any);
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
