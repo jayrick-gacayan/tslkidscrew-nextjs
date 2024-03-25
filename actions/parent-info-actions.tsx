@@ -2,7 +2,6 @@
 
 import { auth, unstable_update } from '@/auth';
 import {
-  forgotPassword,
   getCustomerInfo,
   updateCustomerInfo
 } from '@/services/parent-info-services';
@@ -109,49 +108,4 @@ export async function currentParentAction() {
   }
 
   return undefined;
-}
-
-export async function forgotPasswordAction(prevState: any, formData: FormData) {
-  let email = formData.get('email') as string ?? '';
-
-  let emailSchema = Joi.object({
-    email: Joi.string()
-      .email()
-      .messages({
-        'string.empty': 'Email is required.',
-        'string.email': 'Email is in invalid format.',
-        'any.required': 'Email is required',
-      }),
-  });
-
-
-  let validate = emailSchema.validate({ email }, { abortEarly: false });
-
-  if (validate?.error) {
-    return validate.error?.details.reduce((prev, curr) => {
-      return Object.assign({
-        [curr.context?.key ?? '']: {
-          value: curr.context?.value,
-          errorText: curr.message,
-          validationStatus: ValidationType.ERROR,
-        }
-      }, prev)
-    }, {});
-  };
-
-  let result = await forgotPassword(email);
-
-  console.log('result', result);
-
-  if (result.resultStatus !== ResultStatus.SUCCESS) {
-    return {
-      message: result.message ?? 'Something went wrong. Please try again.',
-      success: false,
-    }
-  }
-
-  return {
-    message: 'Successfully sent email.' ?? result.message,
-    success: true,
-  }
 }

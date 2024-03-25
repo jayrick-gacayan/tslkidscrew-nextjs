@@ -5,7 +5,7 @@ import Fa6SolidLock from '@/app/_components/svg/fa6-solid-lock';
 import PasswordIcon from '@/app/_components/password-icon';
 import { useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
-import { changePasswordAction } from '@/actions/parent-password-actions';
+import { changePasswordAction } from '@/actions/parent-passwords-actions';
 import { ToastContentProps, toast } from 'react-toastify';
 import LoginDetailsButtonSubmit from './login-details-button-submit';
 
@@ -32,7 +32,6 @@ export default function LoginDetails({ email }: { email: string }) {
         formRef.current?.reset();
       }
     }
-
   }, [state])
 
   return (
@@ -42,15 +41,15 @@ export default function LoginDetails({ email }: { email: string }) {
         ref={formRef}
         className='space-y-8'>
         <div className='space-y-4'>
-          <InputCustom labelText='Email'
-            id='email-address'
-            name='email-address'
-            defaultValue={email}
-            className='bg-secondary p-2 pl-10 border-transparent'
-            placeholder='Email Address:'
-            type='text'
-            disabled={true}
-            prefixIcon={<PrefixEnvelopeIcon />} />
+          <div className='block space-y-[2px] w-full'>
+            <div className='font-medium'>Email Address</div>
+            <div className='relative w-full'>
+              <span className='w-full block bg-secondary p-2 px-10 rounded text-secondary-light cursor-not-allowed'>
+                {email}
+              </span>
+              <PrefixEnvelopeIcon />
+            </div>
+          </div>
           <InputCustom labelText='Password'
             id='password'
             name='password'
@@ -63,14 +62,14 @@ export default function LoginDetails({ email }: { email: string }) {
             validationStatus={state?.password?.validationStatus} />
           <InputCustom labelText='Confirm Password'
             id='password-confirmation'
-            name='password-confirmation'
+            name='password_confirmation'
             className='bg-secondary p-2 pl-10 border-transparent'
             placeholder='Confirm Password:'
             type={passwordConfirmationShow ? 'text' : 'password'}
             suffixIcon={<PasswordIcon passwordShow={passwordConfirmationShow} onPasswordShown={setPasswordConfirmationShow} />}
             prefixIcon={<PrefixLockIcon />}
-            errorText={state?.['password-confirmation']?.errorText}
-            validationStatus={state?.['password-confirmation']?.validationStatus} />
+            errorText={state?.['password_confirmation']?.errorText}
+            validationStatus={state?.['password_confirmation']?.validationStatus} />
         </div>
         <LoginDetailsButtonSubmit />
       </form>
