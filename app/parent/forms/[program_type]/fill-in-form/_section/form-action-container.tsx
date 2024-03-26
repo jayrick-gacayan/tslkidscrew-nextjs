@@ -446,11 +446,13 @@ export default function FormActionContainer({
             onStartDateSelected={(val: string) => {
               reduxStore.dispatch(beforeOrAfterSchoolStartDateChanged(fieldInputValue(val)));
             }}
-            onCheckboxChanged={(key: 'beforeSchool' | 'afterSchool', arrSchool: any[], value: string) => {
+            onCheckboxChanged={(key: 'beforeSchool' | 'afterSchool', arrSchool: any[], val: string) => {
+              console.log('arr', key, arrSchool, val)
               reduxStore.dispatch(
                 beforeOrAfterWeekDaysSet({
-                  key, value: !arrSchool.includes(value) ? [...arrSchool, value] :
-                    arrSchool.filter((value: string) => { return value !== value })
+                  key,
+                  value: !arrSchool.includes(val) ? [...arrSchool, val] :
+                    arrSchool.filter((value: string) => { return value !== val; })
                 })
               );
             }}
