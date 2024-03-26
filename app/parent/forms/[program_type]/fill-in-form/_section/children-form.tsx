@@ -50,7 +50,7 @@ export default function ChildrenForm({
                     )
                   }
                   <div className='space-y-4'>
-                    <div className='flex items-center gap-4'>
+                    <div className='flex items-stretch justify-center gap-4'>
                       <InputCustom id={`children-firstname-${idx}`}
                         name={`children[][first_name]`}
                         labelText='First Name'
