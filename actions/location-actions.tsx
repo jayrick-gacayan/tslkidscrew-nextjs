@@ -182,8 +182,9 @@ export async function getAllLocationOnProgramTypeAction(program_type: string) {
   let parent: Session | null = await auth();
 
   let result: Result<LocationPlace[]> = await getAllLocationsForCreateRegRecord(
-    program_type === 'before-or-after-school' ? 'After School' : capitalCase(program_type)
+    program_type === 'before-and-after-school' ? 'After School' : capitalCase(program_type)
     , parent?.user?.accessToken!);
+  console.log('location places', result.data);
 
   return result.data ?? []
 }

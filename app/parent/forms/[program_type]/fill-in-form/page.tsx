@@ -15,10 +15,11 @@ import { getAllLocationOnProgramTypeAction } from '@/actions/location-actions';
 import { VacationCampSetting } from '@/models/vacation-camp-setting';
 import { PROGRAM_TYPES } from '@/types/constants/program-type';
 import { kebabCase } from 'change-case';
+import { Parent } from '@/models/parent';
 
 export async function generateStaticParams(): Promise<{ program_type: string; }[]> {
   return PROGRAM_TYPES.map((val: string) => {
-    return { program_type: val === 'After School' ? 'before-or-after-school' : kebabCase(val) };
+    return { program_type: val === 'After School' ? 'before-and-after-school' : kebabCase(val) };
   });
 }
 
@@ -42,9 +43,7 @@ export default async function Page({
   const summerCampPromos: SummerCampPromoSetting[] | undefined = await getSummerCampRegPromosForPromoAction();
 
   let locationsByProgramType: LocationPlace[] = await getAllLocationOnProgramTypeAction(program_type);
-  let customerData = await getCustomerInfoAction()
-
-  let { card_last_four, card_brand, bank_name, } = customerData.data!;
+  let customerData = await getCustomerInfoAction();
 
   if (location_id) {
     summerCampWeeks = (await getSummerCampRegWeeksForRecordAction(location_id)) ?? [];
@@ -59,7 +58,7 @@ export default async function Page({
         <div className='rounded drop-shadow h-full bg-white w-full xl:w-8/12 m-auto block p-6'>
           <FormActionContainer step={step}
             program_type={program_type}
-            cardDetails={!!card_brand && !!card_last_four ? { card_brand, card_last_four } : undefined}
+            cardDetails={!!customerData.data ? customerData.data as Pick<Parent, 'card_brand' | 'card_last_four'> : undefined}
             locations={locationsByProgramType}
 
             summerCampPromos={summerCampPromos!}
@@ -67,7 +66,7 @@ export default async function Page({
             summerCampWeeksForPromo={summerCampWeeksForPromo}
             programYearCycle={programYearCycle}
             vacationCamps={vacationCamps}
-            bankName={bank_name ?? ''} />
+            bankDetails={!!customerData.data ? customerData.data as Pick<Parent, 'bank_name'> : undefined} />
         </div>
       </div>
     </div>

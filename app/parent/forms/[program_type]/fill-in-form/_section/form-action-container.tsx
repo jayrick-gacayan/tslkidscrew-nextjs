@@ -55,7 +55,7 @@ export default function FormActionContainer({
   step,
   locations,
   cardDetails,
-  bankName,
+  bankDetails,
 
   summerCampPromos,
   summerCampWeeks,
@@ -66,8 +66,8 @@ export default function FormActionContainer({
   program_type: string;
   step: string | undefined;
   locations: Partial<LocationPlace>[];
-  cardDetails: Partial<Parent> | undefined;
-  bankName: string;
+  cardDetails: Pick<Parent, 'card_brand' | 'card_last_four'> | undefined;
+  bankDetails: Pick<Parent, 'bank_name'> | undefined;
 
   summerCampPromos: SummerCampPromoSetting[];
   summerCampWeeks: Partial<SummerCampWeekSetting>[];
@@ -477,7 +477,7 @@ export default function FormActionContainer({
       <FillInFormButtons program_type={program_type}
         step={step}
         cardDetails={cardDetails}
-        bankName={bankName}
+        bankDetails={bankDetails}
         hasBankDetails={formState?.hasBankDetails}
         stripeModalOpen={fillInFormState.stripeModalOpen} />
     </form>

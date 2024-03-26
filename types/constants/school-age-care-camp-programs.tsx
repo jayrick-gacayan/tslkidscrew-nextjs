@@ -34,7 +34,7 @@ export const SCHOOL_AGE_CARE_CAMP_PROGRAMS = [
   },
   {
     name: 'Before and After School',
-    altText: 'before-or-after-school',
+    altText: 'before-and-after-school',
   },
   {
     name: 'Weedend Fun Club',

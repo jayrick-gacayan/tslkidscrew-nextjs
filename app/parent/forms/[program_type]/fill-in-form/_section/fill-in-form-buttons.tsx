@@ -12,14 +12,15 @@ export default function FillInFormButtons({
   program_type,
   step,
   cardDetails,
-  bankName,
+  bankDetails,
   hasBankDetails,
   stripeModalOpen
 }: {
   program_type: string;
   step: string | undefined;
-  cardDetails: Partial<Parent> | undefined;
-  bankName: string;
+  cardDetails: Pick<Parent, 'card_brand' | 'card_last_four'> | undefined;
+  bankDetails: Pick<Parent, 'bank_name'> | undefined;
+
   stripeModalOpen: boolean;
   hasBankDetails?: boolean | undefined;
 }) {
@@ -54,8 +55,8 @@ export default function FillInFormButtons({
           )
         }
         {
-          bankName !== '' && (stepInNumber === highestStep) &&
-          (<div>Bank on File: <span className='font-bold text-[20px]'>{bankName}</span></div>)
+          bankDetails && (stepInNumber === highestStep) &&
+          (<div>Bank on File: <span className='font-bold text-[20px]'>{bankDetails.bank_name}</span></div>)
         }
       </div>
 
@@ -105,7 +106,7 @@ export default function FillInFormButtons({
               setButtonPress={setButtonPress}
               hasBankDetails={hasBankDetails}
               buttonPress={buttonPress}
-              bankName={bankName} />
+              bankName={bankDetails?.bank_name!} />
             <button name='submit-stripe-button'
               value='submit-stripe-button'
               type='submit'
