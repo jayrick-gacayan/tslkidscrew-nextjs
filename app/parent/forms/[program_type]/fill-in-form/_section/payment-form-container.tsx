@@ -54,7 +54,7 @@ export default function PaymentFormContainer({
 
   const tosArray = useCallback(() => {
     switch (program_type) {
-      case 'before-or-after-school': return BEFORE_OR_AFTER_SCHOOL_TOS;
+      case 'before-and-after-school': return BEFORE_OR_AFTER_SCHOOL_TOS;
       case 'summer-camp': return SUMMER_CAMP_SCHOOL_TOS;
       case 'vacation-camp': return VACATION_CAMP_TOS;
       default: return [];
@@ -63,7 +63,7 @@ export default function PaymentFormContainer({
 
   const totalPrice = useCallback(() => {
     switch (program_type) {
-      case 'before-or-after-school': return 25;
+      case 'before-and-after-school': return 25;
       case 'summer-camp': return 200 + 25;
       case 'vacation-camp':
         return vacationCampPrice(vacationCamps.length, arrChildren.length) + 25;
@@ -91,7 +91,7 @@ export default function PaymentFormContainer({
                   currencyFormat('en-US',
                     { style: 'currency', currency: 'USD' },
                     program_type === 'summer-camp' ? 200 :
-                      program_type === 'before-or-after-school' ? 0 :
+                      program_type === 'before-and-after-school' ? 0 :
                         vacationCampPrice(vacationCamps.length, arrChildren.length)
                   )
                 }</div>

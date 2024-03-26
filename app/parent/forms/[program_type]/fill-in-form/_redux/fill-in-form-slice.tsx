@@ -18,7 +18,7 @@ const initialState: FillInFormState = {
     TOSCondition: fieldInputValue<any[]>([]),
     arrChildren: [childInit],
 
-    //for program type before-or-after-school
+    //for program type before-and-after-school
     yearCycle: fieldInputValue<string>(''),
     startDate: fieldInputValue<string | undefined>(new Date().toISOString()),
     beforeOrAfterWeekDays: fieldInputValue({
@@ -113,7 +113,7 @@ const fillInFormSlice = createSlice({
     },
     fillInFormReset: (state: FillInFormState) => { return initialState; },
 
-    // for program-type 'before-or-after-school'
+    // for program-type 'before-and-after-school'
     yearCycleChanged: (
       state: FillInFormState,
       action: PayloadAction<InputProps<string>>
@@ -225,7 +225,7 @@ export const {
   fillInFormReset,
   tosConditionChanged,
 
-  //for program type 'before-or-after-school'
+  //for program type 'before-and-after-school'
   beforeOrAfterSchoolStartDateChanged,
   yearCycleChanged,
   beforeOrAfterWeekDaysSet,

@@ -12,7 +12,7 @@ export interface FillInFormState {
     defDateForChildForm: string | undefined;
     arrChildren: ChildInputTypes[];
 
-    //for program type before-or-after-school
+    //for program type before-and-after-school
     yearCycle: InputProps<string>;
     startDate: InputProps<string | undefined>;
     beforeOrAfterWeekDays: InputProps<{ beforeSchool: any[], afterSchool: any[] }>;

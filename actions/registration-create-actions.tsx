@@ -30,7 +30,7 @@ export async function fillInFormAction(
   prevState: { [key: string]: any },
   formData: FormData
 ) {
-  let highestStep = programType === 'before-or-after-school' ? 5 : 4;
+  let highestStep = programType === 'before-and-after-school' ? 5 : 4;
   let parent: Session | null = await auth();
 
   let customerInfo: Result<Parent> = await getCustomerInfo(
@@ -161,7 +161,7 @@ export async function fillInFormAction(
     if (!!formData.get('back-button')) { return { ...objectStep, stepTwo: false, }; }
 
     switch (programType) {
-      case 'before-or-after-school':
+      case 'before-and-after-school':
         {
           let getRadioButtonData = formData.get('year-cycle') as string ?? ''
 
@@ -258,7 +258,7 @@ export async function fillInFormAction(
         return { ...objectStep, stepThree: true }
       }
     }
-  } else if (step === 4 && programType === 'before-or-after-school') {
+  } else if (step === 4 && programType === 'before-and-after-school') {
     if (!!formData.get('back-button')) { return { ...objectStep, stepThree: false, }; }
 
     let startDate = formData.get('before-or-after-registration-start-date') as string ?? '';
@@ -289,13 +289,13 @@ export async function fillInFormAction(
 
     return { ...objectStep, stepFour: true };
   } else if (step === highestStep) {
-    let stepKey = programType === 'before-or-after-school' ? 'stepFour' : 'stepThree';
+    let stepKey = programType === 'before-and-after-school' ? 'stepFour' : 'stepThree';
 
     if (!!formData.get('back-button')) { return { ...objectStep, [stepKey]: false }; }
 
     let getAllCheckboxes: string[] = formData.getAll(`${programType}-tos[]`) as string[];
 
-    let checkItems = programType === 'before-or-after-school' ? 10 : programType === 'summer-camp' ? 11 : 4
+    let checkItems = programType === 'before-and-after-school' ? 10 : programType === 'summer-camp' ? 11 : 4
 
     if (getAllCheckboxes.length < checkItems) {
       return {
@@ -370,7 +370,7 @@ export async function fillInFormAction(
         }
 
         switch (programType) {
-          case 'before-or-after-school':
+          case 'before-and-after-school':
             regRecord['before_and_afterschool_record_attributes'] = {
               start_date: formData.get('start_date') as string ?? '',
               ...beforeOrAfterSchoolAttribObject(formData, 'before'),
@@ -427,7 +427,7 @@ export async function fillInFormAction(
           }
         }
 
-        let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+        let stepKey = programType === 'before-and-after-school' ? 'stepFive' : 'stepFour'
 
         return {
           ...objectStep,
@@ -455,7 +455,7 @@ export async function fillInFormAction(
           }
         }
 
-        let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+        let stepKey = programType === 'before-and-after-school' ? 'stepFive' : 'stepFour'
 
         return {
           ...objectStep,
@@ -482,7 +482,7 @@ export async function fillInFormAction(
                 }
               }
 
-              let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+              let stepKey = programType === 'before-and-after-school' ? 'stepFive' : 'stepFour'
 
               return {
                 ...objectStep,
@@ -510,7 +510,7 @@ export async function fillInFormAction(
                 }
               }
 
-              let stepKey = programType === 'before-or-after-school' ? 'stepFive' : 'stepFour'
+              let stepKey = programType === 'before-and-after-school' ? 'stepFive' : 'stepFour'
 
               return {
                 ...objectStep,

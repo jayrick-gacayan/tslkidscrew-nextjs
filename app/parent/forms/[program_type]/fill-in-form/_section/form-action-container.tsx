@@ -93,7 +93,7 @@ export default function FormActionContainer({
     return fillInFormState.fillInForm.TOSCondition;
   }, [fillInFormState.fillInForm.TOSCondition])
 
-  /* For Program Type before-or-after-school */
+  /* For Program Type before-and-after-school */
   const { startDate, beforeSchool, afterSchool, beforeAfterWeekDaysErrorText } = useMemo(() => {
     return {
       startDate: fillInFormState.fillInForm.startDate,
@@ -109,7 +109,7 @@ export default function FormActionContainer({
   const yearCycle = useMemo(() => {
     return fillInFormState.fillInForm.yearCycle.value
   }, [fillInFormState.fillInForm.yearCycle]);
-  /* For Program Type before-or-after-school */
+  /* For Program Type before-and-after-school */
 
   /* For Program Type summer-camp */
   const summerCampRegOpt = useMemo(() => {
@@ -132,7 +132,7 @@ export default function FormActionContainer({
   /* For Program Type vacation-camp */
 
   const stepInNumber = !step ? 1 : parseInt(step);
-  const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
+  const highestStep = program_type === 'before-and-after-school' ? 5 : 4;
 
   let objectStepInit: { [key: string]: any } = {
     stepOne: false,
@@ -143,7 +143,7 @@ export default function FormActionContainer({
 
   const [formState, formAction] = useFormState(
     fillInFormAction.bind(null, stepInNumber, program_type),
-    program_type === 'before-or-after-school' ? { ...objectStepInit, stepFive: false } : objectStepInit
+    program_type === 'before-and-after-school' ? { ...objectStepInit, stepFive: false } : objectStepInit
   );
 
   useEffect(() => {
@@ -191,9 +191,9 @@ export default function FormActionContainer({
     }
   }, [formState, stepInNumber]);
 
-  // for program type 'before-or-after-school'
+  // for program type 'before-and-after-school'
   useEffect(() => {
-    if (program_type === 'before-or-after-school') {
+    if (program_type === 'before-and-after-school') {
       if (formState?.['year-cycle']) {
         let { errorText, validationStatus } = formState['year-cycle'];
         reduxStore.dispatch(yearCycleChanged({ value: '', errorText, validationStatus }))
@@ -280,11 +280,11 @@ export default function FormActionContainer({
     if (stepInNumber === 1) { if (stepOne) { pathToURL(1); } }
     else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
     else if (stepInNumber === 3) { pathToStep(stepTwo, stepThree); }
-    else if (stepInNumber === 4 && program_type === 'before-or-after-school') {
+    else if (stepInNumber === 4 && program_type === 'before-and-after-school') {
       pathToStep(stepThree, stepFour);
     }
     else if (stepInNumber === highestStep) {
-      let stepError = program_type === 'before-or-after-school' ? stepFour : stepThree;
+      let stepError = program_type === 'before-and-after-school' ? stepFour : stepThree;
 
       if (!stepError) {
         pathToURL(-1);
@@ -337,7 +337,7 @@ export default function FormActionContainer({
 
           formData.append('referrer',
             encodeURIComponent(
-              program_type === 'before-or-after-school' ? 'after_school' :
+              program_type === 'before-and-after-school' ? 'after_school' :
                 program_type === 'summer-camp' ? 'groupon_summer_camp' : 'vacation_camp')
           );
 
@@ -349,7 +349,7 @@ export default function FormActionContainer({
             formData.append('child-info[][dob]', encodeURIComponent(format(new Date(val.birthdate!), 'yyyy-M-d')));
           });
 
-          if (program_type === 'before-or-after-school') {
+          if (program_type === 'before-and-after-school') {
             formData.append('year_cycle', encodeURIComponent(yearCycle))
             formData.append('start_date', encodeURIComponent(format(new Date(startDate.value!), 'yyyy-M-d')));
             WEEK_DAYS.forEach((val: string) => {
@@ -421,7 +421,7 @@ export default function FormActionContainer({
         stepInNumber === 3 &&
         (() => {
           switch (program_type) {
-            case 'before-or-after-school':
+            case 'before-and-after-school':
               return (<ScheduleSelectionBeforeAndAfterSchool programYearCycle={programYearCycle} />);
             case 'summer-camp':
               return (
@@ -436,7 +436,7 @@ export default function FormActionContainer({
         })()//step three form
       }
       {
-        stepInNumber === 4 && program_type === 'before-or-after-school' &&
+        stepInNumber === 4 && program_type === 'before-and-after-school' &&
         (
           <RegistrationTypeSelectionBeforeOrAfterSchool startDate={startDate}
             afterSchool={afterSchool}
@@ -453,7 +453,7 @@ export default function FormActionContainer({
               );
             }}
             errorText={beforeAfterWeekDaysErrorText} />
-        ) // step four and before-or-after-school
+        ) // step four and before-and-after-school
       }
       {
         stepInNumber === highestStep &&

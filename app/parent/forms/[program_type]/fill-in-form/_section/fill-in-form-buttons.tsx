@@ -28,7 +28,7 @@ export default function FillInFormButtons({
   const { pending } = useFormStatus();
 
   const stepInNumber = !step ? 1 : parseInt(step);
-  const highestStep = program_type === 'before-or-after-school' ? 5 : 4;
+  const highestStep = program_type === 'before-and-after-school' ? 5 : 4;
 
   useEffect(() => {
     if (!stripeModalOpen && buttonPress === 'stripe' && !pending) {

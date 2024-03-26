@@ -11,6 +11,7 @@ import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-sta
 import * as Joi from 'joi';
 import { Session } from 'next-auth';
 
+
 export async function updateCustomerInfoAction(
   prevState: Partial<CustomerInfoFormStateProps>,
   formData: FormData,
@@ -19,6 +20,8 @@ export async function updateCustomerInfoAction(
 
   let first_name = formData.get('first_name') as string ?? '';
   let last_name = formData.get('last_name') as string ?? '';
+  let phone_number = formData.get('phone-number') as string ?? '';
+
 
   let updateCustomerInfoSchema = Joi.object({
     first_name: Joi.string()

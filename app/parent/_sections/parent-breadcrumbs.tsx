@@ -32,7 +32,7 @@ export default function ParentBreadcrumbs() {
     ];
 
     if (pathSegments.length > 2 && pathSegments[1] === 'forms') {
-      let textProgramType = pathSegments[2] === 'before-or-after-school' ?
+      let textProgramType = pathSegments[2] === 'before-and-after-school' ?
         'Before and After School' : capitalCase(pathSegments[2]);
 
       if (pathSegments.length === 3) {
