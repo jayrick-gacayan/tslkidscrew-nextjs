@@ -5,6 +5,7 @@ import {
   getRegistrationRecord,
   getRegistrationRecords
 } from '@/services/registration-record-services';
+import { SearchParamsProps } from '@/types/props/search-params-props';
 import { Session } from 'next-auth';
 
 export async function getRegistrationRecordAction(reg_id: string) {
@@ -13,8 +14,8 @@ export async function getRegistrationRecordAction(reg_id: string) {
   return await getRegistrationRecord(reg_id, parent?.user.accessToken!);
 }
 
-export async function getRegistrationRecordsAction() {
+export async function getRegistrationRecordsAction(searchParams: SearchParamsProps) {
   let parent: Session | null = await auth();
 
-  return await getRegistrationRecords(parent?.user.accessToken!);
+  return await getRegistrationRecords(searchParams, parent?.user.accessToken!);
 }

@@ -1,4 +1,5 @@
 import { getRegistrationRecordAction } from '@/actions/registration-record-actions';
+import BackButtonClient from '@/app/_components/back-button-client';
 import InfoContainer from '@/app/_components/info-container';
 import { ChildRecord } from '@/models/child-record';
 import { RegistrationRecord } from '@/models/registration-record';
@@ -12,6 +13,7 @@ export default async function Page({ params }: { params: { id: string; } }) {
 
   return (
     <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
+      <BackButtonClient />
       <div className='font-[800] text-[32px]'>North Colonie After School</div>
       <div className='block space-y-1'>
         <div className='text-tertiary font-[500]'>

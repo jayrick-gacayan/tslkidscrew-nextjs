@@ -8,7 +8,7 @@ import Pagination from '@/app/_components/pagination';
 import { RegistrationRecord } from '@/models/registration-record';
 
 export default async function Page({ searchParams }: { searchParams: SearchParamsProps }) {
-  let result: Result<Paginate<RegistrationRecord>> = await getRegistrationRecordsAction();
+  let result: Result<Paginate<RegistrationRecord>> = await getRegistrationRecordsAction(searchParams);
   let showEntry: number = typeof searchParams.per_page === 'string' ? parseInt(searchParams.per_page) : 10;
   let totalPages: number = Math.ceil((result.data?.total ?? 1) / showEntry) ?? 1
   let data: any[] | undefined = result.data?.data;

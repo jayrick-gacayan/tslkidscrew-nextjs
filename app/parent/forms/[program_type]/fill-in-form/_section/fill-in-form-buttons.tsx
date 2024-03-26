@@ -7,13 +7,13 @@ import { reduxStore } from '@/react-redux/redux-store';
 import { fillInFormReset } from '../_redux/fill-in-form-slice';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import PendingAction from '../_components/pending-actions';
+import ButtonForStripe from './button-for-stripe';
 
 export default function FillInFormButtons({
   program_type,
   step,
   cardDetails,
   bankDetails,
-  stripeModalOpen,
   buttonPress,
   setButtonPress,
   plaidOpen,
@@ -22,10 +22,7 @@ export default function FillInFormButtons({
   step: string | undefined;
   cardDetails: Pick<Parent, 'card_brand' | 'card_last_four'> | undefined;
   bankDetails: Pick<Parent, 'bank_name'> | undefined;
-
-  stripeModalOpen: boolean;
   plaidOpen: boolean;
-
   buttonPress: string;
   setButtonPress: Dispatch<SetStateAction<string>>;
 }) {
@@ -33,8 +30,6 @@ export default function FillInFormButtons({
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-and-after-school' ? 5 : 4;
-
-
 
   return (
     <>
@@ -111,27 +106,12 @@ export default function FillInFormButtons({
               buttonPress={buttonPress}
               bankDetails={bankDetails}
               plaidOpen={plaidOpen} />
-            <button name='submit-stripe-button'
-              value='submit-stripe-button'
-              type='submit'
-              className={`px-4 py-2 w-full bg-primary text-white rounded disabled:cursor-not-allowed`}
-              disabled={pending && buttonPress === 'stripe'}>
-              {
-                pending && buttonPress === 'stripe' ? (<PendingAction />) :
-                  <>
-                    {
-                      !!cardDetails &&
-                        !!cardDetails.card_brand &&
-                        !!cardDetails.card_last_four ? 'Proceed to Payment with Card on File' :
-                        'Proceed to Payment'
-                    }
-                  </>
-              }
-            </button>
+            <ButtonForStripe pending={pending && buttonPress === 'stripe'}
+              cardDetails={cardDetails}
+              setButtonPress={setButtonPress} />
           </div>
         )
       }
     </>
-
-  )
+  );
 }

@@ -68,7 +68,7 @@ export default function ButtonForPlaid({
 
 
   const { open, ready } = usePlaidLink({
-    env: "sandbox",
+    env: 'sandbox',
     publicKey: process.env.NEXT_PLAID_PUBLIC_KEY!,
     clientName: 'TSL Adventures',
     product: [Products.Auth],
@@ -107,8 +107,6 @@ export default function ButtonForPlaid({
     plaidOpen
   ]);
 
-  console.log('plaidOpen', plaidOpen)
-
   return (
     <button name='submit-plaid-button'
       value='submit-plaid-button'
@@ -117,7 +115,7 @@ export default function ButtonForPlaid({
       disabled={pending}
       onClick={() => { setButtonPress('plaid') }}>
       {
-        pending && buttonPress === 'plaid' ? (<PendingAction />) :
+        pending ? (<PendingAction />) :
           <>
             {
               (!!bankDetails && !!bankDetails.bank_name) ?
@@ -127,5 +125,5 @@ export default function ButtonForPlaid({
           </>
       }
     </button>
-  )
+  );
 }

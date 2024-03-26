@@ -2,6 +2,7 @@ import { Paginate } from "@/models/paginate";
 import { RegistrationRecord } from "@/models/registration-record";
 import { Result } from "@/models/result";
 import { authHeaders } from "@/types/helpers/auth-headers";
+import { SearchParamsProps } from "@/types/props/search-params-props";
 
 export async function getRegistrationRecord(reg_id: string, token: string) {
 
@@ -29,9 +30,13 @@ export async function getRegistrationRecord(reg_id: string, token: string) {
   }
 }
 
-export async function getRegistrationRecords(token: string) {
+export async function getRegistrationRecords(searchParams: SearchParamsProps, token: string) {
+  let urlSearchParams = new URLSearchParams(Object.entries(searchParams) as string[][])
+
+  let strSP = urlSearchParams.toString();
+
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customer_users/regis_records`,
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customer_users/regis_records${strSP === '' ? '' : `?${strSP}`}`,
     { ...authHeaders(token) }
   );
 

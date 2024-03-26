@@ -346,7 +346,6 @@ export default function FormActionContainer({
           let submitStripeButton = formData.get('submit-stripe-button');
           let submitPlaidButton = formData.get('submit-plaid-button');
 
-          console.log('sdfsdfsd', submitStripeButton, submitPlaidButton)
           if (!!submitStripeButton) {
             setButtonPress('stripe')
           }
@@ -501,7 +500,6 @@ export default function FormActionContainer({
         step={step}
         cardDetails={cardDetails}
         bankDetails={bankDetails}
-        stripeModalOpen={fillInFormState.stripeModalOpen}
         plaidOpen={fillInFormState.plaidOpen}
         setButtonPress={setButtonPress}
         buttonPress={buttonPress} />

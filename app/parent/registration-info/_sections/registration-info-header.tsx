@@ -30,7 +30,6 @@ export default function RegistrationInfoHeader({
     return `${baseURL}${urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`}`
   }
 
-
   return (
     <div className='flex sm:flex-row flex-col gap-4 items-start sm:items-center justify-between'>
       <div className='flex-1 text-black'>

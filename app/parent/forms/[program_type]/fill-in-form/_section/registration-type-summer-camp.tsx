@@ -153,7 +153,7 @@ export default function RegistrationTypeSummerCamp({
                       <h1 className="text-[24px]">Promo Package registration</h1>
                       <div>Number of Children: {arrChildren.length}</div>
                       <div className="font-medium">Week Promos</div>
-                      <div className="w-full overflow-auto">
+                      <div className="w-full">
                         <div className="w-full min-w-[1024px] pb-8">
                           <div className="flex items-stretch justify-evenly gap-4 w-full">
                             <WeekPromos weekNum={6}
