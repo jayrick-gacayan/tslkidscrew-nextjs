@@ -7,7 +7,7 @@ export async function generateStaticParams(): Promise<{ program_type: string; }[
   return [
     { program_type: 'vacation-camp' },
     { program_type: 'summer-camp' },
-    { program_type: 'before-or-after-school' }
+    { program_type: 'before-and-after-school' }
   ]
 }
 
@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { program_type: string 
 
   if (program_type !== 'vacation-camp' &&
     program_type !== 'summer-camp' &&
-    program_type !== 'before-or-after-school'
+    program_type !== 'before-and-after-school'
   ) {
     return notFound();
   }
@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { program_type: string 
     <div className='pb-12 w-full'>
       <div className='rounded drop-shadow bg-white w-full lg:w-8/12 mx-auto block p-6 space-y-6'>
         <h1 className='text-center font-bold text-[32px] text-black'>
-          {program_type === 'before-or-after-school' ? 'Before and After School' : capitalCase(program_type)}
+          {program_type === 'before-and-after-school' ? 'Before and After School' : capitalCase(program_type)}
         </h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         <div className='block rounded bg-tertiary-dark h-72' />

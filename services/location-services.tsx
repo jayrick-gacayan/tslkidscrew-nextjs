@@ -189,12 +189,8 @@ export async function getAllLocationsForCreateRegRecord(
     { ...authHeaders(token) }
   );
 
-  console.log('dfsdfsdf', result.status)
   try {
     let response = await result.json();
-
-    console.log('dfsdfsdf', response)
-
 
     return new Result<LocationPlace[]>({
       response: response,
