@@ -25,7 +25,7 @@ export default function AttendanceScheduleVacationCamp({
   return (
     <div className="space-y-8">
       <div className="space-y-2 text-black">
-        <h1 className="font-medium text-[36px]">Attendance Schedule</h1>
+        <h1 className="font-bold text-[36px]">Attendance Schedule</h1>
         <div className="italic space-x-0.5">
           <span className="inline align-top">&#42;</span>
           <span className="inline">Select Attendance Schedule for Vacation Camp</span>
