@@ -13,6 +13,7 @@ import CustomListbox from "@/app/_components/listbox-custom";
 import { ToastContentProps, toast } from "react-toastify";
 import { redirectToPath } from "@/actions/common-actions";
 import ListboxIconDropdownOne from "@/app/_components/listbox-icon-dropdown-one";
+import ReactInternationalPhoneComponent from "@/app/_components/react-international-phone/react-international-phone-component";
 
 function CustomerInfoFormButton() {
   const { pending } = useFormStatus();
@@ -89,18 +90,18 @@ export default function CustomerInfoForm() {
               errorText={state.last_name?.errorText}
               validationStatus={state.last_name?.validationStatus} />
 
-            <InputCustom id='phone-number'
-              labelText="Phone Number"
+            <ReactInternationalPhoneComponent labelText='Phone Number'
+              id='phone-number'
               name='phone-number'
-              type="text"
-              placeholder="Phone Number:"
-              className="bg-secondary border-transparent p-2 px-3" />
-            <InputCustom id='emergency-number'
-              labelText="Emergency Number"
+              className='bg-secondary border-transparent p-2 px-3'
+              placeholder='Phone Number:'
+              type='tel' />
+            <ReactInternationalPhoneComponent labelText='Emergency Number'
+              id='emergency-number'
               name='emergency-number'
-              type="text"
-              placeholder="Emergency Number:"
-              className="bg-secondary border-transparent p-2 px-3" />
+              className='bg-secondary border-transparent p-2 px-3'
+              placeholder='Emergency Number:'
+              type='tel' />
           </div>
         </div>
       </div>
@@ -142,8 +143,7 @@ export default function CustomerInfoForm() {
             <InputCustom id='Zip Code'
               name='address-zipcode'
               labelText="Zipcode"
-              type="text"
-              inputMode="numeric"
+              type="number"
               placeholder="ZipCode :"
               className="bg-secondary border-transparent p-2 px-3" />
           </div>

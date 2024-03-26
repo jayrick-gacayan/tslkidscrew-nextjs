@@ -5,7 +5,7 @@ import ButtonForPlaid from './button-for-plaid';
 import Link from 'next/link';
 import { reduxStore } from '@/react-redux/redux-store';
 import { fillInFormReset } from '../_redux/fill-in-form-slice';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import PendingAction from '../_components/pending-actions';
 
 export default function FillInFormButtons({
@@ -13,8 +13,10 @@ export default function FillInFormButtons({
   step,
   cardDetails,
   bankDetails,
-  hasBankDetails,
-  stripeModalOpen
+  stripeModalOpen,
+  buttonPress,
+  setButtonPress,
+  plaidOpen,
 }: {
   program_type: string;
   step: string | undefined;
@@ -22,25 +24,26 @@ export default function FillInFormButtons({
   bankDetails: Pick<Parent, 'bank_name'> | undefined;
 
   stripeModalOpen: boolean;
-  hasBankDetails?: boolean | undefined;
+  plaidOpen: boolean;
+
+  buttonPress: string;
+  setButtonPress: Dispatch<SetStateAction<string>>;
 }) {
-  const [buttonPress, setButtonPress] = useState<string>('');
   const { pending } = useFormStatus();
 
   const stepInNumber = !step ? 1 : parseInt(step);
   const highestStep = program_type === 'before-and-after-school' ? 5 : 4;
 
-  useEffect(() => {
-    if (!stripeModalOpen && buttonPress === 'stripe' && !pending) {
-      setButtonPress('');
-    }
-  }, [stripeModalOpen, buttonPress]);
+
 
   return (
     <>
       <div className='space-y-2'>
         {
-          cardDetails && (stepInNumber === highestStep) &&
+          ((!!cardDetails &&
+            !!cardDetails.card_brand &&
+            !!cardDetails.card_last_four) &&
+            (stepInNumber === highestStep)) &&
           (
             <div>
               Card on File:
@@ -55,7 +58,8 @@ export default function FillInFormButtons({
           )
         }
         {
-          bankDetails && (stepInNumber === highestStep) &&
+          ((!!bankDetails && !!bankDetails.bank_name) &&
+            (stepInNumber === highestStep)) &&
           (<div>Bank on File: <span className='font-bold text-[20px]'>{bankDetails.bank_name}</span></div>)
         }
       </div>
@@ -104,20 +108,22 @@ export default function FillInFormButtons({
             <ButtonForPlaid program_type={program_type}
               pending={pending && buttonPress === 'plaid'}
               setButtonPress={setButtonPress}
-              hasBankDetails={hasBankDetails}
               buttonPress={buttonPress}
-              bankName={bankDetails?.bank_name!} />
+              bankDetails={bankDetails}
+              plaidOpen={plaidOpen} />
             <button name='submit-stripe-button'
               value='submit-stripe-button'
               type='submit'
               className={`px-4 py-2 w-full bg-primary text-white rounded disabled:cursor-not-allowed`}
-              disabled={pending && buttonPress === 'stripe'}
-              onClick={() => { setButtonPress('stripe') }}>
+              disabled={pending && buttonPress === 'stripe'}>
               {
                 pending && buttonPress === 'stripe' ? (<PendingAction />) :
                   <>
                     {
-                      !cardDetails ? 'Proceed to Payment' : 'Proceed to Payment with Card on File'
+                      !!cardDetails &&
+                        !!cardDetails.card_brand &&
+                        !!cardDetails.card_last_four ? 'Proceed to Payment with Card on File' :
+                        'Proceed to Payment'
                     }
                   </>
               }

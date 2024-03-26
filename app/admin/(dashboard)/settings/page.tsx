@@ -24,13 +24,14 @@ export default async function Page() {
   let programYearCycleSetting: Result<ProgramYearCycleSetting> = await (await getProgramYearCycleSettingsAction());
   let beforeOrAfterSchoolSettings: Result<BeforeOrAfterSchoolSetting[]> = await (await getBeforeOrAfterSchoolSettingsAction());
 
+  console.log('summer camp promo settings', summerCampPromoSettings)
   return (
     <div className='p-8 space-y-4'>
       <AdminHeaderWithEntries headerText='Settings' />
       <TabsContainer summerCampWeekSettings={summerCampWeekSettings?.data ?? []}
         summerCampSwimSettings={summerCampSwimSettings?.data ?? []}
         summerCampPromoSettings={summerCampPromoSettings?.data ?? []}
-        programYearCycleSetting={programYearCycleSetting?.data!}
+        programYearCycleSetting={programYearCycleSetting?.data ?? undefined}
         vacationCampSettings={vacationCampSettings?.data ?? []}
         beforeOrAfterSchoolSettings={beforeOrAfterSchoolSettings?.data ?? []} />
     </div>

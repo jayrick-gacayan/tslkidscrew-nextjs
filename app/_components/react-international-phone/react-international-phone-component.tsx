@@ -1,7 +1,9 @@
 import { ValidationType } from '@/types/enums/validation-type';
-import { ForwardedRef, InputHTMLAttributes, ReactNode, forwardRef } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
+import { ParsedCountry, defaultCountries, usePhoneInput } from 'react-international-phone';
 import { twMerge } from 'tailwind-merge';
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+
+export interface InputProps extends ComponentProps<'input'> {
   labelText?: string;
   suffixIcon?: ReactNode;
   prefixIcon?: ReactNode;
@@ -9,20 +11,34 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   validationStatus?: ValidationType;
 };
 
-function InputCustom(
-  {
-    labelText,
-    className,
-    suffixIcon,
-    prefixIcon,
-    errorText = '',
-    validationStatus = ValidationType.NONE,
-    id,
-    type,
-    ...props
-  }: InputProps,
-  ref: ForwardedRef<HTMLInputElement>
-) {
+export default function ReactInternationalPhoneComponent({
+  labelText,
+  className,
+  suffixIcon,
+  prefixIcon,
+  errorText = '',
+  validationStatus = ValidationType.NONE,
+  id,
+  ...props
+}: InputProps) {
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>(`${props.defaultValue ?? ''}` ?? '');
+
+  const { inputValue, handlePhoneValueChange, inputRef } =
+    usePhoneInput({
+      defaultCountry: 'us',
+      value: phoneNumber,
+      countries: defaultCountries,
+      onChange: (data:
+        {
+          phone: string;
+          inputValue: string;
+          country: ParsedCountry;
+        }) => {
+        console.log('data', data)
+        setPhoneNumber(data.phone);
+      },
+    });
+
   return (
     <div className='block space-y-[2px] w-full'>
       {
@@ -40,9 +56,9 @@ function InputCustom(
         )
       }
       <div className='relative w-full'>
-        <input ref={ref}
-          {...props}
-          type={type}
+        <input ref={inputRef}
+          value={inputValue}
+          onChange={handlePhoneValueChange}
           id={id}
           className={
             twMerge(
@@ -61,7 +77,3 @@ function InputCustom(
     </div>
   );
 }
-
-export default forwardRef<HTMLInputElement, InputProps>(InputCustom);
-
-

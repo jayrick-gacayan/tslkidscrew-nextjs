@@ -7,7 +7,7 @@ import ChildrenForm from './children-form';
 import LocationForm from './location-form';
 import PaymentFormContainer from './payment-form-container';
 import RegistrationTypeSelectionBeforeOrAfterSchool from './registration-type-selection-before-or-after-school';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LocationPlace } from '@/models/location-place';
 import { Parent } from '@/models/parent';
 import { RootState, reduxStore } from '@/react-redux/redux-store';
@@ -22,6 +22,7 @@ import {
   fillInFormReset,
   locationChanged,
   modalStripeToggled,
+  plaidOpenToggled,
   summerCampPackageRegChanged,
   summerCampPromoSet,
   summerCampRegWeeksSet,
@@ -76,6 +77,7 @@ export default function FormActionContainer({
   summerCampWeeksForPromo: Partial<SummerCampWeekSetting>[];
 }) {
   const router: AppRouterInstance = useRouter();
+  const [buttonPress, setButtonPress] = useState<string>('');
 
   const fillInFormState: FillInFormState = useAppSelector((state: RootState) => {
     return state.fillInForm;
@@ -305,6 +307,12 @@ export default function FormActionContainer({
               reduxStore.dispatch(modalStripeToggled(true));
             }
           }
+
+          if (rest?.hasBankDetails !== undefined) {
+            if (!rest.hasBankDetails) {
+              reduxStore.dispatch(plaidOpenToggled(true));
+            }
+          }
         }
       }
     }
@@ -321,6 +329,7 @@ export default function FormActionContainer({
     reduxStore.dispatch(fillInFormReset());
   }, [program_type]);
 
+  console.log('formState, ', formState, buttonPress)
   return (
     <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
       id={`${program_type}-fill-in-form`}
@@ -334,6 +343,16 @@ export default function FormActionContainer({
         }
 
         if (stepInNumber === highestStep) {
+          let submitStripeButton = formData.get('submit-stripe-button');
+          let submitPlaidButton = formData.get('submit-plaid-button');
+
+          console.log('sdfsdfsd', submitStripeButton, submitPlaidButton)
+          if (!!submitStripeButton) {
+            setButtonPress('stripe')
+          }
+
+          if (!!submitPlaidButton) { setButtonPress('plaid') }
+
           formData.append('location', encodeURIComponent(locationValue?.value?.name!))
           formData.append('agree_to_tos', encodeURIComponent(true));
 
@@ -482,8 +501,10 @@ export default function FormActionContainer({
         step={step}
         cardDetails={cardDetails}
         bankDetails={bankDetails}
-        hasBankDetails={formState?.hasBankDetails}
-        stripeModalOpen={fillInFormState.stripeModalOpen} />
+        stripeModalOpen={fillInFormState.stripeModalOpen}
+        plaidOpen={fillInFormState.plaidOpen}
+        setButtonPress={setButtonPress}
+        buttonPress={buttonPress} />
     </form>
   )
 }

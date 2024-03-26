@@ -26,7 +26,7 @@ export default function TabsContainer({
   summerCampSwimSettings: SummerCampSwimSetting[];
   summerCampPromoSettings: SummerCampPromoSetting[];
   vacationCampSettings: VacationCampSetting[];
-  programYearCycleSetting: ProgramYearCycleSetting;
+  programYearCycleSetting: ProgramYearCycleSetting | undefined;
   beforeOrAfterSchoolSettings: BeforeOrAfterSchoolSetting[];
 }) {
 

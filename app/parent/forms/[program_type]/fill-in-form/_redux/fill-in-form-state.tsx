@@ -7,6 +7,7 @@ import { InputProps } from '@/types/props/input-props';
 
 export interface FillInFormState {
   stripeModalOpen: boolean;
+  plaidOpen: boolean;
   fillInForm: {
     location: InputProps<Partial<LocationPlace> | undefined>;
     defDateForChildForm: string | undefined;

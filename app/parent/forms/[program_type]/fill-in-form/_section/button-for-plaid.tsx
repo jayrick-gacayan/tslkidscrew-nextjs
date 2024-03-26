@@ -10,32 +10,30 @@ import {
   usePlaidLink
 } from 'react-plaid-link';
 import PendingAction from '../_components/pending-actions';
+import { Parent } from '@/models/parent';
+import { reduxStore } from '@/react-redux/redux-store';
+import { plaidOpenToggled } from '../_redux/fill-in-form-slice';
 
 export default function ButtonForPlaid({
   program_type,
-  hasBankDetails,
   pending,
   setButtonPress,
   buttonPress,
-  bankName,
+  bankDetails,
+  plaidOpen,
 }: {
   program_type: string;
-  hasBankDetails?: boolean | undefined;
   pending: boolean;
   setButtonPress: Dispatch<SetStateAction<string>>;
   buttonPress: string;
-  bankName: string;
+  bankDetails: Pick<Parent, 'bank_name'> | undefined;
+  plaidOpen: boolean;
 }) {
   const [linkToken, setLinkToken] = useState<string>('');
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>((
     public_token: string,
     metadata: PlaidLinkOnSuccessMetadata) => {
-
-    // send public_token to server
-    // console.log('public token', public_token)
-    // console.log('metadata', metadata)
-
     let form = document.getElementById(`${program_type}-fill-in-form`) as HTMLFormElement;
 
     if (!!form) {
@@ -64,6 +62,7 @@ export default function ButtonForPlaid({
 
   const onExit = useCallback<PlaidLinkOnExit>((error: PlaidLinkError | null, metadata: PlaidLinkOnExitMetadata) => {
     setButtonPress('')
+    reduxStore.dispatch(plaidOpenToggled(false));
     console.log(error, metadata);
   }, [setButtonPress]);
 
@@ -95,20 +94,20 @@ export default function ButtonForPlaid({
 
   useEffect(() => {
     if (buttonPress === 'plaid') {
-      if (hasBankDetails !== undefined) {
-        if (!hasBankDetails) {
-          if (ready) {
-            open();
-          }
+      if (plaidOpen) {
+        if (ready) {
+          open();
         }
       }
     }
   }, [
-    hasBankDetails,
     ready,
     open,
-    buttonPress
+    buttonPress,
+    plaidOpen
   ]);
+
+  console.log('plaidOpen', plaidOpen)
 
   return (
     <button name='submit-plaid-button'
@@ -116,13 +115,14 @@ export default function ButtonForPlaid({
       type='submit'
       className='px-4 py-2 block w-full bg-orange-500 hover:bg-orange-300/70 text-white rounded disabled:cursor-not-allowed'
       disabled={pending}
-      onClick={() => { setButtonPress('plaid'); }}>
+      onClick={() => { setButtonPress('plaid') }}>
       {
         pending && buttonPress === 'plaid' ? (<PendingAction />) :
           <>
             {
-              bankName === '' ? 'Link Bank Details and Proceed to Payment' :
-                'Proceed to Payment with Bank Details on File'
+              (!!bankDetails && !!bankDetails.bank_name) ?
+                'Proceed to Payment with Bank Details on File' :
+                'Link Bank Details and Proceed to Payment'
             }
           </>
       }

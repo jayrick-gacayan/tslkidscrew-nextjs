@@ -30,15 +30,21 @@ export default function AttendanceScheduleVacationCamp({
           <span className="inline align-top">&#42;</span>
           <span className="inline">Select Attendance Schedule for Vacation Camp</span>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-4">
           {
             vacationCamps.map((val: Partial<VacationCampSetting>, idx: number) => {
               return (
-                <div key={`${val.id}=${idx}`} className='space-y-2'>
+                <label key={`${val.id}=${idx}`}
+                  htmlFor={`vacation-camp-${val.name}`}
+                  className={`space-y-2 p-2 block rounded border border-secondary-light
+                  ${vacationCampsMemo.value.find((value: Partial<VacationCampSetting>) => {
+                    return val.id === value.id
+                  }) ? 'bg-primary text-white' : 'bg-secondary-light'}`}>
                   <div className="block">
                     <InputCheckboxCustom labelText={val.name}
                       id={`vacation-camp-${val.name}`}
                       name='vacation-camp[]'
+                      className="checked:border-white"
                       checked={
                         vacationCampsMemo.value.find((value: Partial<VacationCampSetting>) => {
                           return val.id === value.id
@@ -68,7 +74,7 @@ export default function AttendanceScheduleVacationCamp({
 
                   <div className='block space-x-2'>
                     <span className="p-2">Dates: </span>
-                    <span className="p-2 rounded border border-secondary-light">
+                    <span className="">
                       {
                         getDayNumArr(val).map((value: any) => {
                           return (
@@ -80,7 +86,7 @@ export default function AttendanceScheduleVacationCamp({
                       }
                     </span>
                   </div>
-                </div>
+                </label>
               )
             })
           }

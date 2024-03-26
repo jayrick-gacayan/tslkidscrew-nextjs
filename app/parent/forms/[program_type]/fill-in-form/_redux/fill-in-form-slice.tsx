@@ -12,6 +12,7 @@ import { ChildInputTypes } from '@/types/input-types/child-input-types';
 
 const initialState: FillInFormState = {
   stripeModalOpen: false,
+  plaidOpen: false,
   fillInForm: {
     location: fieldInputValue<Partial<LocationPlace> | undefined>(undefined),
     defDateForChildForm: undefined,
@@ -42,6 +43,9 @@ const fillInFormSlice = createSlice({
   reducers: {
     modalStripeToggled: (state: FillInFormState, action: PayloadAction<boolean>) => {
       return { ...state, stripeModalOpen: action.payload }
+    },
+    plaidOpenToggled: (state: FillInFormState, action: PayloadAction<boolean>) => {
+      return { ...state, plaidOpen: action.payload }
     },
     locationChanged: (
       state: FillInFormState,
@@ -224,6 +228,7 @@ export const {
   modalStripeToggled,
   fillInFormReset,
   tosConditionChanged,
+  plaidOpenToggled,
 
   //for program type 'before-and-after-school'
   beforeOrAfterSchoolStartDateChanged,

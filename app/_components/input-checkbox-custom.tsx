@@ -24,7 +24,6 @@ function InputCustomCheckbox(
       <label htmlFor={id}
         className="flex items-center gap-3 w-fit">
         <input {...props}
-
           id={id}
           type='checkbox'
           checked={checked}

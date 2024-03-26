@@ -15,23 +15,37 @@ let today = new Date();
 let minDate = subYears(today, 1);
 let maxDate = addYears(today, 1);
 
-export default function YearCycleTabPanelContainer({ programYearCycleSetting }: { programYearCycleSetting: ProgramYearCycleSetting; }) {
+export default function YearCycleTabPanelContainer({
+  programYearCycleSetting
+}: {
+  programYearCycleSetting: ProgramYearCycleSetting | undefined;
+}) {
   const cbNextYear = useMemo(() => {
-    let { current_year_cycle, next_year_cycle } = programYearCycleSetting;
-    let splitCurrent = current_year_cycle?.split('-');
-    let splitNext = next_year_cycle?.split('-');
+    let currentYear = today.getFullYear();
+    let nextYear = currentYear + 1;
+    if (programYearCycleSetting) {
+      let { current_year_cycle, next_year_cycle } = programYearCycleSetting;
+      let splitCurrent = current_year_cycle?.split('-');
+      let splitNext = next_year_cycle?.split('-');
+
+      return {
+        currentYear: new Date(`${splitCurrent?.[0]}-1-1`),
+        nextYear: new Date(`${splitNext?.[0]}-1-1`),
+      };
+    }
+
 
     return {
-      currentYear: new Date(`${splitCurrent?.[0]}-1-1`),
-      nextYear: new Date(`${splitNext?.[0]}-1-1`),
-    }
+      currentYear: new Date(`${currentYear}-1-1`),
+      nextYear: new Date(`${nextYear}-1-1`),
+    };
   }, [programYearCycleSetting])
 
   const [currentYearCycle, setCurrentYearCycle] = useState<Date | null>(cbNextYear.currentYear);
   const [nextYearCycle, setNextYearCycle] = useState<Date | null>(cbNextYear.nextYear);
 
   const [state, formAction] = useFormState(
-    updateProgramYearCycleSettingAction.bind(null, programYearCycleSetting.id!),
+    updateProgramYearCycleSettingAction.bind(null, programYearCycleSetting?.id!),
     {
       'current-year': fieldInputValue(''),
       'next-year': fieldInputValue(''),

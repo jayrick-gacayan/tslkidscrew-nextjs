@@ -6,11 +6,12 @@ import { useFormState } from 'react-dom';
 import { updateCustomerInfoAction } from '@/actions/parent-info-actions';
 import { CustomerInfoFormStateProps } from '@/types/props/customer-info-form-state-props';
 import { fieldInputValue } from '@/types/helpers/field-input-value';
-import { useEffect } from 'react';
+import { useEffect, KeyboardEvent } from 'react';
 import { ToastContentProps, toast } from 'react-toastify';
 import { pathRevalidate } from '@/actions/common-actions';
 import { AccountInfoForParent } from '../prop-types/custom-pick-parent';
 import PersonalDetailsButtons from './personal-details-button';
+import ReactInternationalPhoneComponent from '@/app/_components/react-international-phone/react-international-phone-component';
 
 export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoForParent, 'email'> | undefined }) {
   const [state, formAction] = useFormState(updateCustomerInfoAction, {
@@ -69,24 +70,22 @@ export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoFo
               validationStatus={state.last_name?.validationStatus} />
           </div>
         </div>
-
         <div className='space-y-4'>
-          <InputCustom labelText='Emergency Number'
+          <ReactInternationalPhoneComponent labelText='Emergency Number'
             id='emergency-number'
             name='emergency-number'
             defaultValue={parent?.emergency_phone_number ?? ''}
             className='bg-secondary p-2 pl-10 border-transparent'
             placeholder='Emergency Number:'
-            type='text'
+            type='tel'
             prefixIcon={<PrefixPhoneIcon />} />
-
-          <InputCustom labelText='Phone Number'
+          <ReactInternationalPhoneComponent labelText='Phone Number'
             id='phone-number'
             name='phone-number'
             defaultValue={parent?.phone_number ?? ''}
             className='bg-secondary p-2 pl-10 border-transparent'
-            placeholder='Phone Number:'
-            type='text'
+            placeholder='Emergency Number:'
+            type='tel'
             prefixIcon={<PrefixPhoneIcon />} />
         </div>
 
@@ -130,8 +129,7 @@ export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoFo
             defaultValue={parent?.zip_code ?? ''}
             className='bg-secondary p-2 pl-10 border-transparent'
             placeholder='Zipcode:'
-            type='text'
-            inputMode='numeric'
+            type='number'
             prefixIcon={<PrefixLocationDotIcon />} />
         </div>
         <PersonalDetailsButtons />
