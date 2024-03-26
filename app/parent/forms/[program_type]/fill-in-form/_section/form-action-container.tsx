@@ -317,7 +317,9 @@ export default function FormActionContainer({
     router
   ]);
 
-  console.log('state', formState)
+  useEffect(() => {
+    reduxStore.dispatch(fillInFormReset());
+  }, [program_type]);
 
   return (
     <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
