@@ -45,16 +45,16 @@ export default function RegisterForm() {
   const [state, formAction] = useFormState(registerParentAction, {
     email: fieldInputValue(''),
     password: fieldInputValue(''),
-    confirm_password: fieldInputValue('')
+    confirm_password: fieldInputValue(''),
+
   } as ParentRegisterFormStateProps);
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
   useEffect(() => {
+    const { success, message, email, password } = state;
 
-
-    if (state.success !== undefined) {
-      let { message, success, email, password } = state;
+    if (success !== undefined) {
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>

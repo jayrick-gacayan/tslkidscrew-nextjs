@@ -117,7 +117,7 @@ export async function registerParentAction(
     return {
       success: false,
       message: result?.errors?.[0] ?? result.error ?? result.message,
-    };
+    } as ParentRegisterFormStateProps;
   }
 
   return {
@@ -125,7 +125,7 @@ export async function registerParentAction(
     email: fieldInputValue(email),
     success: true,
     message: 'Successfully registered parent account.'
-  };
+  } as ParentRegisterFormStateProps;
 }
 
 export async function registerCustomerAction(
