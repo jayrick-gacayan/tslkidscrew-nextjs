@@ -40,7 +40,7 @@ export async function changePassword({ password, password_confirmation }: Passwo
   let strSP = urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`;
 
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/forgot_password/change_password${strSP}`,
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/change_password${strSP}`,
     {
       method: 'PUT',
       ...authHeaders(token)

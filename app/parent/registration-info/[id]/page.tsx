@@ -11,23 +11,29 @@ export default async function Page({ params }: { params: { id: string; } }) {
 
   if (!registrationRecord.data) { notFound(); }
 
+  let { child_records, locationPlace, locationProgram } = registrationRecord.data;
+  let activeStatus = (locationProgram?.active ? 'active' : 'inactive') ?? 'inactive';
+
   return (
-    <div className='rounded bg-white drop-shadow-lg p-4 space-y-6'>
+    <div className='rounded bg-white drop-shadow-lg p-8 space-y-6'>
       <BackButtonClient />
-      <div className='font-[800] text-[32px]'>North Colonie After School</div>
+      <div className='font-[800] text-[32px]'>{locationPlace?.name!} {locationProgram?.name!}</div>
       <div className='block space-y-1'>
         <div className='text-tertiary font-[500]'>
           ENROLLMENT INFORMATION
         </div>
         <p>Your enrollment is currently
-          <span className='text-success font-bold ml-1'>ACTIVE</span>.
+          <span className={`${activeStatus === 'active' ? 'text-success' : 'text-danger'} 
+          font-bold ml-1 uppercase`}>
+            {activeStatus}
+          </span>.
           To unenroll, please contact your program director.
         </p>
       </div>
       <div className='block space-y-4'>
         <div className='text-tertiary font-[500]'>CHILDREN INFORMATION</div>
         {
-          registrationRecord.data?.child_records?.map((child: ChildRecord, index: number) => {
+          child_records?.map((child: ChildRecord, index: number) => {
             return (
               <div key={`registration-child-record-${index}`}
                 className='space-y-4'>

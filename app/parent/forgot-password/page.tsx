@@ -4,12 +4,9 @@ import ForgotPasswordFormContainer from './_sections/form-container';
 export default function ForgotPassword({ searchParams }: { searchParams: SearchParamsProps }) {
 
   return (
-    <div className='flex items-center justify-center pt-12'>
-      <div className='w-[448px] m-auto block bg-white rounded p-8 shadow-lg space-y-4'>
-        <h1 className='text-[24px]'>Forgot Password</h1>
-        <div className='space-y-4'>
-          <ForgotPasswordFormContainer searchParams={searchParams} />
-        </div>
+    <div className='flex items-center justify-center'>
+      <div className='w-auto m-auto block bg-white rounded p-8 shadow-lg space-y-6'>
+        <ForgotPasswordFormContainer searchParams={searchParams} />
       </div>
     </div>
   );
