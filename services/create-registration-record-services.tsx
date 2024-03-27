@@ -13,12 +13,12 @@ export async function createRegistrationRecord(
       ...authHeaders(token)
     }
   );
-  console.log('body on create reg record', body)
+  // console.log('body on create reg record', body)
 
   try {
     let response = await result.json();
 
-    console.log('respons on create reg record', response)
+    // console.log('respons on create reg record', response)
 
     return new Result<any>({
       response: response,

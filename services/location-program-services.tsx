@@ -119,8 +119,7 @@ export async function addLocationProgram(
   try {
     let response = await result.json();
 
-    console.log('result status', result.status, location_id)
-    console.log('response', response)
+    // console.log('response', response)
     return new Result<LocationProgram>({
       ...response,
       data: response.program ?? undefined,

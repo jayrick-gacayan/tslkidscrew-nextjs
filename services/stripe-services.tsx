@@ -58,7 +58,6 @@ export async function unlinkStripeCard(token: string) {
 
   try {
     let response = await result.json();
-    console.log('response', response);
     if (result.status === 200) {
       return new Result<Parent>(
         {

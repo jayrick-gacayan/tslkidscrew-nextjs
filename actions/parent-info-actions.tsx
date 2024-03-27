@@ -21,9 +21,6 @@ export async function updateCustomerInfoAction(
   let first_name = formData.get('first_name') as string ?? '';
   let last_name = formData.get('last_name') as string ?? '';
 
-  console.log('phone number', formData.get('phone-number'))
-
-
   let updateCustomerInfoSchema = Joi.object({
     first_name: Joi.string()
       .required()

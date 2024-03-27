@@ -15,8 +15,6 @@ export async function forgotPassword(email: string) {
   try {
     let response = await result.json();
 
-    console.log('response', response)
-
     return new Result<any>({
       response: response,
       message: response.message ?? result.statusText,
@@ -53,7 +51,6 @@ export async function changePassword({ email, password, password_confirmation }:
   try {
     let response = await result.json();
 
-    console.log('response', response)
     return new Result<any>({
       response: response,
       message: response.message ?? result.statusText,
@@ -86,8 +83,6 @@ export async function resetPassword({
 
   try {
     let response = await result.json();
-
-    console.log('response', response)
 
     return new Result<any>({
       response: response,

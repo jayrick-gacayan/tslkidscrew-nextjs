@@ -124,7 +124,6 @@ export async function updateAdminUser(
   }: AdminUserInputs,
   token: string
 ) {
-  console.log('result', isActive)
   let result = await fetch(
     process.env.NEXT_PUBLIC_API_ADMIN_URL! + `/admin_accounts/edit_admin`,
     {

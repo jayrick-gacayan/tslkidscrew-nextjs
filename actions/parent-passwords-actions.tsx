@@ -63,7 +63,6 @@ export async function forgotPasswordTokenAction(reset_password_token: string, pr
 
   let result = await resetPassword({ password, password_confirmation, reset_password_token });
 
-  console.log('result', result)
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       message: result.message,

@@ -12,12 +12,8 @@ export async function getCustomerInfo(customer_id: string, token: string) {
     }
   );
 
-  console.log('customer info result', result.status)
-
   try {
     let response = await result.json();
-
-    console.log('customer info', response)
 
     return new Result<Parent>({
       response: response,

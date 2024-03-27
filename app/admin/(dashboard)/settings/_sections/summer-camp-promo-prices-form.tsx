@@ -72,7 +72,6 @@ export default function SummerCampPromoPricesForm({
               summerCampPromoData.sort((b: SummerCampPromoSetting, a: SummerCampPromoSetting) => {
                 return b.child_record_count! - a.child_record_count!
               }).map((value, index: number) => {
-                console.log('errorText', state?.errors?.find((val: any) => { return val.id === value.id?.toString() }))
                 return (
                   <div key={`update-promos-children-${index}`}
                     className='flex sm:flex-row flex-col items-center justify-between gap-4 sm:gap-8'>

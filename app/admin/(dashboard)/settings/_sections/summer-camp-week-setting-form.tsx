@@ -75,7 +75,6 @@ export default function SummerCampWeekSettingForm({
   function handleOnChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
 
-    console.log('event')
     if (name !== 'week-enabled') {
       setDataWeek({
         ...dataWeek,

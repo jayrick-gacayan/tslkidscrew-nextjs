@@ -57,13 +57,13 @@ export default function ButtonForPlaid({
   }, [program_type,]);
 
   const onEvent = useCallback<PlaidLinkOnEvent>((eventName: string, metadata: any) => {
-    console.log(eventName, metadata);
+    // console.log(eventName, metadata);
   }, []);
 
   const onExit = useCallback<PlaidLinkOnExit>((error: PlaidLinkError | null, metadata: PlaidLinkOnExitMetadata) => {
     setButtonPress('')
     reduxStore.dispatch(plaidOpenToggled(false));
-    console.log(error, metadata);
+    // console.log(error, metadata);
   }, [setButtonPress]);
 
 

@@ -14,7 +14,7 @@ export async function getRegistrationRecord(reg_id: string, token: string) {
   try {
     let response = await result.json();
 
-    console.log('response', response)
+    // console.log('response', response)
 
     return new Result<RegistrationRecord>({
       response: response,

@@ -35,8 +35,8 @@ export default function PopperWeekPromos({
     open: popoverOpen,
     onOpenChange(isOpen, event, reason) {
       setPopoverOpen(isOpen);
-      event && console.log('event', event);
-      reason && console.log('reason', reason);
+      // event && console.log('event', event);
+      // reason && console.log('reason', reason);
     },
     middleware: [
       offset(10),
