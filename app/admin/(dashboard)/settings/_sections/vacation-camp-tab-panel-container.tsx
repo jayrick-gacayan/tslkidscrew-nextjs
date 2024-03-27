@@ -47,11 +47,14 @@ export default function VacationCampTabPanelContainer({
   return (
     <Tab.Panel as='div' id="vacation-camp-panel">
       <div className="space-y-4">
-        <VacationCampSettingForm vacationCamp={vacationCamp}
-          setVacationCamp={setVacationCamp}
-          partialVCSettings={partialVCSettings}
-          vacationCampData={vacationCampData}
-          arrDays={getVacationCampDateRangeArr} />
+        {
+          vacationCampSettings.length > 0 &&
+          (<VacationCampSettingForm vacationCamp={vacationCamp}
+            setVacationCamp={setVacationCamp}
+            partialVCSettings={partialVCSettings}
+            vacationCampData={vacationCampData}
+            arrDays={getVacationCampDateRangeArr} />)
+        }
       </div>
     </Tab.Panel>
   )

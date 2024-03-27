@@ -313,6 +313,7 @@ export async function getVacationCampSchedulesSettings(token: string) {
     })
   } catch (error) {
     return new Result<VacationCampSetting[]>({
+
       message: result.statusText,
       error: result.statusText,
       statusCode: result.status,
