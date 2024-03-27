@@ -34,7 +34,6 @@ export default function ReactInternationalPhoneComponent({
           inputValue: string;
           country: ParsedCountry;
         }) => {
-        console.log('data', data)
         setPhoneNumber(data.phone);
       },
     });
@@ -69,7 +68,8 @@ export default function ReactInternationalPhoneComponent({
               className,
               validationStatus === ValidationType.ERROR ? 'border-danger bg-danger-light' : '',
             )
-          } />
+          }
+          {...props} />
         {prefixIcon && prefixIcon}
         {suffixIcon && suffixIcon}
       </div>

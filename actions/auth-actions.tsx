@@ -116,8 +116,8 @@ export async function registerParentAction(
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,
-      message: result.message ?? result.error,
-      error: result.message ?? result.error,
+      message: result?.errors?.[0] ?? result.message,
+      error: result?.errors?.[0] ?? result.error ?? result.message,
     };
   }
 

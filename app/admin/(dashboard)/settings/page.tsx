@@ -24,7 +24,7 @@ export default async function Page() {
   let programYearCycleSetting: Result<ProgramYearCycleSetting> = await (await getProgramYearCycleSettingsAction());
   let beforeOrAfterSchoolSettings: Result<BeforeOrAfterSchoolSetting[]> = await (await getBeforeOrAfterSchoolSettingsAction());
 
-  console.log('summer camp promo settings', vacationCampSettings)
+  console.log('summer camp promo settings', summerCampPromoSettings)
   return (
     <div className='p-8 space-y-4'>
       <AdminHeaderWithEntries headerText='Settings' />

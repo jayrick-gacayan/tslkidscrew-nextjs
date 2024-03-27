@@ -14,6 +14,7 @@ import PersonalDetailsButtons from './personal-details-button';
 import ReactInternationalPhoneComponent from '@/app/_components/react-international-phone/react-international-phone-component';
 
 export default function PersonalDetails({ parent }: { parent: Omit<AccountInfoForParent, 'email'> | undefined }) {
+
   const [state, formAction] = useFormState(updateCustomerInfoAction, {
     first_name: fieldInputValue(parent?.first_name ?? ''),
     last_name: fieldInputValue(parent?.last_name ?? '')

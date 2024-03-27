@@ -6,7 +6,7 @@ export class Result<T> {
   statusCode: number = 0;
   response?: any | null = null;
   message: string = '';
-  errors?: T | null = undefined;
+  errors?: any[] = undefined;
   error: string = '';
 
   constructor(init?: Partial<Result<T>>) {

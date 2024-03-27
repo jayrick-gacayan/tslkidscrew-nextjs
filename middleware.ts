@@ -45,10 +45,9 @@ export default auth((req: NextAuthRequest) => {
           if (!rest.first_name && !req.nextUrl.pathname.includes('customer-info')) {
             return NextResponse.redirect(`${req.nextUrl.origin}/parent/customer-info`);
           }
-          else {
-            if (req.nextUrl.pathname.includes('dashboard')) {
-              return NextResponse.redirect(`${req.nextUrl.origin}/parent/registration-info`);
-            }
+
+          if (req.nextUrl.pathname.includes('dashboard')) {
+            return NextResponse.redirect(`${req.nextUrl.origin}/parent/registration-info`);
           }
 
           return NextResponse.next();
