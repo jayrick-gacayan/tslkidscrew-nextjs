@@ -260,9 +260,9 @@ export default function FormActionContainer({
     function pathToStep(stepToDec: boolean, stepToInc: boolean) {
       let value = stepInNumber;
 
-      if (!stepToDec) { value--; }
-      else { if (stepToInc) { value++; } }
-
+      if (!stepToDec) { --value; }
+      else { if (stepToInc) { ++value; } }
+      console.log('stepToInc', stepToInc, value)
       pathToRedirectURL(value);
     }
 
@@ -281,10 +281,10 @@ export default function FormActionContainer({
     let { stepOne, stepTwo, stepThree, stepFour, ...rest } = formState;
 
     if (stepInNumber === 1) { if (stepOne) { pathToRedirectURL(stepInNumber + 1); } }
-    else if (stepInNumber < highestStep && stepInNumber > 1) {
-      const numberStep = (numStep: number) => { return `step${numsIntoWord(numStep)}` };
-
-      pathToStep(formState[numberStep(stepInNumber - 1)], formState[numberStep(stepInNumber)]);
+    else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
+    else if (stepInNumber === 3) { pathToStep(stepTwo, stepThree); }
+    else if (stepInNumber === 4 && program_type === 'before-and-after-school') {
+      pathToStep(stepThree, stepFour);
     }
     else if (stepInNumber === highestStep) {
       let stepError = program_type === 'before-and-after-school' ? stepFour : stepThree;
