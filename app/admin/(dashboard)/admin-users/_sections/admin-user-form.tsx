@@ -94,9 +94,10 @@ export default function AdminUserForm({ type, formReset }: { type: string; formR
 
   function handleInputCheckboxChanged(key: 'isActive' | 'isSuperAdmin') {
     return function (event: ChangeEvent<HTMLInputElement>) {
+      console.log('dsfsdfds', event.target.checked)
       reduxStore.dispatch(adminInputCheckboxFieldChanged({
         key: key,
-        data: !event.target.checked
+        data: event.target.checked
       }));
     };
   }

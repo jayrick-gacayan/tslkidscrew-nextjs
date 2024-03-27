@@ -23,8 +23,7 @@ function InputCustomCheckbox(
     <div className="block">
       <label htmlFor={id}
         className="flex items-center gap-3 w-fit">
-        <input {...props}
-          id={id}
+        <input id={id}
           type='checkbox'
           checked={checked}
           className={
@@ -35,7 +34,8 @@ function InputCustomCheckbox(
               className!,
               errorText !== '' ? 'border-danger bg-danger-light' : '',
             )
-          } />
+          }
+          {...props} />
         {labelText && <span className="block">{labelText}</span>}
       </label>
       {errorText !== '' && <div className="text-danger">{errorText}</div>}

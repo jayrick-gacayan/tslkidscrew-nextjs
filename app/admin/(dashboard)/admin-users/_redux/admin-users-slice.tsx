@@ -35,6 +35,7 @@ const adminUsersSlice = createSlice({
       action: PayloadAction<{ key: 'isActive' | 'isSuperAdmin'; data: boolean; }>) => {
 
       let { key, data } = action.payload;
+      console.log('data', data)
 
       return {
         ...state,
