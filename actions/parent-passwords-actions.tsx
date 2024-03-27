@@ -77,8 +77,7 @@ export async function forgotPasswordTokenAction(reset_password_token: string, pr
   };
 }
 
-
-export async function changePasswordAction(prevState: any, formData: FormData) {
+export async function changePasswordAction(email: string, prevState: any, formData: FormData) {
   let parent: Session | null = await auth();
 
   let password = formData.get('password') as string ?? '';
@@ -87,7 +86,7 @@ export async function changePasswordAction(prevState: any, formData: FormData) {
   let passwordsError = passwordValidate(password, password_confirmation);
   if (passwordsError) { return passwordsError; }
 
-  let result = await changePassword({ password, password_confirmation }, parent?.user.accessToken!);
+  let result = await changePassword({ email, password, password_confirmation }, parent?.user.accessToken!);
 
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
@@ -98,7 +97,7 @@ export async function changePasswordAction(prevState: any, formData: FormData) {
 
   return {
     message: 'Password has been successfully changed.',
-    success: false
+    success: true
   };
 }
 

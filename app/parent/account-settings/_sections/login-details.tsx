@@ -14,7 +14,7 @@ export default function LoginDetails({ email }: { email: string }) {
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
-  const [state, formAction] = useFormState(changePasswordAction, {} as any);
+  const [state, formAction] = useFormState(changePasswordAction.bind(null, email), {} as any);
 
   useEffect(() => {
     if (state.success !== undefined) {
@@ -28,9 +28,7 @@ export default function LoginDetails({ email }: { email: string }) {
         hideProgressBar: true,
       });
 
-      if (success) {
-        formRef.current?.reset();
-      }
+      formRef.current?.reset();
     }
   }, [state])
 

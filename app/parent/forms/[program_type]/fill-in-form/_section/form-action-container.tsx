@@ -256,20 +256,21 @@ export default function FormActionContainer({
   }, [formState, program_type])
 
   useEffect(() => {
-    function pathToURL(numberToStep: number) {
-      pathToRedirectURL(stepInNumber + numberToStep, locationValue.value?.id ?? undefined);
-    }
 
     function pathToStep(stepToDec: boolean, stepToInc: boolean) {
-      if (!stepToDec) { pathToURL(-1); }
-      else { if (stepToInc) { pathToURL(1); } }
+      let value = stepInNumber;
+
+      if (!stepToDec) { value--; }
+      else { if (stepToInc) { value++; } }
+
+      pathToRedirectURL(value);
     }
 
-    function pathToRedirectURL(numberStep: number, location_id?: number) {
+    function pathToRedirectURL(numberStep: number) {
       let urlSearchParams = new URLSearchParams();
 
-      if (numberStep > 1) { urlSearchParams.set('step', numberStep.toString()); }
-      if (location_id) { urlSearchParams.set('location_id', location_id.toString()!); }
+      urlSearchParams.set('step', numberStep.toString());
+      if (locationValue.value) { urlSearchParams.set('location_id', locationValue.value.id?.toString() ?? ''); }
 
       let strSP = urlSearchParams.toString();
       let url = `/parent/forms/${program_type}/fill-in-form${strSP === '' ? `` : `?${strSP}`}`
@@ -279,17 +280,17 @@ export default function FormActionContainer({
 
     let { stepOne, stepTwo, stepThree, stepFour, ...rest } = formState;
 
-    if (stepInNumber === 1) { if (stepOne) { pathToURL(1); } }
-    else if (stepInNumber === 2) { pathToStep(stepOne, stepTwo); }
-    else if (stepInNumber === 3) { pathToStep(stepTwo, stepThree); }
-    else if (stepInNumber === 4 && program_type === 'before-and-after-school') {
-      pathToStep(stepThree, stepFour);
+    if (stepInNumber === 1) { if (stepOne) { pathToRedirectURL(stepInNumber + 1); } }
+    else if (stepInNumber < highestStep && stepInNumber > 1) {
+      const numberStep = (numStep: number) => { return `step${numsIntoWord(numStep)}` };
+
+      pathToStep(formState[numberStep(stepInNumber - 1)], formState[numberStep(stepInNumber)]);
     }
     else if (stepInNumber === highestStep) {
       let stepError = program_type === 'before-and-after-school' ? stepFour : stepThree;
 
       if (!stepError) {
-        pathToURL(-1);
+        pathToRedirectURL(stepInNumber - 1);
         reduxStore.dispatch(tosConditionChanged({
           value: [],
           errorText: '',
@@ -329,7 +330,6 @@ export default function FormActionContainer({
     reduxStore.dispatch(fillInFormReset());
   }, [program_type]);
 
-  console.log('formState, ', formState, buttonPress)
   return (
     <form className='flex flex-col gap-6 justify-between min-h-[560px] h-full'
       id={`${program_type}-fill-in-form`}

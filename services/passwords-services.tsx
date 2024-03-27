@@ -32,7 +32,7 @@ export async function forgotPassword(email: string) {
   }
 }
 
-export async function changePassword({ password, password_confirmation }: PasswordTypes, token: string) {
+export async function changePassword({ email, password, password_confirmation }: PasswordTypes & { email: string }, token: string) {
   let urlSearchParams: URLSearchParams = new URLSearchParams();
   urlSearchParams.set('password', password);
   urlSearchParams.set('password_confirmation', password_confirmation);
@@ -40,14 +40,15 @@ export async function changePassword({ password, password_confirmation }: Passwo
   let strSP = urlSearchParams.toString() === '' ? '' : `?${urlSearchParams.toString()}`;
 
   let result = await fetch(
-    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/change_password${strSP}`,
+    process.env.NEXT_PUBLIC_API_PARENT_URL! + `/customer_users/update_login`,
     {
       method: 'PUT',
+      body: JSON.stringify({
+        customer: { email, password, password_confirmation, }
+      }),
       ...authHeaders(token)
     }
   );
-
-  console.log('result', result.status)
 
   try {
     let response = await result.json();
