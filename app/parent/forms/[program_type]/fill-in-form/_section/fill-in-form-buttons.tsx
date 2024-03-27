@@ -8,6 +8,7 @@ import { fillInFormReset } from '../_redux/fill-in-form-slice';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import PendingAction from '../_components/pending-actions';
 import ButtonForStripe from './button-for-stripe';
+import { useRouter } from 'next/navigation';
 
 export default function FillInFormButtons({
   program_type,
@@ -26,6 +27,7 @@ export default function FillInFormButtons({
   buttonPress: string;
   setButtonPress: Dispatch<SetStateAction<string>>;
 }) {
+  const router = useRouter();
   const { pending } = useFormStatus();
 
   const stepInNumber = !step ? 1 : parseInt(step);
@@ -61,13 +63,12 @@ export default function FillInFormButtons({
 
       <div className='flex items-center justify-center gap-4'>
         <div className='flex-1'>
-          <Link href={`/parent/forms/${program_type}`}
-            className='cursor-pointer transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white'
+          <button className='cursor-pointer transition-all delay-100 px-4 py-2 text-danger rounded border border-danger hover:bg-danger hover:text-white'
             onClick={() => {
-              reduxStore.dispatch(fillInFormReset())
+              router.replace(`/parent/forms/${program_type}`);
             }}>
             Cancel
-          </Link>
+          </button>
         </div>
         <div className='flex-none w-auto'>
           <div className='flex w-fit items-center gap-4'>
