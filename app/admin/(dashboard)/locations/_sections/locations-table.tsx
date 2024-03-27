@@ -21,7 +21,7 @@ export default function LocationsTable({ locationPlaces }: { locationPlaces: Loc
         </thead>
         {
           !locationPlaces ? (<SomethingWentWrongClient />) :
-            locationPlaces.length === 0 ? (<TableEmptyData />) :
+            locationPlaces.length === 0 ? (<TableEmptyData colSpan={6} />) :
               (<LocationTableClient locationPlaces={locationPlaces} />)
         }
       </table>

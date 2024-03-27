@@ -26,7 +26,7 @@ export default function RegistrationInfoTable({
         <tbody>
           {
             !registration_records ? (<SomethingWentWrongClient />) :
-              registration_records.length === 0 ? (<TableEmptyData />) :
+              registration_records.length === 0 ? (<TableEmptyData colSpan={4} />) :
                 <>
                   {
                     registration_records.map((registration_record: RegistrationRecord, index: number) => {

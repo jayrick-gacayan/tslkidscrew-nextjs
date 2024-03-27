@@ -71,8 +71,11 @@ export default function ParentHeader({ parent }: { parent: Parent }) {
                                   leaveTo='transform scale-95 opacity-0'>
                                   <div className='overflow-hidden border focus:border-tertiary absolute top-[110%] right-0 z-[100] bg-white drop-shadow-lg rounded w-48'>
                                     <Menu.Item as='div'
-                                      className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white'>
-                                      Profile
+                                      className='block'>
+                                      <Link href='/parent/account-settings'
+                                        className='px-3 py-2 cursor-pointer hover:bg-primary hover:text-white block'>
+                                        Profile
+                                      </Link>
                                     </Menu.Item>
                                     <Menu.Item as='div'
                                       className='block'>

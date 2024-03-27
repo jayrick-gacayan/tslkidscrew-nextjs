@@ -27,7 +27,7 @@ export default function ProgramsTable({
         </thead>
         {
           !locationPrograms ? (<SomethingWentWrongClient />) :
-            locationPrograms.length === 0 ? (<TableEmptyData />) :
+            locationPrograms.length === 0 ? (<TableEmptyData colSpan={7} />) :
               (<ProgramsTableClient location_id={location_id} programs={locationPrograms} />)
         }
       </table>

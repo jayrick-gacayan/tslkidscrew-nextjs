@@ -24,7 +24,7 @@ export default function InvoicesInfoTable({ invoices }: { invoices: Invoice[] | 
         <tbody>
           {
             !invoices ? (<SomethingWentWrongClient />) :
-              invoices.length === 0 ? (<TableEmptyData />) :
+              invoices.length === 0 ? (<TableEmptyData colSpan={5} />) :
                 <>
                   {
                     invoices.map((invoice: Invoice, index: number) => {

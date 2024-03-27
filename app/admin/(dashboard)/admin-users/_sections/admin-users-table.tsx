@@ -22,7 +22,7 @@ export default function AdminUsersTable({ admins }: { admins: Admin[] | undefine
         </thead>
         {
           !admins ? (<SomethingWentWrongClient />) :
-            admins.length === 0 ? (<TableEmptyData />) :
+            admins.length === 0 ? (<TableEmptyData colSpan={7} />) :
               (<AdminUsersTableClient admins={admins} />)
         }
       </table>

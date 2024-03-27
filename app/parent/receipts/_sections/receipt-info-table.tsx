@@ -23,7 +23,7 @@ export default function ReceiptInfoTable({ receipts }: { receipts: Receipt[] | u
         <tbody>
           {
             !receipts ? (<SomethingWentWrongClient />) :
-              receipts.length === 0 ? (<TableEmptyData />) :
+              receipts.length === 0 ? (<TableEmptyData colSpan={5} />) :
                 (
                   <>
                     {
