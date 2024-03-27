@@ -116,8 +116,7 @@ export async function registerParentAction(
   if (result.resultStatus !== ResultStatus.SUCCESS) {
     return {
       success: false,
-      message: result?.errors?.[0] ?? result.message,
-      error: result?.errors?.[0] ?? result.error ?? result.message,
+      message: result?.errors?.[0] ?? result.error ?? result.message,
     };
   }
 
@@ -170,7 +169,6 @@ export async function registerCustomerAction(
     }, {}) as CustomerInfoFormStateProps;
   }
 
-  console.log('sdfsdfds', formData.get('how-did-you-hear-about-us'))
   let result = await registerCustomer({
     email: parent?.user.email ?? '',
     first_name,

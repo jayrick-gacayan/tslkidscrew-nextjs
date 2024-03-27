@@ -28,7 +28,7 @@ export async function registerParent({
 
   try {
     let response = await result.json();
-    console.log('response', response)
+
     return new Result<any>({
       ...response,
       data: response.user ?? undefined,
