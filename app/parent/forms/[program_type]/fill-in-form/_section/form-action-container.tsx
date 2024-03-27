@@ -262,7 +262,6 @@ export default function FormActionContainer({
 
       if (!stepToDec) { --value; }
       else { if (stepToInc) { ++value; } }
-      console.log('stepToInc', stepToInc, value)
       pathToRedirectURL(value);
     }
 
@@ -465,7 +464,6 @@ export default function FormActionContainer({
               reduxStore.dispatch(beforeOrAfterSchoolStartDateChanged(fieldInputValue(val)));
             }}
             onCheckboxChanged={(key: 'beforeSchool' | 'afterSchool', arrSchool: any[], val: string) => {
-              console.log('arr', key, arrSchool, val)
               reduxStore.dispatch(
                 beforeOrAfterWeekDaysSet({
                   key,

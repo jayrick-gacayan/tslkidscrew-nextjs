@@ -36,7 +36,7 @@ export default function AttendanceScheduleVacationCamp({
               return (
                 <label key={`${val.id}=${idx}`}
                   htmlFor={`vacation-camp-${val.name}`}
-                  className={`space-y-2 p-2 block rounded border border-secondary-light
+                  className={`space-y-2 p-2 block rounded border border-secondary-light cursor-pointer 
                   ${vacationCampsMemo.value.find((value: Partial<VacationCampSetting>) => {
                     return val.id === value.id
                   }) ? 'bg-primary text-white' : 'bg-secondary-light'}`}>
