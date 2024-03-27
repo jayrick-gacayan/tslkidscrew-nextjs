@@ -51,20 +51,10 @@ export default function RegisterForm() {
   const [passwordConfirmationShow, setPasswordConfirmationShow] = useState<boolean>(false);
 
   useEffect(() => {
-    async function autoLoginAccount() {
-      let formData = new FormData();
-      formData.set('email', state?.email?.value ?? '');
-      formData.set('password', state?.password?.value ?? '');
-      formData.set('role', 'parent');
 
-      let result = await roleLogin('/parent/dashboard', {
-        email: fieldInputValue(state.email?.value ?? '')
-      }, formData);
-
-    }
 
     if (state.success !== undefined) {
-      let { message, success } = state;
+      let { message, success, email, password } = state;
       toast((props: ToastContentProps<unknown>) => {
         return (
           <div className="text-black">{message}</div>
@@ -76,6 +66,18 @@ export default function RegisterForm() {
       });
 
       if (success) {
+        async function autoLoginAccount() {
+          let formData = new FormData();
+          formData.set('email', email?.value ?? '');
+          formData.set('password', password?.value ?? '');
+          formData.set('role', 'parent');
+
+          let result = await roleLogin('/parent/dashboard', {
+            email: fieldInputValue(email?.value ?? '')
+          }, formData);
+
+        }
+
         autoLoginAccount();
       }
     }
